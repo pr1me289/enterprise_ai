@@ -1,0 +1,30 @@
+# Virtual environments
+.venv/
+venv/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# Python cache and tooling
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Environment files
+.env
+.env.*
+
+# Logs and OS files
+*.log
+.DS_Store
