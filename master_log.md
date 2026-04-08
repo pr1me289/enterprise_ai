@@ -46,3 +46,10 @@
 **Changes:** Updated `README.md` to describe current preprocessing and chunking behavior, what each layer does, and how to run each layer from `PYTHONPATH=src`.
 **Result:** The README now reflects the current implementation state and gives concise commands for local use.
 **Next:** Keep README commands aligned as the embedding and indexing layers are added.
+
+### [#8] 2026-04-08 | Codex
+**Task:** Bring the PDF dependency from `main` into `feature/chunking-layer`.
+**Plan:** Merge `main` into the chunking branch, keep the existing chunking history in `master_log.md`, and accept the repo-level `pypdf` dependency files from `main`.
+**Changes:** Merged `main` into `feature/chunking-layer`, added `pyproject.toml` and `uv.lock`, and resolved the `master_log.md` merge conflict in favor of the chunking branch history plus this dependency merge note.
+**Result:** The chunking branch now carries the same repo-level PDF dependency baseline as `main`.
+**Next:** Keep branch dependencies aligned as shared tooling evolves.
