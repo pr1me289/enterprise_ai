@@ -25,3 +25,10 @@
 **Changes:** Updated `README.md` to reflect the project purpose, source lanes, phased execution plan, and retrieval architecture from `STRATEGY.md`. Updated `master_log.md` to record task completion. Prepared to create a dedicated preprocessing branch from the updated `main`.
 **Result:** The strategy-aligned README update was pushed to `origin/main` without starting project implementation work. The repository is now documented and ready for work to continue on a separate preprocessing branch.
 **Next:** Create and use the preprocessing branch for the next implementation phase once requirements are provided.
+
+### [#5] 2026-04-08 | Codex
+**Task:** Add a PDF parsing dependency on `main` so policy preprocessing can run in feature branches.
+**Plan:** Create minimal `uv` project metadata on `main`, add `pypdf` as a managed dependency, then merge `main` into the active feature branches and rerun the previously failing preprocessing test.
+**Changes:** Added `pyproject.toml` and `uv.lock` on `main`. Installed `pypdf` with `uv add pypdf`.
+**Result:** `main` now carries the repo-level PDF dependency needed for Python-based policy PDF ingestion.
+**Next:** Merge `main` into `feature/preprocessing-layer` and `feature/chunking-layer`, then rerun preprocessing tests.
