@@ -53,3 +53,10 @@
 **Changes:** Merged `main` into `feature/chunking-layer`, added `pyproject.toml` and `uv.lock`, and resolved the `master_log.md` merge conflict in favor of the chunking branch history plus this dependency merge note.
 **Result:** The chunking branch now carries the same repo-level PDF dependency baseline as `main`.
 **Next:** Keep branch dependencies aligned as shared tooling evolves.
+
+### [#9] 2026-04-08 | Codex
+**Task:** Add chunking tests under `tests/chunking`, run them with coverage, and report the actual results on `feature/chunking-layer`.
+**Plan:** Add repo-local pytest config, create chunking tests against the real mock source files plus temporary artifact outputs, run the chunking suite with coverage, and record any failures or coverage gaps directly in this log.
+**Changes:** Added `tests/conftest.py` plus a `tests/chunking/` suite covering source-specific chunking behavior, questionnaire skip behavior, artifact writing, and the chunking pipeline entrypoint. Updated `pyproject.toml` with pytest config and dev test dependencies, and refreshed `uv.lock` with `uv add --dev pytest pytest-cov`.
+**Result:** `uv run pytest tests/chunking --cov=chunking --cov-report=term-missing` completed with 11 passed, 0 failed. Chunking coverage is 99%: `src/chunking/__init__.py` 100%, `src/chunking/artifacts.py` 100%, `src/chunking/chunker.py` 97%, `src/chunking/models.py` 100%, `src/chunking/pipeline.py` 100%. The only uncovered line is `src/chunking/chunker.py:125`.
+**Next:** Keep chunking tests updated as chunk metadata or artifact shape changes in later indexing work.
