@@ -25,3 +25,10 @@
 **Changes:** Updated `README.md` to reflect the project purpose, source lanes, phased execution plan, and retrieval architecture from `STRATEGY.md`. Updated `master_log.md` to record task completion. Prepared to create a dedicated preprocessing branch from the updated `main`.
 **Result:** The strategy-aligned README update was pushed to `origin/main` without starting project implementation work. The repository is now documented and ready for work to continue on a separate preprocessing branch.
 **Next:** Create and use the preprocessing branch for the next implementation phase once requirements are provided.
+
+### [#5] 2026-04-08 | Codex
+**Task:** Start Step 4 preprocessing scaffolding and align the package layout with the current branch expectations.
+**Plan:** Build source-specific ingestors under `src/preprocessing`, keep source-level metadata contract-driven, and avoid treating mock document versions as validation failures.
+**Changes:** Moved preprocessing code to `src/preprocessing`. Kept per-source ingestors plus the dispatcher and normalized source models. Removed mock-version mismatch warnings while preserving contract-level metadata and detected source versions.
+**Result:** The preprocessing layer now lives at the requested import path and matches the demo-document posture more closely.
+**Next:** Continue Step 4 implementation from `src/preprocessing` and add follow-on verification/tests as the layer expands.
