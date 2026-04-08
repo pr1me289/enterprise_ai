@@ -32,3 +32,17 @@
 **Changes:** Moved preprocessing code to `src/preprocessing`. Kept per-source ingestors plus the dispatcher and normalized source models. Removed mock-version mismatch warnings while preserving contract-level metadata and detected source versions.
 **Result:** The preprocessing layer now lives at the requested import path and matches the demo-document posture more closely.
 **Next:** Continue Step 4 implementation from `src/preprocessing` and add follow-on verification/tests as the layer expands.
+
+### [#6] 2026-04-08 | Codex
+**Task:** Implement the chunking layer and write canonical intermediate chunk artifacts.
+**Plan:** Create `src/chunking`, consume `NormalizedSource` objects from preprocessing, emit canonical `Chunk` objects, and write per-source JSON artifacts to `data/processed/chunks`.
+**Changes:** Added chunk models, source-aware chunk builders, artifact writing utilities, and a pipeline helper. Generated chunk artifacts for the DPA matrix, procurement matrix, precedent log, and Slack notes. Questionnaire sources are skipped from chunk output by design.
+**Result:** Canonical inspectable chunk JSON now exists in `data/processed/chunks` for the currently preprocessable demo sources, ready for later embedding/indexing reads.
+**Next:** Extend artifact generation to the policy PDF once a local PDF text extraction dependency is available in the environment.
+
+### [#7] 2026-04-08 | Codex
+**Task:** Briefly document preprocessing and chunking in the root README.
+**Plan:** Add a short capability summary and minimal run commands without expanding the README unnecessarily.
+**Changes:** Updated `README.md` to describe current preprocessing and chunking behavior, what each layer does, and how to run each layer from `PYTHONPATH=src`.
+**Result:** The README now reflects the current implementation state and gives concise commands for local use.
+**Next:** Keep README commands aligned as the embedding and indexing layers are added.

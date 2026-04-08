@@ -1,0 +1,86 @@
+[
+  {
+    "chunk_id": "SLK-001__thread_SLK-001-THREAD-01",
+    "source_id": "SLK-001",
+    "source_name": "Slack / Meeting Thread Notes",
+    "source_type": "SUPPLEMENTAL_NOTE",
+    "version": "Export at init.",
+    "authority_tier": 4,
+    "retrieval_lane": "INDEXED_HYBRID",
+    "allowed_agents": [
+      "procurement"
+    ],
+    "status": "CONFIRMED",
+    "chunk_type": "THREAD",
+    "chunk_order": 1,
+    "citation_label": "SLK-001 thread SLK-001-THREAD-01",
+    "text": "channel: #vendor-eval-optichain\nP. Horak [2024-02-27T09:14:00]: Hey team \u2014 just a heads up that we've received OptiChain's formal questionnaire submission through the vendor portal. Procurement has it and IT Security and Legal are being looped in this week. We're on a 30-day clock for the go/no-go so let's keep this moving. @M. Osei can you confirm receipt and next steps?\nM. Osei [2024-02-27T09:31:00]: Confirmed \u2014 questionnaire received, logged as PRQ-2024-0047, review initiated. I'll send the formal kickoff note to IT Security and Legal today. Based on a quick first read there are a few things to work through but nothing that looked like a showstopper at first glance.\nT. Kowalski [2024-02-27T10:08:00]: Quick question \u2014 do we know yet how they're actually connecting to SAP? I had a call with their sales team last week and I got the impression it's just a nightly export, no persistent connection into the system. If that's the case it should be pretty straightforward from a security standpoint, right?\nD. Achterberg [2024-02-27T10:44:00]: I'll be reviewing the technical side. I've seen their questionnaire answer on Q2.2 and honestly it's a bit unclear \u2014 they mention a 'lightweight extraction agent' that 'may operate with service account credentials depending on customer configuration.' That language doesn't land cleanly in Tier 2 or Tier 3. I'm going to need to see an architecture diagram before I can make a formal call on the integration tier.\nT. Kowalski [2024-02-27T10:52:00]: Ah got it, that's more nuanced than what their sales deck implies. Good catch. Happy to defer to your assessment once you've seen the diagram.\nP. Horak [2024-02-27T11:03:00]: Thanks both. @D. Achterberg \u2014 once you know what you need from OptiChain to make the tier call, can you flag it and we'll route the request through Procurement? Want to make sure any asks go through the formal channel, not informally through me or the sales contact.\nD. Achterberg [2024-02-27T11:17:00]: Agreed. I'll document the specific information request and send it to @M. Osei to route formally. Won't make a tier determination until I have the architecture diagram in hand.\nM. Osei [2024-02-27T11:22:00]: Perfect. I'll flag the onboarding as PROVISIONAL pending IT Security's tier determination and make sure that's reflected in the onboarding record.\nP. Horak [2024-02-27T14:05:00]: One more thing \u2014 I want to make sure the business side doesn't start sharing any data or doing any integration planning with OptiChain until the formal process is done. Even if conversations have happened at the sales level, nothing moves until Procurement and IT Security sign off. Please make sure the ops team knows this.",
+    "section_id": null,
+    "row_id": null,
+    "record_id": null,
+    "thread_id": "SLK-001-THREAD-01"
+  },
+  {
+    "chunk_id": "SLK-001__thread_SLK-001-THREAD-02",
+    "source_id": "SLK-001",
+    "source_name": "Slack / Meeting Thread Notes",
+    "source_type": "SUPPLEMENTAL_NOTE",
+    "version": "Export at init.",
+    "authority_tier": 4,
+    "retrieval_lane": "INDEXED_HYBRID",
+    "allowed_agents": [
+      "procurement"
+    ],
+    "status": "CONFIRMED",
+    "chunk_type": "THREAD",
+    "chunk_order": 2,
+    "citation_label": "SLK-001 thread SLK-001-THREAD-02",
+    "text": "channel: #procurement-ops\nM. Osei [2024-03-04T08:47:00]: OptiChain questionnaire just came in through the portal \u2014 PRQ-2024-0047. Starting my review now. One thing I'm trying to confirm: does anyone know if we have a current NDA with OptiChain? I want to check before I log the NDA status in the onboarding record.\nT. Kowalski [2024-03-04T09:02:00]: I think we might? I feel like we had some conversations with them earlier this year, maybe even a pilot or something. Could be worth checking with Legal.\nM. Osei [2024-03-04T09:18:00]: I'll check with Legal to be sure. Don't want to assume \u2014 if the NDA isn't confirmed executed we can't move to the information-exchange phase.\nR. Lim [2024-03-04T09:41:00]: I've checked our contract records. There is no executed NDA with OptiChain, Inc. on file. Their questionnaire (Q5.1) indicates they transmitted a draft NDA to us on February 19th and it hasn't come back countersigned. That's an open item \u2014 I'm flagging it as PROVISIONAL per ISP-001 \u00a712.1.4. No information exchange until we have a signed copy confirmed.\nT. Kowalski [2024-03-04T09:55:00]: Ah, I was probably thinking of a different vendor. Good that we checked properly rather than assumed.\nM. Osei [2024-03-04T10:03:00]: Logging NDA status as PROVISIONAL in the onboarding record. @P. Horak \u2014 flagging for awareness. This means the business team cannot share any Lichen data with OptiChain until Legal confirms the NDA is signed.\nP. Horak [2024-03-04T10:22:00]: Understood. I'll make sure ops knows. Thanks for catching this early.",
+    "section_id": null,
+    "row_id": null,
+    "record_id": null,
+    "thread_id": "SLK-001-THREAD-02"
+  },
+  {
+    "chunk_id": "SLK-001__thread_SLK-001-THREAD-03",
+    "source_id": "SLK-001",
+    "source_name": "Slack / Meeting Thread Notes",
+    "source_type": "SUPPLEMENTAL_NOTE",
+    "version": "Export at init.",
+    "authority_tier": 4,
+    "retrieval_lane": "INDEXED_HYBRID",
+    "allowed_agents": [
+      "procurement"
+    ],
+    "status": "CONFIRMED",
+    "chunk_type": "THREAD",
+    "chunk_order": 3,
+    "citation_label": "SLK-001 thread SLK-001-THREAD-03",
+    "text": "channel: #optichain-review-notes\nM. Osei [2024-03-05T15:15:00]: Posting the notes from today's OptiChain review kickoff (30 min call, attendees: P. Horak, D. Achterberg, R. Lim, M. Osei): Status: Questionnaire received, review underway. Three open items identified: 1. ERP integration \u2014 DA needs architecture diagram from OptiChain before IT Security can make a formal tier call. Classified as PROVISIONAL for now. 2. DPA \u2014 R. Lim confirmed a GDPR Art. 28 DPA is required given the EU employee data in scope. Legal will initiate drafting. DPA is a blocker before any data exchange. 3. NDA \u2014 not yet executed. R. Lim has flagged this as PROVISIONAL. Data exchange blocked until confirmed. Procurement path: standard enhanced (Class A, T3). No fast-track. No executive approval needed at this value. Next steps: DA to send architecture diagram request to Procurement by EOD Thursday. Legal to initiate DPA drafting. Procurement to notify OptiChain of open items and expected timelines.\nD. Achterberg [2024-03-05T15:28:00]: Confirmed \u2014 I'll have the formal information request to @M. Osei by Thursday EOD. The key thing I need from them is clarity on whether their extraction agent holds its own SAP service account credentials or whether it uses a Lichen-managed credential broker. That's the hinge point for the tier call.\nR. Lim [2024-03-05T15:35:00]: DPA drafting initiated. I'm working from our standard GDPR Art. 28 template. I'll also confirm the EU data residency setup \u2014 their questionnaire mentions eu-west-1 for EU data which is good, but I want to verify the OptiChain Europe B.V. entity is the contracting counterpart for the DPA. That affects how we structure the SCCs question.\nM. Osei [2024-03-05T15:41:00]: Good point on the entity. I'll flag that for the DPA negotiation. For the record: Procurement has logged overall onboarding status as ESCALATED pending resolution of the three open items. No implementation activity is authorized until all three are resolved and Legal and IT Security have signed off.\nP. Horak [2024-03-05T16:02:00]: Thanks all \u2014 this is exactly the kind of early clarity we need. I've let the ops team know nothing moves until the process is complete. OptiChain's sales team is asking about timeline \u2014 I'm telling them 10 business days assuming they're responsive on the architecture diagram and NDA. Sound right? Also \u2014 just to be clear, none of this goes back to OptiChain directly through this channel. All vendor comms go through Procurement.",
+    "section_id": null,
+    "row_id": null,
+    "record_id": null,
+    "thread_id": "SLK-001-THREAD-03"
+  },
+  {
+    "chunk_id": "SLK-001__thread_SLK-001-THREAD-04",
+    "source_id": "SLK-001",
+    "source_name": "Slack / Meeting Thread Notes",
+    "source_type": "SUPPLEMENTAL_NOTE",
+    "version": "Export at init.",
+    "authority_tier": 4,
+    "retrieval_lane": "INDEXED_HYBRID",
+    "allowed_agents": [
+      "procurement"
+    ],
+    "status": "CONFIRMED",
+    "chunk_type": "THREAD",
+    "chunk_order": 4,
+    "citation_label": "SLK-001 thread SLK-001-THREAD-04",
+    "text": "channel: #facilities-ops\nC. Oduya [2024-03-05T10:05:00]: Heads up \u2014 we're kicking off the onboarding process for Greenbrook Catering Services for the Dortmund facility cafeteria contract (PRQ-2024-0051). They're replacing Compass Group effective May 1. Contract value is about \u20ac48,000 annually. No data or system access required, just a facilities services agreement.\nN. Papadopoulos [2024-03-05T10:18:00]: Does this need to go through the full vendor approval process or is there a lighter-weight path for facilities vendors?\nC. Oduya [2024-03-05T10:31:00]: Class E, Tier 1 \u2014 so it's the streamlined path. No IT Security review required, no DPA, just standard NDA and Procurement sign-off at Manager level. Should be done in a few days.\nN. Papadopoulos [2024-03-05T10:39:00]: Perfect, and I assume no ERP integration or data access for a catering vendor?\nC. Oduya [2024-03-05T10:44:00]: Correct \u2014 zero system access. They're providing catering services only. The only thing we're sharing with them is the headcount by facility for meal planning, which is aggregate non-personal data. No DPA needed.\nC. Oduya [2024-03-05T11:02:00]: NDA is already drafted, sending to Greenbrook today. Should have this wrapped up by end of week. I'll post the final approval confirmation here once it's done.",
+    "section_id": null,
+    "row_id": null,
+    "record_id": null,
+    "thread_id": "SLK-001-THREAD-04"
+  }
+]

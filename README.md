@@ -4,7 +4,7 @@
 
 `enterprise_ai` is a Python-based enterprise AI demo focused on governed evidence delivery, not generic vector search. The project will ingest enterprise source material, convert it into retrieval-ready evidence units, route those units through the correct retrieval lane, and later deliver scoped context bundles to downstream agents in a way that preserves authority, permissions, freshness, and auditability.
 
-The current repository contains mock procurement, legal, security, and stakeholder documents that will be used to build and demonstrate this pipeline. No implementation work has started yet beyond repository setup and project planning.
+The current repository contains mock procurement, legal, security, and stakeholder documents that will be used to build and demonstrate this pipeline. Early preprocessing and chunking scaffolding now exists under `src/preprocessing/` and `src/chunking/`.
 
 ## Required Reading Before Implementation
 
@@ -83,7 +83,7 @@ The project should not read like "we built a vector database and called it enter
 
 ## Setup
 
-This repository is not fully scaffolded yet. There is currently no `pyproject.toml`, `uv.lock`, `src/`, or `tests/` directory, and no project implementation should begin until the next phase is explicitly authorized.
+This repository is still lightly scaffolded. There is currently no `pyproject.toml`, `uv.lock`, or `tests/` directory yet.
 
 Prerequisites for the next build stage:
 
@@ -107,8 +107,14 @@ Typical current usage:
 2. Review `core_documents/context_contract.md` first. It is the authoritative source for retrieval governance, source permissions, provenance, and conflict handling.
 3. Review `core_documents/design_doc.md` next for the engineering architecture and output contracts.
 4. Review `STRATEGY.md` for the locked retrieval and preprocessing approach.
-5. Use the repository rules in `AGENTS.md` before adding code or automation.
-6. Scaffold the Python project with `uv` only when implementation begins.
+5. Use `src/preprocessing/` to normalize raw source files into `NormalizedSource` objects with inherited source-level metadata.
+6. Use `src/chunking/` to convert chunkable normalized sources into canonical `Chunk` objects and write JSON artifacts to `data/processed/chunks/`.
+7. Use the repository rules in `AGENTS.md` before adding code or automation.
+
+Current implementation notes:
+
+- Preprocessing detects source type, preserves source structure, and attaches source-level metadata before any chunking.
+- Chunking consumes `NormalizedSource` objects only, attaches chunk metadata at creation time, and writes inspectable intermediate JSON artifacts. It does not embed or index anything yet.
 
 ## System Requirements
 
@@ -126,6 +132,12 @@ Typical current usage:
 Keep this section updated as the project evolves.
 
 ```bash
+# Run preprocessing on one or more source files from Python
+PYTHONPATH=src python3 -c "from preprocessing import load_source; print(load_source('mock_documents/OptiChain_VSQ_001_v2_1.json').to_dict()['source_id'])"
+
+# Build chunk artifacts for chunkable sources
+PYTHONPATH=src python3 -c "from chunking.pipeline import build_chunk_artifacts_from_paths; build_chunk_artifacts_from_paths(['mock_documents/DPA_Legal_Trigger_Matrix_v1_3.xlsx','mock_documents/Procurement_Approval_Matrix_v2_0.xlsx','mock_documents/Vendor_Precedent_Log_v1_1.json','mock_documents/Slack_Thread_Export_001.json'])"
+
 # Install dependencies
 uv sync  # after pyproject.toml and uv.lock are added
 
