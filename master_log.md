@@ -11,3 +11,10 @@
 **Changes:** Updated `master_log.md` to reflect successful push completion and the current recommendation to work on a separate branch next.
 **Result:** The repository log now matches the true repository state after the `main` branch push.
 **Next:** Start future work from a new branch instead of committing directly to `main`.
+
+### [#3] 2026-04-08 | Codex
+**Task:** Read `STRATEGY.md`, update `README.md` to describe the project purpose and execution plan, push the change to `main`, and create a branch for the preprocessing layer without starting implementation work.
+**Plan:** Review the strategy document, rewrite `README.md` so it reflects the governed retrieval architecture and phased execution approach, record the work in `master_log.md`, push the documentation change to `main`, then create a dedicated preprocessing branch for the next phase.
+**Changes:** In progress.
+**Result:** In progress.
+**Next:** Commit the documentation update, push `main`, and create the preprocessing branch.
