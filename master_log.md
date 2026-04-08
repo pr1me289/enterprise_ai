@@ -38,4 +38,4 @@
 **Plan:** Create minimal project test metadata, install repo-local test tooling with `uv`, add preprocessing-focused tests for the real mock files and helpers, run the suite with coverage, and record any faults exposed by the results.
 **Changes:** Added `pyproject.toml`, `uv.lock`, and a `tests/preprocessing/` suite covering the questionnaire, matrices, precedents, Slack exports, source loader routing, and the policy PDF path. Installed `pytest` and `pytest-cov` with `uv add --dev`.
 **Result:** `uv run pytest tests/preprocessing --cov=preprocessing --cov-report=term-missing` produced 13 passing tests and 1 failing test. The failure is real: preprocessing the mock policy PDF still raises `RuntimeError` because neither `pdftotext` nor `pypdf` is available. Coverage for `src/preprocessing` is 75%.
-**Next:** Decide whether to add a PDF extraction dependency on this branch or leave the failing policy test in place until policy ingestion is operational.
+**Next:** Add a PDF extraction dependency and rerun the failing preprocessing test.

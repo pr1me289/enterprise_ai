@@ -3,6 +3,9 @@ name = "enterprise-ai"
 version = "0.1.0"
 description = "Governed preprocessing and retrieval pipeline demo."
 requires-python = ">=3.12"
+dependencies = [
+    "pypdf>=6.9.2",
+]
 
 [build-system]
 requires = ["hatchling"]
