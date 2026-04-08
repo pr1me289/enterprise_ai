@@ -18,3 +18,10 @@
 **Changes:** In progress.
 **Result:** In progress.
 **Next:** Commit the documentation update, push `main`, and create the preprocessing branch.
+
+### [#4] 2026-04-08 | Codex
+**Task:** Finalize the strategy-driven documentation update and prepare a dedicated branch for preprocessing work.
+**Plan:** Record the completed README push in `master_log.md`, push the log update to `main`, then create a preprocessing branch without starting implementation.
+**Changes:** Updated `README.md` to reflect the project purpose, source lanes, phased execution plan, and retrieval architecture from `STRATEGY.md`. Updated `master_log.md` to record task completion. Prepared to create a dedicated preprocessing branch from the updated `main`.
+**Result:** The strategy-aligned README update was pushed to `origin/main` without starting project implementation work. The repository is now documented and ready for work to continue on a separate preprocessing branch.
+**Next:** Create and use the preprocessing branch for the next implementation phase once requirements are provided.
