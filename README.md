@@ -6,6 +6,18 @@
 
 The current repository contains mock procurement, legal, security, and stakeholder documents that will be used to build and demonstrate this pipeline. No implementation work has started yet beyond repository setup and project planning.
 
+## Required Reading Before Implementation
+
+Before starting any implementation work, read the core repository documents in this order:
+
+1. `core_documents/context_contract.md`
+2. `core_documents/design_doc.md`
+3. `STRATEGY.md`
+
+`core_documents/context_contract.md` is the authoritative governance document for source authority, retrieval permissions, provenance requirements, conflict resolution, freshness/versioning, and evidence admissibility. `core_documents/design_doc.md` is the engineering architecture reference for pipeline topology, orchestration, output contracts, and retrieval-system design. If these documents conflict, defer to `core_documents/context_contract.md` for retrieval and source-governance decisions.
+
+Implementation should not begin until these documents have been reviewed alongside this README.
+
 ## Architecture
 
 The architecture is intentionally split into two major layers.
@@ -92,9 +104,11 @@ There is no runnable application, test suite, retrieval service, or production b
 Typical current usage:
 
 1. Review the sample documents in `mock_documents/`.
-2. Review `STRATEGY.md` for the locked retrieval and preprocessing approach.
-3. Use the repository rules in `AGENTS.md` before adding code or automation.
-4. Scaffold the Python project with `uv` only when implementation begins.
+2. Review `core_documents/context_contract.md` first. It is the authoritative source for retrieval governance, source permissions, provenance, and conflict handling.
+3. Review `core_documents/design_doc.md` next for the engineering architecture and output contracts.
+4. Review `STRATEGY.md` for the locked retrieval and preprocessing approach.
+5. Use the repository rules in `AGENTS.md` before adding code or automation.
+6. Scaffold the Python project with `uv` only when implementation begins.
 
 ## System Requirements
 
