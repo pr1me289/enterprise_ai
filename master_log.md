@@ -39,3 +39,10 @@
 **Changes:** Added `pyproject.toml`, `uv.lock`, and a `tests/preprocessing/` suite covering the questionnaire, matrices, precedents, Slack exports, source loader routing, and the policy PDF path. Installed `pytest` and `pytest-cov` with `uv add --dev`.
 **Result:** `uv run pytest tests/preprocessing --cov=preprocessing --cov-report=term-missing` produced 13 passing tests and 1 failing test. The failure is real: preprocessing the mock policy PDF still raises `RuntimeError` because neither `pdftotext` nor `pypdf` is available. Coverage for `src/preprocessing` is 75%.
 **Next:** Add a PDF extraction dependency and rerun the failing preprocessing test.
+
+### [#7] 2026-04-08 | Codex
+**Task:** Bring the PDF dependency from `main` into the preprocessing branch and rerun the failing preprocessing test.
+**Plan:** Merge `main` into `feature/preprocessing-layer`, keep the branch test config, add `pypdf` to the branch project metadata, then rerun the policy-only test and the full preprocessing suite.
+**Changes:** Merged `main` into `feature/preprocessing-layer`, resolved `pyproject.toml`, `uv.lock`, and `master_log.md`, added `pypdf` as a runtime dependency, and set `tool.uv.package = false` so `uv run` does not require packaging the repo for tests.
+**Result:** `uv run pytest tests/preprocessing/test_policy_ingestor.py -q` now passes. `uv run pytest tests/preprocessing --cov=preprocessing --cov-report=term-missing` now reports 14 passed, 0 failed, with preprocessing coverage at 80%.
+**Next:** Merge the same dependency change into `feature/chunking-layer` so both active feature branches share the PDF ingestion dependency.
