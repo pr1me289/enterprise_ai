@@ -32,3 +32,10 @@
 **Changes:** Moved preprocessing code to `src/preprocessing`. Kept per-source ingestors plus the dispatcher and normalized source models. Removed mock-version mismatch warnings while preserving contract-level metadata and detected source versions.
 **Result:** The preprocessing layer now lives at the requested import path and matches the demo-document posture more closely.
 **Next:** Continue Step 4 implementation from `src/preprocessing` and add follow-on verification/tests as the layer expands.
+
+### [#6] 2026-04-08 | Codex
+**Task:** Add preprocessing tests under `tests/`, using the mock source files, and report honest failures plus coverage on `feature/preprocessing-layer`.
+**Plan:** Create minimal project test metadata, install repo-local test tooling with `uv`, add preprocessing-focused tests for the real mock files and helpers, run the suite with coverage, and record any faults exposed by the results.
+**Changes:** Added `pyproject.toml`, `uv.lock`, and a `tests/preprocessing/` suite covering the questionnaire, matrices, precedents, Slack exports, source loader routing, and the policy PDF path. Installed `pytest` and `pytest-cov` with `uv add --dev`.
+**Result:** `uv run pytest tests/preprocessing --cov=preprocessing --cov-report=term-missing` produced 13 passing tests and 1 failing test. The failure is real: preprocessing the mock policy PDF still raises `RuntimeError` because neither `pdftotext` nor `pypdf` is available. Coverage for `src/preprocessing` is 75%.
+**Next:** Decide whether to add a PDF extraction dependency on this branch or leave the failing policy test in place until policy ingestion is operational.
