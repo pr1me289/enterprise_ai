@@ -123,7 +123,7 @@ Current implementation notes:
 
 ## Storage And Index Outputs
 
-Step 8 writes three different persistence forms because the repository does not treat every source the same.
+Step 8 writes three different persistence forms because the repository does not treat every source the same. These are per-source logical indices over shared backends, not one undifferentiated global store.
 
 - Indexed-hybrid sources are stored twice: once as dense vectors in Chroma and once as lexical BM25 bundles.
 - The questionnaire is not embedded. It is stored as a direct structured object for field-level access.
@@ -132,7 +132,7 @@ Step 8 writes three different persistence forms because the repository does not 
 High-level flow:
 
 1. Finalized chunk artifacts are read from `data/processed/chunks/`.
-2. Indexed-hybrid chunks are grouped by source and written into per-source Chroma collections plus matching BM25 bundles.
+2. Indexed-hybrid chunks are grouped by source and written into per-source logical indices over shared Chroma and BM25 backends.
 3. The questionnaire is loaded directly from its normalized source and written to a structured JSON store.
 4. `data/indexes/index_registry.json` is written so retrieval code can route requests to the correct backend with explainable metadata.
 
@@ -150,13 +150,13 @@ Chroma is the dense-vector backend for semantic retrieval over finalized chunk o
   - `idx_precedents`
   - `idx_slack_notes`
 
-Each Chroma record stores the chunk text as the retrievable evidence unit plus inherited chunk metadata such as `source_id`, `source_type`, `authority_tier`, `retrieval_lane`, `version`, `document_date`, `freshness_status`, `allowed_agents`, `manifest_status`, and document-specific identifiers like `section_id`, `row_id`, or `thread_id` when present.
+Each Chroma record stores the chunk text as the retrievable evidence unit plus inherited chunk metadata such as `source_id`, `source_type`, `authority_tier`, `retrieval_lane`, `version`, `document_date`, `freshness_status`, `allowed_agents`, `manifest_status`, and document-specific identifiers like `section_id`, `row_id`, or `thread_id` when present. Governance fields such as `allowed_agents` are inherited from source and contract metadata already attached upstream; indexing persists them for filtering and auditability and does not invent them.
 
 Use these collections when the query needs semantic similarity over evidence text. The retrieval path should treat the Chroma hit as a candidate evidence unit and use the mirrored JSON in `data/indexes/vector_registry/` when raw text and full metadata need to be inspected outside the vector store itself.
 
 ### BM25 Bundles
 
-BM25 is the lexical retrieval backend for exact-term, acronym, clause, section, and identifier matching over the same logical source partitions used by Chroma.
+BM25 is the lexical retrieval backend for exact-term, acronym, clause, section, and identifier matching over the same per-source logical partitions used by Chroma.
 
 - Persisted data directory: `data/bm25/`
 - Builder code: `src/indexing/build_bm25_index.py`
@@ -168,7 +168,7 @@ The BM25 layer is meant to be used alongside the Chroma layer, not instead of it
 
 ### Questionnaire Structured Store
 
-The questionnaire bypasses embedding and indexing because it belongs to the direct structured lane.
+The questionnaire bypasses embedding and indexing because it belongs to the direct structured lane. It is not embedded, not added to Chroma, and not added to BM25.
 
 - Persisted store file: `data/structured/vq_direct_access.json`
 - Builder code: `src/indexing/build_structured_store.py`
@@ -183,7 +183,7 @@ The registry ties the storage layer together and makes the build explainable.
 - Registry file: `data/indexes/index_registry.json`
 - Registry definitions: `src/indexing/index_registry.py`
 
-This file records which logical indices exist, the source each one represents, the retrieval lane, the allowed agents, the configured backends, the embedding model, and build-level details such as version and status coverage. Retrieval and routing code should use this registry as the source-to-index map instead of hard-coding storage assumptions in multiple places.
+This file records which logical indices exist, the source each one represents, the retrieval lane, the allowed agents, the configured backends, the embedding model, and build-level details such as version and status coverage. Retrieval and routing code should use this registry as the canonical source-to-index map instead of hard-coding storage assumptions in multiple places.
 
 ## System Requirements
 
