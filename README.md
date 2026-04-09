@@ -121,6 +121,70 @@ Current implementation notes:
 - Storage/indexing now builds per-source logical indices over shared backends: Chroma collections for `idx_security_policy`, `idx_dpa_matrix`, `idx_procurement_matrix`, `idx_precedents`, and `idx_slack_notes`; BM25 bundles under `data/bm25/`; a direct structured questionnaire store at `vq_direct_access`; and `data/indexes/index_registry.json` for explainable build metadata.
 - Retrieval scaffolding now includes explicit source routing, endpoint permission guards, hybrid fusion, authority-aware reranking, and retrieval manifest objects under `src/retrieval/`.
 
+## Storage And Index Outputs
+
+Step 8 writes three different persistence forms because the repository does not treat every source the same.
+
+- Indexed-hybrid sources are stored twice: once as dense vectors in Chroma and once as lexical BM25 bundles.
+- The questionnaire is not embedded. It is stored as a direct structured object for field-level access.
+- A central registry records which logical indices and stores exist, what source each one represents, and which backends belong to it.
+
+High-level flow:
+
+1. Finalized chunk artifacts are read from `data/processed/chunks/`.
+2. Indexed-hybrid chunks are grouped by source and written into per-source Chroma collections plus matching BM25 bundles.
+3. The questionnaire is loaded directly from its normalized source and written to a structured JSON store.
+4. `data/indexes/index_registry.json` is written so retrieval code can route requests to the correct backend with explainable metadata.
+
+### Chroma Collections
+
+Chroma is the dense-vector backend for semantic retrieval over finalized chunk objects, not raw source files.
+
+- Persisted data directory: `data/indexes/chroma/`
+- Human-inspectable registry mirror: `data/indexes/vector_registry/`
+- Builder code: `src/indexing/build_vector_index.py`
+- Collection names:
+  - `idx_security_policy`
+  - `idx_dpa_matrix`
+  - `idx_procurement_matrix`
+  - `idx_precedents`
+  - `idx_slack_notes`
+
+Each Chroma record stores the chunk text as the retrievable evidence unit plus inherited chunk metadata such as `source_id`, `source_type`, `authority_tier`, `retrieval_lane`, `version`, `document_date`, `freshness_status`, `allowed_agents`, `manifest_status`, and document-specific identifiers like `section_id`, `row_id`, or `thread_id` when present.
+
+Use these collections when the query needs semantic similarity over evidence text. The retrieval path should treat the Chroma hit as a candidate evidence unit and use the mirrored JSON in `data/indexes/vector_registry/` when raw text and full metadata need to be inspected outside the vector store itself.
+
+### BM25 Bundles
+
+BM25 is the lexical retrieval backend for exact-term, acronym, clause, section, and identifier matching over the same logical source partitions used by Chroma.
+
+- Persisted data directory: `data/bm25/`
+- Builder code: `src/indexing/build_bm25_index.py`
+- Bundle naming: one `.pkl` file per logical index, for example `data/bm25/idx_security_policy.pkl`
+
+Each bundle contains the source-partitioned chunk texts, tokenized forms, chunk IDs, and chunk metadata needed to score and return keyword-focused matches. This is the right backend when the query contains exact language such as section numbers, control names, matrix terms, or product/vendor identifiers that may not rank well in dense retrieval alone.
+
+The BM25 layer is meant to be used alongside the Chroma layer, not instead of it. Both operate over the same finalized chunk units so hybrid retrieval can fuse semantic and lexical evidence without changing the evidence boundary.
+
+### Questionnaire Structured Store
+
+The questionnaire bypasses embedding and indexing because it belongs to the direct structured lane.
+
+- Persisted store file: `data/structured/vq_direct_access.json`
+- Builder code: `src/indexing/build_structured_store.py`
+- Logical store name: `vq_direct_access`
+
+This file contains top-level governance metadata for the questionnaire source and a `data` object holding the structured questionnaire payload itself. Use this store for direct field lookup and deterministic access patterns instead of semantic search. The helper in `src/indexing/build_structured_store.py` supports loading the store and retrieving fields by path.
+
+### Index Registry
+
+The registry ties the storage layer together and makes the build explainable.
+
+- Registry file: `data/indexes/index_registry.json`
+- Registry definitions: `src/indexing/index_registry.py`
+
+This file records which logical indices exist, the source each one represents, the retrieval lane, the allowed agents, the configured backends, the embedding model, and build-level details such as version and status coverage. Retrieval and routing code should use this registry as the source-to-index map instead of hard-coding storage assumptions in multiple places.
+
 ## System Requirements
 
 - macOS or Linux development environment

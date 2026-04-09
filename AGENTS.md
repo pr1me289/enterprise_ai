@@ -21,6 +21,12 @@ Under no circumstances should secrets be committed.
 
 ---
 
+## Seek Clarification When Necessary
+
+Whenever you encounter conflicting information, unclear instructions, or uncertainty about the meaning or implications of a prompt, stop development and ask the user for clarification before proceeding. Do not implement uncertain features or make ambiguous changes. Only act when the instructions, development philosophy, and rationale for the requested work are clearly understood.
+
+---
+
 ## Dependency & Environment Management
 
 This project uses `uv` for dependency and environment management.
