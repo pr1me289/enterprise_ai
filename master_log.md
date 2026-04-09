@@ -60,3 +60,10 @@
 **Changes:** Added `tests/conftest.py` plus a `tests/chunking/` suite covering source-specific chunking behavior, questionnaire skip behavior, artifact writing, and the chunking pipeline entrypoint. Updated `pyproject.toml` with pytest config and dev test dependencies, and refreshed `uv.lock` with `uv add --dev pytest pytest-cov`.
 **Result:** `uv run pytest tests/chunking --cov=chunking --cov-report=term-missing` completed with 11 passed, 0 failed. Chunking coverage is 99%: `src/chunking/__init__.py` 100%, `src/chunking/artifacts.py` 100%, `src/chunking/chunker.py` 97%, `src/chunking/models.py` 100%, `src/chunking/pipeline.py` 100%. The only uncovered line is `src/chunking/chunker.py:125`.
 **Next:** Keep chunking tests updated as chunk metadata or artifact shape changes in later indexing work.
+
+### [#10] 2026-04-09 | Codex
+**Task:** Rename the source contract field from `status` to `manifest_status` across preprocessing and chunking, then refresh chunk artifacts.
+**Plan:** Update the source contract and normalized source models, propagate the rename through ingestors and chunk models, rerun chunk artifact generation, and verify the change with the chunking test suite.
+**Changes:** Renamed the contract/model field to `manifest_status` in `src/preprocessing/` and `src/chunking/`, updated the direct `NormalizedSource` construction in `tests/chunking/test_chunker.py`, and regenerated `data/processed/chunks/DPA-TM-001.json`, `PAM-001.json`, `PVD-001.json`, and `SLK-001.json` so the artifact payload now emits `manifest_status`.
+**Result:** The code and generated chunk artifacts now consistently use `manifest_status` instead of `status`. `uv run pytest tests/chunking` completed with 11 passed, 0 failed.
+**Next:** Keep downstream indexing/retrieval code aligned to `manifest_status` as new layers are added.

@@ -24,7 +24,7 @@ class Chunk:
     authority_tier: int
     retrieval_lane: str
     allowed_agents: tuple[str, ...]
-    status: str
+    manifest_status: str
     chunk_type: str
     chunk_order: int
     citation_label: str

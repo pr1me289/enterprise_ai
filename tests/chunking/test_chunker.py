@@ -21,7 +21,7 @@ def test_policy_source_chunks_by_section(mock_documents_dir: Path) -> None:
     assert all(chunk.row_id is None for chunk in chunks)
     assert chunks[0].citation_label.startswith("ISP-001")
     assert chunks[0].allowed_agents == ("it_security", "legal", "procurement")
-    assert chunks[0].status == "PROVISIONAL"
+    assert chunks[0].manifest_status == "PROVISIONAL"
     assert chunks[0].chunk_order == 1
 
 
@@ -107,7 +107,7 @@ def test_chunk_source_rejects_unsupported_source_type() -> None:
         authority_tier=0,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=(),
-        status=ManifestStatus.PENDING,
+        manifest_status=ManifestStatus.PENDING,
         owner_role="None",
         source_path=Path("/tmp/bad.txt"),
         raw_text="bad",

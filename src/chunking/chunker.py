@@ -107,7 +107,7 @@ def _build_chunk(
         authority_tier=source.authority_tier,
         retrieval_lane=source.retrieval_lane.value,
         allowed_agents=source.allowed_agents,
-        status=source.status.value,
+        manifest_status=source.manifest_status.value,
         chunk_type=chunk_type.value,
         chunk_order=chunk_order,
         section_id=section_id,

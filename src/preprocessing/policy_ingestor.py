@@ -35,7 +35,7 @@ def ingest_policy(path: str | Path, contract: SourceContract) -> NormalizedSourc
         authority_tier=contract.authority_tier,
         retrieval_lane=contract.retrieval_lane,
         allowed_agents=contract.allowed_agents,
-        status=contract.status,
+        manifest_status=contract.manifest_status,
         owner_role=contract.owner_role,
         source_path=source_path,
         raw_text=normalize_text(raw_text),

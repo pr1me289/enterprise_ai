@@ -10,7 +10,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 1,
     "citation_label": "PAM-001 row A-T1",
@@ -31,7 +31,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 2,
     "citation_label": "PAM-001 row A-T2",
@@ -52,7 +52,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 3,
     "citation_label": "PAM-001 row A-T3",
@@ -73,7 +73,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 4,
     "citation_label": "PAM-001 row A-T4",
@@ -94,7 +94,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 5,
     "citation_label": "PAM-001 row B-T1",
@@ -115,7 +115,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 6,
     "citation_label": "PAM-001 row B-T2",
@@ -136,7 +136,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 7,
     "citation_label": "PAM-001 row B-T3",
@@ -157,7 +157,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 8,
     "citation_label": "PAM-001 row B-T4",
@@ -178,7 +178,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 9,
     "citation_label": "PAM-001 row C-T1",
@@ -199,7 +199,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 10,
     "citation_label": "PAM-001 row C-T2",
@@ -220,7 +220,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 11,
     "citation_label": "PAM-001 row C-T3",
@@ -241,7 +241,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 12,
     "citation_label": "PAM-001 row C-T4",
@@ -262,7 +262,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 13,
     "citation_label": "PAM-001 row D-T1",
@@ -283,7 +283,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 14,
     "citation_label": "PAM-001 row D-T2",
@@ -304,7 +304,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 15,
     "citation_label": "PAM-001 row D-T3",
@@ -325,7 +325,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 16,
     "citation_label": "PAM-001 row D-T4",
@@ -346,7 +346,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 17,
     "citation_label": "PAM-001 row E-T1",
@@ -367,7 +367,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 18,
     "citation_label": "PAM-001 row E-T2",
@@ -388,7 +388,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 19,
     "citation_label": "PAM-001 row E-T3",
@@ -409,7 +409,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "PROVISIONAL",
+    "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 20,
     "citation_label": "PAM-001 row E-T4",

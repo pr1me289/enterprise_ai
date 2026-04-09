@@ -17,7 +17,7 @@ class SourceContract:
     authority_tier: int
     retrieval_lane: RetrievalLane
     allowed_agents: tuple[str, ...]
-    status: ManifestStatus
+    manifest_status: ManifestStatus
     owner_role: str
     path_hints: tuple[str, ...]
 
@@ -31,7 +31,7 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
         authority_tier=1,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("it_security", "legal", "procurement"),
-        status=ManifestStatus.PROVISIONAL,
+        manifest_status=ManifestStatus.PROVISIONAL,
         owner_role="IT Security",
         path_hints=("it_security_policy",),
     ),
@@ -43,7 +43,7 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
         authority_tier=1,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("legal",),
-        status=ManifestStatus.PROVISIONAL,
+        manifest_status=ManifestStatus.PROVISIONAL,
         owner_role="Legal",
         path_hints=("dpa_legal_trigger_matrix",),
     ),
@@ -55,7 +55,7 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
         authority_tier=1,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("procurement",),
-        status=ManifestStatus.PROVISIONAL,
+        manifest_status=ManifestStatus.PROVISIONAL,
         owner_role="Procurement",
         path_hints=("procurement_approval_matrix",),
     ),
@@ -73,7 +73,7 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
             "checklist_assembler",
             "checkoff",
         ),
-        status=ManifestStatus.PENDING,
+        manifest_status=ManifestStatus.PENDING,
         owner_role="Procurement",
         path_hints=("optichain_vsq", "vendor_questionnaire"),
     ),
@@ -85,7 +85,7 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
         authority_tier=3,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("it_security", "legal", "procurement"),
-        status=ManifestStatus.CONFIRMED,
+        manifest_status=ManifestStatus.CONFIRMED,
         owner_role="IT Architecture / Platform",
         path_hints=("vendor_precedent_log", "precedent_log"),
     ),
@@ -97,7 +97,7 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
         authority_tier=4,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("procurement",),
-        status=ManifestStatus.CONFIRMED,
+        manifest_status=ManifestStatus.CONFIRMED,
         owner_role="Procurement",
         path_hints=("slack_thread_export", "meeting_thread"),
     ),

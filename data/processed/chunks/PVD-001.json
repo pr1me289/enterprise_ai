@@ -12,7 +12,7 @@
       "legal",
       "procurement"
     ],
-    "status": "CONFIRMED",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "RECORD",
     "chunk_order": 1,
     "citation_label": "PVD-001 record PVD-001-REC-001",
@@ -35,7 +35,7 @@
       "legal",
       "procurement"
     ],
-    "status": "CONFIRMED",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "RECORD",
     "chunk_order": 2,
     "citation_label": "PVD-001 record PVD-001-REC-002",
@@ -58,7 +58,7 @@
       "legal",
       "procurement"
     ],
-    "status": "CONFIRMED",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "RECORD",
     "chunk_order": 3,
     "citation_label": "PVD-001 record PVD-001-REC-003",
@@ -81,7 +81,7 @@
       "legal",
       "procurement"
     ],
-    "status": "CONFIRMED",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "RECORD",
     "chunk_order": 4,
     "citation_label": "PVD-001 record PVD-001-REC-004",

@@ -10,7 +10,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "CONFIRMED",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "THREAD",
     "chunk_order": 1,
     "citation_label": "SLK-001 thread SLK-001-THREAD-01",
@@ -31,7 +31,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "CONFIRMED",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "THREAD",
     "chunk_order": 2,
     "citation_label": "SLK-001 thread SLK-001-THREAD-02",
@@ -52,7 +52,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "CONFIRMED",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "THREAD",
     "chunk_order": 3,
     "citation_label": "SLK-001 thread SLK-001-THREAD-03",
@@ -73,7 +73,7 @@
     "allowed_agents": [
       "procurement"
     ],
-    "status": "CONFIRMED",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "THREAD",
     "chunk_order": 4,
     "citation_label": "SLK-001 thread SLK-001-THREAD-04",
