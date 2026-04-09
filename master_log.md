@@ -74,3 +74,10 @@
 **Changes:** Extended `src/preprocessing/text_utils.py` so policy splitting recognizes Markdown forms like `## 1. Purpose`, `### 6.1 Access Provisioning`, and `**12.1.4** ...`. Updated `tests/chunking/test_chunker.py` and `tests/chunking/test_pipeline.py` to use `mock_documents/IT_Security_Policy_V4.2.md`, updated the chunking command in `README.md`, and generated `data/processed/chunks/ISP-001.json`.
 **Result:** The Markdown IT security policy now chunks correctly into 96 section-boundary artifacts, including clause-level citations such as `ISP-001 §12.1.4`. `uv run pytest tests/chunking` completed with 11 passed, 0 failed.
 **Next:** Keep policy parsing aligned if future mock policy sources introduce additional Markdown heading styles or mixed formatting.
+
+### [#12] 2026-04-09 | Codex
+**Task:** Reduce over-chunking in the IT security policy so container headings do not become weak retrieval units.
+**Plan:** Refine policy section splitting to suppress parent/container headings with no substantive body text, preserve leaf clauses whose policy content lives on the heading line, strip separator-only lines from chunk text, regenerate the policy artifact, and verify with tests.
+**Changes:** Updated `src/preprocessing/text_utils.py` with policy-specific cleanup and a filter that drops empty container sections such as `6`, `6.1`, and `6.2` while retaining substantive leaf clauses like `6.1.1`. Regenerated `data/processed/chunks/ISP-001.json` and tightened `tests/chunking/test_chunker.py` plus `tests/chunking/test_pipeline.py` to assert the new policy chunk shape and separator removal.
+**Result:** `ISP-001.json` now contains 82 stronger policy chunks instead of 96, container-only headings are omitted, and trailing `---` separators are removed from chunk text. `uv run pytest tests/chunking` completed with 11 passed, 0 failed.
+**Next:** Revisit the heading-substance heuristic only if future policy formats introduce ambiguous section labels that should be retained or merged differently.

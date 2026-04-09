@@ -26,5 +26,7 @@ def test_build_chunk_artifacts_from_paths_uses_preprocessing_and_writes_json(
     dpa_payload = json.loads((tmp_path / "DPA-TM-001.json").read_text(encoding="utf-8"))
     assert policy_payload[0]["chunk_type"] == "SECTION"
     assert policy_payload[0]["section_id"] == "1"
+    assert all(chunk["section_id"] not in {"6", "6.1", "6.2"} for chunk in policy_payload)
+    assert not any(chunk["text"].endswith("---") for chunk in policy_payload)
     assert any(chunk["section_id"] == "12.1.4" for chunk in policy_payload)
     assert dpa_payload[0]["chunk_type"] == "ROW"

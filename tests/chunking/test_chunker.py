@@ -24,7 +24,13 @@ def test_policy_source_chunks_by_section(mock_documents_dir: Path) -> None:
     assert chunks[0].manifest_status == "PROVISIONAL"
     assert chunks[0].section_id == "1"
     assert chunks[0].text.startswith("1 Purpose")
+    assert not chunks[0].text.endswith("---")
     assert chunks[0].chunk_order == 1
+    section_ids = {chunk.section_id for chunk in chunks}
+    assert "6" not in section_ids
+    assert "6.1" not in section_ids
+    assert "6.2" not in section_ids
+    assert "6.1.1" in section_ids
     assert any(chunk.section_id == "12.1.4" for chunk in chunks)
     nda_chunk = next(chunk for chunk in chunks if chunk.section_id == "12.1.4")
     assert "Onboarding may not proceed to the information-exchange phase" in nda_chunk.text
