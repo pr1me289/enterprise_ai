@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
-from indexing.index_registry import SOURCE_ID_TO_LOGICAL_STORE, index_definition_for_source
+from pathlib import Path
+
+from indexing.load_index_registry import get_logical_store_name, get_registry_entry
 
 
-def route_source(source_id: str) -> str:
-    if source_id not in SOURCE_ID_TO_LOGICAL_STORE:
-        raise KeyError(f"Unsupported source routing request: {source_id}")
-    return SOURCE_ID_TO_LOGICAL_STORE[source_id]
+def route_source(source_id: str, registry_path: str | Path | None = None) -> str:
+    return get_logical_store_name(source_id, path=registry_path) if registry_path else get_logical_store_name(source_id)
 
 
-def route_index_endpoint(source_id: str) -> str:
-    return index_definition_for_source(source_id).index_name
+def route_index_endpoint(source_id: str, registry_path: str | Path | None = None) -> str:
+    entry = get_registry_entry(source_id, path=registry_path) if registry_path else get_registry_entry(source_id)
+    if entry["storage_kind"] != "vector_bm25":
+        raise KeyError(f"Source {source_id} is not mapped to a vector/BM25 index.")
+    return str(entry["logical_store_name"])

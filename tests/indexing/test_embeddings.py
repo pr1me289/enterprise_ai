@@ -16,7 +16,7 @@ def _make_chunk(
         chunk_id=chunk_id,
         source_id=source_id,
         source_name="IT Security Policy",
-        source_type="POLICY",
+        source_type="POLICY_DOCUMENT",
         version="4.2",
         document_date="2026-04-04",
         freshness_status="CURRENT",

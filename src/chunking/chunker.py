@@ -9,21 +9,24 @@ from .models import Chunk, ChunkType
 PRECEDENT_DOMAIN_SCOPE_BY_RECORD_ID = {
     "PVD-001-REC-001": "legal",
     "PVD-001-REC-002": "security",
-    "PVD-001-REC-003": "procurement",
+    "PVD-001-REC-003": "legal",
     "PVD-001-REC-004": "procurement",
 }
 
 
 def chunk_source(source: NormalizedSource) -> list[Chunk]:
-    if source.source_type is SourceType.POLICY:
+    if source.source_type is SourceType.POLICY_DOCUMENT:
         return _chunk_policy(source)
-    if source.source_type is SourceType.MATRIX:
+    if source.source_type in {
+        SourceType.LEGAL_TRIGGER_MATRIX,
+        SourceType.PROCUREMENT_APPROVAL_MATRIX,
+    }:
         return _chunk_matrix(source)
-    if source.source_type is SourceType.PRECEDENT:
+    if source.source_type is SourceType.VENDOR_PRECEDENT:
         return _chunk_precedent(source)
-    if source.source_type is SourceType.SUPPLEMENTAL_NOTE:
+    if source.source_type is SourceType.SLACK_THREAD:
         return _chunk_slack(source)
-    if source.source_type is SourceType.QUESTIONNAIRE:
+    if source.source_type is SourceType.VENDOR_QUESTIONNAIRE:
         return []
     raise ValueError(f"Unsupported source type for chunking: {source.source_type}")
 

@@ -40,7 +40,7 @@ def ingest_slack_threads(path: str | Path, contract: SourceContract) -> Normaliz
         source_type=contract.source_type,
         source_name=contract.source_name,
         version=contract.version,
-        document_date=_resolve_document_date(structured_data, threads) or contract.document_date,
+        document_date=contract.document_date,
         freshness_status=contract.freshness_status,
         authority_tier=contract.authority_tier,
         retrieval_lane=contract.retrieval_lane,
@@ -119,12 +119,4 @@ def _detect_version_from_name(filename: str) -> str | None:
     for token in stem.replace("-", "_").split("_"):
         if token.lower().startswith("v") and any(character.isdigit() for character in token):
             return token.lower().lstrip("v")
-    return None
-
-
-def _resolve_document_date(data: dict | None, threads: list[SlackThread]) -> str | None:
-    if data and data.get("export_date"):
-        return str(data["export_date"])
-    if threads and threads[0].export_date:
-        return threads[0].export_date
     return None

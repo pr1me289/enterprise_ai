@@ -115,8 +115,9 @@ Typical current usage:
 
 Current implementation notes:
 
-- Preprocessing detects source type, preserves source structure, and attaches source-level metadata before any chunking, including `document_date`, `freshness_status`, and source-class citation posture where available.
-- Chunking consumes `NormalizedSource` objects only, attaches finalized chunk metadata at creation time, and writes inspectable intermediate JSON artifacts. Current chunk artifacts now carry `document_date`, `freshness_status`, `is_primary_citable`, and manual precedent `domain_scope` values needed for later storage/indexing work.
+- Preprocessing detects source type, preserves source structure, and attaches source-level metadata before any chunking. For this demo, all current normalized sources inherit the same source-level defaults: `document_date=2026-04-04` and `freshness_status=CURRENT`.
+- The `source_type` contract is now intentionally explicit and source-specific: `POLICY_DOCUMENT`, `LEGAL_TRIGGER_MATRIX`, `PROCUREMENT_APPROVAL_MATRIX`, `VENDOR_QUESTIONNAIRE`, `VENDOR_PRECEDENT`, and `SLACK_THREAD`.
+- Chunking consumes `NormalizedSource` objects only, attaches finalized chunk metadata at creation time, and writes inspectable intermediate JSON artifacts. Current chunk artifacts carry inherited `document_date`, `freshness_status`, `is_primary_citable`, and reviewed precedent `domain_scope` values needed for later storage/indexing work.
 - Indexing now consumes finalized chunk artifacts, embeds only indexed-hybrid chunks with `sentence-transformers/all-MiniLM-L6-v2`, and persists vectors plus inherited chunk metadata into Chroma.
 - Storage/indexing now builds per-source logical indices over shared backends: Chroma collections for `idx_security_policy`, `idx_dpa_matrix`, `idx_procurement_matrix`, `idx_precedents`, and `idx_slack_notes`; BM25 bundles under `data/bm25/`; a direct structured questionnaire store at `vq_direct_access`; and `data/indexes/index_registry.json` for explainable build metadata.
 - Retrieval scaffolding now includes explicit source routing, endpoint permission guards, hybrid fusion, authority-aware reranking, and retrieval manifest objects under `src/retrieval/`.
@@ -182,8 +183,11 @@ The registry ties the storage layer together and makes the build explainable.
 
 - Registry file: `data/indexes/index_registry.json`
 - Registry definitions: `src/indexing/index_registry.py`
+- Registry loader/helpers: `src/indexing/load_index_registry.py`
 
-This file records which logical indices exist, the source each one represents, the retrieval lane, the allowed agents, the configured backends, the embedding model, and build-level details such as version and status coverage. Retrieval and routing code should use this registry as the canonical source-to-index map instead of hard-coding storage assumptions in multiple places.
+This file is a source-level control-plane registry, not a chunk registry. It contains one entry per logical source and records the source metadata (`source_id`, `source_name`, `source_type`, `authority_tier`, `retrieval_lane`, `version`, `document_date`, `freshness_status`, `manifest_status`, `allowed_agents`, `is_primary_citable`) plus the storage metadata (`storage_kind`, `logical_store_name`, `backends`, and `backend_locations`) needed for routing and explainability.
+
+Retrieval and routing code should use this registry as the canonical source-to-store map instead of hard-coding collection names, bundle paths, store names, or allowed-agent assumptions in multiple places.
 
 ## System Requirements
 

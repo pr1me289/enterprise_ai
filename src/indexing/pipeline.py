@@ -22,6 +22,7 @@ from .index_registry import (
     DEFAULT_VECTOR_REGISTRY_DIR,
     build_index_registry_payload,
     group_chunks_by_index_name,
+    write_index_registry,
 )
 from .models import EmbeddingRecord
 
@@ -153,14 +154,10 @@ def build_storage_indices(
 
     registry_payload = build_index_registry_payload(
         chunk_groups=chunk_groups,
-        embedding_model=model_name,
+        structured_store_path=structured_store_path,
+        bm25_persist_directory=bm25_persist_directory,
     )
-    registry_path = Path(index_registry_path)
-    registry_path.parent.mkdir(parents=True, exist_ok=True)
-    registry_path.write_text(
-        json.dumps(registry_payload, indent=2, ensure_ascii=True) + "\n",
-        encoding="utf-8",
-    )
+    registry_path = write_index_registry(registry_payload, path=index_registry_path)
 
     return {
         "vector_counts": vector_counts,

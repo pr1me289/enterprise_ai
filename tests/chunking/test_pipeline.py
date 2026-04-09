@@ -25,6 +25,7 @@ def test_build_chunk_artifacts_from_paths_uses_preprocessing_and_writes_json(
     policy_payload = json.loads((tmp_path / "ISP-001.json").read_text(encoding="utf-8"))
     dpa_payload = json.loads((tmp_path / "DPA-TM-001.json").read_text(encoding="utf-8"))
     assert policy_payload[0]["chunk_type"] == "SECTION"
+    assert policy_payload[0]["source_type"] == "POLICY_DOCUMENT"
     assert policy_payload[0]["section_id"] == "1"
     assert policy_payload[0]["document_date"] == "2026-04-04"
     assert policy_payload[0]["freshness_status"] == "CURRENT"
@@ -33,5 +34,7 @@ def test_build_chunk_artifacts_from_paths_uses_preprocessing_and_writes_json(
     assert not any(chunk["text"].endswith("---") for chunk in policy_payload)
     assert any(chunk["section_id"] == "12.1.4" for chunk in policy_payload)
     assert dpa_payload[0]["freshness_status"] == "CURRENT"
+    assert dpa_payload[0]["source_type"] == "LEGAL_TRIGGER_MATRIX"
+    assert dpa_payload[0]["document_date"] == "2026-04-04"
     assert dpa_payload[0]["is_primary_citable"] is True
     assert dpa_payload[0]["chunk_type"] == "ROW"

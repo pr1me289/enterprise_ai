@@ -32,7 +32,7 @@ def test_persist_embeddings_upserts_documents_embeddings_and_metadata(tmp_path) 
         embedding=[0.1, 0.2],
         source_id="ISP-001",
         source_name="IT Security Policy",
-        source_type="POLICY",
+        source_type="POLICY_DOCUMENT",
         version="4.2",
         document_date="2026-04-04",
         freshness_status="CURRENT",

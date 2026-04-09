@@ -7,6 +7,9 @@ from pathlib import Path
 
 from .models import ManifestStatus, RetrievalLane, SourceType
 
+DEMO_DOCUMENT_DATE = "2026-04-04"
+DEMO_FRESHNESS_STATUS = "CURRENT"
+
 
 @dataclass(frozen=True, slots=True)
 class SourceContract:
@@ -28,11 +31,11 @@ class SourceContract:
 SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
     SourceContract(
         source_id="ISP-001",
-        source_type=SourceType.POLICY,
+        source_type=SourceType.POLICY_DOCUMENT,
         source_name="IT Security Policy",
         version="4.2",
-        document_date=None,
-        freshness_status="CURRENT",
+        document_date=DEMO_DOCUMENT_DATE,
+        freshness_status=DEMO_FRESHNESS_STATUS,
         authority_tier=1,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("it_security", "legal", "procurement"),
@@ -43,11 +46,11 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
     ),
     SourceContract(
         source_id="DPA-TM-001",
-        source_type=SourceType.MATRIX,
+        source_type=SourceType.LEGAL_TRIGGER_MATRIX,
         source_name="DPA Legal Trigger Matrix",
         version="2.1",
-        document_date=None,
-        freshness_status="CURRENT",
+        document_date=DEMO_DOCUMENT_DATE,
+        freshness_status=DEMO_FRESHNESS_STATUS,
         authority_tier=1,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("legal",),
@@ -58,11 +61,11 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
     ),
     SourceContract(
         source_id="PAM-001",
-        source_type=SourceType.MATRIX,
+        source_type=SourceType.PROCUREMENT_APPROVAL_MATRIX,
         source_name="Procurement Approval Matrix",
         version="3.0",
-        document_date=None,
-        freshness_status="CURRENT",
+        document_date=DEMO_DOCUMENT_DATE,
+        freshness_status=DEMO_FRESHNESS_STATUS,
         authority_tier=1,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("procurement",),
@@ -73,11 +76,11 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
     ),
     SourceContract(
         source_id="VQ-OC-001",
-        source_type=SourceType.QUESTIONNAIRE,
+        source_type=SourceType.VENDOR_QUESTIONNAIRE,
         source_name="OptiChain Vendor Questionnaire",
         version="Submission rev. 1",
-        document_date=None,
-        freshness_status="CURRENT",
+        document_date=DEMO_DOCUMENT_DATE,
+        freshness_status=DEMO_FRESHNESS_STATUS,
         authority_tier=2,
         retrieval_lane=RetrievalLane.DIRECT_STRUCTURED,
         allowed_agents=(
@@ -94,11 +97,11 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
     ),
     SourceContract(
         source_id="PVD-001",
-        source_type=SourceType.PRECEDENT,
+        source_type=SourceType.VENDOR_PRECEDENT,
         source_name="Prior Vendor Decisions / Precedent Log",
         version="Current at init.",
-        document_date=None,
-        freshness_status="CURRENT",
+        document_date=DEMO_DOCUMENT_DATE,
+        freshness_status=DEMO_FRESHNESS_STATUS,
         authority_tier=3,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("it_security", "legal", "procurement"),
@@ -109,11 +112,11 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
     ),
     SourceContract(
         source_id="SLK-001",
-        source_type=SourceType.SUPPLEMENTAL_NOTE,
+        source_type=SourceType.SLACK_THREAD,
         source_name="Slack / Meeting Thread Notes",
         version="Export at init.",
-        document_date=None,
-        freshness_status="CURRENT",
+        document_date=DEMO_DOCUMENT_DATE,
+        freshness_status=DEMO_FRESHNESS_STATUS,
         authority_tier=4,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("procurement",),

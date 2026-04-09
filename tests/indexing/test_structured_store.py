@@ -14,6 +14,10 @@ def test_build_structured_store_writes_questionnaire_payload(repo_root, tmp_path
 
     assert output_path.name == "vq_direct_access.json"
     assert payload["source_id"] == "VQ-OC-001"
+    assert payload["source_type"] == "VENDOR_QUESTIONNAIRE"
+    assert payload["authority_tier"] == 2
+    assert payload["retrieval_lane"] == "DIRECT_STRUCTURED"
+    assert payload["document_date"] == "2026-04-04"
     assert payload["freshness_status"] == "CURRENT"
     assert "vendor_profile" in payload["data"]
 

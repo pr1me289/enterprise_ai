@@ -34,7 +34,7 @@ def ingest_precedent_log(path: str | Path, contract: SourceContract) -> Normaliz
         source_type=contract.source_type,
         source_name=contract.source_name,
         version=contract.version,
-        document_date=str(data.get("last_updated") or contract.document_date or "") or None,
+        document_date=contract.document_date,
         freshness_status=contract.freshness_status,
         authority_tier=contract.authority_tier,
         retrieval_lane=contract.retrieval_lane,

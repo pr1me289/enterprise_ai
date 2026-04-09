@@ -21,14 +21,29 @@ from .embeddings import (
     should_embed,
 )
 from .index_registry import (
-    ACCESS_MATRIX,
     DEFAULT_BM25_PERSIST_DIR,
     DEFAULT_INDEX_REGISTRY_PATH,
     DEFAULT_STRUCTURED_STORE_DIR,
     INDEX_CONFIG,
+    SOURCE_ID_TO_LOGICAL_STORE,
+    SOURCE_STORE_CONFIG,
     SOURCE_ID_TO_INDEX_NAME,
     build_index_registry_payload,
+    group_chunks_by_index_name,
     index_name_for_source,
+    write_index_registry,
+)
+from .load_index_registry import (
+    get_allowed_agents,
+    get_backends,
+    get_entry_by_logical_store_name,
+    get_logical_store_name,
+    get_registry_entry,
+    is_indexed_source,
+    is_structured_source,
+    list_indexed_sources,
+    list_structured_sources,
+    load_index_registry,
 )
 from .metadata_schema import metadata_from_chunk
 from .models import EmbeddingRecord
@@ -41,7 +56,6 @@ from .pipeline import (
 )
 
 __all__ = [
-    "ACCESS_MATRIX",
     "BM25Index",
     "DEFAULT_BM25_PERSIST_DIR",
     "DEFAULT_CHROMA_PERSIST_DIR",
@@ -53,6 +67,8 @@ __all__ = [
     "DEFAULT_VECTOR_REGISTRY_DIR",
     "EmbeddingRecord",
     "INDEX_CONFIG",
+    "SOURCE_ID_TO_LOGICAL_STORE",
+    "SOURCE_STORE_CONFIG",
     "SOURCE_ID_TO_INDEX_NAME",
     "StructuredStore",
     "VectorIndex",
@@ -65,11 +81,23 @@ __all__ = [
     "build_structured_store",
     "build_vector_indices",
     "embed_batch",
+    "get_allowed_agents",
+    "get_backends",
+    "get_entry_by_logical_store_name",
+    "get_logical_store_name",
+    "get_registry_entry",
+    "group_chunks_by_index_name",
     "index_name_for_source",
+    "is_indexed_source",
+    "is_structured_source",
+    "list_indexed_sources",
+    "list_structured_sources",
     "load_chunk_artifacts",
     "load_chunk_artifacts_from_dir",
+    "load_index_registry",
     "metadata_from_chunk",
     "should_embed",
     "tokenize",
     "vector_records_from_embeddings",
+    "write_index_registry",
 ]

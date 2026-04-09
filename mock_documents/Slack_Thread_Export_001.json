@@ -5,7 +5,7 @@
   "classification": "INTERNAL USE",
   "source_id": "SLK-001",
   "source_name": "Slack / Meeting Thread Notes",
-  "source_type": "SUPPLEMENTAL_NOTE",
+  "source_type": "SLACK_THREAD",
   "authority_tier": 4,
   "citation_class": "SUPPLEMENTARY",
   "domain": "procurement",

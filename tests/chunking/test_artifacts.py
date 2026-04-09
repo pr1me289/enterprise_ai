@@ -26,6 +26,7 @@ def test_write_chunk_artifacts_writes_per_source_json(mock_documents_dir: Path, 
     payload = json.loads((tmp_path / "DPA-TM-001.json").read_text(encoding="utf-8"))
     assert len(payload) == 27
     assert payload[0]["chunk_id"] == "DPA-TM-001__row_A-01"
+    assert payload[0]["source_type"] == "LEGAL_TRIGGER_MATRIX"
     assert payload[0]["allowed_agents"] == ["legal"]
 
 
@@ -47,4 +48,6 @@ def test_chunk_and_write_sources_builds_artifacts_from_normalized_sources(
     precedent_payload = json.loads((tmp_path / "PVD-001.json").read_text(encoding="utf-8"))
     slack_payload = json.loads((tmp_path / "SLK-001.json").read_text(encoding="utf-8"))
     assert precedent_payload[0]["record_id"] == "PVD-001-REC-001"
+    assert precedent_payload[2]["domain_scope"] == "legal"
     assert slack_payload[0]["thread_id"] == "SLK-001-THREAD-01"
+    assert all(chunk["allowed_agents"] == ["procurement"] for chunk in slack_payload)

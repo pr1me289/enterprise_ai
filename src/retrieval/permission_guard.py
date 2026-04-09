@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from indexing.index_registry import ACCESS_MATRIX
+from pathlib import Path
+
+from indexing.load_index_registry import get_entry_by_logical_store_name, load_index_registry
 
 
 class UnauthorizedRetrieval(PermissionError):
@@ -14,8 +16,25 @@ class UnauthorizedRetrieval(PermissionError):
         self.agent_name = agent_name
 
 
-def assert_endpoint_access(agent_name: str, index_name: str, access_matrix: dict[str, tuple[str, ...]] | None = None) -> None:
-    matrix = access_matrix or ACCESS_MATRIX
-    allowed_agents = matrix.get(index_name, ())
+def build_access_matrix(registry_path: str | Path | None = None) -> dict[str, tuple[str, ...]]:
+    payload = load_index_registry(registry_path) if registry_path else load_index_registry()
+    return {
+        entry["logical_store_name"]: tuple(entry["allowed_agents"])
+        for entry in payload["sources"].values()
+        if entry["storage_kind"] == "vector_bm25"
+    }
+
+
+def assert_endpoint_access(
+    agent_name: str,
+    index_name: str,
+    access_matrix: dict[str, tuple[str, ...]] | None = None,
+    registry_path: str | Path | None = None,
+) -> None:
+    if access_matrix is None:
+        entry = get_entry_by_logical_store_name(index_name, path=registry_path) if registry_path else get_entry_by_logical_store_name(index_name)
+        allowed_agents = tuple(entry["allowed_agents"]) if entry["storage_kind"] == "vector_bm25" else ()
+    else:
+        allowed_agents = access_matrix.get(index_name, ())
     if agent_name not in allowed_agents:
         raise UnauthorizedRetrieval(index_name, agent_name)

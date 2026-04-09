@@ -50,7 +50,8 @@ def test_dpa_matrix_chunks_one_row_per_chunk(mock_documents_dir: Path) -> None:
     assert chunks[0].row_id == "A-01"
     assert chunks[0].citation_label == "DPA-TM-001 row A-01"
     assert "GDPR Art. 28" in chunks[0].text
-    assert chunks[0].document_date is None
+    assert chunks[0].source_type == "LEGAL_TRIGGER_MATRIX"
+    assert chunks[0].document_date == "2026-04-04"
     assert chunks[0].freshness_status == "CURRENT"
     assert chunks[0].is_primary_citable is True
     assert chunks[-1].row_id == "G-02"
@@ -63,6 +64,7 @@ def test_procurement_matrix_chunks_one_row_per_chunk(mock_documents_dir: Path) -
 
     assert len(chunks) == 20
     assert chunks[0].row_id == "A-T1"
+    assert chunks[0].source_type == "PROCUREMENT_APPROVAL_MATRIX"
     assert chunks[0].allowed_agents == ("procurement",)
     assert chunks[0].is_primary_citable is True
     assert chunks[-1].row_id == "E-T4"
@@ -76,13 +78,15 @@ def test_precedent_source_chunks_by_record(mock_documents_dir: Path) -> None:
 
     assert len(chunks) == 4
     assert all(chunk.chunk_type == "RECORD" for chunk in chunks)
+    assert all(chunk.source_type == "VENDOR_PRECEDENT" for chunk in chunks)
     assert chunks[0].record_id == "PVD-001-REC-001"
     assert chunks[0].citation_label == "PVD-001 record PVD-001-REC-001"
-    assert chunks[0].document_date == "2024-03-01"
+    assert chunks[0].document_date == "2026-04-04"
     assert chunks[0].is_primary_citable is False
     assert chunks[0].domain_scope == "legal"
     assert chunks[1].domain_scope == "security"
-    assert chunks[2].domain_scope == "procurement"
+    assert chunks[2].domain_scope == "legal"
+    assert chunks[3].domain_scope == "procurement"
     assert "Meridian Analytics, Ltd." in chunks[0].text
 
 
@@ -93,10 +97,12 @@ def test_slack_source_chunks_by_thread(mock_documents_dir: Path) -> None:
 
     assert len(chunks) == 4
     assert all(chunk.chunk_type == "THREAD" for chunk in chunks)
+    assert all(chunk.source_type == "SLACK_THREAD" for chunk in chunks)
     assert chunks[0].thread_id == "SLK-001-THREAD-01"
     assert chunks[0].citation_label == "SLK-001 thread SLK-001-THREAD-01"
-    assert chunks[0].document_date == "2024-03-05"
+    assert chunks[0].document_date == "2026-04-04"
     assert chunks[0].is_primary_citable is False
+    assert all(chunk.allowed_agents == ("procurement",) for chunk in chunks)
     assert "vendor-eval-optichain" in chunks[0].text
 
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 from indexing.index_registry import (
     INDEX_CONFIG,
     SOURCE_ID_TO_INDEX_NAME,
+    SOURCE_STORE_CONFIG,
     build_index_registry_payload,
     group_chunks_by_index_name,
     index_name_for_source,
@@ -29,15 +30,25 @@ def test_group_chunks_by_index_name_uses_per_source_logical_indices(repo_root) -
     assert grouped["idx_precedents"][0].source_id == "PVD-001"
 
 
-def test_build_index_registry_payload_captures_versions_and_counts(repo_root) -> None:
+def test_build_index_registry_payload_is_source_level_and_uses_store_mapping(repo_root) -> None:
     chunks = load_chunk_artifacts_from_dir(repo_root / "data/processed/chunks")
     grouped = group_chunks_by_index_name(chunks)
 
     payload = build_index_registry_payload(
         chunk_groups=grouped,
-        embedding_model="sentence-transformers/all-MiniLM-L6-v2",
+        structured_store_path=repo_root / "data/structured/vq_direct_access.json",
+        bm25_persist_directory=repo_root / "data/bm25",
     )
 
-    assert payload["indices"]["idx_security_policy"]["chunk_count"] == 82
-    assert payload["indices"]["idx_slack_notes"]["source_id"] == "SLK-001"
-    assert payload["structured_store"]["store_name"] == "vq_direct_access"
+    assert payload["registry_version"] == "1.0"
+    assert set(payload["sources"]) == set(SOURCE_STORE_CONFIG)
+    assert payload["sources"]["ISP-001"]["logical_store_name"] == "idx_security_policy"
+    assert payload["sources"]["ISP-001"]["storage_kind"] == "vector_bm25"
+    assert payload["sources"]["ISP-001"]["backends"] == ["chroma", "bm25"]
+    assert payload["sources"]["ISP-001"]["backend_locations"]["chroma_collection"] == "idx_security_policy"
+    assert payload["sources"]["SLK-001"]["allowed_agents"] == ["procurement"]
+    assert payload["sources"]["VQ-OC-001"]["logical_store_name"] == "vq_direct_access"
+    assert payload["sources"]["VQ-OC-001"]["storage_kind"] == "structured_direct"
+    assert payload["sources"]["VQ-OC-001"]["backend_locations"]["structured_store"].endswith(
+        "data/structured/vq_direct_access.json"
+    )

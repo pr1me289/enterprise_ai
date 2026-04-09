@@ -16,7 +16,7 @@ def _make_record(
         "metadata": {
             "chunk_id": chunk_id,
             "source_id": source_id,
-            "source_type": "POLICY",
+            "source_type": "POLICY_DOCUMENT",
             "authority_tier": 1,
             "retrieval_lane": "INDEXED_HYBRID",
             "version": "4.2",

@@ -52,6 +52,8 @@ def build_structured_store(
         "source_id": questionnaire.source_id,
         "source_name": questionnaire.source_name,
         "source_type": questionnaire.source_type.value,
+        "authority_tier": questionnaire.authority_tier,
+        "retrieval_lane": questionnaire.retrieval_lane.value,
         "version": questionnaire.version,
         "document_date": questionnaire.document_date,
         "freshness_status": questionnaire.freshness_status,
