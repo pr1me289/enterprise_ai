@@ -99,7 +99,7 @@ Environment variables:
 
 ## Usage
 
-There is no runnable application, test suite, retrieval service, or production build in the repository yet. At this stage, the repository is being used to define architecture, preserve source materials, and prepare for implementation.
+There is still no user-facing application or retrieval service in the repository yet. At this stage, the repository provides preprocessing, chunking, and embedding/indexing utilities plus tests while the governed retrieval pipeline is being built incrementally.
 
 Typical current usage:
 
@@ -109,12 +109,14 @@ Typical current usage:
 4. Review `STRATEGY.md` for the locked retrieval and preprocessing approach.
 5. Use `src/preprocessing/` to normalize raw source files into `NormalizedSource` objects with inherited source-level metadata.
 6. Use `src/chunking/` to convert chunkable normalized sources into canonical `Chunk` objects and write JSON artifacts to `data/processed/chunks/`.
-7. Use the repository rules in `AGENTS.md` before adding code or automation.
+7. Use `src/indexing/` to embed indexed-hybrid chunk artifacts and persist vectors plus inherited metadata into Chroma.
+8. Use the repository rules in `AGENTS.md` before adding code or automation.
 
 Current implementation notes:
 
 - Preprocessing detects source type, preserves source structure, and attaches source-level metadata before any chunking.
-- Chunking consumes `NormalizedSource` objects only, attaches chunk metadata at creation time, and writes inspectable intermediate JSON artifacts. It does not embed or index anything yet.
+- Chunking consumes `NormalizedSource` objects only, attaches chunk metadata at creation time, and writes inspectable intermediate JSON artifacts.
+- Indexing now consumes finalized chunk artifacts, embeds only indexed-hybrid chunks with `sentence-transformers/all-MiniLM-L6-v2`, and persists vectors plus inherited chunk metadata into Chroma.
 
 ## System Requirements
 
@@ -137,6 +139,9 @@ PYTHONPATH=src python3 -c "from preprocessing import load_source; print(load_sou
 
 # Build chunk artifacts for chunkable sources
 PYTHONPATH=src python3 -c "from chunking.pipeline import build_chunk_artifacts_from_paths; build_chunk_artifacts_from_paths(['mock_documents/IT_Security_Policy_V4.2.md','mock_documents/DPA_Legal_Trigger_Matrix_v1_3.xlsx','mock_documents/Procurement_Approval_Matrix_v2_0.xlsx','mock_documents/Vendor_Precedent_Log_v1_1.json','mock_documents/Slack_Thread_Export_001.json'])"
+
+# Build and persist embeddings for all current chunk artifacts
+PYTHONPATH=src python3 -c "from indexing.pipeline import build_and_persist_embeddings_from_chunk_dir; build_and_persist_embeddings_from_chunk_dir()"
 
 # Install dependencies
 uv sync  # after pyproject.toml and uv.lock are added

@@ -20,6 +20,7 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+data/indexes/chroma/
 
 # Environment files
 .env

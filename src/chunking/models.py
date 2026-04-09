@@ -34,6 +34,12 @@ class Chunk:
     record_id: str | None = None
     thread_id: str | None = None
 
+    @classmethod
+    def from_dict(cls, payload: dict[str, Any]) -> "Chunk":
+        normalized_payload = dict(payload)
+        normalized_payload["allowed_agents"] = tuple(payload.get("allowed_agents", []))
+        return cls(**normalized_payload)
+
     def to_dict(self) -> dict[str, Any]:
         payload = asdict(self)
         payload["allowed_agents"] = list(self.allowed_agents)
