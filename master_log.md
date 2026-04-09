@@ -67,3 +67,10 @@
 **Changes:** Renamed the contract/model field to `manifest_status` in `src/preprocessing/` and `src/chunking/`, updated the direct `NormalizedSource` construction in `tests/chunking/test_chunker.py`, and regenerated `data/processed/chunks/DPA-TM-001.json`, `PAM-001.json`, `PVD-001.json`, and `SLK-001.json` so the artifact payload now emits `manifest_status`.
 **Result:** The code and generated chunk artifacts now consistently use `manifest_status` instead of `status`. `uv run pytest tests/chunking` completed with 11 passed, 0 failed.
 **Next:** Keep downstream indexing/retrieval code aligned to `manifest_status` as new layers are added.
+
+### [#11] 2026-04-09 | Codex
+**Task:** Chunk the new Markdown IT security policy and write its artifact into `data/processed/chunks`.
+**Plan:** Update the policy section parser to recognize Markdown headings and bolded clause identifiers, switch the supported chunking path/tests to the Markdown policy source, regenerate chunk artifacts including the policy, and verify the result with the chunking test suite.
+**Changes:** Extended `src/preprocessing/text_utils.py` so policy splitting recognizes Markdown forms like `## 1. Purpose`, `### 6.1 Access Provisioning`, and `**12.1.4** ...`. Updated `tests/chunking/test_chunker.py` and `tests/chunking/test_pipeline.py` to use `mock_documents/IT_Security_Policy_V4.2.md`, updated the chunking command in `README.md`, and generated `data/processed/chunks/ISP-001.json`.
+**Result:** The Markdown IT security policy now chunks correctly into 96 section-boundary artifacts, including clause-level citations such as `ISP-001 §12.1.4`. `uv run pytest tests/chunking` completed with 11 passed, 0 failed.
+**Next:** Keep policy parsing aligned if future mock policy sources introduce additional Markdown heading styles or mixed formatting.

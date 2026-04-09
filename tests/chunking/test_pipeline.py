@@ -12,7 +12,7 @@ def test_build_chunk_artifacts_from_paths_uses_preprocessing_and_writes_json(
 ) -> None:
     written = build_chunk_artifacts_from_paths(
         [
-            mock_documents_dir / "IT_Security_Policy_v4.2.pdf",
+            mock_documents_dir / "IT_Security_Policy_V4.2.md",
             mock_documents_dir / "DPA_Legal_Trigger_Matrix_v1_3.xlsx",
             mock_documents_dir / "OptiChain_VSQ_001_v2_1.json",
         ],
@@ -25,5 +25,6 @@ def test_build_chunk_artifacts_from_paths_uses_preprocessing_and_writes_json(
     policy_payload = json.loads((tmp_path / "ISP-001.json").read_text(encoding="utf-8"))
     dpa_payload = json.loads((tmp_path / "DPA-TM-001.json").read_text(encoding="utf-8"))
     assert policy_payload[0]["chunk_type"] == "SECTION"
-    assert policy_payload[0]["section_id"] is not None
+    assert policy_payload[0]["section_id"] == "1"
+    assert any(chunk["section_id"] == "12.1.4" for chunk in policy_payload)
     assert dpa_payload[0]["chunk_type"] == "ROW"

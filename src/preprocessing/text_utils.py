@@ -13,7 +13,7 @@ from xml.etree import ElementTree
 WHITESPACE_RE = re.compile(r"[ \t]+")
 MULTI_BLANK_RE = re.compile(r"\n{3,}")
 INLINE_SECTION_RE = re.compile(
-    r"(?m)^(?P<section_id>(?:§\s*)?\d+(?:\.\d+)*)(?:[.)])?\s+(?P<heading>[^\n]+?)\s*$",
+    r"(?m)^(?:#{1,6}\s+)?(?:\*\*)?(?P<section_id>(?:§\s*)?\d+(?:\.\d+)*)(?:[.)])?(?:\*\*)?\s+(?P<heading>[^\n]+?)\s*$",
 )
 
 XML_NS = {

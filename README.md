@@ -136,7 +136,7 @@ Keep this section updated as the project evolves.
 PYTHONPATH=src python3 -c "from preprocessing import load_source; print(load_source('mock_documents/OptiChain_VSQ_001_v2_1.json').to_dict()['source_id'])"
 
 # Build chunk artifacts for chunkable sources
-PYTHONPATH=src python3 -c "from chunking.pipeline import build_chunk_artifacts_from_paths; build_chunk_artifacts_from_paths(['mock_documents/DPA_Legal_Trigger_Matrix_v1_3.xlsx','mock_documents/Procurement_Approval_Matrix_v2_0.xlsx','mock_documents/Vendor_Precedent_Log_v1_1.json','mock_documents/Slack_Thread_Export_001.json'])"
+PYTHONPATH=src python3 -c "from chunking.pipeline import build_chunk_artifacts_from_paths; build_chunk_artifacts_from_paths(['mock_documents/IT_Security_Policy_V4.2.md','mock_documents/DPA_Legal_Trigger_Matrix_v1_3.xlsx','mock_documents/Procurement_Approval_Matrix_v2_0.xlsx','mock_documents/Vendor_Precedent_Log_v1_1.json','mock_documents/Slack_Thread_Export_001.json'])"
 
 # Install dependencies
 uv sync  # after pyproject.toml and uv.lock are added
