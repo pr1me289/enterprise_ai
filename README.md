@@ -4,7 +4,7 @@
 
 `enterprise_ai` is a Python-based enterprise AI demo focused on governed evidence delivery, not generic vector search. The project will ingest enterprise source material, convert it into retrieval-ready evidence units, route those units through the correct retrieval lane, and later deliver scoped context bundles to downstream agents in a way that preserves authority, permissions, freshness, and auditability.
 
-The current repository contains mock procurement, legal, security, and stakeholder documents that will be used to build and demonstrate this pipeline. Early preprocessing and chunking scaffolding now exists under `src/preprocessing/` and `src/chunking/`.
+The current repository contains mock procurement, legal, security, and stakeholder documents that are used to build and demonstrate this pipeline. Preprocessing, chunking, embedding, storage/indexing, and retrieval scaffolding now exist under `src/`.
 
 ## Required Reading Before Implementation
 
@@ -33,7 +33,7 @@ Current repository contents:
 
 - `mock_documents/` contains sample enterprise documents in PDF, JSON, Markdown, and spreadsheet formats.
 - `AGENTS.md` and `CLAUDE.md` define repository-level engineering and AI workflow rules.
-- Future application code will live in `src/` and tests will live in `tests/` as the project is scaffolded.
+- Implementation code lives in `src/` and tests live in `tests/`.
 - `STRATEGY.md` defines the target retrieval architecture, preprocessing rules, and build sequence.
 
 ## Source Lanes
@@ -83,7 +83,7 @@ The project should not read like "we built a vector database and called it enter
 
 ## Setup
 
-This repository is still lightly scaffolded. There is currently no `pyproject.toml`, `uv.lock`, or `tests/` directory yet.
+This repository now includes a `pyproject.toml`, `uv.lock`, and a growing automated test suite.
 
 Prerequisites for the next build stage:
 
@@ -109,14 +109,17 @@ Typical current usage:
 4. Review `STRATEGY.md` for the locked retrieval and preprocessing approach.
 5. Use `src/preprocessing/` to normalize raw source files into `NormalizedSource` objects with inherited source-level metadata.
 6. Use `src/chunking/` to convert chunkable normalized sources into canonical `Chunk` objects and write JSON artifacts to `data/processed/chunks/`.
-7. Use `src/indexing/` to embed indexed-hybrid chunk artifacts and persist vectors plus inherited metadata into Chroma.
-8. Use the repository rules in `AGENTS.md` before adding code or automation.
+7. Use `src/indexing/` to embed indexed-hybrid chunk artifacts and build per-source Chroma collections, BM25 bundles, a direct structured questionnaire store, and an index registry.
+8. Use `src/retrieval/` to route source-specific queries through permission checks, hybrid search, authority-aware reranking, and retrieval manifest generation.
+9. Use the repository rules in `AGENTS.md` before adding code or automation.
 
 Current implementation notes:
 
-- Preprocessing detects source type, preserves source structure, and attaches source-level metadata before any chunking.
-- Chunking consumes `NormalizedSource` objects only, attaches chunk metadata at creation time, and writes inspectable intermediate JSON artifacts.
+- Preprocessing detects source type, preserves source structure, and attaches source-level metadata before any chunking, including `document_date`, `freshness_status`, and source-class citation posture where available.
+- Chunking consumes `NormalizedSource` objects only, attaches finalized chunk metadata at creation time, and writes inspectable intermediate JSON artifacts. Current chunk artifacts now carry `document_date`, `freshness_status`, `is_primary_citable`, and manual precedent `domain_scope` values needed for later storage/indexing work.
 - Indexing now consumes finalized chunk artifacts, embeds only indexed-hybrid chunks with `sentence-transformers/all-MiniLM-L6-v2`, and persists vectors plus inherited chunk metadata into Chroma.
+- Storage/indexing now builds per-source logical indices over shared backends: Chroma collections for `idx_security_policy`, `idx_dpa_matrix`, `idx_procurement_matrix`, `idx_precedents`, and `idx_slack_notes`; BM25 bundles under `data/bm25/`; a direct structured questionnaire store at `vq_direct_access`; and `data/indexes/index_registry.json` for explainable build metadata.
+- Retrieval scaffolding now includes explicit source routing, endpoint permission guards, hybrid fusion, authority-aware reranking, and retrieval manifest objects under `src/retrieval/`.
 
 ## System Requirements
 
@@ -142,6 +145,9 @@ PYTHONPATH=src python3 -c "from chunking.pipeline import build_chunk_artifacts_f
 
 # Build and persist embeddings for all current chunk artifacts
 PYTHONPATH=src python3 -c "from indexing.pipeline import build_and_persist_embeddings_from_chunk_dir; build_and_persist_embeddings_from_chunk_dir()"
+
+# Build Step 8 storage/index outputs
+PYTHONPATH=src python3 -c "from indexing.pipeline import build_storage_indices; build_storage_indices(questionnaire_path='mock_documents/OptiChain_VSQ_001_v2_1.json')"
 
 # Install dependencies
 uv sync  # after pyproject.toml and uv.lock are added

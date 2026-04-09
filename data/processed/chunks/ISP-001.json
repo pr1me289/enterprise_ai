@@ -5,6 +5,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -12,6 +14,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 1,
@@ -20,7 +23,8 @@
     "section_id": "1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_2",
@@ -28,6 +32,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -35,6 +41,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 2,
@@ -43,7 +50,8 @@
     "section_id": "2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_3",
@@ -51,6 +59,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -58,6 +68,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 3,
@@ -66,7 +77,8 @@
     "section_id": "3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_3_1",
@@ -74,6 +86,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -81,6 +95,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 4,
@@ -89,7 +104,8 @@
     "section_id": "3.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_3_2",
@@ -97,6 +113,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -104,6 +122,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 5,
@@ -112,7 +131,8 @@
     "section_id": "3.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_3_3",
@@ -120,6 +140,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -127,6 +149,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 6,
@@ -135,7 +158,8 @@
     "section_id": "3.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_3_4",
@@ -143,6 +167,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -150,6 +176,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 7,
@@ -158,7 +185,8 @@
     "section_id": "3.4",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_3_5",
@@ -166,6 +194,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -173,6 +203,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 8,
@@ -181,7 +212,8 @@
     "section_id": "3.5",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_3_6",
@@ -189,6 +221,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -196,6 +230,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 9,
@@ -204,7 +239,8 @@
     "section_id": "3.6",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_3_7",
@@ -212,6 +248,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -219,6 +257,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 10,
@@ -227,7 +266,8 @@
     "section_id": "3.7",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_4",
@@ -235,6 +275,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -242,6 +284,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 11,
@@ -250,7 +293,8 @@
     "section_id": "4",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_5",
@@ -258,6 +302,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -265,6 +311,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 12,
@@ -273,7 +320,8 @@
     "section_id": "5",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_5_1",
@@ -281,6 +329,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -288,6 +338,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 13,
@@ -296,7 +347,8 @@
     "section_id": "5.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_5_2",
@@ -304,6 +356,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -311,6 +365,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 14,
@@ -319,7 +374,8 @@
     "section_id": "5.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_5_3",
@@ -327,6 +383,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -334,6 +392,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 15,
@@ -342,7 +401,8 @@
     "section_id": "5.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_6_1_1",
@@ -350,6 +410,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -357,6 +419,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 16,
@@ -365,7 +428,8 @@
     "section_id": "6.1.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_6_1_2",
@@ -373,6 +437,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -380,6 +446,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 17,
@@ -388,7 +455,8 @@
     "section_id": "6.1.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_6_1_3",
@@ -396,6 +464,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -403,6 +473,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 18,
@@ -411,7 +482,8 @@
     "section_id": "6.1.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_6_2_1",
@@ -419,6 +491,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -426,6 +500,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 19,
@@ -434,7 +509,8 @@
     "section_id": "6.2.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_6_2_2",
@@ -442,6 +518,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -449,6 +527,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 20,
@@ -457,7 +536,8 @@
     "section_id": "6.2.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_6_2_3",
@@ -465,6 +545,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -472,6 +554,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 21,
@@ -480,7 +563,8 @@
     "section_id": "6.2.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_6_3_1",
@@ -488,6 +572,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -495,6 +581,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 22,
@@ -503,7 +590,8 @@
     "section_id": "6.3.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_6_3_2",
@@ -511,6 +599,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -518,6 +608,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 23,
@@ -526,7 +617,8 @@
     "section_id": "6.3.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_6_3_3",
@@ -534,6 +626,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -541,6 +635,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 24,
@@ -549,7 +644,8 @@
     "section_id": "6.3.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_7_1",
@@ -557,6 +653,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -564,6 +662,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 25,
@@ -572,7 +671,8 @@
     "section_id": "7.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_7_2",
@@ -580,6 +680,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -587,6 +689,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 26,
@@ -595,7 +698,8 @@
     "section_id": "7.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_7_3",
@@ -603,6 +707,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -610,6 +716,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 27,
@@ -618,7 +725,8 @@
     "section_id": "7.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_7_4",
@@ -626,6 +734,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -633,6 +743,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 28,
@@ -641,7 +752,8 @@
     "section_id": "7.4",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_8_1",
@@ -649,6 +761,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -656,6 +770,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 29,
@@ -664,7 +779,8 @@
     "section_id": "8.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_8_2",
@@ -672,6 +788,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -679,6 +797,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 30,
@@ -687,7 +806,8 @@
     "section_id": "8.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_8_3",
@@ -695,6 +815,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -702,6 +824,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 31,
@@ -710,7 +833,8 @@
     "section_id": "8.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_8_4",
@@ -718,6 +842,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -725,6 +851,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 32,
@@ -733,7 +860,8 @@
     "section_id": "8.4",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_8_5",
@@ -741,6 +869,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -748,6 +878,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 33,
@@ -756,7 +887,8 @@
     "section_id": "8.5",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_9_1",
@@ -764,6 +896,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -771,6 +905,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 34,
@@ -779,7 +914,8 @@
     "section_id": "9.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_9_2",
@@ -787,6 +923,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -794,6 +932,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 35,
@@ -802,7 +941,8 @@
     "section_id": "9.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_9_3",
@@ -810,6 +950,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -817,6 +959,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 36,
@@ -825,7 +968,8 @@
     "section_id": "9.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_9_4",
@@ -833,6 +977,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -840,6 +986,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 37,
@@ -848,7 +995,8 @@
     "section_id": "9.4",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_9_5",
@@ -856,6 +1004,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -863,6 +1013,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 38,
@@ -871,7 +1022,8 @@
     "section_id": "9.5",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_10",
@@ -879,6 +1031,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -886,6 +1040,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 39,
@@ -894,7 +1049,8 @@
     "section_id": "10",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_10_1",
@@ -902,6 +1058,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -909,6 +1067,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 40,
@@ -917,7 +1076,8 @@
     "section_id": "10.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_10_2",
@@ -925,6 +1085,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -932,6 +1094,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 41,
@@ -940,7 +1103,8 @@
     "section_id": "10.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_11_1",
@@ -948,6 +1112,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -955,6 +1121,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 42,
@@ -963,7 +1130,8 @@
     "section_id": "11.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_11_2",
@@ -971,6 +1139,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -978,6 +1148,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 43,
@@ -986,7 +1157,8 @@
     "section_id": "11.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_11_3",
@@ -994,6 +1166,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1001,6 +1175,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 44,
@@ -1009,7 +1184,8 @@
     "section_id": "11.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_11_4",
@@ -1017,6 +1193,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1024,6 +1202,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 45,
@@ -1032,7 +1211,8 @@
     "section_id": "11.4",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12",
@@ -1040,6 +1220,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1047,6 +1229,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 46,
@@ -1055,7 +1238,8 @@
     "section_id": "12",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12_1_1",
@@ -1063,6 +1247,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1070,6 +1256,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 47,
@@ -1078,7 +1265,8 @@
     "section_id": "12.1.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12_1_2",
@@ -1086,6 +1274,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1093,6 +1283,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 48,
@@ -1101,7 +1292,8 @@
     "section_id": "12.1.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12_1_3",
@@ -1109,6 +1301,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1116,6 +1310,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 49,
@@ -1124,7 +1319,8 @@
     "section_id": "12.1.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12_1_4",
@@ -1132,6 +1328,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1139,6 +1337,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 50,
@@ -1147,7 +1346,8 @@
     "section_id": "12.1.4",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12_2",
@@ -1155,6 +1355,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1162,6 +1364,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 51,
@@ -1170,7 +1373,8 @@
     "section_id": "12.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12_2_1",
@@ -1178,6 +1382,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1185,6 +1391,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 52,
@@ -1193,7 +1400,8 @@
     "section_id": "12.2.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12_2_2",
@@ -1201,6 +1409,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1208,6 +1418,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 53,
@@ -1216,7 +1427,8 @@
     "section_id": "12.2.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12_2_3",
@@ -1224,6 +1436,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1231,6 +1445,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 54,
@@ -1239,7 +1454,8 @@
     "section_id": "12.2.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12_3_1",
@@ -1247,6 +1463,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1254,6 +1472,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 55,
@@ -1262,7 +1481,8 @@
     "section_id": "12.3.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12_3_2",
@@ -1270,6 +1490,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1277,6 +1499,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 56,
@@ -1285,7 +1508,8 @@
     "section_id": "12.3.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12_3_3",
@@ -1293,6 +1517,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1300,6 +1526,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 57,
@@ -1308,7 +1535,8 @@
     "section_id": "12.3.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_12_3_4",
@@ -1316,6 +1544,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1323,6 +1553,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 58,
@@ -1331,7 +1562,8 @@
     "section_id": "12.3.4",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_13_1",
@@ -1339,6 +1571,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1346,6 +1580,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 59,
@@ -1354,7 +1589,8 @@
     "section_id": "13.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_13_2",
@@ -1362,6 +1598,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1369,6 +1607,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 60,
@@ -1377,7 +1616,8 @@
     "section_id": "13.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_13_3",
@@ -1385,6 +1625,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1392,6 +1634,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 61,
@@ -1400,7 +1643,8 @@
     "section_id": "13.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_13_4",
@@ -1408,6 +1652,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1415,6 +1661,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 62,
@@ -1423,7 +1670,8 @@
     "section_id": "13.4",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_14",
@@ -1431,6 +1679,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1438,6 +1688,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 63,
@@ -1446,7 +1697,8 @@
     "section_id": "14",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_14_1",
@@ -1454,6 +1706,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1461,6 +1715,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 64,
@@ -1469,7 +1724,8 @@
     "section_id": "14.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_14_2",
@@ -1477,6 +1733,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1484,6 +1742,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 65,
@@ -1492,7 +1751,8 @@
     "section_id": "14.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_14_3",
@@ -1500,6 +1760,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1507,6 +1769,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 66,
@@ -1515,7 +1778,8 @@
     "section_id": "14.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_15_1",
@@ -1523,6 +1787,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1530,6 +1796,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 67,
@@ -1538,7 +1805,8 @@
     "section_id": "15.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_15_2",
@@ -1546,6 +1814,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1553,6 +1823,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 68,
@@ -1561,7 +1832,8 @@
     "section_id": "15.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_15_3",
@@ -1569,6 +1841,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1576,6 +1850,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 69,
@@ -1584,7 +1859,8 @@
     "section_id": "15.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_16",
@@ -1592,6 +1868,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1599,6 +1877,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 70,
@@ -1607,7 +1886,8 @@
     "section_id": "16",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_16_1",
@@ -1615,6 +1895,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1622,6 +1904,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 71,
@@ -1630,7 +1913,8 @@
     "section_id": "16.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_16_2",
@@ -1638,6 +1922,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1645,6 +1931,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 72,
@@ -1653,7 +1940,8 @@
     "section_id": "16.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_16_3",
@@ -1661,6 +1949,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1668,6 +1958,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 73,
@@ -1676,7 +1967,8 @@
     "section_id": "16.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_16_4",
@@ -1684,6 +1976,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1691,6 +1985,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 74,
@@ -1699,7 +1994,8 @@
     "section_id": "16.4",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_17_1",
@@ -1707,6 +2003,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1714,6 +2012,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 75,
@@ -1722,7 +2021,8 @@
     "section_id": "17.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_17_2",
@@ -1730,6 +2030,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1737,6 +2039,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 76,
@@ -1745,7 +2048,8 @@
     "section_id": "17.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_17_3",
@@ -1753,6 +2057,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1760,6 +2066,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 77,
@@ -1768,7 +2075,8 @@
     "section_id": "17.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_17_4",
@@ -1776,6 +2084,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1783,6 +2093,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 78,
@@ -1791,7 +2102,8 @@
     "section_id": "17.4",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_18_1",
@@ -1799,6 +2111,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1806,6 +2120,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 79,
@@ -1814,7 +2129,8 @@
     "section_id": "18.1",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_18_2",
@@ -1822,6 +2138,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1829,6 +2147,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 80,
@@ -1837,7 +2156,8 @@
     "section_id": "18.2",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_18_3",
@@ -1845,6 +2165,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1852,6 +2174,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 81,
@@ -1860,7 +2183,8 @@
     "section_id": "18.3",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "ISP-001__section_18_4",
@@ -1868,6 +2192,8 @@
     "source_name": "IT Security Policy",
     "source_type": "POLICY",
     "version": "4.2",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -1875,6 +2201,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "SECTION",
     "chunk_order": 82,
@@ -1883,6 +2210,7 @@
     "section_id": "18.4",
     "row_id": null,
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   }
 ]

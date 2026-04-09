@@ -22,6 +22,9 @@ def test_policy_source_chunks_by_section(mock_documents_dir: Path) -> None:
     assert chunks[0].citation_label.startswith("ISP-001")
     assert chunks[0].allowed_agents == ("it_security", "legal", "procurement")
     assert chunks[0].manifest_status == "PROVISIONAL"
+    assert chunks[0].document_date == "2026-04-04"
+    assert chunks[0].freshness_status == "CURRENT"
+    assert chunks[0].is_primary_citable is True
     assert chunks[0].section_id == "1"
     assert chunks[0].text.startswith("1 Purpose")
     assert not chunks[0].text.endswith("---")
@@ -47,6 +50,9 @@ def test_dpa_matrix_chunks_one_row_per_chunk(mock_documents_dir: Path) -> None:
     assert chunks[0].row_id == "A-01"
     assert chunks[0].citation_label == "DPA-TM-001 row A-01"
     assert "GDPR Art. 28" in chunks[0].text
+    assert chunks[0].document_date is None
+    assert chunks[0].freshness_status == "CURRENT"
+    assert chunks[0].is_primary_citable is True
     assert chunks[-1].row_id == "G-02"
 
 
@@ -58,6 +64,7 @@ def test_procurement_matrix_chunks_one_row_per_chunk(mock_documents_dir: Path) -
     assert len(chunks) == 20
     assert chunks[0].row_id == "A-T1"
     assert chunks[0].allowed_agents == ("procurement",)
+    assert chunks[0].is_primary_citable is True
     assert chunks[-1].row_id == "E-T4"
     assert chunks[-1].authority_tier == 1
 
@@ -71,6 +78,11 @@ def test_precedent_source_chunks_by_record(mock_documents_dir: Path) -> None:
     assert all(chunk.chunk_type == "RECORD" for chunk in chunks)
     assert chunks[0].record_id == "PVD-001-REC-001"
     assert chunks[0].citation_label == "PVD-001 record PVD-001-REC-001"
+    assert chunks[0].document_date == "2024-03-01"
+    assert chunks[0].is_primary_citable is False
+    assert chunks[0].domain_scope == "legal"
+    assert chunks[1].domain_scope == "security"
+    assert chunks[2].domain_scope == "procurement"
     assert "Meridian Analytics, Ltd." in chunks[0].text
 
 
@@ -83,6 +95,8 @@ def test_slack_source_chunks_by_thread(mock_documents_dir: Path) -> None:
     assert all(chunk.chunk_type == "THREAD" for chunk in chunks)
     assert chunks[0].thread_id == "SLK-001-THREAD-01"
     assert chunks[0].citation_label == "SLK-001 thread SLK-001-THREAD-01"
+    assert chunks[0].document_date == "2024-03-05"
+    assert chunks[0].is_primary_citable is False
     assert "vendor-eval-optichain" in chunks[0].text
 
 
@@ -115,9 +129,12 @@ def test_chunk_source_rejects_unsupported_source_type() -> None:
         source_type="UNKNOWN",  # type: ignore[arg-type]
         source_name="Bad Source",
         version="0",
+        document_date=None,
+        freshness_status="CURRENT",
         authority_tier=0,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=(),
+        is_primary_citable=False,
         manifest_status=ManifestStatus.PENDING,
         owner_role="None",
         source_path=Path("/tmp/bad.txt"),

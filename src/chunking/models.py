@@ -21,9 +21,12 @@ class Chunk:
     source_name: str
     source_type: str
     version: str
+    document_date: str | None
+    freshness_status: str
     authority_tier: int
     retrieval_lane: str
     allowed_agents: tuple[str, ...]
+    is_primary_citable: bool
     manifest_status: str
     chunk_type: str
     chunk_order: int
@@ -33,6 +36,7 @@ class Chunk:
     row_id: str | None = None
     record_id: str | None = None
     thread_id: str | None = None
+    domain_scope: str | None = None
 
     @classmethod
     def from_dict(cls, payload: dict[str, Any]) -> "Chunk":

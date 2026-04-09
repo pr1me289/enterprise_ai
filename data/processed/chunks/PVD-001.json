@@ -5,6 +5,8 @@
     "source_name": "Prior Vendor Decisions / Precedent Log",
     "source_type": "PRECEDENT",
     "version": "Current at init.",
+    "document_date": "2024-03-01",
+    "freshness_status": "CURRENT",
     "authority_tier": 3,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -12,6 +14,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": false,
     "manifest_status": "CONFIRMED",
     "chunk_type": "RECORD",
     "chunk_order": 1,
@@ -20,7 +23,8 @@
     "section_id": null,
     "row_id": null,
     "record_id": "PVD-001-REC-001",
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": "legal"
   },
   {
     "chunk_id": "PVD-001__record_PVD-001-REC-002",
@@ -28,6 +32,8 @@
     "source_name": "Prior Vendor Decisions / Precedent Log",
     "source_type": "PRECEDENT",
     "version": "Current at init.",
+    "document_date": "2024-03-01",
+    "freshness_status": "CURRENT",
     "authority_tier": 3,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -35,6 +41,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": false,
     "manifest_status": "CONFIRMED",
     "chunk_type": "RECORD",
     "chunk_order": 2,
@@ -43,7 +50,8 @@
     "section_id": null,
     "row_id": null,
     "record_id": "PVD-001-REC-002",
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": "security"
   },
   {
     "chunk_id": "PVD-001__record_PVD-001-REC-003",
@@ -51,6 +59,8 @@
     "source_name": "Prior Vendor Decisions / Precedent Log",
     "source_type": "PRECEDENT",
     "version": "Current at init.",
+    "document_date": "2024-03-01",
+    "freshness_status": "CURRENT",
     "authority_tier": 3,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -58,6 +68,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": false,
     "manifest_status": "CONFIRMED",
     "chunk_type": "RECORD",
     "chunk_order": 3,
@@ -66,7 +77,8 @@
     "section_id": null,
     "row_id": null,
     "record_id": "PVD-001-REC-003",
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": "procurement"
   },
   {
     "chunk_id": "PVD-001__record_PVD-001-REC-004",
@@ -74,6 +86,8 @@
     "source_name": "Prior Vendor Decisions / Precedent Log",
     "source_type": "PRECEDENT",
     "version": "Current at init.",
+    "document_date": "2024-03-01",
+    "freshness_status": "CURRENT",
     "authority_tier": 3,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
@@ -81,6 +95,7 @@
       "legal",
       "procurement"
     ],
+    "is_primary_citable": false,
     "manifest_status": "CONFIRMED",
     "chunk_type": "RECORD",
     "chunk_order": 4,
@@ -89,6 +104,7 @@
     "section_id": null,
     "row_id": null,
     "record_id": "PVD-001-REC-004",
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": "procurement"
   }
 ]

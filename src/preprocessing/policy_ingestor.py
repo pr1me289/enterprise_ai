@@ -4,11 +4,16 @@ from __future__ import annotations
 
 import shutil
 import subprocess
+from datetime import datetime
 from pathlib import Path
+import re
 
 from .models import NormalizedSource, PolicySection
 from .source_contract import SourceContract
 from .text_utils import normalize_text, read_docx_text, split_policy_sections
+
+
+EFFECTIVE_DATE_RE = re.compile(r"(?mi)^\*{0,2}effective date:\*{0,2}\s*(?P<value>.+?)\s*$")
 
 
 def ingest_policy(path: str | Path, contract: SourceContract) -> NormalizedSource:
@@ -32,9 +37,12 @@ def ingest_policy(path: str | Path, contract: SourceContract) -> NormalizedSourc
         source_type=contract.source_type,
         source_name=contract.source_name,
         version=contract.version,
+        document_date=_extract_document_date(raw_text) or contract.document_date,
+        freshness_status=contract.freshness_status,
         authority_tier=contract.authority_tier,
         retrieval_lane=contract.retrieval_lane,
         allowed_agents=contract.allowed_agents,
+        is_primary_citable=contract.is_primary_citable,
         manifest_status=contract.manifest_status,
         owner_role=contract.owner_role,
         source_path=source_path,
@@ -86,3 +94,14 @@ def _detect_version_from_name(filename: str) -> str | None:
         if token.lower().startswith("v") and any(character.isdigit() for character in token):
             return token.lower().lstrip("v")
     return None
+
+
+def _extract_document_date(text: str) -> str | None:
+    match = EFFECTIVE_DATE_RE.search(text)
+    if not match:
+        return None
+    value = normalize_text(match.group("value"))
+    try:
+        return datetime.strptime(value, "%B %d, %Y").date().isoformat()
+    except ValueError:
+        return value

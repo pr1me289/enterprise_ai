@@ -18,9 +18,12 @@ def _make_chunk(
         source_name="IT Security Policy",
         source_type="POLICY",
         version="4.2",
+        document_date="2026-04-04",
+        freshness_status="CURRENT",
         authority_tier=1,
         retrieval_lane=retrieval_lane,
         allowed_agents=("it_security",),
+        is_primary_citable=True,
         manifest_status="PROVISIONAL",
         chunk_type="SECTION",
         chunk_order=chunk_order,
@@ -76,5 +79,8 @@ def test_build_embeddings_copies_current_chunk_metadata_without_new_fields() -> 
 
     assert record.chunk_id == "SLK-001__thread_1"
     assert record.text == "thread text"
+    assert record.document_date == "2026-04-04"
+    assert record.freshness_status == "CURRENT"
+    assert record.is_primary_citable is True
     assert record.manifest_status == "PROVISIONAL"
     assert record.allowed_agents == ("it_security",)

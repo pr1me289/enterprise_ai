@@ -77,9 +77,12 @@ class NormalizedSource:
     source_type: SourceType
     source_name: str
     version: str
+    document_date: str | None
+    freshness_status: str
     authority_tier: int
     retrieval_lane: RetrievalLane
     allowed_agents: tuple[str, ...]
+    is_primary_citable: bool
     manifest_status: ManifestStatus
     owner_role: str
     source_path: Path

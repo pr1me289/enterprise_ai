@@ -14,9 +14,12 @@ class SourceContract:
     source_type: SourceType
     source_name: str
     version: str
+    document_date: str | None
+    freshness_status: str
     authority_tier: int
     retrieval_lane: RetrievalLane
     allowed_agents: tuple[str, ...]
+    is_primary_citable: bool
     manifest_status: ManifestStatus
     owner_role: str
     path_hints: tuple[str, ...]
@@ -28,9 +31,12 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
         source_type=SourceType.POLICY,
         source_name="IT Security Policy",
         version="4.2",
+        document_date=None,
+        freshness_status="CURRENT",
         authority_tier=1,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("it_security", "legal", "procurement"),
+        is_primary_citable=True,
         manifest_status=ManifestStatus.PROVISIONAL,
         owner_role="IT Security",
         path_hints=("it_security_policy",),
@@ -40,9 +46,12 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
         source_type=SourceType.MATRIX,
         source_name="DPA Legal Trigger Matrix",
         version="2.1",
+        document_date=None,
+        freshness_status="CURRENT",
         authority_tier=1,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("legal",),
+        is_primary_citable=True,
         manifest_status=ManifestStatus.PROVISIONAL,
         owner_role="Legal",
         path_hints=("dpa_legal_trigger_matrix",),
@@ -52,9 +61,12 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
         source_type=SourceType.MATRIX,
         source_name="Procurement Approval Matrix",
         version="3.0",
+        document_date=None,
+        freshness_status="CURRENT",
         authority_tier=1,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("procurement",),
+        is_primary_citable=True,
         manifest_status=ManifestStatus.PROVISIONAL,
         owner_role="Procurement",
         path_hints=("procurement_approval_matrix",),
@@ -64,6 +76,8 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
         source_type=SourceType.QUESTIONNAIRE,
         source_name="OptiChain Vendor Questionnaire",
         version="Submission rev. 1",
+        document_date=None,
+        freshness_status="CURRENT",
         authority_tier=2,
         retrieval_lane=RetrievalLane.DIRECT_STRUCTURED,
         allowed_agents=(
@@ -73,6 +87,7 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
             "checklist_assembler",
             "checkoff",
         ),
+        is_primary_citable=True,
         manifest_status=ManifestStatus.PENDING,
         owner_role="Procurement",
         path_hints=("optichain_vsq", "vendor_questionnaire"),
@@ -82,9 +97,12 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
         source_type=SourceType.PRECEDENT,
         source_name="Prior Vendor Decisions / Precedent Log",
         version="Current at init.",
+        document_date=None,
+        freshness_status="CURRENT",
         authority_tier=3,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("it_security", "legal", "procurement"),
+        is_primary_citable=False,
         manifest_status=ManifestStatus.CONFIRMED,
         owner_role="IT Architecture / Platform",
         path_hints=("vendor_precedent_log", "precedent_log"),
@@ -94,9 +112,12 @@ SOURCE_CONTRACTS: tuple[SourceContract, ...] = (
         source_type=SourceType.SUPPLEMENTAL_NOTE,
         source_name="Slack / Meeting Thread Notes",
         version="Export at init.",
+        document_date=None,
+        freshness_status="CURRENT",
         authority_tier=4,
         retrieval_lane=RetrievalLane.INDEXED_HYBRID,
         allowed_agents=("procurement",),
+        is_primary_citable=False,
         manifest_status=ManifestStatus.CONFIRMED,
         owner_role="Procurement",
         path_hints=("slack_thread_export", "meeting_thread"),

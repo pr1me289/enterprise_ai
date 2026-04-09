@@ -6,6 +6,13 @@ from preprocessing import NormalizedSource, SourceType
 
 from .models import Chunk, ChunkType
 
+PRECEDENT_DOMAIN_SCOPE_BY_RECORD_ID = {
+    "PVD-001-REC-001": "legal",
+    "PVD-001-REC-002": "security",
+    "PVD-001-REC-003": "procurement",
+    "PVD-001-REC-004": "procurement",
+}
+
 
 def chunk_source(source: NormalizedSource) -> list[Chunk]:
     if source.source_type is SourceType.POLICY:
@@ -64,6 +71,7 @@ def _chunk_precedent(source: NormalizedSource) -> list[Chunk]:
             text=record.text,
             citation_label=f"{source.source_id} record {record.record_id}",
             record_id=record.record_id,
+            domain_scope=PRECEDENT_DOMAIN_SCOPE_BY_RECORD_ID.get(record.record_id),
             suffix=f"record_{_sanitize_identifier(record.record_id)}",
         )
         for record in source.records
@@ -97,6 +105,7 @@ def _build_chunk(
     row_id: str | None = None,
     record_id: str | None = None,
     thread_id: str | None = None,
+    domain_scope: str | None = None,
 ) -> Chunk:
     return Chunk(
         chunk_id=f"{source.source_id}__{suffix}",
@@ -104,9 +113,12 @@ def _build_chunk(
         source_name=source.source_name,
         source_type=source.source_type.value,
         version=source.version,
+        document_date=source.document_date,
+        freshness_status=source.freshness_status,
         authority_tier=source.authority_tier,
         retrieval_lane=source.retrieval_lane.value,
         allowed_agents=source.allowed_agents,
+        is_primary_citable=source.is_primary_citable,
         manifest_status=source.manifest_status.value,
         chunk_type=chunk_type.value,
         chunk_order=chunk_order,
@@ -114,6 +126,7 @@ def _build_chunk(
         row_id=row_id,
         record_id=record_id,
         thread_id=thread_id,
+        domain_scope=domain_scope,
         citation_label=citation_label,
         text=text,
     )
