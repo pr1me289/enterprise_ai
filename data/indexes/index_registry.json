@@ -1,0 +1,162 @@
+{
+  "registry_version": "1.0",
+  "generated_at": "2026-04-09T22:16:07.374412Z",
+  "sources": {
+    "DPA-TM-001": {
+      "source_id": "DPA-TM-001",
+      "source_name": "DPA Legal Trigger Matrix",
+      "source_type": "LEGAL_TRIGGER_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "2.1",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "manifest_status": "PROVISIONAL",
+      "allowed_agents": [
+        "legal"
+      ],
+      "is_primary_citable": true,
+      "storage_kind": "vector_bm25",
+      "logical_store_name": "idx_dpa_matrix",
+      "backends": [
+        "chroma",
+        "bm25"
+      ],
+      "backend_locations": {
+        "chroma_collection": "idx_dpa_matrix",
+        "bm25_bundle": "data/bm25/idx_dpa_matrix.pkl"
+      }
+    },
+    "ISP-001": {
+      "source_id": "ISP-001",
+      "source_name": "IT Security Policy",
+      "source_type": "POLICY_DOCUMENT",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "4.2",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "manifest_status": "PROVISIONAL",
+      "allowed_agents": [
+        "it_security",
+        "legal",
+        "procurement"
+      ],
+      "is_primary_citable": true,
+      "storage_kind": "vector_bm25",
+      "logical_store_name": "idx_security_policy",
+      "backends": [
+        "chroma",
+        "bm25"
+      ],
+      "backend_locations": {
+        "chroma_collection": "idx_security_policy",
+        "bm25_bundle": "data/bm25/idx_security_policy.pkl"
+      }
+    },
+    "PAM-001": {
+      "source_id": "PAM-001",
+      "source_name": "Procurement Approval Matrix",
+      "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "3.0",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "manifest_status": "PROVISIONAL",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "is_primary_citable": true,
+      "storage_kind": "vector_bm25",
+      "logical_store_name": "idx_procurement_matrix",
+      "backends": [
+        "chroma",
+        "bm25"
+      ],
+      "backend_locations": {
+        "chroma_collection": "idx_procurement_matrix",
+        "bm25_bundle": "data/bm25/idx_procurement_matrix.pkl"
+      }
+    },
+    "PVD-001": {
+      "source_id": "PVD-001",
+      "source_name": "Prior Vendor Decisions / Precedent Log",
+      "source_type": "VENDOR_PRECEDENT",
+      "authority_tier": 3,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "Current at init.",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "manifest_status": "CONFIRMED",
+      "allowed_agents": [
+        "it_security",
+        "legal",
+        "procurement"
+      ],
+      "is_primary_citable": false,
+      "storage_kind": "vector_bm25",
+      "logical_store_name": "idx_precedents",
+      "backends": [
+        "chroma",
+        "bm25"
+      ],
+      "backend_locations": {
+        "chroma_collection": "idx_precedents",
+        "bm25_bundle": "data/bm25/idx_precedents.pkl"
+      }
+    },
+    "SLK-001": {
+      "source_id": "SLK-001",
+      "source_name": "Slack / Meeting Thread Notes",
+      "source_type": "SLACK_THREAD",
+      "authority_tier": 4,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "Export at init.",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "manifest_status": "CONFIRMED",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "is_primary_citable": false,
+      "storage_kind": "vector_bm25",
+      "logical_store_name": "idx_slack_notes",
+      "backends": [
+        "chroma",
+        "bm25"
+      ],
+      "backend_locations": {
+        "chroma_collection": "idx_slack_notes",
+        "bm25_bundle": "data/bm25/idx_slack_notes.pkl"
+      }
+    },
+    "VQ-OC-001": {
+      "source_id": "VQ-OC-001",
+      "source_name": "OptiChain Vendor Questionnaire",
+      "source_type": "VENDOR_QUESTIONNAIRE",
+      "authority_tier": 2,
+      "retrieval_lane": "DIRECT_STRUCTURED",
+      "version": "Submission rev. 1",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "manifest_status": "PENDING",
+      "allowed_agents": [
+        "it_security",
+        "legal",
+        "procurement",
+        "checklist_assembler",
+        "checkoff"
+      ],
+      "is_primary_citable": true,
+      "storage_kind": "structured_direct",
+      "logical_store_name": "vq_direct_access",
+      "backends": [
+        "structured_json"
+      ],
+      "backend_locations": {
+        "structured_store": "data/structured/vq_direct_access.json"
+      }
+    }
+  }
+}
