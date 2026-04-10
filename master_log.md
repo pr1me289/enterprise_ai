@@ -116,3 +116,17 @@
 **Changes:** Reworked `src/indexing/index_registry.py` around a source-level `SOURCE_STORE_CONFIG`, added deterministic registry generation/writing, and changed the registry JSON shape to `registry_version`, `generated_at`, and `sources`. Added `src/indexing/load_index_registry.py` with helpers for entry lookup, logical store lookup, backend lookup, access lookup, and indexed-vs-structured checks. Updated `src/indexing/build_structured_store.py` so the questionnaire store now carries `authority_tier` and `retrieval_lane` at top level. Updated `src/indexing/pipeline.py` to write the new registry format, and updated `src/retrieval/source_router.py` plus `src/retrieval/permission_guard.py` so routing and access checks consume registry-derived mappings rather than hard-coded module maps. Added and refreshed indexing tests for the new registry shape and loader helpers, and updated the README registry section to describe the control-plane role of the registry.
 **Result:** The Step 8 registry is now a canonical source-level control-plane artifact with one record per source, direct mapping to logical store names and backends, and retrieval helpers built on top of it instead of ad hoc storage assumptions.
 **Next:** Keep any future retrieval planner or bundle assembly code reading source/store/backends/allowed-agents from the registry helpers instead of duplicating source-routing logic elsewhere.
+
+### [#18] 2026-04-10 | Codex
+**Task:** Regenerate the Step 8 index registry JSON on `feature/index-registry`.
+**Plan:** Use the existing `build_storage_indices` pipeline entrypoint so the generated registry matches the current chunk artifacts, structured questionnaire store, BM25 bundles, and per-source Chroma/vector registry outputs.
+**Changes:** Regenerated local Step 8 storage/index outputs, including `data/indexes/index_registry.json`, by running the existing indexing pipeline with `mock_documents/OptiChain_VSQ_001_v2_1.json`.
+**Result:** `data/indexes/index_registry.json` now exists locally with six source-level entries: five indexed-hybrid sources mapped to Chroma/BM25 logical stores and `VQ-OC-001` mapped to `vq_direct_access`.
+**Next:** Use `src/indexing/load_index_registry.py` helpers for retrieval code that needs the canonical source-to-store routing map.
+
+### [#19] 2026-04-10 | Codex
+**Task:** Add a README note for regenerating the index registry.
+**Plan:** Document the intended Step 8 pipeline entrypoint concisely in the existing Index Registry section.
+**Changes:** Added a short README line pointing to `src/indexing/pipeline.py` and `build_storage_indices(questionnaire_path='mock_documents/OptiChain_VSQ_001_v2_1.json')`.
+**Result:** The README now identifies the code path to run when `data/indexes/index_registry.json` needs to be generated or refreshed.
+**Next:** Keep the command aligned if the Step 8 pipeline entrypoint changes.

@@ -185,6 +185,8 @@ The registry ties the storage layer together and makes the build explainable.
 - Registry definitions: `src/indexing/index_registry.py`
 - Registry loader/helpers: `src/indexing/load_index_registry.py`
 
+To generate or refresh the registry, run the Step 8 entrypoint in `src/indexing/pipeline.py`: `build_storage_indices(questionnaire_path='mock_documents/OptiChain_VSQ_001_v2_1.json')`.
+
 This file is a source-level control-plane registry, not a chunk registry. It contains one entry per logical source and records the source metadata (`source_id`, `source_name`, `source_type`, `authority_tier`, `retrieval_lane`, `version`, `document_date`, `freshness_status`, `manifest_status`, `allowed_agents`, `is_primary_citable`) plus the storage metadata (`storage_kind`, `logical_store_name`, `backends`, and `backend_locations`) needed for routing and explainability.
 
 Retrieval and routing code should use this registry as the canonical source-to-store map instead of hard-coding collection names, bundle paths, store names, or allowed-agent assumptions in multiple places.
