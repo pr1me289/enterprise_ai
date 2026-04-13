@@ -102,3 +102,13 @@ class AuditLogger:
             event_type=AuditEventType.ESCALATION,
             details={"step_id": step_id, **payload},
         )
+
+    def log_run_event(self, *, message: str, details: dict | None = None) -> AuditEntry:
+        payload = {"message": message}
+        if details:
+            payload.update(details)
+        return self.append(
+            agent_id="supervisor",
+            event_type=AuditEventType.RUN_EVENT,
+            details=payload,
+        )

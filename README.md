@@ -226,7 +226,7 @@ PYTHONPATH=src python3 -c "from indexing.pipeline import build_and_persist_embed
 # Build Step 8 storage/index outputs
 PYTHONPATH=src python3 -c "from indexing.pipeline import build_storage_indices; build_storage_indices(questionnaire_path='mock_documents/OptiChain_VSQ_001_v2_1.json')"
 
-# Run the first-pass orchestration demo
+# Run the first-pass orchestration demo scenarios
 PYTHONPATH=src uv run python -m orchestration.demo
 
 # Install dependencies

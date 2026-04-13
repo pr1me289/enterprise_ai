@@ -10,7 +10,7 @@ from orchestration.audit.audit_logger import AuditLogger
 from orchestration.config.source_manifest import DEFAULT_STAKEHOLDER_MAP, build_source_manifest
 from orchestration.config.step_definitions import STEP_DEFINITIONS
 from orchestration.models.contracts import StepExecutionResult
-from orchestration.models.enums import AuditEventType, RunStatus, StepId, StepStatus
+from orchestration.models.enums import RunStatus, StepId, StepStatus
 from orchestration.pipeline_state import PipelineState
 from orchestration.retrieval.bundle_assembler import BundleAssembler
 from orchestration.retrieval.direct_structured import DirectStructuredAccessor
@@ -40,13 +40,14 @@ class Supervisor:
         questionnaire_overrides: dict[str, Any] | None = None,
         llm_adapter: MockLLMAdapter | None = None,
         pipeline_config: dict[str, Any] | None = None,
+        indexed_backend: Any | None = None,
     ) -> None:
         self.repo_root = Path(repo_root)
         self.manifest = build_source_manifest()
         self.state = PipelineState.initialize(self.manifest.manifest_version)
         self.audit_logger = AuditLogger(self.state.pipeline_run_id)
         self.direct_accessor = DirectStructuredAccessor(questionnaire_path, overrides=questionnaire_overrides)
-        self.indexed_backend = MockHybridIndexedBackend(
+        self.indexed_backend = indexed_backend or MockHybridIndexedBackend(
             chunk_dir=chunk_dir or (self.repo_root / "data" / "processed" / "chunks")
         )
         self.runtime_accessor = RuntimeReadAccessor(pipeline_config=pipeline_config or DEFAULT_STAKEHOLDER_MAP)
@@ -119,21 +120,25 @@ class Supervisor:
                 audit_logger=self.audit_logger,
             ),
         }
-        self.audit_logger.append(
-            agent_id="supervisor",
-            event_type=AuditEventType.RUN_EVENT,
-            details={"message": "Pipeline initialized", "manifest_version": self.manifest.manifest_version},
+        self.audit_logger.log_run_event(
+            message="Pipeline initialized",
+            details={"manifest_version": self.manifest.manifest_version},
         )
 
     def run(self) -> PipelineState:
-        while self.state.next_step_queue:
-            step_id = self.state.dequeue()
-            if step_id is None:
-                break
-            self._run_step(step_id)
-            if self.state.overall_status is RunStatus.BLOCKED:
-                break
+        while self.execute_next_step():
+            continue
+        self._finalize_run()
         return self.state
+
+    def execute_next_step(self) -> bool:
+        if not self.state.next_step_queue:
+            return False
+        step_id = self.state.dequeue()
+        if step_id is None:
+            return False
+        self._run_step(step_id)
+        return self.state.overall_status is not RunStatus.BLOCKED and bool(self.state.next_step_queue)
 
     def _run_step(self, step_id: StepId) -> None:
         handler = self.handlers[step_id]
@@ -191,6 +196,23 @@ class Supervisor:
         self.state.overall_status = StateMachine.derive_overall_status(self.state)
         next_step = StateMachine.determine_next_step(self.state, result.step_id, result.step_status, output)
         self.state.enqueue(next_step)
+
+    def _finalize_run(self) -> None:
+        if self.state.overall_status is RunStatus.COMPLETE:
+            self.audit_logger.log_run_event(
+                message="Pipeline completed",
+                details={"overall_status": self.state.overall_status.value},
+            )
+        elif self.state.overall_status is RunStatus.ESCALATED:
+            self.audit_logger.log_run_event(
+                message="Pipeline halted in escalated state",
+                details={"overall_status": self.state.overall_status.value},
+            )
+        elif self.state.overall_status is RunStatus.BLOCKED:
+            self.audit_logger.log_run_event(
+                message="Pipeline halted in blocked state",
+                details={"overall_status": self.state.overall_status.value},
+            )
 
     def _store_output(self, step_id: StepId, output: dict[str, Any]) -> None:
         mapping = {

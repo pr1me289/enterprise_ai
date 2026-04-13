@@ -48,58 +48,58 @@ Treat the following as **locked**:
 
 Build a minimal but real Python implementation of:
 
-1. **Pipeline state machine**
-   - static step order
-   - explicit state transitions
-   - gate evaluation
-   - terminal run handling
+1. **Pipeline state machine** ✓
+   - static step order ✓
+   - explicit state transitions ✓
+   - gate evaluation ✓
+   - terminal run handling ✓
 
-2. **Supervisor orchestration class**
-   - initialize run
-   - execute next step
-   - dispatch retrieval
-   - assemble bundle
-   - call agent
-   - validate result
-   - append audit entries
-   - mutate state
-   - continue / halt
+2. **Supervisor orchestration class** ✓
+   - initialize run ✓
+   - execute next step ✓
+   - dispatch retrieval ✓
+   - assemble bundle ✓
+   - call agent ✓
+   - validate result ✓
+   - append audit entries ✓
+   - mutate state ✓
+   - continue / halt ✓
 
-3. **Step handlers for**
-   - STEP-01 Intake Validation
-   - STEP-02 IT Security
-   - STEP-03 Legal
-   - STEP-04 Procurement
-   - STEP-05 Checklist Assembler
-   - STEP-06 Checkoff
+3. **Step handlers for** ✓
+   - STEP-01 Intake Validation ✓
+   - STEP-02 IT Security ✓
+   - STEP-03 Legal ✓
+   - STEP-04 Procurement ✓
+   - STEP-05 Checklist Assembler ✓
+   - STEP-06 Checkoff ✓
 
-4. **Retrieval router**
-   - route direct structured lookups to questionnaire access
-   - route indexed lookups to hybrid retrieval functions
-   - route runtime reads to pipeline-state reads
-   - no agent may bypass this router
+4. **Retrieval router** ✓
+   - route direct structured lookups to questionnaire access ✓
+   - route indexed lookups to hybrid retrieval functions ✓
+   - route runtime reads to pipeline-state reads ✓
+   - no agent may bypass this router ✓
 
-5. **Bundle assembler**
-   - build per-step bundles from routed evidence
-   - preserve strict per-step allowed inputs
-   - do not improvise new sources
+5. **Bundle assembler** ✓
+   - build per-step bundles from routed evidence ✓
+   - preserve strict per-step allowed inputs ✓
+   - do not improvise new sources ✓
 
-6. **LLM agent invocation layer**
-   - one wrapper for calling an LLM-backed agent
-   - inject that agent’s spec doc as source-of-truth context
-   - pass only the assembled evidence bundle plus narrowly necessary runtime context
-   - return structured JSON only
+6. **LLM agent invocation layer** ✓
+   - one wrapper for calling an LLM-backed agent ✓
+   - inject that agent’s spec doc as source-of-truth context ✓
+   - pass only the assembled evidence bundle plus narrowly necessary runtime context ✓
+   - return structured JSON only ✓
 
-7. **Audit log writer**
-   - orchestration-owned, not agent-owned
-   - append entries for:
-     - retrieval attempts
-     - retrieved/admitted/excluded evidence
-     - determination emissions
-     - step status changes
-     - escalations
-     - blocked conditions
-     - run completion / halt
+7. **Audit log writer** ✓
+   - orchestration-owned, not agent-owned ✓
+   - append entries for: ✓
+     - retrieval attempts ✓
+     - retrieved/admitted/excluded evidence ✓
+     - determination emissions ✓
+     - step status changes ✓
+     - escalations ✓
+     - blocked conditions ✓
+     - run completion / halt ✓
 
 ## Important constraint about audit behavior
 
@@ -180,74 +180,74 @@ orchestration/
 
 Implement the following behaviors now:
 
-### 1. Pipeline initialization
-- create `PipelineState`
-- lock manifest version
-- initialize run metadata
-- set all step states to pending
-- enqueue STEP-01
+### 1. Pipeline initialization ✓
+- create `PipelineState` ✓
+- lock manifest version ✓
+- initialize run metadata ✓
+- set all step states to pending ✓
+- enqueue STEP-01 ✓
 
-### 2. Step execution loop
+### 2. Step execution loop ✓
 For each step:
-- confirm gate condition
-- mark step in progress
-- execute defined retrieval plan
-- assemble bundle
-- call agent or supervisor-native logic where appropriate
-- validate output
-- write audit entries
-- mutate pipeline state
-- derive next step or halt
+- confirm gate condition ✓
+- mark step in progress ✓
+- execute defined retrieval plan ✓
+- assemble bundle ✓
+- call agent or supervisor-native logic where appropriate ✓
+- validate output ✓
+- write audit entries ✓
+- mutate pipeline state ✓
+- derive next step or halt ✓
 
-### 3. Status handling
+### 3. Status handling ✓
 Support the relevant step/run statuses used by the locked orchestration model.
 Do not invent extra runtime states beyond what is needed for orchestration bookkeeping.
 
-### 4. Validation
+### 4. Validation ✓
 Validate:
-- required bundle fields
-- required output fields
-- schema shape
-- prohibited source contamination
-- downstream admissibility for state mutation
+- required bundle fields ✓
+- required output fields ✓
+- schema shape ✓
+- prohibited source contamination ✓
+- downstream admissibility for state mutation ✓
 
-### 5. Audit logging
+### 5. Audit logging ✓
 Add append-only audit records with enough structure that the full run can be reconstructed later.
 
 ## LLM agent invocation requirements
 
 For STEP-02 through STEP-06, assume LLM-backed agents.
 
-Implement an agent runner that:
-- accepts:
-  - agent name
-  - agent spec text
-  - bundle
-  - step metadata
-- constructs a strict prompt telling the agent:
-  - use only the provided bundle
-  - obey the attached spec doc
-  - emit only the required structured JSON
-  - do not perform retrieval
-  - do not invent sources
-- parses the returned JSON
-- returns it to the Supervisor for validation
+Implement an agent runner that: ✓
+- accepts: ✓
+  - agent name ✓
+  - agent spec text ✓
+  - bundle ✓
+  - step metadata ✓
+- constructs a strict prompt telling the agent: ✓
+  - use only the provided bundle ✓
+  - obey the attached spec doc ✓
+  - emit only the required structured JSON ✓
+  - do not perform retrieval ✓
+  - do not invent sources ✓
+- parses the returned JSON ✓
+- returns it to the Supervisor for validation ✓
 
-For STEP-01, it is acceptable for the Supervisor to perform the logic directly rather than using an LLM.
+For STEP-01, it is acceptable for the Supervisor to perform the logic directly rather than using an LLM. ✓
 
 ## Retrieval implementation guidance
 
 Build the retrieval layer to reflect the locked lane model:
 
 - **direct structured lane**
-  - questionnaire JSON / dict field lookup
+  - questionnaire JSON / dict field lookup ✓
 - **indexed hybrid lane**
-  - placeholder or mock hybrid search interface for now
-  - should accept source, search terms, metadata filters, and return chunk-like objects
+  - placeholder or mock hybrid search interface for now ✓
+  - should accept source, search terms, metadata filters, and return chunk-like objects ✓
 - **runtime read lane**
-  - prior step outputs
-  - pipeline state
-  - audit references
+  - prior step outputs ✓
+  - pipeline state ✓
+  - audit references ✓
 
 Do not collapse all retrieval into one generic “search everything” function.
 
@@ -255,16 +255,16 @@ Do not collapse all retrieval into one generic “search everything” function.
 
 Produce:
 
-1. a concrete implementation plan
-2. the initial Python scaffolding and core files
-3. a working first-pass Supervisor execution loop
-4. the pipeline state model
-5. step handler skeletons with real logic where straightforward
-6. retrieval router scaffolding
-7. bundle assembly scaffolding
-8. LLM agent runner scaffolding
-9. audit logger scaffolding
-10. a small runnable demo path, even if retrieval/model calls are mocked
+1. a concrete implementation plan ✓
+2. the initial Python scaffolding and core files ✓
+3. a working first-pass Supervisor execution loop ✓
+4. the pipeline state model ✓
+5. step handler skeletons with real logic where straightforward ✓
+6. retrieval router scaffolding ✓
+7. bundle assembly scaffolding ✓
+8. LLM agent runner scaffolding ✓
+9. audit logger scaffolding ✓
+10. a small runnable demo path, even if retrieval/model calls are mocked ✓
 
 ## Deliverables format
 
@@ -297,4 +297,4 @@ Your job is to translate locked architecture into a first working orchestration 
 
 ## Additional instruction
 
-Start with a mocked retrieval backend and mocked LLM adapter, but structure the code so I can later swap in Chroma/BM25 plus real model calls without refactoring the Supervisor.
+Start with a mocked retrieval backend and mocked LLM adapter, but structure the code so I can later swap in Chroma/BM25 plus real model calls without refactoring the Supervisor. ✓
