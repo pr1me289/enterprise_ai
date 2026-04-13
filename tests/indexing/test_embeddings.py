@@ -41,6 +41,14 @@ def test_should_embed_only_allows_indexed_hybrid_chunks() -> None:
             source_id="VQ-OC-001",
         )
     ) is False
+    assert should_embed(
+        _make_chunk(
+            chunk_id="SHM-001__record_summary",
+            retrieval_lane="DIRECT_STRUCTURED",
+            source_id="SHM-001",
+            text="stakeholder map summary",
+        )
+    ) is False
 
 
 def test_build_embeddings_filters_non_eligible_chunks_and_sorts_deterministically() -> None:

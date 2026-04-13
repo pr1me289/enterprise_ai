@@ -50,9 +50,15 @@ from .models import EmbeddingRecord
 from .pipeline import (
     build_and_persist_embeddings_from_chunk_dir,
     build_and_persist_embeddings_from_chunk_paths,
+    build_and_persist_embeddings_for_scenario,
+    build_and_persist_embeddings_for_scenarios,
     build_storage_indices,
     load_chunk_artifacts,
     load_chunk_artifacts_from_dir,
+    load_chunk_artifacts_from_dirs,
+    scenario_chroma_persist_directory,
+    scenario_embedding_collection_name,
+    scenario_vector_registry_directory,
 )
 
 __all__ = [
@@ -74,6 +80,8 @@ __all__ = [
     "VectorIndex",
     "build_and_persist_embeddings_from_chunk_dir",
     "build_and_persist_embeddings_from_chunk_paths",
+    "build_and_persist_embeddings_for_scenario",
+    "build_and_persist_embeddings_for_scenarios",
     "build_embeddings",
     "build_bm25_indices",
     "build_index_registry_payload",
@@ -94,8 +102,12 @@ __all__ = [
     "list_structured_sources",
     "load_chunk_artifacts",
     "load_chunk_artifacts_from_dir",
+    "load_chunk_artifacts_from_dirs",
     "load_index_registry",
     "metadata_from_chunk",
+    "scenario_chroma_persist_directory",
+    "scenario_embedding_collection_name",
+    "scenario_vector_registry_directory",
     "should_embed",
     "tokenize",
     "vector_records_from_embeddings",

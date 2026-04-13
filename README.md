@@ -123,7 +123,7 @@ Current implementation notes:
 - Preprocessing detects source type, preserves source structure, and attaches source-level metadata before any chunking. For this demo, all current normalized sources inherit the same source-level defaults: `document_date=2026-04-04` and `freshness_status=CURRENT`.
 - The `source_type` contract is now intentionally explicit and source-specific: `POLICY_DOCUMENT`, `LEGAL_TRIGGER_MATRIX`, `PROCUREMENT_APPROVAL_MATRIX`, `VENDOR_QUESTIONNAIRE`, `STAKEHOLDER_MAP`, `VENDOR_PRECEDENT`, and `SLACK_THREAD`.
 - Chunking consumes `NormalizedSource` objects only, attaches finalized chunk metadata at creation time, and writes inspectable intermediate JSON artifacts. Active scenario chunk outputs now live under `data/processed/scenario_1/chunks/` and `data/processed/scenario_2/chunks/`. The questionnaire is still excluded from chunk output, while the stakeholder map now emits structured-entry chunks. Legacy precedent handling remains in code, but precedent outputs are not used by the active workflow.
-- Indexing now consumes finalized chunk artifacts, embeds only indexed-hybrid chunks with `sentence-transformers/all-MiniLM-L6-v2`, and persists vectors plus inherited chunk metadata into Chroma.
+- Indexing now consumes finalized chunk artifacts, embeds only indexed-hybrid chunks with `sentence-transformers/all-MiniLM-L6-v2`, and persists vectors plus inherited chunk metadata into Chroma. Scenario-aware embedding helpers now read from `data/processed/scenario_1/chunks/` and `data/processed/scenario_2/chunks/` separately and persist to scenario-specific Chroma / vector-registry outputs. The stakeholder map can now flow through the embedding loaders because it is chunked, but it remains direct-structured and is skipped by embedding eligibility.
 - Storage/indexing now builds per-source logical indices over shared backends: active workflow collections are `idx_security_policy`, `idx_dpa_matrix`, `idx_procurement_matrix`, and `idx_slack_notes`; BM25 bundles are written under `data/bm25/`; a direct structured questionnaire store is written at `vq_direct_access`; and `data/indexes/index_registry.json` remains the explainable source-to-store map. Legacy precedent indices may still be emitted by existing scripts but are not used by the current workflow.
 - Retrieval scaffolding now includes explicit source routing, endpoint permission guards, hybrid fusion, authority-aware reranking, and retrieval manifest objects under `src/retrieval/`.
 - A first-pass orchestration layer now exists under `src/orchestration/`. It uses a static sequential Supervisor state machine, step-specific handlers, lane-aware routing, bundle validation, append-only audit logging, and a mocked LLM adapter / mocked indexed backend that can later be replaced with real model and retrieval integrations.
@@ -221,8 +221,9 @@ PYTHONPATH=src python3 -c "from preprocessing import load_source; print(load_sou
 # The questionnaire is still excluded from chunk output; stakeholder-map entries are now chunked.
 PYTHONPATH=src python3 -c "from chunking.pipeline import build_scenario_chunk_artifacts; build_scenario_chunk_artifacts('scenario_1'); build_scenario_chunk_artifacts('scenario_2')"
 
-# Build and persist embeddings for all current chunk artifacts
-PYTHONPATH=src python3 -c "from indexing.pipeline import build_and_persist_embeddings_from_chunk_dir; build_and_persist_embeddings_from_chunk_dir()"
+# Build and persist embeddings for each scenario's chunk artifacts
+# The stakeholder map is loaded from the scenario chunk dirs but remains non-embeddable because it is direct-structured.
+PYTHONPATH=src python3 -c "from indexing.pipeline import build_and_persist_embeddings_for_scenario; build_and_persist_embeddings_for_scenario('scenario_1'); build_and_persist_embeddings_for_scenario('scenario_2')"
 
 # Build Step 8 storage/index outputs
 PYTHONPATH=src python3 -c "from indexing.pipeline import build_storage_indices; build_storage_indices(questionnaire_path='mock_documents/OptiChain_VSQ_001_v2_1.json')"
