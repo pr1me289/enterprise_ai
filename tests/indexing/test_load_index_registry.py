@@ -12,6 +12,7 @@ from indexing.load_index_registry import (
     list_structured_sources,
     load_index_registry,
 )
+from indexing.pipeline import build_storage_indices_for_scenario
 
 
 def test_load_index_registry_reads_generated_sources_payload(repo_root) -> None:
@@ -51,4 +52,3 @@ def test_registry_helpers_expose_canonical_source_to_store_map(repo_root, tmp_pa
         "SLK-001",
     ]
     assert list_structured_sources(registry_path) == ["SHM-001", "VQ-OC-001"]
-from indexing.pipeline import build_storage_indices_for_scenario
