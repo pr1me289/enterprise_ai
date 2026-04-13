@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from .enums import AgentStatus, RetrievalLane, StepId, StepStatus
+from .escalation import EscalationPayload
 
 
 @dataclass(frozen=True, slots=True)
@@ -69,4 +70,4 @@ class StepExecutionResult:
     retrieval_results: dict[str, RetrievalResult] = field(default_factory=dict)
     agent_status: AgentStatus | None = None
     halt_reason: str | None = None
-    escalation_payload: dict[str, Any] | None = None
+    escalation_payload: EscalationPayload | None = None

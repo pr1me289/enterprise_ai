@@ -6,6 +6,7 @@ from uuid import uuid4
 
 from orchestration.audit.schemas import AuditEntry
 from orchestration.models.enums import AuditEventType
+from orchestration.models.escalation import EscalationPayload
 from orchestration.pipeline_state import utc_now
 
 
@@ -96,11 +97,11 @@ class AuditLogger:
             details={"step_id": step_id, "output": output},
         )
 
-    def log_escalation(self, *, agent_id: str, step_id: str, payload: dict) -> AuditEntry:
+    def log_escalation(self, *, agent_id: str, step_id: str, payload: EscalationPayload) -> AuditEntry:
         return self.append(
             agent_id=agent_id,
             event_type=AuditEventType.ESCALATION,
-            details={"step_id": step_id, **payload},
+            details={"step_id": step_id, **payload.to_dict()},
         )
 
     def log_run_event(self, *, message: str, details: dict | None = None) -> AuditEntry:

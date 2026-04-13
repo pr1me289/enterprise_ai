@@ -207,3 +207,21 @@
 - Test files updated: `tests/chunking/test_chunker.py`, `tests/chunking/test_pipeline.py`, `tests/chunking/test_artifacts.py`, `tests/preprocessing/test_matrix_ingestor.py`, `tests/indexing/test_index_registry.py`, `tests/indexing/test_indexing_pipeline.py`, `tests/indexing/test_load_index_registry.py`.
 **Result:** All 68 tests pass on `fix/integrity`. Slack tier was already corrected to 3 in a prior session (confirmed clean). The full integrity fix is complete.
 **Next:** Review and merge `fix/integrity` into main via PR if checks pass.
+
+### [#29] 2026-04-13 | Claude Code
+**Task:** Implement missing runtime data contracts on `feature/supervisor-orchestration-v2`.
+**Plan:** Create `EscalationPayload`, `RetrievedChunk`, `ContextBundle`, and step determination dataclasses; update `StepExecutionResult.escalation_payload` type; update step02/03/04 handlers and `audit_logger.log_escalation`; export all new models; write tests.
+**Changes:**
+- `src/orchestration/models/escalation.py`: New `EscalationPayload` dataclass with `evidence_condition`, `resolution_owner`, `additional_context`, and `to_dict()`.
+- `src/orchestration/models/retrieved_chunk.py`: New `RetrievedChunk` dataclass with source metadata, `chunk_id`, `authority_tier`, `retrieval_lane`, `is_primary_citable`, `text`, `citation_label`, `extra_metadata`, and `to_dict()`.
+- `src/orchestration/models/context_bundle.py`: New `ContextBundle` dataclass with `step_id`, `admitted_evidence`, `excluded_evidence`, `structured_fields`, `source_provenance`, `admissibility_status`, and `to_dict()`; plus `ExcludedChunk` helper.
+- `src/orchestration/models/determinations.py`: New step determination dataclasses `Step01IntakeDetermination` through `Step06CheckoffDetermination` derived from `REQUIRED_OUTPUT_FIELDS` and scenario output shapes; plus `PolicyCitation`.
+- `src/orchestration/models/contracts.py`: `StepExecutionResult.escalation_payload` changed from `dict[str, Any] | None` to `EscalationPayload | None`.
+- `src/orchestration/steps/step02_security.py`: Constructs `EscalationPayload` object instead of plain dict.
+- `src/orchestration/steps/step03_legal.py`: Same.
+- `src/orchestration/steps/step04_procurement.py`: Same.
+- `src/orchestration/audit/audit_logger.py`: `log_escalation` now accepts `EscalationPayload` and calls `.to_dict()` before spreading.
+- `src/orchestration/models/__init__.py`: Exports all new models via `__all__`.
+- `tests/orchestration/test_runtime_contracts.py`: 24 new tests covering all new dataclasses, type contracts, and audit logger integration.
+**Result:** All 92 tests pass (68 pre-existing + 24 new). No regressions.
+**Next:** Wire `ContextBundle` and determination dataclasses into the bundle assembler and agent runner as the agent contracts solidify.

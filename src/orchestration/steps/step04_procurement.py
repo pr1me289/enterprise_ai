@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from orchestration.models.contracts import GateDecision, RetrievalRequest, StepExecutionResult
 from orchestration.models.enums import RetrievalLane, StepId, StepStatus
+from orchestration.models.escalation import EscalationPayload
 from orchestration.pipeline_state import PipelineState
 from orchestration.steps.base import BaseStepHandler
 
@@ -150,10 +151,10 @@ class Step04ProcurementHandler(BaseStepHandler):
             )
         escalation_payload = None
         if output["status"] == "escalated":
-            escalation_payload = {
-                "evidence_condition": "Procurement routing inherited an unresolved constraint or lacked a matrix match.",
-                "resolution_owner": "Procurement Director",
-            }
+            escalation_payload = EscalationPayload(
+                evidence_condition="Procurement routing inherited an unresolved constraint or lacked a matrix match.",
+                resolution_owner="Procurement Director",
+            )
         return StepExecutionResult(
             step_id=self.step_id,
             step_status=self._step_status_from_agent_status(output["status"]),
