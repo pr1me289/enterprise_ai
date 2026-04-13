@@ -124,13 +124,13 @@ Current implementation notes:
 - The `source_type` contract is now intentionally explicit and source-specific: `POLICY_DOCUMENT`, `LEGAL_TRIGGER_MATRIX`, `PROCUREMENT_APPROVAL_MATRIX`, `VENDOR_QUESTIONNAIRE`, `STAKEHOLDER_MAP`, `VENDOR_PRECEDENT`, and `SLACK_THREAD`.
 - Chunking consumes `NormalizedSource` objects only, attaches finalized chunk metadata at creation time, and writes inspectable intermediate JSON artifacts. Active scenario chunk outputs now live under `data/processed/scenario_1/chunks/` and `data/processed/scenario_2/chunks/`. The questionnaire is still excluded from chunk output, while the stakeholder map now emits structured-entry chunks. Legacy precedent handling remains in code, but precedent outputs are not used by the active workflow.
 - Indexing now consumes finalized chunk artifacts, embeds only indexed-hybrid chunks with `sentence-transformers/all-MiniLM-L6-v2`, and persists vectors plus inherited chunk metadata into Chroma. Scenario-aware embedding helpers now read from `data/processed/scenario_1/chunks/` and `data/processed/scenario_2/chunks/` separately and persist to scenario-specific Chroma / vector-registry outputs. The stakeholder map can now flow through the embedding loaders because it is chunked, but it remains direct-structured and is skipped by embedding eligibility.
-- Storage/indexing now builds per-source logical indices over shared backends: active workflow collections are `idx_security_policy`, `idx_dpa_matrix`, `idx_procurement_matrix`, and `idx_slack_notes`; BM25 bundles are written under `data/bm25/`; a direct structured questionnaire store is written at `vq_direct_access`; and `data/indexes/index_registry.json` remains the explainable source-to-store map. Legacy precedent indices may still be emitted by existing scripts but are not used by the current workflow.
+- Storage/indexing now builds per-source logical indices over shared backends: active workflow collections are `idx_security_policy`, `idx_dpa_matrix`, `idx_procurement_matrix`, and `idx_slack_notes`. Scenario-specific outputs are written under `data/indexes/scenario_1/` and `data/indexes/scenario_2/` for Chroma, vector registries, and index registries; under `data/bm25/scenario_1/` and `data/bm25/scenario_2/` for BM25 bundles; and under `data/structured/scenario_1/` and `data/structured/scenario_2/` for direct structured stores. The active structured stores are now `vq_direct_access` for the questionnaire and `stakeholder_map_direct_access` for the stakeholder map. Legacy precedent indices may still be emitted by existing scripts but are not used by the current workflow.
 - Retrieval scaffolding now includes explicit source routing, endpoint permission guards, hybrid fusion, authority-aware reranking, and retrieval manifest objects under `src/retrieval/`.
 - A first-pass orchestration layer now exists under `src/orchestration/`. It uses a static sequential Supervisor state machine, step-specific handlers, lane-aware routing, bundle validation, append-only audit logging, and a mocked LLM adapter / mocked indexed backend that can later be replaced with real model and retrieval integrations.
 
 ## Storage And Index Outputs
 
-Step 8 writes three different persistence forms because the repository does not treat every source the same. These are per-source logical indices over shared backends, not one undifferentiated global store.
+Step 8 writes three different persistence forms because the repository does not treat every source the same. These are per-source logical indices over shared backends, not one undifferentiated global store, and they are now generated separately for each demo scenario.
 
 - Indexed-hybrid sources are stored twice: once as dense vectors in Chroma and once as lexical BM25 bundles.
 - The questionnaire is not embedded. It is stored as a direct structured object for field-level access.
@@ -138,17 +138,17 @@ Step 8 writes three different persistence forms because the repository does not 
 
 High-level flow:
 
-1. Finalized chunk artifacts are read from `data/processed/chunks/`.
-2. Indexed-hybrid chunks are grouped by source and written into per-source logical indices over shared Chroma and BM25 backends.
-3. The questionnaire is loaded directly from its normalized source and written to a structured JSON store.
-4. `data/indexes/index_registry.json` is written so retrieval code can route requests to the correct backend with explainable metadata.
+1. Finalized chunk artifacts are read from scenario-specific chunk directories such as `data/processed/scenario_1/chunks/` and `data/processed/scenario_2/chunks/`.
+2. Indexed-hybrid chunks are grouped by source and written into per-source logical indices over shared Chroma and BM25 backends inside each scenario output tree.
+3. The questionnaire and stakeholder map are loaded directly from their normalized sources and written to structured JSON stores inside each scenario output tree.
+4. A scenario-specific `index_registry.json` is written so retrieval code can route requests to the correct backend with explainable metadata.
 
 ### Chroma Collections
 
 Chroma is the dense-vector backend for semantic retrieval over finalized chunk objects, not raw source files.
 
-- Persisted data directory: `data/indexes/chroma/`
-- Human-inspectable registry mirror: `data/indexes/vector_registry/`
+- Persisted data directories: `data/indexes/scenario_1/chroma/`, `data/indexes/scenario_2/chroma/`
+- Human-inspectable registry mirrors: `data/indexes/scenario_1/vector_registry/`, `data/indexes/scenario_2/vector_registry/`
 - Builder code: `src/indexing/build_vector_index.py`
 - Collection names:
   - `idx_security_policy`
@@ -166,7 +166,7 @@ Use these collections when the query needs semantic similarity over evidence tex
 
 BM25 is the lexical retrieval backend for exact-term, acronym, clause, section, and identifier matching over the same per-source logical partitions used by Chroma.
 
-- Persisted data directory: `data/bm25/`
+- Persisted data directories: `data/bm25/scenario_1/`, `data/bm25/scenario_2/`
 - Builder code: `src/indexing/build_bm25_index.py`
 - Bundle naming: one `.pkl` file per logical index, for example `data/bm25/idx_security_policy.pkl`
 
@@ -176,23 +176,31 @@ The BM25 layer is meant to be used alongside the Chroma layer, not instead of it
 
 ### Questionnaire Structured Store
 
-The questionnaire bypasses embedding and indexing because it belongs to the direct structured lane. It is not embedded, not added to Chroma, and not added to BM25.
+The questionnaire and stakeholder map bypass embedding and indexing because they belong to the direct structured lane. They are not embedded, not added to Chroma, and not added to BM25.
 
-- Persisted store file: `data/structured/vq_direct_access.json`
+- Persisted store files:
+  - `data/structured/scenario_1/vq_direct_access.json`
+  - `data/structured/scenario_1/stakeholder_map_direct_access.json`
+  - `data/structured/scenario_2/vq_direct_access.json`
+  - `data/structured/scenario_2/stakeholder_map_direct_access.json`
 - Builder code: `src/indexing/build_structured_store.py`
-- Logical store name: `vq_direct_access`
+- Logical store names:
+  - `vq_direct_access`
+  - `stakeholder_map_direct_access`
 
-This file contains top-level governance metadata for the questionnaire source and a `data` object holding the structured questionnaire payload itself. Use this store for direct field lookup and deterministic access patterns instead of semantic search. The helper in `src/indexing/build_structured_store.py` supports loading the store and retrieving fields by path.
+Each structured store contains top-level governance metadata for its source plus a `data` object holding the structured payload itself. Use these stores for direct field lookup and deterministic access patterns instead of semantic search. The helper in `src/indexing/build_structured_store.py` supports loading a store and retrieving fields by path.
 
 ### Index Registry
 
 The registry ties the storage layer together and makes the build explainable.
 
-- Registry file: `data/indexes/index_registry.json`
+- Registry files:
+  - `data/indexes/scenario_1/index_registry.json`
+  - `data/indexes/scenario_2/index_registry.json`
 - Registry definitions: `src/indexing/index_registry.py`
 - Registry loader/helpers: `src/indexing/load_index_registry.py`
 
-To generate or refresh the registry, run the Step 8 entrypoint in `src/indexing/pipeline.py`: `build_storage_indices(questionnaire_path='mock_documents/OptiChain_VSQ_001_v2_1.json')`.
+To generate or refresh the scenario-specific Step 8 outputs, run the Step 8 scenario entrypoint in `src/indexing/pipeline.py`: `build_storage_indices_for_scenario('scenario_1')` and `build_storage_indices_for_scenario('scenario_2')`.
 
 This file is a source-level control-plane registry, not a chunk registry. It contains one entry per logical source and records the source metadata (`source_id`, `source_name`, `source_type`, `authority_tier`, `retrieval_lane`, `version`, `document_date`, `freshness_status`, `manifest_status`, `allowed_agents`, `is_primary_citable`) plus the storage metadata (`storage_kind`, `logical_store_name`, `backends`, and `backend_locations`) needed for routing and explainability.
 
@@ -225,8 +233,8 @@ PYTHONPATH=src python3 -c "from chunking.pipeline import build_scenario_chunk_ar
 # The stakeholder map is loaded from the scenario chunk dirs but remains non-embeddable because it is direct-structured.
 PYTHONPATH=src python3 -c "from indexing.pipeline import build_and_persist_embeddings_for_scenario; build_and_persist_embeddings_for_scenario('scenario_1'); build_and_persist_embeddings_for_scenario('scenario_2')"
 
-# Build Step 8 storage/index outputs
-PYTHONPATH=src python3 -c "from indexing.pipeline import build_storage_indices; build_storage_indices(questionnaire_path='mock_documents/OptiChain_VSQ_001_v2_1.json')"
+# Build Step 8 storage/index outputs for each scenario
+PYTHONPATH=src python3 -c "from indexing.pipeline import build_storage_indices_for_scenario; build_storage_indices_for_scenario('scenario_1'); build_storage_indices_for_scenario('scenario_2')"
 
 # Run the first-pass orchestration demo scenarios
 PYTHONPATH=src uv run python -m orchestration.demo

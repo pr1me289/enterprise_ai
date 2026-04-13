@@ -12,11 +12,16 @@ from indexing.pipeline import (
     build_and_persist_embeddings_for_scenario,
     build_and_persist_embeddings_for_scenarios,
     build_storage_indices,
+    build_storage_indices_for_scenario,
+    build_storage_indices_for_scenarios,
     load_chunk_artifacts,
     load_chunk_artifacts_from_dir,
     load_chunk_artifacts_from_dirs,
+    scenario_bm25_persist_directory,
     scenario_chroma_persist_directory,
     scenario_embedding_collection_name,
+    scenario_index_registry_path,
+    scenario_structured_store_directory,
     scenario_vector_registry_directory,
 )
 
@@ -184,6 +189,7 @@ def test_build_storage_indices_writes_vector_bm25_and_structured_outputs(
     result = build_storage_indices(
         chunk_artifact_dir=chunk_artifact_dir,
         questionnaire_path=repo_root / "mock_documents/OptiChain_VSQ_001_v2_1.json",
+        stakeholder_map_path=repo_root / "scenario_1_mock_documents/Stakeholder_Map_PRQ_2024_0047.json",
         chroma_persist_directory=tmp_path / "chroma",
         vector_registry_directory=tmp_path / "vector_registry",
         bm25_persist_directory=tmp_path / "bm25",
@@ -195,6 +201,77 @@ def test_build_storage_indices_writes_vector_bm25_and_structured_outputs(
     assert result["vector_counts"]["idx_security_policy"] == 82
     assert result["bm25_counts"]["idx_precedents"] == 4
     assert result["structured_store_path"].name == "vq_direct_access.json"
+    assert result["structured_store_paths"]["SHM-001"].name == "stakeholder_map_direct_access.json"
     assert result["index_registry_path"].name == "index_registry.json"
     assert (tmp_path / "bm25/idx_security_policy.pkl").exists()
     assert (tmp_path / "vector_registry/idx_slack_notes.json").exists()
+
+
+def test_build_storage_indices_for_scenario_writes_scenario_specific_outputs(
+    repo_root: Path,
+    tmp_path: Path,
+) -> None:
+    result = build_storage_indices_for_scenario(
+        "scenario_1",
+        repo_root=repo_root,
+        chroma_persist_directory=tmp_path / "scenario_1/chroma",
+        vector_registry_directory=tmp_path / "scenario_1/vector_registry",
+        bm25_persist_directory=tmp_path / "scenario_1/bm25",
+        structured_store_directory=tmp_path / "scenario_1/structured",
+        index_registry_path=tmp_path / "scenario_1/index_registry.json",
+        embed_texts=lambda texts: [[float(index)] for index, _ in enumerate(texts, start=1)],
+    )
+
+    assert result["vector_counts"] == {
+        "idx_dpa_matrix": 27,
+        "idx_procurement_matrix": 20,
+        "idx_security_policy": 82,
+        "idx_slack_notes": 4,
+    }
+    assert result["bm25_counts"] == result["vector_counts"]
+    assert set(result["structured_store_paths"]) == {"VQ-OC-001", "SHM-001"}
+    assert (tmp_path / "scenario_1/index_registry.json").exists()
+    assert (tmp_path / "scenario_1/structured/stakeholder_map_direct_access.json").exists()
+
+
+def test_build_storage_indices_for_scenarios_splits_storage_outputs_by_scenario(
+    repo_root: Path,
+    tmp_path: Path,
+) -> None:
+    results = build_storage_indices_for_scenarios(
+        ("scenario_1", "scenario_2"),
+        repo_root=repo_root,
+        chroma_persist_directories={
+            "scenario_1": tmp_path / "scenario_1/chroma",
+            "scenario_2": tmp_path / "scenario_2/chroma",
+        },
+        vector_registry_directories={
+            "scenario_1": tmp_path / "scenario_1/vector_registry",
+            "scenario_2": tmp_path / "scenario_2/vector_registry",
+        },
+        bm25_persist_directories={
+            "scenario_1": tmp_path / "scenario_1/bm25",
+            "scenario_2": tmp_path / "scenario_2/bm25",
+        },
+        structured_store_directories={
+            "scenario_1": tmp_path / "scenario_1/structured",
+            "scenario_2": tmp_path / "scenario_2/structured",
+        },
+        index_registry_paths={
+            "scenario_1": tmp_path / "scenario_1/index_registry.json",
+            "scenario_2": tmp_path / "scenario_2/index_registry.json",
+        },
+        embed_texts=lambda texts: [[float(index)] for index, _ in enumerate(texts, start=1)],
+    )
+
+    assert set(results) == {"scenario_1", "scenario_2"}
+    assert set(results["scenario_1"]["structured_store_paths"]) == {"VQ-OC-001", "SHM-001"}
+    assert results["scenario_1"]["vector_counts"]["idx_security_policy"] == 82
+    assert results["scenario_2"]["vector_counts"]["idx_security_policy"] == 82
+
+
+def test_scenario_storage_output_helpers_are_stable() -> None:
+    assert scenario_bm25_persist_directory("scenario_1") == Path("data/bm25/scenario_1")
+    assert scenario_chroma_persist_directory("scenario_2") == Path("data/indexes/scenario_2/chroma")
+    assert scenario_structured_store_directory("scenario_1") == Path("data/structured/scenario_1")
+    assert scenario_index_registry_path("scenario_2") == Path("data/indexes/scenario_2/index_registry.json")

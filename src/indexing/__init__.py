@@ -5,6 +5,7 @@ from .build_structured_store import (
     DEFAULT_STRUCTURED_STORE_NAME,
     StructuredStore,
     build_structured_store,
+    build_structured_stores,
 )
 from .build_vector_index import (
     DEFAULT_CHROMA_PERSIST_DIR,
@@ -23,6 +24,7 @@ from .embeddings import (
 from .index_registry import (
     DEFAULT_BM25_PERSIST_DIR,
     DEFAULT_INDEX_REGISTRY_PATH,
+    DEFAULT_STAKEHOLDER_STORE_NAME,
     DEFAULT_STRUCTURED_STORE_DIR,
     INDEX_CONFIG,
     SOURCE_ID_TO_LOGICAL_STORE,
@@ -31,6 +33,11 @@ from .index_registry import (
     build_index_registry_payload,
     group_chunks_by_index_name,
     index_name_for_source,
+    scenario_bm25_persist_directory,
+    scenario_chroma_persist_directory,
+    scenario_index_registry_path,
+    scenario_structured_store_directory,
+    scenario_vector_registry_directory,
     write_index_registry,
 )
 from .load_index_registry import (
@@ -52,13 +59,13 @@ from .pipeline import (
     build_and_persist_embeddings_from_chunk_paths,
     build_and_persist_embeddings_for_scenario,
     build_and_persist_embeddings_for_scenarios,
+    build_storage_indices_for_scenario,
+    build_storage_indices_for_scenarios,
     build_storage_indices,
     load_chunk_artifacts,
     load_chunk_artifacts_from_dir,
     load_chunk_artifacts_from_dirs,
-    scenario_chroma_persist_directory,
     scenario_embedding_collection_name,
-    scenario_vector_registry_directory,
 )
 
 __all__ = [
@@ -68,6 +75,7 @@ __all__ = [
     "DEFAULT_EMBED_BATCH_SIZE",
     "DEFAULT_EMBEDDING_MODEL",
     "DEFAULT_INDEX_REGISTRY_PATH",
+    "DEFAULT_STAKEHOLDER_STORE_NAME",
     "DEFAULT_STRUCTURED_STORE_DIR",
     "DEFAULT_STRUCTURED_STORE_NAME",
     "DEFAULT_VECTOR_REGISTRY_DIR",
@@ -85,8 +93,11 @@ __all__ = [
     "build_embeddings",
     "build_bm25_indices",
     "build_index_registry_payload",
+    "build_storage_indices_for_scenario",
+    "build_storage_indices_for_scenarios",
     "build_storage_indices",
     "build_structured_store",
+    "build_structured_stores",
     "build_vector_indices",
     "embed_batch",
     "get_allowed_agents",
@@ -105,8 +116,11 @@ __all__ = [
     "load_chunk_artifacts_from_dirs",
     "load_index_registry",
     "metadata_from_chunk",
+    "scenario_bm25_persist_directory",
     "scenario_chroma_persist_directory",
     "scenario_embedding_collection_name",
+    "scenario_index_registry_path",
+    "scenario_structured_store_directory",
     "scenario_vector_registry_directory",
     "should_embed",
     "tokenize",

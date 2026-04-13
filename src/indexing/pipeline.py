@@ -8,9 +8,15 @@ from typing import Any
 
 from chunking import Chunk
 from chunking.artifacts import DEFAULT_CHUNK_ARTIFACT_DIR, scenario_chunk_artifact_dir
+from preprocessing import resolve_scenario_source_paths
 
 from .build_bm25_index import BM25Index, build_bm25_indices
-from .build_structured_store import DEFAULT_STRUCTURED_STORE_NAME, StructuredStore, build_structured_store
+from .build_structured_store import (
+    DEFAULT_STRUCTURED_STORE_NAME,
+    StructuredStore,
+    build_structured_store,
+    build_structured_stores,
+)
 from .build_vector_index import persist_embeddings
 from .build_vector_index import VectorIndex, build_vector_indices, vector_records_from_embeddings
 from .embeddings import DEFAULT_EMBED_BATCH_SIZE, DEFAULT_EMBEDDING_MODEL, build_embeddings
@@ -20,22 +26,19 @@ from .index_registry import (
     DEFAULT_INDEX_REGISTRY_PATH,
     DEFAULT_STRUCTURED_STORE_DIR,
     DEFAULT_VECTOR_REGISTRY_DIR,
+    DEFAULT_STAKEHOLDER_STORE_NAME,
     build_index_registry_payload,
     group_chunks_by_index_name,
+    scenario_bm25_persist_directory,
+    scenario_index_registry_path,
+    scenario_structured_store_directory,
+    scenario_chroma_persist_directory,
+    scenario_vector_registry_directory,
     write_index_registry,
 )
 from .models import EmbeddingRecord
 
 DEFAULT_EMBEDDING_COLLECTION_NAME = "enterprise_ai_chunks"
-DEFAULT_SCENARIO_INDEX_ROOT = Path("data/indexes")
-
-
-def scenario_chroma_persist_directory(scenario_name: str) -> Path:
-    return DEFAULT_SCENARIO_INDEX_ROOT / scenario_name / "chroma"
-
-
-def scenario_vector_registry_directory(scenario_name: str) -> Path:
-    return DEFAULT_SCENARIO_INDEX_ROOT / scenario_name / "vector_registry"
 
 
 def scenario_embedding_collection_name(scenario_name: str) -> str:
@@ -185,6 +188,7 @@ def build_storage_indices(
     *,
     chunk_artifact_dir: str | Path = DEFAULT_CHUNK_ARTIFACT_DIR,
     questionnaire_path: str | Path,
+    stakeholder_map_path: str | Path | None = None,
     chroma_persist_directory: str | Path = DEFAULT_CHROMA_PERSIST_DIR,
     vector_registry_directory: str | Path = DEFAULT_VECTOR_REGISTRY_DIR,
     bm25_persist_directory: str | Path = DEFAULT_BM25_PERSIST_DIR,
@@ -223,15 +227,23 @@ def build_storage_indices(
     bm25_counts = build_bm25_indices(chunk_groups, bm25_index=bm25_index)
 
     structured_store = StructuredStore(output_dir=structured_store_directory)
-    structured_store_path = build_structured_store(
+    questionnaire_store_path = build_structured_store(
         questionnaire_path,
         store=structured_store,
         store_name=DEFAULT_STRUCTURED_STORE_NAME,
     )
+    structured_store_paths: dict[str, Path] = {"VQ-OC-001": Path(questionnaire_store_path)}
+    if stakeholder_map_path is not None:
+        stakeholder_store_path = build_structured_store(
+            stakeholder_map_path,
+            store=structured_store,
+            store_name=DEFAULT_STAKEHOLDER_STORE_NAME,
+        )
+        structured_store_paths["SHM-001"] = Path(stakeholder_store_path)
 
     registry_payload = build_index_registry_payload(
         chunk_groups=chunk_groups,
-        structured_store_path=structured_store_path,
+        structured_store_paths=list(structured_store_paths.values()),
         bm25_persist_directory=bm25_persist_directory,
     )
     registry_path = write_index_registry(registry_payload, path=index_registry_path)
@@ -239,6 +251,77 @@ def build_storage_indices(
     return {
         "vector_counts": vector_counts,
         "bm25_counts": bm25_counts,
-        "structured_store_path": Path(structured_store_path),
+        "structured_store_path": Path(questionnaire_store_path),
+        "structured_store_paths": structured_store_paths,
         "index_registry_path": registry_path,
+    }
+
+
+def build_storage_indices_for_scenario(
+    scenario_name: str,
+    *,
+    chunk_artifact_dir: str | Path | None = None,
+    chroma_persist_directory: str | Path | None = None,
+    vector_registry_directory: str | Path | None = None,
+    bm25_persist_directory: str | Path | None = None,
+    structured_store_directory: str | Path | None = None,
+    index_registry_path: str | Path | None = None,
+    repo_root: str | Path | None = None,
+    model_name: str = DEFAULT_EMBEDDING_MODEL,
+    batch_size: int = DEFAULT_EMBED_BATCH_SIZE,
+    embed_texts: Any | None = None,
+) -> dict[str, Any]:
+    scenario_sources = resolve_scenario_source_paths(scenario_name, repo_root=repo_root)
+    return build_storage_indices(
+        chunk_artifact_dir=chunk_artifact_dir or scenario_chunk_artifact_dir(scenario_name),
+        questionnaire_path=scenario_sources["questionnaire"],
+        stakeholder_map_path=scenario_sources["stakeholder_map"],
+        chroma_persist_directory=chroma_persist_directory or scenario_chroma_persist_directory(scenario_name),
+        vector_registry_directory=vector_registry_directory or scenario_vector_registry_directory(scenario_name),
+        bm25_persist_directory=bm25_persist_directory or scenario_bm25_persist_directory(scenario_name),
+        structured_store_directory=structured_store_directory or scenario_structured_store_directory(scenario_name),
+        index_registry_path=index_registry_path or scenario_index_registry_path(scenario_name),
+        model_name=model_name,
+        batch_size=batch_size,
+        embed_texts=embed_texts,
+    )
+
+
+def build_storage_indices_for_scenarios(
+    scenario_names: list[str] | tuple[str, ...] = ("scenario_1", "scenario_2"),
+    *,
+    chunk_artifact_dirs: dict[str, str | Path] | None = None,
+    chroma_persist_directories: dict[str, str | Path] | None = None,
+    vector_registry_directories: dict[str, str | Path] | None = None,
+    bm25_persist_directories: dict[str, str | Path] | None = None,
+    structured_store_directories: dict[str, str | Path] | None = None,
+    index_registry_paths: dict[str, str | Path] | None = None,
+    repo_root: str | Path | None = None,
+    model_name: str = DEFAULT_EMBEDDING_MODEL,
+    batch_size: int = DEFAULT_EMBED_BATCH_SIZE,
+    embed_texts: Any | None = None,
+) -> dict[str, dict[str, Any]]:
+    return {
+        scenario_name: build_storage_indices_for_scenario(
+            scenario_name,
+            chunk_artifact_dir=chunk_artifact_dirs.get(scenario_name) if chunk_artifact_dirs else None,
+            chroma_persist_directory=(
+                chroma_persist_directories.get(scenario_name) if chroma_persist_directories else None
+            ),
+            vector_registry_directory=(
+                vector_registry_directories.get(scenario_name) if vector_registry_directories else None
+            ),
+            bm25_persist_directory=(
+                bm25_persist_directories.get(scenario_name) if bm25_persist_directories else None
+            ),
+            structured_store_directory=(
+                structured_store_directories.get(scenario_name) if structured_store_directories else None
+            ),
+            index_registry_path=index_registry_paths.get(scenario_name) if index_registry_paths else None,
+            repo_root=repo_root,
+            model_name=model_name,
+            batch_size=batch_size,
+            embed_texts=embed_texts,
+        )
+        for scenario_name in scenario_names
     }

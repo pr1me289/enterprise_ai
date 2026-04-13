@@ -11,12 +11,16 @@ from typing import Any
 from chunking import Chunk
 
 
-DEFAULT_CHROMA_PERSIST_DIR = Path("data/indexes/chroma")
-DEFAULT_VECTOR_REGISTRY_DIR = Path("data/indexes/vector_registry")
-DEFAULT_INDEX_REGISTRY_PATH = Path("data/indexes/index_registry.json")
-DEFAULT_BM25_PERSIST_DIR = Path("data/bm25")
-DEFAULT_STRUCTURED_STORE_DIR = Path("data/structured")
+DEFAULT_INDEX_ROOT = Path("data/indexes")
+DEFAULT_BM25_ROOT = Path("data/bm25")
+DEFAULT_STRUCTURED_ROOT = Path("data/structured")
+DEFAULT_CHROMA_PERSIST_DIR = DEFAULT_INDEX_ROOT / "chroma"
+DEFAULT_VECTOR_REGISTRY_DIR = DEFAULT_INDEX_ROOT / "vector_registry"
+DEFAULT_INDEX_REGISTRY_PATH = DEFAULT_INDEX_ROOT / "index_registry.json"
+DEFAULT_BM25_PERSIST_DIR = DEFAULT_BM25_ROOT
+DEFAULT_STRUCTURED_STORE_DIR = DEFAULT_STRUCTURED_ROOT
 DEFAULT_STRUCTURED_STORE_NAME = "vq_direct_access"
+DEFAULT_STAKEHOLDER_STORE_NAME = "stakeholder_map_direct_access"
 REGISTRY_VERSION = "1.0"
 
 
@@ -65,6 +69,12 @@ SOURCE_STORE_CONFIG: dict[str, SourceStoreDefinition] = {
         storage_kind="structured_direct",
         backends=("structured_json",),
     ),
+    "SHM-001": SourceStoreDefinition(
+        source_id="SHM-001",
+        logical_store_name=DEFAULT_STAKEHOLDER_STORE_NAME,
+        storage_kind="structured_direct",
+        backends=("structured_json",),
+    ),
 }
 
 SOURCE_ID_TO_LOGICAL_STORE = {
@@ -83,6 +93,26 @@ INDEX_CONFIG = {
     for definition in SOURCE_STORE_CONFIG.values()
     if definition.storage_kind == "vector_bm25"
 }
+
+
+def scenario_chroma_persist_directory(scenario_name: str) -> Path:
+    return DEFAULT_INDEX_ROOT / scenario_name / "chroma"
+
+
+def scenario_vector_registry_directory(scenario_name: str) -> Path:
+    return DEFAULT_INDEX_ROOT / scenario_name / "vector_registry"
+
+
+def scenario_index_registry_path(scenario_name: str) -> Path:
+    return DEFAULT_INDEX_ROOT / scenario_name / "index_registry.json"
+
+
+def scenario_bm25_persist_directory(scenario_name: str) -> Path:
+    return DEFAULT_BM25_ROOT / scenario_name
+
+
+def scenario_structured_store_directory(scenario_name: str) -> Path:
+    return DEFAULT_STRUCTURED_ROOT / scenario_name
 
 
 def index_name_for_source(source_id: str) -> str:
@@ -119,30 +149,37 @@ def group_chunks_by_index_name(chunks: list[Chunk]) -> dict[str, list[Chunk]]:
 def build_index_registry_payload(
     *,
     chunk_groups: dict[str, list[Chunk]],
-    structured_store_path: str | Path,
+    structured_store_path: str | Path | None = None,
+    structured_store_paths: list[str | Path] | None = None,
     bm25_persist_directory: str | Path = DEFAULT_BM25_PERSIST_DIR,
     generated_at: datetime | None = None,
 ) -> dict[str, Any]:
     sources: dict[str, Any] = {}
 
-    for source_id in sorted(SOURCE_ID_TO_INDEX_NAME):
-        definition = SOURCE_STORE_CONFIG[source_id]
-        chunks = chunk_groups.get(definition.logical_store_name, [])
-        if not chunks:
-            raise ValueError(f"Missing chunk group for indexed source {source_id}.")
-        sources[source_id] = _build_indexed_source_entry(
+    for logical_store_name, chunks in sorted(chunk_groups.items()):
+        if logical_store_name not in INDEX_CONFIG:
+            continue
+        definition = INDEX_CONFIG[logical_store_name]
+        sources[definition.source_id] = _build_indexed_source_entry(
             definition=definition,
             chunks=chunks,
             bm25_persist_directory=bm25_persist_directory,
         )
 
-    structured_payload = json.loads(Path(structured_store_path).read_text(encoding="utf-8"))
-    structured_source_id = structured_payload["source_id"]
-    sources[structured_source_id] = _build_structured_source_entry(
-        definition=SOURCE_STORE_CONFIG[structured_source_id],
-        payload=structured_payload,
-        structured_store_path=structured_store_path,
-    )
+    all_structured_store_paths: list[str | Path] = []
+    if structured_store_path is not None:
+        all_structured_store_paths.append(structured_store_path)
+    if structured_store_paths is not None:
+        all_structured_store_paths.extend(structured_store_paths)
+
+    for path in all_structured_store_paths:
+        structured_payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        structured_source_id = structured_payload["source_id"]
+        sources[structured_source_id] = _build_structured_source_entry(
+            definition=SOURCE_STORE_CONFIG[structured_source_id],
+            payload=structured_payload,
+            structured_store_path=path,
+        )
 
     return {
         "registry_version": REGISTRY_VERSION,
