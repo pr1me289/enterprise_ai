@@ -34,15 +34,106 @@
 **Next:** Continue Step 4 implementation from `src/preprocessing` and add follow-on verification/tests as the layer expands.
 
 ### [#6] 2026-04-08 | Codex
-**Task:** Add preprocessing tests under `tests/`, using the mock source files, and report honest failures plus coverage on `feature/preprocessing-layer`.
-**Plan:** Create minimal project test metadata, install repo-local test tooling with `uv`, add preprocessing-focused tests for the real mock files and helpers, run the suite with coverage, and record any faults exposed by the results.
-**Changes:** Added `pyproject.toml`, `uv.lock`, and a `tests/preprocessing/` suite covering the questionnaire, matrices, precedents, Slack exports, source loader routing, and the policy PDF path. Installed `pytest` and `pytest-cov` with `uv add --dev`.
-**Result:** `uv run pytest tests/preprocessing --cov=preprocessing --cov-report=term-missing` produced 13 passing tests and 1 failing test. The failure is real: preprocessing the mock policy PDF still raises `RuntimeError` because neither `pdftotext` nor `pypdf` is available. Coverage for `src/preprocessing` is 75%.
-**Next:** Add a PDF extraction dependency and rerun the failing preprocessing test.
+**Task:** Implement the chunking layer and write canonical intermediate chunk artifacts.
+**Plan:** Create `src/chunking`, consume `NormalizedSource` objects from preprocessing, emit canonical `Chunk` objects, and write per-source JSON artifacts to `data/processed/chunks`.
+**Changes:** Added chunk models, source-aware chunk builders, artifact writing utilities, and a pipeline helper. Generated chunk artifacts for the DPA matrix, procurement matrix, precedent log, and Slack notes. Questionnaire sources are skipped from chunk output by design.
+**Result:** Canonical inspectable chunk JSON now exists in `data/processed/chunks` for the currently preprocessable demo sources, ready for later embedding/indexing reads.
+**Next:** Extend artifact generation to the policy PDF once a local PDF text extraction dependency is available in the environment.
 
 ### [#7] 2026-04-08 | Codex
-**Task:** Bring the PDF dependency from `main` into the preprocessing branch and rerun the failing preprocessing test.
-**Plan:** Merge `main` into `feature/preprocessing-layer`, keep the branch test config, add `pypdf` to the branch project metadata, then rerun the policy-only test and the full preprocessing suite.
-**Changes:** Merged `main` into `feature/preprocessing-layer`, resolved `pyproject.toml`, `uv.lock`, and `master_log.md`, added `pypdf` as a runtime dependency, and set `tool.uv.package = false` so `uv run` does not require packaging the repo for tests.
-**Result:** `uv run pytest tests/preprocessing/test_policy_ingestor.py -q` now passes. `uv run pytest tests/preprocessing --cov=preprocessing --cov-report=term-missing` now reports 14 passed, 0 failed, with preprocessing coverage at 80%.
-**Next:** Merge the same dependency change into `feature/chunking-layer` so both active feature branches share the PDF ingestion dependency.
+**Task:** Briefly document preprocessing and chunking in the root README.
+**Plan:** Add a short capability summary and minimal run commands without expanding the README unnecessarily.
+**Changes:** Updated `README.md` to describe current preprocessing and chunking behavior, what each layer does, and how to run each layer from `PYTHONPATH=src`.
+**Result:** The README now reflects the current implementation state and gives concise commands for local use.
+**Next:** Keep README commands aligned as the embedding and indexing layers are added.
+
+### [#8] 2026-04-08 | Codex
+**Task:** Bring the PDF dependency from `main` into `feature/chunking-layer`.
+**Plan:** Merge `main` into the chunking branch, keep the existing chunking history in `master_log.md`, and accept the repo-level `pypdf` dependency files from `main`.
+**Changes:** Merged `main` into `feature/chunking-layer`, added `pyproject.toml` and `uv.lock`, and resolved the `master_log.md` merge conflict in favor of the chunking branch history plus this dependency merge note.
+**Result:** The chunking branch now carries the same repo-level PDF dependency baseline as `main`.
+**Next:** Keep branch dependencies aligned as shared tooling evolves.
+
+### [#9] 2026-04-08 | Codex
+**Task:** Add chunking tests under `tests/chunking`, run them with coverage, and report the actual results on `feature/chunking-layer`.
+**Plan:** Add repo-local pytest config, create chunking tests against the real mock source files plus temporary artifact outputs, run the chunking suite with coverage, and record any failures or coverage gaps directly in this log.
+**Changes:** Added `tests/conftest.py` plus a `tests/chunking/` suite covering source-specific chunking behavior, questionnaire skip behavior, artifact writing, and the chunking pipeline entrypoint. Updated `pyproject.toml` with pytest config and dev test dependencies, and refreshed `uv.lock` with `uv add --dev pytest pytest-cov`.
+**Result:** `uv run pytest tests/chunking --cov=chunking --cov-report=term-missing` completed with 11 passed, 0 failed. Chunking coverage is 99%: `src/chunking/__init__.py` 100%, `src/chunking/artifacts.py` 100%, `src/chunking/chunker.py` 97%, `src/chunking/models.py` 100%, `src/chunking/pipeline.py` 100%. The only uncovered line is `src/chunking/chunker.py:125`.
+**Next:** Keep chunking tests updated as chunk metadata or artifact shape changes in later indexing work.
+
+### [#10] 2026-04-09 | Codex
+**Task:** Rename the source contract field from `status` to `manifest_status` across preprocessing and chunking, then refresh chunk artifacts.
+**Plan:** Update the source contract and normalized source models, propagate the rename through ingestors and chunk models, rerun chunk artifact generation, and verify the change with the chunking test suite.
+**Changes:** Renamed the contract/model field to `manifest_status` in `src/preprocessing/` and `src/chunking/`, updated the direct `NormalizedSource` construction in `tests/chunking/test_chunker.py`, and regenerated `data/processed/chunks/DPA-TM-001.json`, `PAM-001.json`, `PVD-001.json`, and `SLK-001.json` so the artifact payload now emits `manifest_status`.
+**Result:** The code and generated chunk artifacts now consistently use `manifest_status` instead of `status`. `uv run pytest tests/chunking` completed with 11 passed, 0 failed.
+**Next:** Keep downstream indexing/retrieval code aligned to `manifest_status` as new layers are added.
+
+### [#11] 2026-04-09 | Codex
+**Task:** Chunk the new Markdown IT security policy and write its artifact into `data/processed/chunks`.
+**Plan:** Update the policy section parser to recognize Markdown headings and bolded clause identifiers, switch the supported chunking path/tests to the Markdown policy source, regenerate chunk artifacts including the policy, and verify the result with the chunking test suite.
+**Changes:** Extended `src/preprocessing/text_utils.py` so policy splitting recognizes Markdown forms like `## 1. Purpose`, `### 6.1 Access Provisioning`, and `**12.1.4** ...`. Updated `tests/chunking/test_chunker.py` and `tests/chunking/test_pipeline.py` to use `mock_documents/IT_Security_Policy_V4.2.md`, updated the chunking command in `README.md`, and generated `data/processed/chunks/ISP-001.json`.
+**Result:** The Markdown IT security policy now chunks correctly into 96 section-boundary artifacts, including clause-level citations such as `ISP-001 §12.1.4`. `uv run pytest tests/chunking` completed with 11 passed, 0 failed.
+**Next:** Keep policy parsing aligned if future mock policy sources introduce additional Markdown heading styles or mixed formatting.
+
+### [#12] 2026-04-09 | Codex
+**Task:** Reduce over-chunking in the IT security policy so container headings do not become weak retrieval units.
+**Plan:** Refine policy section splitting to suppress parent/container headings with no substantive body text, preserve leaf clauses whose policy content lives on the heading line, strip separator-only lines from chunk text, regenerate the policy artifact, and verify with tests.
+**Changes:** Updated `src/preprocessing/text_utils.py` with policy-specific cleanup and a filter that drops empty container sections such as `6`, `6.1`, and `6.2` while retaining substantive leaf clauses like `6.1.1`. Regenerated `data/processed/chunks/ISP-001.json` and tightened `tests/chunking/test_chunker.py` plus `tests/chunking/test_pipeline.py` to assert the new policy chunk shape and separator removal.
+**Result:** `ISP-001.json` now contains 82 stronger policy chunks instead of 96, container-only headings are omitted, and trailing `---` separators are removed from chunk text. `uv run pytest tests/chunking` completed with 11 passed, 0 failed.
+**Next:** Revisit the heading-substance heuristic only if future policy formats introduce ambiguous section labels that should be retained or merged differently.
+
+### [#13] 2026-04-09 | Codex
+**Task:** Implement Step 7 embedding on a dedicated branch from `feature/chunking-layer`, using finalized chunk artifacts and persisting eligible vectors into Chroma.
+**Plan:** Create `feature/embedding-layer`, add a small `src/indexing/` package for eligibility filtering, batch embedding, vector-record assembly, chunk-artifact loading, and Chroma persistence, add indexing tests, install only the runtime dependencies needed for this stage, then run a real embedding build against the current chunk artifacts.
+**Changes:** Created `feature/embedding-layer`. Added `src/indexing/` with `models.py`, `embeddings.py`, `chroma_store.py`, `pipeline.py`, and `__init__.py`. Added `Chunk.from_dict()` in `src/chunking/models.py` to support loading canonical chunk artifacts. Added `tests/indexing/` covering embedding eligibility, deterministic record construction, artifact loading, and Chroma persistence with test doubles. Updated `README.md` project commands and implementation notes, updated `.gitignore` to exclude the generated Chroma directory, and updated `pyproject.toml` / `uv.lock` with the embedding runtime stack: `chromadb`, `sentence-transformers==3.0.1`, `transformers==4.41.2`, `torch<2.3`, `onnxruntime<1.24`, and `numpy<2`.
+**Result:** `uv run pytest tests/chunking tests/indexing` completed with 19 passed, 0 failed under Python 3.12. A real embedding build completed successfully with `uv run python -c "..."`, embedding all current indexed-hybrid chunk artifacts and persisting 137 records into the Chroma collection `enterprise_ai_chunks` under `data/indexes/chroma/`.
+**Next:** Build Step 8 storage/index retrieval helpers around the persisted Chroma collection and add BM25 alongside the dense vector index without changing the chunk contracts.
+
+### [#14] 2026-04-09 | Codex
+**Task:** Promote the Step 8 metadata fields to first-class source/chunk metadata before starting storage and indexing.
+**Plan:** Extend preprocessing so sources carry `document_date`, `freshness_status`, and source-class `is_primary_citable`, extend chunking so chunk artifacts inherit those fields plus manual precedent `domain_scope`, regenerate the chunk artifacts, update the README, and stop before implementing Step 8 storage/indexing logic.
+**Changes:** Updated `src/preprocessing/` models, source contracts, and ingestors so source-level metadata now includes `document_date`, `freshness_status`, and `is_primary_citable`. Updated `src/chunking/models.py` and `src/chunking/chunker.py` so chunk artifacts inherit that metadata and precedent chunks receive a manual `domain_scope` mapping by record ID. Regenerated `data/processed/chunks/ISP-001.json`, `DPA-TM-001.json`, `PAM-001.json`, `PVD-001.json`, and `SLK-001.json`. Updated chunking tests plus the direct chunk test helper in `tests/indexing/test_embeddings.py`, and refreshed `README.md` implementation notes to describe the finalized chunk metadata shape.
+**Result:** The canonical chunk artifacts now expose the Step 8 metadata as first-class fields instead of leaving them to be inferred ad hoc later. `uv run pytest tests/chunking tests/indexing` completed with 19 passed, 0 failed. No Step 8 storage/indexing implementation was started after this metadata promotion pass.
+**Next:** Resume Step 8 only after the metadata-first chunk contract is accepted as the stable input to storage/indexing.
+
+### [#15] 2026-04-09 | Codex
+**Task:** Implement Step 8 storage and indexing on a dedicated branch from `feature/embedding-layer`, following `storage_indexing_strategy.md`.
+**Plan:** Keep the metadata-first chunk contract intact, add explicit per-source index definitions, build per-source Chroma collections and BM25 bundles over shared backends, persist the questionnaire as a direct structured store, add retrieval wrappers for endpoint routing/permissions/hybrid search/reranking/manifests, update docs, and verify with both tests and a real storage/index build.
+**Changes:** Created and populated the Step 8 storage/indexing structure under `src/indexing/` with `build_vector_index.py`, `build_bm25_index.py`, `build_structured_store.py`, `index_registry.py`, and `metadata_schema.py`, while retaining the Step 7 embedding entrypoints. Added `src/retrieval/` with `source_router.py`, `permission_guard.py`, `hybrid_search.py`, `authority_reranker.py`, and `retrieval_manifest.py`. Added `rank-bm25` to `pyproject.toml` / `uv.lock`. Added tests covering explicit index mapping, BM25 build/query/filter behavior, structured questionnaire persistence, and retrieval routing/permission/fusion behavior. Ran a real Step 8 build that created per-source Chroma collections, BM25 bundles under `data/bm25/`, vector registries under `data/indexes/vector_registry/`, a structured questionnaire store at `data/structured/vq_direct_access.json`, and `data/indexes/index_registry.json`. Updated `.gitignore` and `README.md` to reflect the generated outputs and new workflow.
+**Result:** `uv run pytest tests/chunking tests/indexing tests/retrieval` completed with 32 passed, 0 failed. The real Step 8 build completed successfully with per-source counts of: `idx_security_policy` 82, `idx_dpa_matrix` 27, `idx_procurement_matrix` 20, `idx_precedents` 4, and `idx_slack_notes` 4 in both Chroma and BM25 outputs.
+**Next:** Build the task-aware retrieval planner and bundle assembly on top of the Step 8 endpoint/router/permission/hybrid foundations without collapsing the indices into one broad searchable corpus.
+
+### [#16] 2026-04-09 | Codex
+**Task:** Tighten the artifact metadata contract so source types are deliberate, document dates are demo-consistent, Slack permissions stay procurement-only, and precedent domain scopes are reviewed rather than heuristic drift.
+**Plan:** Replace the generic `SourceType` values with explicit source-class enum values, move all current sources to the shared demo defaults `document_date=2026-04-04` and `freshness_status=CURRENT`, stop overriding dates inside ingestors, spot-check and lock the precedent `domain_scope` mapping by record, regenerate chunk and Step 8 storage outputs, then update the README and tests to reflect the tightened contract.
+**Changes:** Updated `src/preprocessing/models.py`, `src/preprocessing/source_contract.py`, `src/preprocessing/source_loader.py`, and the source ingestors so all current sources inherit explicit source-type enums and shared demo date/freshness defaults at the source-contract layer. Updated `src/chunking/chunker.py` so matrix dispatch handles the split matrix types and precedent `domain_scope` now uses the reviewed mapping `legal`, `security`, `legal`, `procurement` for the four current records. Updated `src/indexing/index_registry.py` to expose the new source-type values in the logical index definitions. Refreshed the relevant mock Slack and precedent source files, expanded tests to assert the new source types, the shared `2026-04-04` document date, procurement-only Slack `allowed_agents`, and the reviewed precedent scope mapping, and updated `README.md` to document the standardized `source_type` contract and the demo-wide metadata defaults.
+**Result:** The artifact contract is now tighter and more legible: source types align to the planning language, all current sources expose the same demo date/freshness posture, Slack remains procurement-scoped across all chunks, and precedent `domain_scope` is explicitly reviewed instead of left ambiguous.
+**Next:** Keep later retrieval and bundle-assembly work keyed to these explicit source classes and inherited governance fields rather than re-deriving them downstream.
+
+### [#17] 2026-04-09 | Codex
+**Task:** Rebuild the index registry as a canonical source-to-store routing map by directly following `build_index_registry.md`.
+**Plan:** Replace the existing index-centric registry shape with a generated source-level registry that records one entry per logical source, add a loader/helper module for retrieval code, update the structured questionnaire store metadata so the registry can read it directly, route retrieval helpers through registry lookups, regenerate `data/indexes/index_registry.json`, and verify with tests.
+**Changes:** Reworked `src/indexing/index_registry.py` around a source-level `SOURCE_STORE_CONFIG`, added deterministic registry generation/writing, and changed the registry JSON shape to `registry_version`, `generated_at`, and `sources`. Added `src/indexing/load_index_registry.py` with helpers for entry lookup, logical store lookup, backend lookup, access lookup, and indexed-vs-structured checks. Updated `src/indexing/build_structured_store.py` so the questionnaire store now carries `authority_tier` and `retrieval_lane` at top level. Updated `src/indexing/pipeline.py` to write the new registry format, and updated `src/retrieval/source_router.py` plus `src/retrieval/permission_guard.py` so routing and access checks consume registry-derived mappings rather than hard-coded module maps. Added and refreshed indexing tests for the new registry shape and loader helpers, and updated the README registry section to describe the control-plane role of the registry.
+**Result:** The Step 8 registry is now a canonical source-level control-plane artifact with one record per source, direct mapping to logical store names and backends, and retrieval helpers built on top of it instead of ad hoc storage assumptions.
+**Next:** Keep any future retrieval planner or bundle assembly code reading source/store/backends/allowed-agents from the registry helpers instead of duplicating source-routing logic elsewhere.
+
+### [#18] 2026-04-10 | Codex
+**Task:** Regenerate the Step 8 index registry JSON on `feature/index-registry`.
+**Plan:** Use the existing `build_storage_indices` pipeline entrypoint so the generated registry matches the current chunk artifacts, structured questionnaire store, BM25 bundles, and per-source Chroma/vector registry outputs.
+**Changes:** Regenerated local Step 8 storage/index outputs, including `data/indexes/index_registry.json`, by running the existing indexing pipeline with `mock_documents/OptiChain_VSQ_001_v2_1.json`.
+**Result:** `data/indexes/index_registry.json` now exists locally with six source-level entries: five indexed-hybrid sources mapped to Chroma/BM25 logical stores and `VQ-OC-001` mapped to `vq_direct_access`.
+**Next:** Use `src/indexing/load_index_registry.py` helpers for retrieval code that needs the canonical source-to-store routing map.
+
+### [#19] 2026-04-10 | Codex
+**Task:** Add a README note for regenerating the index registry.
+**Plan:** Document the intended Step 8 pipeline entrypoint concisely in the existing Index Registry section.
+**Changes:** Added a short README line pointing to `src/indexing/pipeline.py` and `build_storage_indices(questionnaire_path='mock_documents/OptiChain_VSQ_001_v2_1.json')`.
+**Result:** The README now identifies the code path to run when `data/indexes/index_registry.json` needs to be generated or refreshed.
+**Next:** Keep the command aligned if the Step 8 pipeline entrypoint changes.
+
+### [#20] 2026-04-13 | Codex
+**Task:** Build the first-pass Supervisor orchestration layer on a feature branch from current `main`, using the orchestration plan and agent specs as the primary implementation constraints.
+**Plan:** Add a new `src/orchestration/` package with explicit pipeline state, step definitions, step handlers, retrieval routing, bundle assembly, LLM-agent invocation scaffolding, validation, and append-only audit logging. Start with mocked indexed retrieval and mocked LLM behavior, but keep interfaces shaped so real retrieval and real model calls can be swapped in later. Add targeted orchestration tests and a small runnable demo path.
+**Changes:** Added `src/orchestration/` with explicit enums/contracts, manifest and step configuration, `PipelineState`, state-machine helpers, append-only audit logging, direct/indexed/runtime retrieval adapters, bundle assembly, LLM agent execution scaffolding, validators, and concrete step handlers for STEP-01 through STEP-06. Added `src/orchestration/supervisor.py`, `src/orchestration/demo.py`, `src/orchestration/scenarios.py`, and `src/orchestration/mocks.py` for fixture-driven demo runs using mocked retrieval results and mocked agent outputs. Added `tests/orchestration/test_supervisor.py` covering the happy-path full run, the escalated security halt path, and the two demo scenarios. Updated `README.md` to document the new orchestration layer and the demo command, and updated `orchestration_layer_build_prompt.md` with completion check marks for the items now satisfied on this branch.
+**Result:** The first-pass static Supervisor orchestration layer now runs end to end with deterministic step sequencing, gate evaluation, lane-specific retrieval routing, bundle assembly, mocked retrieval, mocked LLM agent execution, output validation, pipeline state mutation, and orchestration-owned audit logging. Two fixture-driven demo scenarios now run correctly: one completes through STEP-06 and one halts after STEP-02 with ESCALATED status. Verification completed with `uv run pytest tests/orchestration`, `PYTHONPATH=src uv run python -m orchestration.demo`, and `uv run pytest`, ending at 37 passed, 0 failed.
+**Next:** Replace the mocked indexed retrieval backend and mocked LLM adapter with real implementations behind the same interfaces, and tighten step-level output validation as the agent contracts settle further.

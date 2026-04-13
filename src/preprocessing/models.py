@@ -9,11 +9,12 @@ from typing import Any
 
 
 class SourceType(str, Enum):
-    POLICY = "POLICY"
-    MATRIX = "MATRIX"
-    QUESTIONNAIRE = "QUESTIONNAIRE"
-    PRECEDENT = "PRECEDENT"
-    SUPPLEMENTAL_NOTE = "SUPPLEMENTAL_NOTE"
+    POLICY_DOCUMENT = "POLICY_DOCUMENT"
+    LEGAL_TRIGGER_MATRIX = "LEGAL_TRIGGER_MATRIX"
+    PROCUREMENT_APPROVAL_MATRIX = "PROCUREMENT_APPROVAL_MATRIX"
+    VENDOR_QUESTIONNAIRE = "VENDOR_QUESTIONNAIRE"
+    VENDOR_PRECEDENT = "VENDOR_PRECEDENT"
+    SLACK_THREAD = "SLACK_THREAD"
 
 
 class RetrievalLane(str, Enum):
@@ -77,10 +78,13 @@ class NormalizedSource:
     source_type: SourceType
     source_name: str
     version: str
+    document_date: str | None
+    freshness_status: str
     authority_tier: int
     retrieval_lane: RetrievalLane
     allowed_agents: tuple[str, ...]
-    status: ManifestStatus
+    is_primary_citable: bool
+    manifest_status: ManifestStatus
     owner_role: str
     source_path: Path
     raw_text: str
@@ -98,5 +102,5 @@ class NormalizedSource:
         payload["source_path"] = str(self.source_path)
         payload["source_type"] = self.source_type.value
         payload["retrieval_lane"] = self.retrieval_lane.value
-        payload["status"] = self.status.value
+        payload["manifest_status"] = self.manifest_status.value
         return payload

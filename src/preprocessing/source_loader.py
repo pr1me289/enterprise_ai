@@ -18,15 +18,18 @@ def load_source(path: str | Path) -> NormalizedSource:
     source_path = Path(path)
     contract = resolve_contract_for_path(source_path)
 
-    if contract.source_type is SourceType.POLICY:
+    if contract.source_type is SourceType.POLICY_DOCUMENT:
         return ingest_policy(source_path, contract)
-    if contract.source_type is SourceType.MATRIX:
+    if contract.source_type in {
+        SourceType.LEGAL_TRIGGER_MATRIX,
+        SourceType.PROCUREMENT_APPROVAL_MATRIX,
+    }:
         return ingest_matrix(source_path, contract)
-    if contract.source_type is SourceType.QUESTIONNAIRE:
+    if contract.source_type is SourceType.VENDOR_QUESTIONNAIRE:
         return ingest_questionnaire(source_path, contract)
-    if contract.source_type is SourceType.PRECEDENT:
+    if contract.source_type is SourceType.VENDOR_PRECEDENT:
         return ingest_precedent_log(source_path, contract)
-    if contract.source_type is SourceType.SUPPLEMENTAL_NOTE:
+    if contract.source_type is SourceType.SLACK_THREAD:
         return ingest_slack_threads(source_path, contract)
     raise ValueError(f"Unsupported source type for {source_path}")
 

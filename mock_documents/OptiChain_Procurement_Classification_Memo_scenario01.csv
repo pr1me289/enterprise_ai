@@ -1,0 +1,44 @@
+Field,Value
+document_id,PROC-CLASS-MEMO-0047
+procurement_reference,PRQ-2024-0047
+vendor_name,OptiChain Inc.
+issued_by,M. Osei — Senior Procurement Manager
+issued_date,2024-03-05
+vendor_class,CLASS_C
+vendor_class_label,Specialized Software — Non-Regulated
+classification_rationale,Standard Demand Forecasting module only. Export-only integration. No personal data. No regulated data. No persistent system access. Single-function analytics platform.
+contract_value_annual,45000
+contract_value_total,45000
+contract_term_months,12
+deal_size,45000
+contract_value_tier,T1
+approval_path,FAST_TRACK
+fast_track_eligible,true
+fast_track_disqualifying_conditions,NONE
+fast_track_basis,"Class C / T1 / no regulated data / no system access / NDA executed / prior relationship confirmed / ERP tier assigned / no open ESCALATED or BLOCKED items"
+executive_approval_required,false
+it_security_review,Notification only
+legal_dpa_review,Not required
+procurement_review,Required — Manager-level sign-off
+business_owner_signoff,Manager+ (Operations)
+erp_integration_tier,TIER_3
+erp_integration_tier_assigned_by,D. Achterberg — IT Security
+erp_integration_tier_status,RESOLVED
+data_classification,UNREGULATED
+data_classification_status,RESOLVED
+dpa_required,false
+dpa_status,RESOLVED — not required
+nda_status,EXECUTED
+nda_execution_date,2024-01-15
+nda_status_resolved,RESOLVED
+existing_msa,YES
+prior_engagement_reference,PRQ-2023-0031
+prior_engagement_outcome,CLOSED_SUCCESSFULLY
+prior_relationship_status,RESOLVED
+overall_onboarding_status,COMPLETE
+blocking_items,NONE
+pipeline_run_cleared_for,FAST_TRACK
+pam_row_applied,"Class C / T1"
+pam_version,PROC-MATRIX-001 v2.0
+isp_reference,ISP-001 v4.2 §12.2
+dpa_matrix_reference,DPA-TM-001 v1.3 — no applicable trigger row

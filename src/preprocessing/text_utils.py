@@ -12,8 +12,9 @@ from xml.etree import ElementTree
 
 WHITESPACE_RE = re.compile(r"[ \t]+")
 MULTI_BLANK_RE = re.compile(r"\n{3,}")
+SEPARATOR_LINE_RE = re.compile(r"(?m)^(?:---+|\*\*\*+|___+)\s*$")
 INLINE_SECTION_RE = re.compile(
-    r"(?m)^(?P<section_id>(?:§\s*)?\d+(?:\.\d+)*)(?:[.)])?\s+(?P<heading>[^\n]+?)\s*$",
+    r"(?m)^(?:#{1,6}\s+)?(?:\*\*)?(?P<section_id>(?:§\s*)?\d+(?:\.\d+)*)(?:[.)])?(?:\*\*)?\s+(?P<heading>[^\n]+?)\s*$",
 )
 
 XML_NS = {
@@ -72,8 +73,10 @@ def split_policy_sections(raw_text: str) -> list[tuple[str, str, str, int]]:
         section_id = normalize_section_id(match.group("section_id"))
         heading = normalize_text(match.group("heading"))
         body_start = match.end()
-        body_text = normalize_text(raw_text[body_start:end])
-        full_text = normalize_text(f"{section_id} {heading}\n{body_text}".strip())
+        body_text = _clean_policy_chunk_text(raw_text[body_start:end])
+        if not body_text and not _heading_is_substantive(heading):
+            continue
+        full_text = _clean_policy_chunk_text(f"{section_id} {heading}\n{body_text}".strip())
         sections.append((section_id, heading, full_text, section_level(section_id)))
     return sections
 
@@ -160,6 +163,18 @@ def parse_markdown_table(text: str) -> list[dict[str, str]]:
         padded = values + [""] * (len(header) - len(values))
         rows.append({header[index]: padded[index] for index in range(len(header))})
     return rows
+
+
+def _clean_policy_chunk_text(text: str) -> str:
+    without_separators = SEPARATOR_LINE_RE.sub("", text)
+    return normalize_text(without_separators)
+
+
+def _heading_is_substantive(heading: str) -> bool:
+    words = heading.split()
+    if len(words) >= 5:
+        return True
+    return any(token.lower() in {"must", "shall", "required", "requires", "prohibited"} for token in words)
 
 
 def _read_shared_strings(archive: zipfile.ZipFile) -> list[str]:

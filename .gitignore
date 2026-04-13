@@ -20,6 +20,11 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+data/indexes/chroma/
+data/indexes/vector_registry/
+data/indexes/index_registry.json
+data/bm25/
+data/structured/
 
 # Environment files
 .env
