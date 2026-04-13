@@ -113,7 +113,8 @@ Typical current usage:
 6. Use `src/chunking/` to convert chunkable normalized sources into canonical `Chunk` objects and write JSON artifacts to `data/processed/chunks/`.
 7. Use `src/indexing/` to embed indexed-hybrid chunk artifacts and build per-source Chroma collections, BM25 bundles, a direct structured questionnaire store, and an index registry.
 8. Use `src/retrieval/` to route source-specific queries through permission checks, hybrid search, authority-aware reranking, and retrieval manifest generation.
-9. Use the repository rules in `AGENTS.md` before adding code or automation.
+9. Use `src/orchestration/` for the first-pass static Supervisor state machine, step handlers, lane-specific retrieval routing, bundle assembly, mocked LLM-agent execution, validation, and append-only audit logging.
+10. Use the repository rules in `AGENTS.md` before adding code or automation.
 
 Current implementation notes:
 
@@ -124,6 +125,7 @@ Current implementation notes:
 - Indexing now consumes finalized chunk artifacts, embeds only indexed-hybrid chunks with `sentence-transformers/all-MiniLM-L6-v2`, and persists vectors plus inherited chunk metadata into Chroma.
 - Storage/indexing now builds per-source logical indices over shared backends: active workflow collections are `idx_security_policy`, `idx_dpa_matrix`, `idx_procurement_matrix`, and `idx_slack_notes`; BM25 bundles are written under `data/bm25/`; a direct structured questionnaire store is written at `vq_direct_access`; and `data/indexes/index_registry.json` remains the explainable source-to-store map. Legacy precedent indices may still be emitted by existing scripts but are not used by the current workflow.
 - Retrieval scaffolding now includes explicit source routing, endpoint permission guards, hybrid fusion, authority-aware reranking, and retrieval manifest objects under `src/retrieval/`.
+- A first-pass orchestration layer now exists under `src/orchestration/`. It uses a static sequential Supervisor state machine, step-specific handlers, lane-aware routing, bundle validation, append-only audit logging, and a mocked LLM adapter / mocked indexed backend that can later be replaced with real model and retrieval integrations.
 
 ## Storage And Index Outputs
 
@@ -223,6 +225,9 @@ PYTHONPATH=src python3 -c "from indexing.pipeline import build_and_persist_embed
 
 # Build Step 8 storage/index outputs
 PYTHONPATH=src python3 -c "from indexing.pipeline import build_storage_indices; build_storage_indices(questionnaire_path='mock_documents/OptiChain_VSQ_001_v2_1.json')"
+
+# Run the first-pass orchestration demo
+PYTHONPATH=src uv run python -m orchestration.demo
 
 # Install dependencies
 uv sync  # after pyproject.toml and uv.lock are added
