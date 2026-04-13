@@ -1,300 +1,496 @@
-# Prompt for Coding Agent — Build the Supervisor Orchestration Layer
+# Orchestration Layer Build Prompt for Coding Agent
 
-You are implementing the **Supervisor orchestration layer** for an enterprise AI demo.
+## Objective
 
-Your job is to build the **first working version of the orchestration layer only** — not the full polished product, not a speculative architecture redesign, and not broad refactors.
+Build the first deterministic version of the orchestration layer for the enterprise AI vendor onboarding demo.
 
-## Core objective
+This system must prove that the supervisor can drive the pipeline step by step, retrieve only the allowed evidence for each step, assemble an admissible context bundle, call the appropriate step handler, mutate pipeline state, write audit entries, and halt correctly on `COMPLETE`, `BLOCKED`, or `ESCALATED`.
 
-Build a **static Python state machine** that deterministically executes the pipeline step-by-step, drives retrieval and bundle assembly, invokes LLM-backed agents with their locked spec docs as source-of-truth, updates pipeline state, and writes audit log entries after every meaningful execution event.
+The immediate goal is **not** to build a fully LLM-driven agent system. The immediate goal is to build a **working deterministic supervisor loop** that runs both demo scenarios correctly using the chunked corpora and structured records already prepared.
 
-The intended control flow is:
+---
 
-1. Supervisor begins run
-2. Supervisor evaluates current step and gate conditions
-3. Supervisor routes retrieval requests to the correct lane
-4. Retrieval engine returns evidence
-5. Supervisor assembles a context bundle
-6. Domain agent receives the bundle and reasons over it using its spec doc
-7. Supervisor validates the returned output
-8. Supervisor updates pipeline state
-9. Supervisor appends audit log entries
-10. Supervisor advances or halts based on status
-11. Loop until terminal run state
+## Core Mental Model
 
-## Architectural posture you must preserve
+The orchestration layer is the **supervisor-controlled runtime layer**.
 
-Treat the following as **locked**:
+It is responsible for:
 
-- The orchestration layer is a **deterministic sequential state machine**
-- The Supervisor is the only orchestration authority
-- The Supervisor owns:
-  - step sequencing
-  - gate evaluation
-  - retrieval routing
-  - bundle assembly
-  - pipeline state mutation
-  - audit log creation / append behavior
-  - validation of agent outputs
-- Domain agents are **LLM reasoners**, not retrievers
-- Domain agents do **not** independently search sources
-- Agent specs are the behavioral source of truth for each domain agent
-- The questionnaire remains in the **direct structured lane**
-- Indexed sources go through the **hybrid indexed lane**
-- Pipeline state / checklist / audit state are **non-retrieval runtime objects**
-- Keep the implementation simple, static, and demo-friendly over abstract or enterprise-heavy generalization
+- moving the pipeline from step to step
+- checking gate conditions
+- deciding what retrieval is needed at each step
+- invoking the retrieval layer
+- assembling the admissible context bundle
+- calling the current domain step handler
+- validating the returned output
+- mutating pipeline state
+- writing audit log entries
+- halting or advancing based on status
 
-## What you are building in this first pass
+The retrieval engine is functionally part of this orchestration flow, but it is **subordinate to the supervisor**.
 
-Build a minimal but real Python implementation of:
+The correct runtime model is:
 
-1. **Pipeline state machine** ✓
-   - static step order ✓
-   - explicit state transitions ✓
-   - gate evaluation ✓
-   - terminal run handling ✓
+1. **Supervisor / orchestration layer**
+   - decides what step is active
+   - checks whether the gate is satisfied
+   - determines which sources are allowed
+   - determines which subqueries should run
+   - determines which retrieval lane should be used
+   - decides what evidence is admitted into the bundle
 
-2. **Supervisor orchestration class** ✓
-   - initialize run ✓
-   - execute next step ✓
-   - dispatch retrieval ✓
-   - assemble bundle ✓
-   - call agent ✓
-   - validate result ✓
-   - append audit entries ✓
-   - mutate state ✓
-   - continue / halt ✓
+2. **Retrieval layer**
+   - executes the supervisor’s retrieval requests
+   - performs direct structured lookup for questionnaire / structured records
+   - performs indexed retrieval for policy / matrix / Slack chunk stores
+   - returns retrieved candidates with provenance
 
-3. **Step handlers for** ✓
-   - STEP-01 Intake Validation ✓
-   - STEP-02 IT Security ✓
-   - STEP-03 Legal ✓
-   - STEP-04 Procurement ✓
-   - STEP-05 Checklist Assembler ✓
-   - STEP-06 Checkoff ✓
+3. **Domain step handler**
+   - receives only the scoped bundle for the current step
+   - produces a determination object for that step
 
-4. **Retrieval router** ✓
-   - route direct structured lookups to questionnaire access ✓
-   - route indexed lookups to hybrid retrieval functions ✓
-   - route runtime reads to pipeline-state reads ✓
-   - no agent may bypass this router ✓
+4. **Supervisor again**
+   - validates the returned result
+   - updates pipeline state
+   - appends audit entries
+   - determines whether to continue, block, or escalate
 
-5. **Bundle assembler** ✓
-   - build per-step bundles from routed evidence ✓
-   - preserve strict per-step allowed inputs ✓
-   - do not improvise new sources ✓
+The supervisor is therefore both:
+- the **traffic controller**
+- and the **evidence gatekeeper**
 
-6. **LLM agent invocation layer** ✓
-   - one wrapper for calling an LLM-backed agent ✓
-   - inject that agent’s spec doc as source-of-truth context ✓
-   - pass only the assembled evidence bundle plus narrowly necessary runtime context ✓
-   - return structured JSON only ✓
+This system is **not** “RAG first, agent second.”
 
-7. **Audit log writer** ✓
-   - orchestration-owned, not agent-owned ✓
-   - append entries for: ✓
-     - retrieval attempts ✓
-     - retrieved/admitted/excluded evidence ✓
-     - determination emissions ✓
-     - step status changes ✓
-     - escalations ✓
-     - blocked conditions ✓
-     - run completion / halt ✓
+It is:
 
-## Important constraint about audit behavior
+**supervisor-governed retrieval first, then step-bounded agent execution.**
 
-The orchestration layer must **not assume the agent specs handle audit writing**.
+---
 
-Instead:
+## Immediate Development Goal
 
-- agents return their structured determination
-- the Supervisor records the audit events
-- if the agent output is missing something required for auditable state mutation, the Supervisor should treat that as a validation issue and handle it explicitly
+Build the **first deterministic end-to-end supervisor loop** with:
 
-The audit system should be implemented as a first-class runtime concern of the Supervisor.
+- real pipeline state mutation
+- real retrieval routing
+- real bundle assembly
+- real admissibility checks
+- mocked or deterministic step reasoning
+- full audit logging
 
-## Source-of-truth hierarchy for implementation
+This version should be able to run:
 
-When there is ambiguity, use this precedence:
+- **Scenario 1** → deterministic `COMPLETE`
+- **Scenario 2** → deterministic halt at the intended first `ESCALATED` step
 
-1. Locked orchestration plan
-2. Locked agent spec for the current step
-3. Design Doc
-4. Context Contract
-5. Retrieval / chunking strategy notes
+Only after this works should live LLM-backed step handlers be introduced.
 
-Do **not** invent new architecture when these documents already constrain the behavior.
+---
 
-## Implementation style requirements
+## Required Runtime Models
 
-- Use Python
-- Favor plain classes, dataclasses, enums, and typed functions
-- Keep the state machine explicit and inspectable
-- Prefer readability and deterministic control flow over abstraction-heavy frameworks
-- Do not use LangGraph or any orchestration framework for v1
-- Avoid clever dynamic registration unless it clearly improves clarity
-- Keep LLM agent invocation behind a simple adapter interface so models can be swapped later
-- Build with mocked retrieval and mocked LLM execution where necessary, but structure the code so real retrieval and real model calls can drop in later
+Finalize and lock the runtime data contracts first.
 
-## Recommended file structure
+Implement models for:
 
-You may adjust slightly if needed, but stay close to this shape:
+- `PipelineState`
+- `StepStatus`
+- `EscalationPayload`
+- `AuditLogEntry`
+- `RetrievedChunk`
+- `ContextBundle`
+
+Also implement determination models for each step:
+
+- `Step01IntakeDetermination`
+- `Step02SecurityDetermination`
+- `Step03LegalDetermination`
+- `Step04ProcurementDetermination`
+- `Step05ChecklistDetermination`
+- `Step06CheckoffDetermination`
+
+### Expectations for these models
+
+#### `PipelineState`
+Should contain at minimum:
+- run identifiers
+- current step
+- overall status
+- step statuses
+- step determinations
+- escalation payloads
+- audit references
+- next-step queue
+
+#### `StepStatus`
+Use the canonical statuses:
+- `PENDING`
+- `IN_PROGRESS`
+- `COMPLETE`
+- `BLOCKED`
+- `ESCALATED`
+
+#### `RetrievedChunk`
+Should contain:
+- source metadata
+- chunk identifier
+- authority tier
+- retrieval lane
+- citable flag
+- text payload
+- provenance / citation label
+
+#### `ContextBundle`
+Should contain:
+- current step
+- admitted evidence
+- excluded evidence with reasons
+- relevant structured fields
+- source provenance
+- bundle admissibility status
+
+#### `AuditLogEntry`
+Should capture:
+- timestamp
+- step
+- event type
+- event details
+- source reference if applicable
+- status transition if applicable
+
+---
+
+## Retrieval Architecture to Build
+
+Build a retrieval router that operates under supervisor control.
+
+### Responsibilities of the retrieval router
+Given:
+- current step
+- allowed sources
+- retrieval lane
+- step subquery plan
+
+it should return:
+- retrieved candidate chunks and records
+- source metadata
+- provenance labels
+- exclusion reasons when applicable
+
+### Retrieval lanes to support now
+
+#### 1. `DIRECT_STRUCTURED`
+Used for structured access like:
+- questionnaire JSON
+- stakeholder map JSON if still used downstream
+
+Behavior:
+- direct field lookup
+- no semantic ranking
+- exact retrieval from structured store
+
+#### 2. `INDEXED_HYBRID`
+Used for:
+- IT Security Policy chunks
+- DPA Legal Trigger Matrix chunks
+- Procurement Approval Matrix chunks
+- Slack thread chunks
+
+Behavior:
+- deterministic lookup from prebuilt chunk JSON files for now
+- may simulate ranking if needed, but should remain deterministic
+- preserve citation and source metadata
+
+### Important rule
+The retrieval layer must **not** decide authority, admissibility, or escalation on its own.
+
+It may return candidates.
+
+The **supervisor / bundle assembly logic** decides:
+- what is admissible
+- what is excluded
+- what is supplementary only
+- whether evidence is sufficient
+- whether ambiguity requires escalation
+
+---
+
+## Bundle Assembly and Admissibility
+
+This is the heart of the orchestration layer.
+
+Implement bundle assembly logic that, for each step:
+
+1. collects retrieved candidates
+2. applies source-permission constraints
+3. applies authority hierarchy rules
+4. excludes out-of-scope or non-admissible evidence
+5. records exclusion reasons
+6. assembles the final context bundle
+7. determines whether the bundle is:
+   - admissible
+   - incomplete
+   - escalation-worthy
+
+### Bundle assembly must enforce
+
+- source authority hierarchy
+- lane-specific retrieval behavior
+- primary citation rules
+- low-authority suppression for Slack
+- scenario-specific relevance filtering
+- exclusion of irrelevant retrieved threads
+- deterministic provenance
+
+### Specific things the system must demonstrate
+
+- Thread 4 in Slack is excluded from OptiChain determinations
+- Slack is supplementary only and never primary evidence
+- structured questionnaire facts are passed through cleanly
+- matrix rows are retrieved as atomic rule-table evidence
+- policy sections are retrieved with stable citation labels
+
+---
+
+## Step Handlers to Implement
+
+Implement deterministic step handlers first.
+
+Create functions such as:
+
+- `run_step_01_intake()`
+- `run_step_02_security()`
+- `run_step_03_legal()`
+- `run_step_04_procurement()`
+- `run_step_05_checklist()`
+- `run_step_06_checkoff()`
+
+These do **not** need live LLMs yet.
+
+They may use deterministic logic over the assembled bundle.
+
+### Step 01 — Intake
+Must:
+- confirm questionnaire exists
+- confirm completeness
+- confirm no version conflict
+- emit `COMPLETE` or `BLOCKED`
+
+### Step 02 — Security
+Must:
+- evaluate ERP integration tier
+- evaluate data classification
+- evaluate fast-track eligibility inputs from security perspective
+- preserve ambiguity where formal evidence is insufficient
+- emit `COMPLETE` or `ESCALATED`
+
+### Step 03 — Legal
+Must:
+- inspect DPA trigger applicability
+- inspect NDA status
+- determine legal blockers
+- emit `COMPLETE` or `ESCALATED`
+
+### Step 04 — Procurement
+Must:
+- derive approval path from structured procurement matrix logic
+- incorporate upstream outputs
+- determine required approvals and timeline
+- emit `COMPLETE` or `ESCALATED`
+
+### Step 05 — Checklist
+Must:
+- compile prior determinations
+- assemble final approval checklist
+- emit overall checklist status
+
+### Step 06 — Checkoff
+Must:
+- generate downstream stakeholder guidance only
+- not alter the substantive checklist result
+- use finalized outputs plus stakeholder map / downstream config
+
+---
+
+## Control Flow Expectations
+
+Implement a sequential supervisor loop that:
+
+1. initializes `PipelineState`
+2. sets current step to `STEP-01`
+3. evaluates gate conditions before each step
+4. retrieves only the sources allowed for that step
+5. assembles the context bundle
+6. calls the step handler
+7. validates the returned object
+8. updates step status and pipeline state
+9. writes audit entries
+10. halts or advances
+
+### Transition rules
+A step must move:
+- `PENDING -> IN_PROGRESS -> TERMINAL_STATE`
+
+Terminal states:
+- `COMPLETE`
+- `BLOCKED`
+- `ESCALATED`
+
+A terminal step must not revert within the same run.
+
+### Run-level expectations
+The supervisor should:
+- halt on the first required blocking condition
+- halt on the first escalation condition if the scenario requires that behavior
+- preserve escalation payloads and audit entries
+- keep all transitions deterministic
+
+---
+
+## Audit Logging Requirements
+
+Every important runtime event should write an audit entry.
+
+At minimum, log:
+
+- step status changes
+- retrieval attempts
+- retrieved candidates
+- excluded evidence and exclusion reason
+- admitted evidence
+- gate evaluation results
+- domain determinations
+- escalation payload creation
+- pipeline halt or completion
+
+The audit log is not optional. It is part of the demo value.
+
+---
+
+## Scenario Execution Requirements
+
+### Scenario 1
+The system must prove that it can:
+- retrieve the correct evidence
+- exclude irrelevant Slack thread content
+- assemble admissible bundles
+- produce the clean fast-track path
+- emit final `COMPLETE`
+
+### Scenario 2
+The system must prove that it can:
+- retrieve the correct evidence
+- preserve ambiguity where required
+- assemble admissible but escalation-worthy bundles
+- halt at the intended first escalation
+- emit the correct `ESCALATED` outcome
+
+---
+
+## Suggested Initial File / Module Layout
+
+Use a structure roughly like this:
 
 ```text
-orchestration/
-  supervisor.py
-  state_machine.py
-  pipeline_state.py
-  steps/
-    step01_intake.py
-    step02_security.py
-    step03_legal.py
-    step04_procurement.py
-    step05_checklist.py
-    step06_checkoff.py
-  retrieval/
-    router.py
-    direct_structured.py
-    hybrid_indexed.py
-    runtime_reads.py
-    bundle_assembler.py
-  agents/
-    base.py
-    llm_agent_runner.py
-    prompts/
-  audit/
-    audit_logger.py
-    schemas.py
-  validation/
-    output_validator.py
-    bundle_validator.py
-  models/
-    enums.py
-    contracts.py
-  config/
-    step_definitions.py
-    source_manifest.py
+supervisor.py
+pipeline_state.py
+models/
+  step_status.py
+  determinations.py
+  retrieved_chunk.py
+  context_bundle.py
+  escalation.py
+  audit_log.py
+step_handlers/
+  step_01_intake.py
+  step_02_security.py
+  step_03_legal.py
+  step_04_procurement.py
+  step_05_checklist.py
+  step_06_checkoff.py
+retrieval/
+  router.py
+  index_lookup.py
+  structured_lookup.py
+bundle_assembler.py
+admissibility.py
+audit_logger.py
+scenario_data/
+  scenario_1/
+  scenario_2/
 ```
 
-## Functional requirements for v1
+This does not need to be exact, but the separation of concerns should remain clear.
 
-Implement the following behaviors now:
+---
 
-### 1. Pipeline initialization ✓
-- create `PipelineState` ✓
-- lock manifest version ✓
-- initialize run metadata ✓
-- set all step states to pending ✓
-- enqueue STEP-01 ✓
+## Implementation Priorities
 
-### 2. Step execution loop ✓
-For each step:
-- confirm gate condition ✓
-- mark step in progress ✓
-- execute defined retrieval plan ✓
-- assemble bundle ✓
-- call agent or supervisor-native logic where appropriate ✓
-- validate output ✓
-- write audit entries ✓
-- mutate pipeline state ✓
-- derive next step or halt ✓
+Build in this order:
 
-### 3. Status handling ✓
-Support the relevant step/run statuses used by the locked orchestration model.
-Do not invent extra runtime states beyond what is needed for orchestration bookkeeping.
+1. runtime data contracts
+2. pipeline state initialization and mutation logic
+3. retrieval router
+4. structured and indexed lookup helpers
+5. bundle assembly
+6. admissibility checks
+7. deterministic step handlers
+8. supervisor execution loop
+9. audit logging
+10. scenario 1 and scenario 2 end-to-end verification
 
-### 4. Validation ✓
-Validate:
-- required bundle fields ✓
-- required output fields ✓
-- schema shape ✓
-- prohibited source contamination ✓
-- downstream admissibility for state mutation ✓
+Do **not** introduce live LLM calls until the deterministic version works.
 
-### 5. Audit logging ✓
-Add append-only audit records with enough structure that the full run can be reconstructed later.
+---
 
-## LLM agent invocation requirements
+## Explicit Non-Goals for This Phase
 
-For STEP-02 through STEP-06, assume LLM-backed agents.
+Do **not** prioritize the following yet:
 
-Implement an agent runner that: ✓
-- accepts: ✓
-  - agent name ✓
-  - agent spec text ✓
-  - bundle ✓
-  - step metadata ✓
-- constructs a strict prompt telling the agent: ✓
-  - use only the provided bundle ✓
-  - obey the attached spec doc ✓
-  - emit only the required structured JSON ✓
-  - do not perform retrieval ✓
-  - do not invent sources ✓
-- parses the returned JSON ✓
-- returns it to the Supervisor for validation ✓
+- polished UI
+- multi-model orchestration
+- live human escalation workflow
+- probabilistic retrieval
+- prompt tuning
+- agent memory beyond pipeline state
+- generalized autonomous behavior
 
-For STEP-01, it is acceptable for the Supervisor to perform the logic directly rather than using an LLM. ✓
+This phase is about proving the pipeline runtime and governed context flow.
 
-## Retrieval implementation guidance
+---
 
-Build the retrieval layer to reflect the locked lane model:
+## Success Condition for This Phase
 
-- **direct structured lane**
-  - questionnaire JSON / dict field lookup ✓
-- **indexed hybrid lane**
-  - placeholder or mock hybrid search interface for now ✓
-  - should accept source, search terms, metadata filters, and return chunk-like objects ✓
-- **runtime read lane**
-  - prior step outputs ✓
-  - pipeline state ✓
-  - audit references ✓
+This phase is successful when the system can:
 
-Do not collapse all retrieval into one generic “search everything” function.
+- run Scenario 1 deterministically to `COMPLETE`
+- run Scenario 2 deterministically to the intended first `ESCALATED` halt
+- retrieve the right chunks / records for each step
+- exclude irrelevant or low-authority misuse
+- assemble clean step bundles
+- preserve provenance and auditability
+- produce stable state transitions
 
-## What I want from you in this first coding pass
+That is the milestone to hit before integrating live LLM-backed domain agents.
 
-Produce:
+---
 
-1. a concrete implementation plan ✓
-2. the initial Python scaffolding and core files ✓
-3. a working first-pass Supervisor execution loop ✓
-4. the pipeline state model ✓
-5. step handler skeletons with real logic where straightforward ✓
-6. retrieval router scaffolding ✓
-7. bundle assembly scaffolding ✓
-8. LLM agent runner scaffolding ✓
-9. audit logger scaffolding ✓
-10. a small runnable demo path, even if retrieval/model calls are mocked ✓
+## Final Instruction to Coding Agent
 
-## Deliverables format
+Implement the orchestration layer as a **deterministic supervisor-governed runtime**, not as a loose agentic workflow.
 
-Return work in this order:
+The supervisor must remain the authority over:
+- execution sequencing
+- gate logic
+- retrieval routing
+- source permissions
+- bundle admissibility
+- escalation behavior
+- pipeline state mutation
+- audit logging
 
-1. **Brief implementation plan**
-2. **File tree**
-3. **Core code files**
-4. **Short explanation of how to run the first-pass demo**
-5. **Any assumptions that were necessary**
+The retrieval layer must remain an execution component under supervisor control.
 
-## Critical guardrails
+The domain step handlers must remain bounded to the scoped bundle they are given.
 
-- Do not redesign the architecture
-- Do not introduce parallel execution
-- Do not replace the static state machine with a framework
-- Do not let agents retrieve directly
-- Do not merge audit logic into agents
-- Do not add speculative features not required for the orchestration layer
-- Do not optimize prematurely
-- Do not silently change field names or step responsibilities
-- Do not use vague pseudo-code where real Python can reasonably be written
-
-## Development philosophy for this task
-
-Be conservative, literal, and implementation-focused.
-
-This is a **spec-driven build task**.
-Your job is to translate locked architecture into a first working orchestration layer, not to invent a better architecture.
-
-## Additional instruction
-
-Start with a mocked retrieval backend and mocked LLM adapter, but structure the code so I can later swap in Chroma/BM25 plus real model calls without refactoring the Supervisor. ✓
+Build the deterministic version first. Prove both scenarios end to end. Only then introduce live LLM-backed step handlers.
