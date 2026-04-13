@@ -37,11 +37,13 @@ Current repository contents:
 - Implementation code lives in `src/` and tests live in `tests/`.
 - `STRATEGY.md` defines the target retrieval architecture, preprocessing rules, and build sequence.
 
+Repository note: prior vendor / precedent documents are no longer part of the active workflow. Existing preprocessing, chunking, embedding, and indexing code may still emit precedent-related artifacts, but those outputs are not used by the current pipeline.
+
 ## Source Lanes
 
 The project strategy fixes three source treatment lanes.
 
-- Indexed hybrid lane: policy, legal matrix, procurement matrix, precedent log, and Slack or meeting notes will be chunked, metadata-tagged, embedded, and indexed.
+- Indexed hybrid lane: policy, legal matrix, procurement matrix, and Slack or meeting notes will be chunked, metadata-tagged, embedded, and indexed.
 - Direct structured lane: the vendor questionnaire JSON will be loaded as a structured object and accessed directly by field rather than embedded.
 - Non-retrieval state lane: checklist, audit, and runtime pipeline state will remain outside retrieval entirely.
 
@@ -66,7 +68,6 @@ Planned preprocessing behavior by source:
 - DPA legal trigger matrix: row-level chunking
 - Procurement approval matrix: row-level chunking
 - Vendor questionnaire: no chunking, direct structured access
-- Prior vendor decisions: record-level chunking
 - Slack or meeting notes: thread-level chunking
 
 ## Purpose
@@ -116,11 +117,12 @@ Typical current usage:
 
 Current implementation notes:
 
+- The pipeline status model is now limited to three terminal signals: `COMPLETE`, `BLOCKED`, and `ESCALATED`. The prior `PROVISIONAL` status signal has been removed from the current workflow model.
 - Preprocessing detects source type, preserves source structure, and attaches source-level metadata before any chunking. For this demo, all current normalized sources inherit the same source-level defaults: `document_date=2026-04-04` and `freshness_status=CURRENT`.
 - The `source_type` contract is now intentionally explicit and source-specific: `POLICY_DOCUMENT`, `LEGAL_TRIGGER_MATRIX`, `PROCUREMENT_APPROVAL_MATRIX`, `VENDOR_QUESTIONNAIRE`, `VENDOR_PRECEDENT`, and `SLACK_THREAD`.
-- Chunking consumes `NormalizedSource` objects only, attaches finalized chunk metadata at creation time, and writes inspectable intermediate JSON artifacts. Current chunk artifacts carry inherited `document_date`, `freshness_status`, `is_primary_citable`, and reviewed precedent `domain_scope` values needed for later storage/indexing work.
+- Chunking consumes `NormalizedSource` objects only, attaches finalized chunk metadata at creation time, and writes inspectable intermediate JSON artifacts. Legacy precedent handling remains in code, but precedent outputs are not used by the active workflow.
 - Indexing now consumes finalized chunk artifacts, embeds only indexed-hybrid chunks with `sentence-transformers/all-MiniLM-L6-v2`, and persists vectors plus inherited chunk metadata into Chroma.
-- Storage/indexing now builds per-source logical indices over shared backends: Chroma collections for `idx_security_policy`, `idx_dpa_matrix`, `idx_procurement_matrix`, `idx_precedents`, and `idx_slack_notes`; BM25 bundles under `data/bm25/`; a direct structured questionnaire store at `vq_direct_access`; and `data/indexes/index_registry.json` for explainable build metadata.
+- Storage/indexing now builds per-source logical indices over shared backends: active workflow collections are `idx_security_policy`, `idx_dpa_matrix`, `idx_procurement_matrix`, and `idx_slack_notes`; BM25 bundles are written under `data/bm25/`; a direct structured questionnaire store is written at `vq_direct_access`; and `data/indexes/index_registry.json` remains the explainable source-to-store map. Legacy precedent indices may still be emitted by existing scripts but are not used by the current workflow.
 - Retrieval scaffolding now includes explicit source routing, endpoint permission guards, hybrid fusion, authority-aware reranking, and retrieval manifest objects under `src/retrieval/`.
 
 ## Storage And Index Outputs
@@ -149,8 +151,9 @@ Chroma is the dense-vector backend for semantic retrieval over finalized chunk o
   - `idx_security_policy`
   - `idx_dpa_matrix`
   - `idx_procurement_matrix`
-  - `idx_precedents`
   - `idx_slack_notes`
+
+Legacy note: some existing scripts may still generate `idx_precedents`, but that collection is not part of the active workflow and its output is currently ignored.
 
 Each Chroma record stores the chunk text as the retrievable evidence unit plus inherited chunk metadata such as `source_id`, `source_type`, `authority_tier`, `retrieval_lane`, `version`, `document_date`, `freshness_status`, `allowed_agents`, `manifest_status`, and document-specific identifiers like `section_id`, `row_id`, or `thread_id` when present. Governance fields such as `allowed_agents` are inherited from source and contract metadata already attached upstream; indexing persists them for filtering and auditability and does not invent them.
 
@@ -212,6 +215,7 @@ Keep this section updated as the project evolves.
 PYTHONPATH=src python3 -c "from preprocessing import load_source; print(load_source('mock_documents/OptiChain_VSQ_001_v2_1.json').to_dict()['source_id'])"
 
 # Build chunk artifacts for chunkable sources
+# Legacy precedent inputs may still be accepted by the chunking pipeline, but precedent outputs are not used by the current workflow.
 PYTHONPATH=src python3 -c "from chunking.pipeline import build_chunk_artifacts_from_paths; build_chunk_artifacts_from_paths(['mock_documents/IT_Security_Policy_V4.2.md','mock_documents/DPA_Legal_Trigger_Matrix_v1_3.xlsx','mock_documents/Procurement_Approval_Matrix_v2_0.xlsx','mock_documents/Vendor_Precedent_Log_v1_1.json','mock_documents/Slack_Thread_Export_001.json'])"
 
 # Build and persist embeddings for all current chunk artifacts
