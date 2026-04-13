@@ -1,0 +1,177 @@
+{
+  "export_id": "SLACK-EXPORT-001-SCENARIO01",
+  "export_version": "1.0",
+  "pipeline_reference": "PRQ-2024-0047",
+  "export_classification": "INTERNAL USE",
+  "authority_tier": 3,
+  "citation_class": "SUPPLEMENTARY",
+  "ingestion_note": "All threads are low-authority supplemental context. No agent may cite a Slack message as a PRIMARY source for any determination. Orientation thread (Thread 0) is excluded from retrieval index.",
+
+  "threads": [
+    {
+      "thread_id": "T1",
+      "channel": "#vendor-eval-optichain",
+      "exported_at": "2024-02-27",
+      "message_count": 8,
+      "demo_intended_agent": "IT Security Agent",
+      "demo_operator_note": "Thread contains a sales-call impression consistent with the formal questionnaire answer — integration is export-only. Agent should cite ISP-001 §12.2 as PRIMARY for tier determination, not this thread. Supplementary context only.",
+      "messages": [
+        {
+          "author": "P. Horak",
+          "timestamp": "2024-02-27T09:14:00Z",
+          "text": "Hey team — just a heads up that we've received OptiChain's formal questionnaire submission through the vendor portal. Procurement has it and IT Security and Legal are being looped in this week. Given that this is a renewal-adjacent engagement with an existing vendor relationship from last year, I'm hoping the review is relatively quick. @M. Osei can you confirm receipt and next steps?"
+        },
+        {
+          "author": "M. Osei",
+          "timestamp": "2024-02-27T09:31:00Z",
+          "text": "Confirmed — questionnaire received, logged as PRQ-2024-0047, review initiated. First read looks clean — they're proposing the export-only module, no direct ERP integration, no personal data. I'll send the formal kickoff note to IT Security and Legal today."
+        },
+        {
+          "author": "T. Kowalski",
+          "timestamp": "2024-02-27T10:08:00Z",
+          "text": "Quick question — do we know yet how they're actually connecting to SAP? I had a call with their sales team last week and got the impression it's just nightly exports, no persistent connection into the system at all."
+        },
+        {
+          "author": "D. Achterberg",
+          "timestamp": "2024-02-27T10:33:00Z",
+          "text": "That's consistent with what the questionnaire says in Q2.2 — they explicitly describe export-only file-based transfers over HTTPS with no persistent session and no service account credentials on their side. That's a clean Tier 3 under ISP-001 §12.2. I'll confirm formally once I've reviewed the full submission but the integration pattern is clear from their answer."
+        },
+        {
+          "author": "T. Kowalski",
+          "timestamp": "2024-02-27T10:41:00Z",
+          "text": "Good — that should make the security side pretty clean then. No architecture diagram request needed this time?"
+        },
+        {
+          "author": "D. Achterberg",
+          "timestamp": "2024-02-27T10:49:00Z",
+          "text": "No. Their Q2.2 answer is unambiguous — export-only, Lichen initiates, no vendor-side credentials, HTTPS transmission. The ISP-001 §12.2 Tier 3 criteria are satisfied from the questionnaire alone. I'll document the formal tier assignment in the onboarding record."
+        },
+        {
+          "author": "M. Osei",
+          "timestamp": "2024-02-27T11:02:00Z",
+          "text": "Great. I'll log ERP integration tier as Tier 3 confirmed pending D. Achterberg's formal sign-off. No PROVISIONAL status needed on the integration question."
+        },
+        {
+          "author": "P. Horak",
+          "timestamp": "2024-02-27T11:15:00Z",
+          "text": "Sounds like a much cleaner run than we sometimes get with new platforms. Let's keep it moving — I want this wrapped up inside two weeks."
+        }
+      ]
+    },
+    {
+      "thread_id": "T2",
+      "channel": "#procurement-ops",
+      "exported_at": "2024-03-04",
+      "message_count": 6,
+      "demo_intended_agent": "Procurement Agent",
+      "demo_operator_note": "Thread confirms NDA execution and existing MSA, consistent with questionnaire Q5.1 and Q5.2. Agent should treat the formal questionnaire as the authoritative source. Thread is supplementary confirmation only.",
+      "messages": [
+        {
+          "author": "M. Osei",
+          "timestamp": "2024-03-04T08:47:00Z",
+          "text": "OptiChain questionnaire just came in through the portal — PRQ-2024-0047. Starting my review now. One thing to confirm: NDA status. Their Q5.1 says fully executed January 15, 2024. Can Legal confirm that's in our contract records?"
+        },
+        {
+          "author": "R. Lim",
+          "timestamp": "2024-03-04T09:05:00Z",
+          "text": "Confirmed. Executed mutual NDA with OptiChain, Inc. on file — signed January 15, 2024. No issues there. ISP-001 §12.1.4 is satisfied. Information-exchange phase is clear."
+        },
+        {
+          "author": "M. Osei",
+          "timestamp": "2024-03-04T09:12:00Z",
+          "text": "Perfect. Also checking Q5.2 — they reference a prior MSA from PRQ-2023-0031. Can you confirm that engagement closed cleanly?"
+        },
+        {
+          "author": "R. Lim",
+          "timestamp": "2024-03-04T09:24:00Z",
+          "text": "Yes, PRQ-2023-0031 closed Q3 2023 with no open items, no compliance flags, no outstanding obligations. The MSA is on file. This satisfies the prior relationship requirement for fast-track consideration under the procurement matrix."
+        },
+        {
+          "author": "M. Osei",
+          "timestamp": "2024-03-04T09:31:00Z",
+          "text": "Great. Logging NDA status as EXECUTED and prior relationship as CONFIRMED in the onboarding record. No blockers on the legal/contractual side."
+        },
+        {
+          "author": "P. Horak",
+          "timestamp": "2024-03-04T10:05:00Z",
+          "text": "Thanks both — clean on the legal side then. @M. Osei let me know when you have the classification memo ready. I want to make sure the fast-track path is formally documented before we loop in the business owner for sign-off."
+        }
+      ]
+    },
+    {
+      "thread_id": "T3",
+      "channel": "#optichain-review-notes",
+      "exported_at": "2024-03-05",
+      "message_count": 5,
+      "demo_intended_agent": "IT Security Agent, Procurement Agent",
+      "demo_operator_note": "Thread contains informal meeting notes summarizing the clean pass — no blockers, fast-track path confirmed. Supplementary background only. Agent should not cite this thread as primary evidence for any determination.",
+      "messages": [
+        {
+          "author": "M. Osei",
+          "timestamp": "2024-03-05T15:15:00Z",
+          "text": "Posting the notes from today's OptiChain review kickoff (30 min call, attendees: P. Horak, D. Achterberg, R. Lim, M. Osei): Status: Questionnaire received, review complete. No blocking items identified. Summary: ERP integration — confirmed Tier 3 / export-only per ISP-001 §12.2. No architecture documentation required. Data classification — UNREGULATED. No regulated data, no personal data, no EU employee data in scope. DPA — not required. No DPA trigger rows apply. NDA — fully executed January 15, 2024. Prior relationship — PRQ-2023-0031 closed cleanly Q3 2023. Vendor class — Class C (non-regulated software). Contract value — $45K TCV / T1. Approval path — FAST_TRACK eligible. Next steps: D. Achterberg to issue formal Tier 3 sign-off to Procurement by EOD. M. Osei to issue Procurement Classification Memo. Manager-level sign-off to close the run."
+        },
+        {
+          "author": "D. Achterberg",
+          "timestamp": "2024-03-05T15:27:00Z",
+          "text": "Formal Tier 3 confirmation sent to @M. Osei — documented in the onboarding record. No security follow-up items."
+        },
+        {
+          "author": "R. Lim",
+          "timestamp": "2024-03-05T15:33:00Z",
+          "text": "Legal confirmation issued — no DPA required, NDA confirmed, no legal blockers. Fast-track path is clear from our side."
+        },
+        {
+          "author": "M. Osei",
+          "timestamp": "2024-03-05T15:40:00Z",
+          "text": "Classification memo drafted and being routed for Manager sign-off. Logging overall onboarding status as COMPLETE pending final Manager approval. Fastest run we've had in a while."
+        },
+        {
+          "author": "P. Horak",
+          "timestamp": "2024-03-05T15:55:00Z",
+          "text": "Great work everyone. I'll get the Manager sign-off from Operations by end of week. Once that's confirmed we can notify OptiChain and kick off onboarding. Good example of the process working the way it's supposed to."
+        }
+      ]
+    },
+    {
+      "thread_id": "T4",
+      "channel": "#facilities-ops",
+      "exported_at": "2024-03-05",
+      "message_count": 6,
+      "demo_intended_agent": "NONE — out of scope",
+      "demo_operator_note": "Thread discusses an unrelated catering vendor onboarding (PRQ-2024-0051, Greenbrook Catering Services). Shares vocabulary with OptiChain evaluation but has zero relevance. Governed pipeline should correctly exclude this. Naive RAG will likely surface it.",
+      "messages": [
+        {
+          "author": "C. Oduya",
+          "timestamp": "2024-03-05T10:05:00Z",
+          "text": "Heads up — we're kicking off the onboarding process for Greenbrook Catering Services for the Dortmund facility cafeteria contract (PRQ-2024-0051). They're replacing Compass Group effective May 1. Contract value is about €48,000 annually. No data or system access required, just a facilities services agreement."
+        },
+        {
+          "author": "N. Papadopoulos",
+          "timestamp": "2024-03-05T10:18:00Z",
+          "text": "Does this need to go through the full vendor approval process or is there a lighter-weight path for facilities vendors?"
+        },
+        {
+          "author": "C. Oduya",
+          "timestamp": "2024-03-05T10:31:00Z",
+          "text": "Class E, Tier 1 — so it's the FAST_TRACK path. No IT Security review required, no DPA, just standard NDA and Procurement sign-off at Manager level. Should be done in a few days."
+        },
+        {
+          "author": "N. Papadopoulos",
+          "timestamp": "2024-03-05T10:39:00Z",
+          "text": "Perfect, and I assume no ERP integration or data access for a catering vendor?"
+        },
+        {
+          "author": "C. Oduya",
+          "timestamp": "2024-03-05T10:44:00Z",
+          "text": "Correct — zero system access. They're providing catering services only. The only thing we're sharing with them is the headcount by facility for meal planning, which is aggregate non-personal data. No DPA needed."
+        },
+        {
+          "author": "C. Oduya",
+          "timestamp": "2024-03-05T11:02:00Z",
+          "text": "NDA is already drafted, sending to Greenbrook today. Should have this wrapped up by end of week. I'll post the final approval confirmation here once it's done."
+        }
+      ]
+    }
+  ]
+}
