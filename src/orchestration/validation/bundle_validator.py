@@ -56,8 +56,15 @@ class BundleValidator:
         prohibited_sources = sorted(set(source_ids) - ALLOWED_SOURCES.get(step_id, set()))
         required = REQUIRED_FIELDS.get(step_id, set())
         missing_required = sorted(set(missing_fields) | (required - present_fields))
+        # Prohibited sources indicate an authority-governance violation: the bundle
+        # cannot be used until the prohibited source is removed or the step's allowed
+        # sources are updated.  This requires escalation rather than a simple partial
+        # status.
+        escalation_required = bool(prohibited_sources)
+        admissible = not prohibited_sources and not missing_required
         return BundleValidationResult(
-            admissible=not prohibited_sources and not missing_required,
+            admissible=admissible,
             missing_fields=missing_required,
             prohibited_sources=prohibited_sources,
+            escalation_required=escalation_required,
         )

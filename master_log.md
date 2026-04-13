@@ -237,3 +237,15 @@
 - `tests/orchestration/test_retrieval_router.py`: 28 new tests covering chunk dict conversion, typed router output, source permission enforcement, `ContextBundle` production, Slack supplementary enforcement, Thread 4 exclusion, provenance/citation labels.
 **Result:** All 120 tests pass (92 pre-existing + 28 new). Ruff clean. Both demo scenarios continue to run correctly end-to-end.
 **Next:** Integrate live LLM-backed step handlers once deterministic pipeline is validated.
+
+### [#31] 2026-04-13 | Claude Code
+**Task:** Audit and complete bundle assembly and admissibility logic against orchestration_layer_build_prompt.md, context_contract.md, and design_doc.md.
+**Plan:** Read all reference documents and source files; audit against build prompt requirements (source authority hierarchy, lane-specific behavior, primary citation rules, Slack supplementary-only, Thread 4 exclusion, deterministic provenance); identify real gaps; fix them; write comprehensive tests; verify full suite passes.
+**Changes:**
+- `src/orchestration/models/contracts.py`: Added `escalation_required: bool = False` field to `BundleValidationResult` to distinguish prohibited-source governance violations from ordinary missing-field partial bundles.
+- `src/orchestration/validation/bundle_validator.py`: `BundleValidator.validate()` now sets `escalation_required=True` when prohibited sources are detected; added comment explaining the semantic distinction.
+- `src/orchestration/retrieval/bundle_assembler.py`: Extracted `_resolve_admissibility()` helper that maps validation results to canonical `"ADMISSIBLE"` / `"PARTIAL"` / `"ESCALATION_REQUIRED"` status strings; all five `assemble_stepNN()` methods now use it instead of inline ternary; improved `_is_thread4_non_optichain()` docstring to accurately describe both exclusion criteria (Thread 4 identifier and non-optichain domain_scope).
+- `src/orchestration/models/context_bundle.py`: Updated `admissibility_status` docstring to list all valid values including `"ESCALATION_REQUIRED"` and remove the stale `"INADMISSIBLE"` reference.
+- `tests/orchestration/test_bundle_assembly.py`: 57 new tests covering: `_resolve_admissibility()` all cases; `BundleValidator` per-step allowed-source enforcement and escalation_required flag; `admissibility_status` under admissible/partial/escalation scenarios for steps 02–04; Tier-3 never primary-citable in admitted_evidence; DPA/PAM matrix rows in structured_fields not admitted_evidence; stable citation labels for ISP/DPA/PAM chunks; Thread 4 exclusion demo requirement; Slack supplementary-only demo requirement; questionnaire facts passthrough demo requirement; matrix row atomicity demo requirement; policy section citation label stability demo requirement; per-step source-permission constraints validated against source_contract.py allowed_agents.
+**Result:** All 177 tests pass (120 pre-existing + 57 new). Pre-existing ruff issue in `src/preprocessing/text_utils.py` (F841 unused variable) is unchanged. Both demo scenarios continue to run correctly.
+**Next:** Integrate live LLM-backed step handlers once deterministic pipeline is validated.

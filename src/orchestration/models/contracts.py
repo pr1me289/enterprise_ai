@@ -48,6 +48,7 @@ class BundleValidationResult:
     admissible: bool
     missing_fields: list[str] = field(default_factory=list)
     prohibited_sources: list[str] = field(default_factory=list)
+    escalation_required: bool = False
 
 
 @dataclass(slots=True)

@@ -40,7 +40,14 @@ class ContextBundle:
     """Source-level provenance records describing which stores were queried."""
 
     admissibility_status: str = "PENDING"
-    """Overall admissibility status of the bundle (``ADMISSIBLE``, ``PARTIAL``, ``INADMISSIBLE``)."""
+    """Overall admissibility status of the bundle.
+
+    Valid values:
+    - ``ADMISSIBLE`` — all required sources and fields are present.
+    - ``PARTIAL`` — missing required fields but no prohibited sources.
+    - ``ESCALATION_REQUIRED`` — prohibited sources detected; authority governance violation.
+    - ``PENDING`` — not yet evaluated.
+    """
 
     def to_dict(self) -> dict[str, Any]:
         return {

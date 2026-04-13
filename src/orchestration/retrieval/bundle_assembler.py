@@ -14,6 +14,21 @@ _SLACK_SOURCE_ID = "SLK-001"
 _SLACK_THREAD4_VENDOR_SCOPE = "optichain"  # Thread 4 is an OptiChain-unrelated vendor
 
 
+def _resolve_admissibility(validation: dict[str, Any]) -> str:
+    """Map a validation result dict to the canonical admissibility_status string.
+
+    Rules:
+    - ``ADMISSIBLE`` — admissible flag is True.
+    - ``ESCALATION_REQUIRED`` — prohibited sources are present (authority governance violation).
+    - ``PARTIAL`` — missing required fields but no prohibited sources.
+    """
+    if validation.get("admissible"):
+        return "ADMISSIBLE"
+    if validation.get("prohibited_sources"):
+        return "ESCALATION_REQUIRED"
+    return "PARTIAL"
+
+
 def _collect_chunks_from_result(result: RetrievalResult) -> list[RetrievedChunk]:
     """Return typed RetrievedChunk objects from a result, if any were produced."""
     return list(result.retrieved_chunks)
@@ -39,10 +54,16 @@ def _apply_slack_supplementary_rule(chunk: RetrievedChunk) -> RetrievedChunk:
 
 
 def _is_thread4_non_optichain(chunk: RetrievedChunk) -> bool:
-    """Return True if this Slack chunk is Thread 4 and should be excluded for OptiChain steps.
+    """Return True if this Slack chunk should be excluded from OptiChain determination bundles.
 
-    Thread 4 (SLK-001 thread T4) covers a non-OptiChain vendor (Greenbrook Catering).
-    It must be excluded from all OptiChain determination bundles.
+    Two exclusion criteria:
+    1. The chunk carries an explicit Thread 4 identifier (``thread_id`` in ``T4``, ``4``,
+       ``thread_4``).  Thread 4 covers Greenbrook Catering — an unrelated vendor — and must
+       never appear in OptiChain determination bundles.
+    2. The chunk carries a non-empty ``domain_scope`` that does not include ``"optichain"``,
+       meaning it is explicitly scoped to a different vendor and must also be excluded.
+
+    Non-Slack chunks are never subject to this rule.
     """
     if chunk.source_id != _SLACK_SOURCE_ID:
         return False
@@ -158,7 +179,7 @@ class BundleAssembler:
 
         admitted, excluded = self._assemble_chunks(step_id, retrievals, optichain_context=True)
         provenance = _build_provenance(["VQ-OC-001", "ISP-001"], retrievals)
-        admissibility = "ADMISSIBLE" if validation.get("admissible") else "PARTIAL"
+        admissibility = _resolve_admissibility(validation)
 
         bundle = ContextBundle(
             step_id=step_id,
@@ -188,7 +209,7 @@ class BundleAssembler:
         step_id = StepId.STEP_03
         admitted, excluded = self._assemble_chunks(step_id, retrievals, optichain_context=True)
         provenance = _build_provenance(["STEP-02", "VQ-OC-001", "DPA-TM-001", "ISP-001"], retrievals)
-        admissibility = "ADMISSIBLE" if validation.get("admissible") else "PARTIAL"
+        admissibility = _resolve_admissibility(validation)
 
         upstream_security_payload = retrievals["upstream_security"].payload
         questionnaire = {
@@ -226,7 +247,7 @@ class BundleAssembler:
         step_id = StepId.STEP_04
         admitted, excluded = self._assemble_chunks(step_id, retrievals, optichain_context=True)
         provenance = _build_provenance(["STEP-02", "STEP-03", "VQ-OC-001", "PAM-001", "SLK-001"], retrievals)
-        admissibility = "ADMISSIBLE" if validation.get("admissible") else "PARTIAL"
+        admissibility = _resolve_admissibility(validation)
 
         bundle = ContextBundle(
             step_id=step_id,
@@ -256,7 +277,7 @@ class BundleAssembler:
         domain_outputs = retrievals["all_agent_outputs"].payload
         admitted, excluded = self._assemble_chunks(step_id, retrievals, optichain_context=True)
         provenance = _build_provenance(["STEP-02", "STEP-03", "STEP-04", "AUDIT_LOG", "VQ-OC-001"], retrievals)
-        admissibility = "ADMISSIBLE" if validation.get("admissible") else "PARTIAL"
+        admissibility = _resolve_admissibility(validation)
 
         bundle = ContextBundle(
             step_id=step_id,
@@ -285,7 +306,7 @@ class BundleAssembler:
         step_id = StepId.STEP_06
         admitted, excluded = self._assemble_chunks(step_id, retrievals, optichain_context=True)
         provenance = _build_provenance(["STEP-05", "PIPELINE_CONFIG", "STEP-02", "STEP-03", "STEP-04"], retrievals)
-        admissibility = "ADMISSIBLE" if validation.get("admissible") else "PARTIAL"
+        admissibility = _resolve_admissibility(validation)
 
         bundle = ContextBundle(
             step_id=step_id,
