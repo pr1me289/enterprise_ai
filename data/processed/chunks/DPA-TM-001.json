@@ -3,13 +3,16 @@
     "chunk_id": "DPA-TM-001__row_A-01",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 1,
@@ -18,19 +21,23 @@
     "section_id": null,
     "row_id": "A-01",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_A-02",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 2,
@@ -39,19 +46,23 @@
     "section_id": null,
     "row_id": "A-02",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_A-03",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 3,
@@ -60,19 +71,23 @@
     "section_id": null,
     "row_id": "A-03",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_A-04",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 4,
@@ -81,19 +96,23 @@
     "section_id": null,
     "row_id": "A-04",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_A-05",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 5,
@@ -102,19 +121,23 @@
     "section_id": null,
     "row_id": "A-05",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_B-01",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 6,
@@ -123,19 +146,23 @@
     "section_id": null,
     "row_id": "B-01",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_B-02",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 7,
@@ -144,19 +171,23 @@
     "section_id": null,
     "row_id": "B-02",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_B-03",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 8,
@@ -165,19 +196,23 @@
     "section_id": null,
     "row_id": "B-03",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_B-04",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 9,
@@ -186,19 +221,23 @@
     "section_id": null,
     "row_id": "B-04",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_C-01",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 10,
@@ -207,19 +246,23 @@
     "section_id": null,
     "row_id": "C-01",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_C-02",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 11,
@@ -228,19 +271,23 @@
     "section_id": null,
     "row_id": "C-02",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_D-01",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 12,
@@ -249,19 +296,23 @@
     "section_id": null,
     "row_id": "D-01",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_D-02",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 13,
@@ -270,19 +321,23 @@
     "section_id": null,
     "row_id": "D-02",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_D-03",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 14,
@@ -291,19 +346,23 @@
     "section_id": null,
     "row_id": "D-03",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_D-04",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 15,
@@ -312,19 +371,23 @@
     "section_id": null,
     "row_id": "D-04",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_E-01",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 16,
@@ -333,19 +396,23 @@
     "section_id": null,
     "row_id": "E-01",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_E-02",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 17,
@@ -354,19 +421,23 @@
     "section_id": null,
     "row_id": "E-02",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_E-03",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 18,
@@ -375,19 +446,23 @@
     "section_id": null,
     "row_id": "E-03",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_E-04",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 19,
@@ -396,19 +471,23 @@
     "section_id": null,
     "row_id": "E-04",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_E-05",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 20,
@@ -417,19 +496,23 @@
     "section_id": null,
     "row_id": "E-05",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_E-06",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 21,
@@ -438,19 +521,23 @@
     "section_id": null,
     "row_id": "E-06",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_E-07",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 22,
@@ -459,19 +546,23 @@
     "section_id": null,
     "row_id": "E-07",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_F-01",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 23,
@@ -480,19 +571,23 @@
     "section_id": null,
     "row_id": "F-01",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_F-02",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 24,
@@ -501,19 +596,23 @@
     "section_id": null,
     "row_id": "F-02",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_F-03",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 25,
@@ -522,19 +621,23 @@
     "section_id": null,
     "row_id": "F-03",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_G-01",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 26,
@@ -543,19 +646,23 @@
     "section_id": null,
     "row_id": "G-01",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "DPA-TM-001__row_G-02",
     "source_id": "DPA-TM-001",
     "source_name": "DPA Legal Trigger Matrix",
-    "source_type": "MATRIX",
+    "source_type": "LEGAL_TRIGGER_MATRIX",
     "version": "2.1",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "legal"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 27,
@@ -564,6 +671,7 @@
     "section_id": null,
     "row_id": "G-02",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   }
 ]

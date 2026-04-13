@@ -3,13 +3,16 @@
     "chunk_id": "PAM-001__row_A-T1",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 1,
@@ -18,19 +21,23 @@
     "section_id": null,
     "row_id": "A-T1",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_A-T2",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 2,
@@ -39,19 +46,23 @@
     "section_id": null,
     "row_id": "A-T2",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_A-T3",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 3,
@@ -60,19 +71,23 @@
     "section_id": null,
     "row_id": "A-T3",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_A-T4",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 4,
@@ -81,19 +96,23 @@
     "section_id": null,
     "row_id": "A-T4",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_B-T1",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 5,
@@ -102,19 +121,23 @@
     "section_id": null,
     "row_id": "B-T1",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_B-T2",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 6,
@@ -123,19 +146,23 @@
     "section_id": null,
     "row_id": "B-T2",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_B-T3",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 7,
@@ -144,19 +171,23 @@
     "section_id": null,
     "row_id": "B-T3",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_B-T4",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 8,
@@ -165,19 +196,23 @@
     "section_id": null,
     "row_id": "B-T4",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_C-T1",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 9,
@@ -186,19 +221,23 @@
     "section_id": null,
     "row_id": "C-T1",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_C-T2",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 10,
@@ -207,19 +246,23 @@
     "section_id": null,
     "row_id": "C-T2",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_C-T3",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 11,
@@ -228,19 +271,23 @@
     "section_id": null,
     "row_id": "C-T3",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_C-T4",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 12,
@@ -249,19 +296,23 @@
     "section_id": null,
     "row_id": "C-T4",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_D-T1",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 13,
@@ -270,19 +321,23 @@
     "section_id": null,
     "row_id": "D-T1",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_D-T2",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 14,
@@ -291,19 +346,23 @@
     "section_id": null,
     "row_id": "D-T2",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_D-T3",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 15,
@@ -312,19 +371,23 @@
     "section_id": null,
     "row_id": "D-T3",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_D-T4",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 16,
@@ -333,19 +396,23 @@
     "section_id": null,
     "row_id": "D-T4",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_E-T1",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 17,
@@ -354,19 +421,23 @@
     "section_id": null,
     "row_id": "E-T1",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_E-T2",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 18,
@@ -375,19 +446,23 @@
     "section_id": null,
     "row_id": "E-T2",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_E-T3",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 19,
@@ -396,19 +471,23 @@
     "section_id": null,
     "row_id": "E-T3",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   },
   {
     "chunk_id": "PAM-001__row_E-T4",
     "source_id": "PAM-001",
     "source_name": "Procurement Approval Matrix",
-    "source_type": "MATRIX",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
     "version": "3.0",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 1,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": true,
     "manifest_status": "PROVISIONAL",
     "chunk_type": "ROW",
     "chunk_order": 20,
@@ -417,6 +496,7 @@
     "section_id": null,
     "row_id": "E-T4",
     "record_id": null,
-    "thread_id": null
+    "thread_id": null,
+    "domain_scope": null
   }
 ]

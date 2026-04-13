@@ -10,7 +10,9 @@ from .models import NormalizedSource, SourceType
 from .policy_ingestor import ingest_policy
 from .precedent_ingestor import ingest_precedent_log
 from .questionnaire_ingestor import ingest_questionnaire
+from .scenario_sources import list_scenario_source_paths
 from .slack_ingestor import ingest_slack_threads
+from .stakeholder_ingestor import ingest_stakeholder_map
 from .source_contract import resolve_contract_for_path
 
 
@@ -18,18 +20,31 @@ def load_source(path: str | Path) -> NormalizedSource:
     source_path = Path(path)
     contract = resolve_contract_for_path(source_path)
 
-    if contract.source_type is SourceType.POLICY:
+    if contract.source_type is SourceType.POLICY_DOCUMENT:
         return ingest_policy(source_path, contract)
-    if contract.source_type is SourceType.MATRIX:
+    if contract.source_type in {
+        SourceType.LEGAL_TRIGGER_MATRIX,
+        SourceType.PROCUREMENT_APPROVAL_MATRIX,
+    }:
         return ingest_matrix(source_path, contract)
-    if contract.source_type is SourceType.QUESTIONNAIRE:
+    if contract.source_type is SourceType.VENDOR_QUESTIONNAIRE:
         return ingest_questionnaire(source_path, contract)
-    if contract.source_type is SourceType.PRECEDENT:
+    if contract.source_type is SourceType.STAKEHOLDER_MAP:
+        return ingest_stakeholder_map(source_path, contract)
+    if contract.source_type is SourceType.VENDOR_PRECEDENT:
         return ingest_precedent_log(source_path, contract)
-    if contract.source_type is SourceType.SUPPLEMENTAL_NOTE:
+    if contract.source_type is SourceType.SLACK_THREAD:
         return ingest_slack_threads(source_path, contract)
     raise ValueError(f"Unsupported source type for {source_path}")
 
 
 def load_sources(paths: Iterable[str | Path]) -> list[NormalizedSource]:
     return [load_source(path) for path in paths]
+
+
+def load_scenario_sources(
+    scenario_name: str,
+    *,
+    repo_root: str | Path | None = None,
+) -> list[NormalizedSource]:
+    return load_sources(list_scenario_source_paths(scenario_name, repo_root=repo_root))

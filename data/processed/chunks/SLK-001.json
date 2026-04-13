@@ -3,13 +3,16 @@
     "chunk_id": "SLK-001__thread_SLK-001-THREAD-01",
     "source_id": "SLK-001",
     "source_name": "Slack / Meeting Thread Notes",
-    "source_type": "SUPPLEMENTAL_NOTE",
+    "source_type": "SLACK_THREAD",
     "version": "Export at init.",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 4,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": false,
     "manifest_status": "CONFIRMED",
     "chunk_type": "THREAD",
     "chunk_order": 1,
@@ -18,19 +21,23 @@
     "section_id": null,
     "row_id": null,
     "record_id": null,
-    "thread_id": "SLK-001-THREAD-01"
+    "thread_id": "SLK-001-THREAD-01",
+    "domain_scope": null
   },
   {
     "chunk_id": "SLK-001__thread_SLK-001-THREAD-02",
     "source_id": "SLK-001",
     "source_name": "Slack / Meeting Thread Notes",
-    "source_type": "SUPPLEMENTAL_NOTE",
+    "source_type": "SLACK_THREAD",
     "version": "Export at init.",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 4,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": false,
     "manifest_status": "CONFIRMED",
     "chunk_type": "THREAD",
     "chunk_order": 2,
@@ -39,19 +46,23 @@
     "section_id": null,
     "row_id": null,
     "record_id": null,
-    "thread_id": "SLK-001-THREAD-02"
+    "thread_id": "SLK-001-THREAD-02",
+    "domain_scope": null
   },
   {
     "chunk_id": "SLK-001__thread_SLK-001-THREAD-03",
     "source_id": "SLK-001",
     "source_name": "Slack / Meeting Thread Notes",
-    "source_type": "SUPPLEMENTAL_NOTE",
+    "source_type": "SLACK_THREAD",
     "version": "Export at init.",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 4,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": false,
     "manifest_status": "CONFIRMED",
     "chunk_type": "THREAD",
     "chunk_order": 3,
@@ -60,19 +71,23 @@
     "section_id": null,
     "row_id": null,
     "record_id": null,
-    "thread_id": "SLK-001-THREAD-03"
+    "thread_id": "SLK-001-THREAD-03",
+    "domain_scope": null
   },
   {
     "chunk_id": "SLK-001__thread_SLK-001-THREAD-04",
     "source_id": "SLK-001",
     "source_name": "Slack / Meeting Thread Notes",
-    "source_type": "SUPPLEMENTAL_NOTE",
+    "source_type": "SLACK_THREAD",
     "version": "Export at init.",
+    "document_date": "2026-04-04",
+    "freshness_status": "CURRENT",
     "authority_tier": 4,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
     ],
+    "is_primary_citable": false,
     "manifest_status": "CONFIRMED",
     "chunk_type": "THREAD",
     "chunk_order": 4,
@@ -81,6 +96,7 @@
     "section_id": null,
     "row_id": null,
     "record_id": null,
-    "thread_id": "SLK-001-THREAD-04"
+    "thread_id": "SLK-001-THREAD-04",
+    "domain_scope": null
   }
 ]

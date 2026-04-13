@@ -11,7 +11,8 @@ from .models import (
     SlackThread,
     SourceType,
 )
-from .source_loader import load_source, load_sources
+from .scenario_sources import list_scenario_source_paths, resolve_scenario_source_paths
+from .source_loader import load_scenario_sources, load_source, load_sources
 
 __all__ = [
     "ManifestStatus",
@@ -23,6 +24,9 @@ __all__ = [
     "SlackMessage",
     "SlackThread",
     "SourceType",
+    "list_scenario_source_paths",
+    "load_scenario_sources",
+    "resolve_scenario_source_paths",
     "load_source",
     "load_sources",
 ]
