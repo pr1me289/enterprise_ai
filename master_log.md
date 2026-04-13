@@ -225,3 +225,15 @@
 - `tests/orchestration/test_runtime_contracts.py`: 24 new tests covering all new dataclasses, type contracts, and audit logger integration.
 **Result:** All 92 tests pass (68 pre-existing + 24 new). No regressions.
 **Next:** Wire `ContextBundle` and determination dataclasses into the bundle assembler and agent runner as the agent contracts solidify.
+
+### [#30] 2026-04-13 | Claude Code
+**Task:** Build/extend typed retrieval output and ContextBundle production under supervisor control — branch `feature/supervisor-orchestration-retrieval` off `feature/supervisor-orchestration-v2`.
+**Plan:** Read all existing retrieval, model, and assembler code to identify gaps; update router to produce typed `RetrievedChunk` objects for INDEXED_HYBRID lane; update `BundleAssembler` to produce `ContextBundle` objects; enforce Slack supplementary-only rule and Thread 4 exclusion; update `LLMAgentRunner` to accept `ContextBundle` transparently; write 28 new tests covering all rules.
+**Changes:**
+- `src/orchestration/models/contracts.py`: Added `retrieved_chunks: list[Any]` field to `RetrievalResult`; relaxed `StepExecutionResult.bundle` to `Any`.
+- `src/orchestration/retrieval/router.py`: Added `_chunk_dict_to_retrieved_chunk()` converter; INDEXED_HYBRID lane now populates `result.retrieved_chunks` with typed `RetrievedChunk` objects; replaced raising `_assert_index_access` with graceful `_check_index_access` that returns `(denied, reason)` and records denials as `excluded_items` rather than raising.
+- `src/orchestration/retrieval/bundle_assembler.py`: Full rewrite — all six `assemble_stepNN()` methods now return `ContextBundle` objects with typed `admitted_evidence`, `excluded_evidence` (`ExcludedChunk`), `structured_fields`, `source_provenance`, and `admissibility_status`; enforces Slack supplementary-only rule (`_apply_slack_supplementary_rule`); excludes Thread 4 (`T4`) from OptiChain determination bundles (`_is_thread4_non_optichain`); propagates permission-denied router exclusions as `ExcludedChunk` stubs.
+- `src/orchestration/agents/llm_agent_runner.py`: `run()` now normalizes `ContextBundle` to `bundle.structured_fields` (a plain dict) before passing to the adapter — step handlers unchanged.
+- `tests/orchestration/test_retrieval_router.py`: 28 new tests covering chunk dict conversion, typed router output, source permission enforcement, `ContextBundle` production, Slack supplementary enforcement, Thread 4 exclusion, provenance/citation labels.
+**Result:** All 120 tests pass (92 pre-existing + 28 new). Ruff clean. Both demo scenarios continue to run correctly end-to-end.
+**Next:** Integrate live LLM-backed step handlers once deterministic pipeline is validated.

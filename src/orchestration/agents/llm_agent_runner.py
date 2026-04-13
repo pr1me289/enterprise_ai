@@ -25,14 +25,19 @@ class LLMAgentRunner:
         self.repo_root = Path(repo_root)
         self.adapter = adapter
 
-    def run(self, *, agent_name: str, bundle: dict[str, Any], step_metadata: dict[str, Any]) -> dict[str, Any]:
+    def run(self, *, agent_name: str, bundle: Any, step_metadata: dict[str, Any]) -> dict[str, Any]:
+        # Accept either a ContextBundle (typed) or a plain dict.  Agents always
+        # receive the flat structured_fields dict so downstream logic is unchanged.
+        bundle_dict: dict[str, Any] = (
+            bundle.structured_fields if hasattr(bundle, "structured_fields") else bundle
+        )
         spec_text = self._load_spec(agent_name)
-        prompt = self._build_prompt(agent_name=agent_name, spec_text=spec_text, bundle=bundle, step_metadata=step_metadata)
+        prompt = self._build_prompt(agent_name=agent_name, spec_text=spec_text, bundle=bundle_dict, step_metadata=step_metadata)
         return self.adapter.generate_structured_json(
             agent_name=agent_name,
             spec_text=spec_text,
             prompt=prompt,
-            bundle=bundle,
+            bundle=bundle_dict,
             step_metadata=step_metadata,
         )
 

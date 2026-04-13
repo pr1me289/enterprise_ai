@@ -39,6 +39,8 @@ class RetrievalResult:
     missing_fields: list[str] = field(default_factory=list)
     admitted_items: list[dict[str, Any]] = field(default_factory=list)
     excluded_items: list[dict[str, Any]] = field(default_factory=list)
+    # Typed chunk objects populated for INDEXED_HYBRID lane results.
+    retrieved_chunks: list[Any] = field(default_factory=list)
 
 
 @dataclass(slots=True)
@@ -66,7 +68,7 @@ class StepExecutionResult:
     step_id: StepId
     step_status: StepStatus
     output: dict[str, Any] | None = None
-    bundle: dict[str, Any] | None = None
+    bundle: Any = None  # ContextBundle or dict[str, Any]
     retrieval_results: dict[str, RetrievalResult] = field(default_factory=dict)
     agent_status: AgentStatus | None = None
     halt_reason: str | None = None
