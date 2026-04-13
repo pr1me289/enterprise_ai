@@ -21,7 +21,7 @@ def test_policy_source_chunks_by_section(mock_documents_dir: Path) -> None:
     assert all(chunk.row_id is None for chunk in chunks)
     assert chunks[0].citation_label.startswith("ISP-001")
     assert chunks[0].allowed_agents == ("it_security", "legal", "procurement")
-    assert chunks[0].manifest_status == "PROVISIONAL"
+    assert chunks[0].manifest_status == "CONFIRMED"
     assert chunks[0].document_date == "2026-04-04"
     assert chunks[0].freshness_status == "CURRENT"
     assert chunks[0].is_primary_citable is True
@@ -102,6 +102,7 @@ def test_slack_source_chunks_by_thread(mock_documents_dir: Path) -> None:
     assert chunks[0].citation_label == "SLK-001 thread SLK-001-THREAD-01"
     assert chunks[0].document_date == "2026-04-04"
     assert chunks[0].is_primary_citable is False
+    assert chunks[0].authority_tier == 3
     assert all(chunk.allowed_agents == ("procurement",) for chunk in chunks)
     assert "vendor-eval-optichain" in chunks[0].text
 

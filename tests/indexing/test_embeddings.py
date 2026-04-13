@@ -24,7 +24,7 @@ def _make_chunk(
         retrieval_lane=retrieval_lane,
         allowed_agents=("it_security",),
         is_primary_citable=True,
-        manifest_status="PROVISIONAL",
+        manifest_status="CONFIRMED",
         chunk_type="SECTION",
         chunk_order=chunk_order,
         citation_label=f"{source_id} citation",
@@ -90,5 +90,5 @@ def test_build_embeddings_copies_current_chunk_metadata_without_new_fields() -> 
     assert record.document_date == "2026-04-04"
     assert record.freshness_status == "CURRENT"
     assert record.is_primary_citable is True
-    assert record.manifest_status == "PROVISIONAL"
+    assert record.manifest_status == "CONFIRMED"
     assert record.allowed_agents == ("it_security",)

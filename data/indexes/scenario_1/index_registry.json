@@ -1,6 +1,6 @@
 {
   "registry_version": "1.0",
-  "generated_at": "2026-04-13T20:28:04.672255Z",
+  "generated_at": "2026-04-13T21:08:17.011967Z",
   "sources": {
     "DPA-TM-001": {
       "source_id": "DPA-TM-001",
@@ -11,7 +11,7 @@
       "version": "2.1",
       "document_date": "2026-04-04",
       "freshness_status": "CURRENT",
-      "manifest_status": "PROVISIONAL",
+      "manifest_status": "CONFIRMED",
       "allowed_agents": [
         "legal"
       ],
@@ -36,7 +36,7 @@
       "version": "3.0",
       "document_date": "2026-04-04",
       "freshness_status": "CURRENT",
-      "manifest_status": "PROVISIONAL",
+      "manifest_status": "CONFIRMED",
       "allowed_agents": [
         "procurement"
       ],
@@ -61,7 +61,7 @@
       "version": "4.2",
       "document_date": "2026-04-04",
       "freshness_status": "CURRENT",
-      "manifest_status": "PROVISIONAL",
+      "manifest_status": "CONFIRMED",
       "allowed_agents": [
         "it_security",
         "legal",
@@ -83,7 +83,7 @@
       "source_id": "SLK-001",
       "source_name": "Slack / Meeting Thread Notes",
       "source_type": "SLACK_THREAD",
-      "authority_tier": 4,
+      "authority_tier": 3,
       "retrieval_lane": "INDEXED_HYBRID",
       "version": "Export at init.",
       "document_date": "2026-04-04",

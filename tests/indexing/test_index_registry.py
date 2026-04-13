@@ -65,8 +65,10 @@ def test_build_index_registry_payload_is_source_level_and_uses_store_mapping(rep
     assert payload["sources"]["ISP-001"]["logical_store_name"] == "idx_security_policy"
     assert payload["sources"]["ISP-001"]["storage_kind"] == "vector_bm25"
     assert payload["sources"]["ISP-001"]["backends"] == ["chroma", "bm25"]
+    assert payload["sources"]["ISP-001"]["manifest_status"] == "CONFIRMED"
     assert payload["sources"]["ISP-001"]["backend_locations"]["chroma_collection"] == "idx_security_policy"
     assert payload["sources"]["SLK-001"]["allowed_agents"] == ["procurement"]
+    assert payload["sources"]["SLK-001"]["authority_tier"] == 3
     assert payload["sources"]["VQ-OC-001"]["logical_store_name"] == "vq_direct_access"
     assert payload["sources"]["VQ-OC-001"]["storage_kind"] == "structured_direct"
     assert payload["sources"]["SHM-001"]["logical_store_name"] == "stakeholder_map_direct_access"

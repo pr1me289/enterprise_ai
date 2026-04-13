@@ -40,7 +40,7 @@ def test_persist_embeddings_upserts_documents_embeddings_and_metadata(tmp_path) 
         retrieval_lane="INDEXED_HYBRID",
         allowed_agents=("it_security", "legal"),
         is_primary_citable=True,
-        manifest_status="PROVISIONAL",
+        manifest_status="CONFIRMED",
         chunk_type="SECTION",
         citation_label="ISP-001 §1",
         section_id="1",

@@ -13,7 +13,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 1,
     "citation_label": "DPA-TM-001 row A-01",
@@ -38,7 +38,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 2,
     "citation_label": "DPA-TM-001 row A-02",
@@ -63,7 +63,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 3,
     "citation_label": "DPA-TM-001 row A-03",
@@ -88,7 +88,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 4,
     "citation_label": "DPA-TM-001 row A-04",
@@ -113,7 +113,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 5,
     "citation_label": "DPA-TM-001 row A-05",
@@ -138,7 +138,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 6,
     "citation_label": "DPA-TM-001 row B-01",
@@ -163,7 +163,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 7,
     "citation_label": "DPA-TM-001 row B-02",
@@ -188,7 +188,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 8,
     "citation_label": "DPA-TM-001 row B-03",
@@ -213,7 +213,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 9,
     "citation_label": "DPA-TM-001 row B-04",
@@ -238,7 +238,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 10,
     "citation_label": "DPA-TM-001 row C-01",
@@ -263,7 +263,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 11,
     "citation_label": "DPA-TM-001 row C-02",
@@ -288,7 +288,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 12,
     "citation_label": "DPA-TM-001 row D-01",
@@ -313,7 +313,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 13,
     "citation_label": "DPA-TM-001 row D-02",
@@ -338,7 +338,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 14,
     "citation_label": "DPA-TM-001 row D-03",
@@ -363,7 +363,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 15,
     "citation_label": "DPA-TM-001 row D-04",
@@ -388,7 +388,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 16,
     "citation_label": "DPA-TM-001 row E-01",
@@ -413,7 +413,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 17,
     "citation_label": "DPA-TM-001 row E-02",
@@ -438,7 +438,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 18,
     "citation_label": "DPA-TM-001 row E-03",
@@ -463,7 +463,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 19,
     "citation_label": "DPA-TM-001 row E-04",
@@ -488,7 +488,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 20,
     "citation_label": "DPA-TM-001 row E-05",
@@ -513,7 +513,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 21,
     "citation_label": "DPA-TM-001 row E-06",
@@ -538,7 +538,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 22,
     "citation_label": "DPA-TM-001 row E-07",
@@ -563,7 +563,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 23,
     "citation_label": "DPA-TM-001 row F-01",
@@ -588,7 +588,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 24,
     "citation_label": "DPA-TM-001 row F-02",
@@ -613,7 +613,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 25,
     "citation_label": "DPA-TM-001 row F-03",
@@ -638,7 +638,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 26,
     "citation_label": "DPA-TM-001 row G-01",
@@ -663,7 +663,7 @@
       "legal"
     ],
     "is_primary_citable": true,
-    "manifest_status": "PROVISIONAL",
+    "manifest_status": "CONFIRMED",
     "chunk_type": "ROW",
     "chunk_order": 27,
     "citation_label": "DPA-TM-001 row G-02",

@@ -7,7 +7,7 @@
     "version": "Export at init.",
     "document_date": "2026-04-04",
     "freshness_status": "CURRENT",
-    "authority_tier": 4,
+    "authority_tier": 3,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
@@ -32,7 +32,7 @@
     "version": "Export at init.",
     "document_date": "2026-04-04",
     "freshness_status": "CURRENT",
-    "authority_tier": 4,
+    "authority_tier": 3,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
@@ -57,7 +57,7 @@
     "version": "Export at init.",
     "document_date": "2026-04-04",
     "freshness_status": "CURRENT",
-    "authority_tier": 4,
+    "authority_tier": 3,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"
@@ -82,7 +82,7 @@
     "version": "Export at init.",
     "document_date": "2026-04-04",
     "freshness_status": "CURRENT",
-    "authority_tier": 4,
+    "authority_tier": 3,
     "retrieval_lane": "INDEXED_HYBRID",
     "allowed_agents": [
       "procurement"

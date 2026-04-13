@@ -43,6 +43,8 @@ def test_registry_helpers_expose_canonical_source_to_store_map(repo_root, tmp_pa
     assert is_structured_source("VQ-OC-001", registry_path) is True
     assert is_structured_source("SHM-001", registry_path) is True
     assert get_registry_entry("ISP-001", registry_path)["source_type"] == "POLICY_DOCUMENT"
+    assert get_registry_entry("ISP-001", registry_path)["manifest_status"] == "CONFIRMED"
+    assert get_registry_entry("SLK-001", registry_path)["authority_tier"] == 3
     assert get_entry_by_logical_store_name("vq_direct_access", registry_path)["source_id"] == "VQ-OC-001"
     assert get_entry_by_logical_store_name("stakeholder_map_direct_access", registry_path)["source_id"] == "SHM-001"
     assert list_indexed_sources(registry_path) == [
