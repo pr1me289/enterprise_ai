@@ -12,7 +12,8 @@ Before starting any implementation work, read the core repository documents in t
 
 1. `core_documents/context_contract.md`
 2. `core_documents/design_doc.md`
-3. `STRATEGY.md`
+3. `core_documents/supervisor_orchestration_plan.md`
+4. `STRATEGY.md`
 
 `core_documents/context_contract.md` is the authoritative governance document for source authority, retrieval permissions, provenance requirements, conflict resolution, freshness/versioning, and evidence admissibility. `core_documents/design_doc.md` is the engineering architecture reference for pipeline topology, orchestration, output contracts, and retrieval-system design. If these documents conflict, defer to `core_documents/context_contract.md` for retrieval and source-governance decisions.
 
