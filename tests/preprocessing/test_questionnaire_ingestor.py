@@ -10,9 +10,9 @@ def test_questionnaire_json_stays_structured(mock_documents_dir: Path) -> None:
     source = load_source(mock_documents_dir / "OptiChain_VSQ_001_v2_1.json")
 
     assert source.source_id == "VQ-OC-001"
-    assert source.source_type is SourceType.QUESTIONNAIRE
+    assert source.source_type is SourceType.VENDOR_QUESTIONNAIRE
     assert source.retrieval_lane is RetrievalLane.DIRECT_STRUCTURED
-    assert source.status is ManifestStatus.PENDING
+    assert source.manifest_status is ManifestStatus.PENDING
     assert source.document_id == "VSQ-001"
     assert source.detected_version == "2.1"
     assert source.structured_data["vendor_profile"]["vendor_legal_name"] == "OptiChain, Inc."

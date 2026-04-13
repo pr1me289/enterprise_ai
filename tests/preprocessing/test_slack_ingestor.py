@@ -10,8 +10,8 @@ def test_slack_json_preserves_threads_and_messages(mock_documents_dir: Path) -> 
     source = load_source(mock_documents_dir / "Slack_Thread_Export_001.json")
 
     assert source.source_id == "SLK-001"
-    assert source.source_type is SourceType.SUPPLEMENTAL_NOTE
-    assert source.status is ManifestStatus.CONFIRMED
+    assert source.source_type is SourceType.SLACK_THREAD
+    assert source.manifest_status is ManifestStatus.CONFIRMED
     assert source.document_id == "SLACK-EXPORT-001"
     assert source.detected_version == "1.0"
     assert len(source.threads) == 4

@@ -10,7 +10,9 @@ from .models import NormalizedSource, SourceType
 from .policy_ingestor import ingest_policy
 from .precedent_ingestor import ingest_precedent_log
 from .questionnaire_ingestor import ingest_questionnaire
+from .scenario_sources import list_scenario_source_paths
 from .slack_ingestor import ingest_slack_threads
+from .stakeholder_ingestor import ingest_stakeholder_map
 from .source_contract import resolve_contract_for_path
 
 
@@ -27,6 +29,8 @@ def load_source(path: str | Path) -> NormalizedSource:
         return ingest_matrix(source_path, contract)
     if contract.source_type is SourceType.VENDOR_QUESTIONNAIRE:
         return ingest_questionnaire(source_path, contract)
+    if contract.source_type is SourceType.STAKEHOLDER_MAP:
+        return ingest_stakeholder_map(source_path, contract)
     if contract.source_type is SourceType.VENDOR_PRECEDENT:
         return ingest_precedent_log(source_path, contract)
     if contract.source_type is SourceType.SLACK_THREAD:
@@ -36,3 +40,11 @@ def load_source(path: str | Path) -> NormalizedSource:
 
 def load_sources(paths: Iterable[str | Path]) -> list[NormalizedSource]:
     return [load_source(path) for path in paths]
+
+
+def load_scenario_sources(
+    scenario_name: str,
+    *,
+    repo_root: str | Path | None = None,
+) -> list[NormalizedSource]:
+    return load_sources(list_scenario_source_paths(scenario_name, repo_root=repo_root))
