@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from orchestration.models.contracts import GateDecision, RetrievalRequest, StepExecutionResult
+from orchestration.models.determinations import Step01IntakeDetermination
 from orchestration.models.enums import RetrievalLane, StepStatus
 from orchestration.pipeline_state import PipelineState
 from orchestration.steps.base import BaseStepHandler
@@ -69,31 +70,41 @@ class Step01IntakeHandler(BaseStepHandler):
         questionnaire_exists = not existence.missing_fields
         missing_fields = list(completeness.missing_fields)
         version_conflict_detected = False
-        output = {
-            "questionnaire_exists": questionnaire_exists,
-            "questionnaire_complete": not missing_fields,
-            "version_conflict_detected": version_conflict_detected,
-            "missing_fields": missing_fields,
-        }
-        state.vendor_name = existence.payload.get("vendor_name")
+        vendor_name = existence.payload.get("vendor_name") or ""
+        state.vendor_name = vendor_name or None
 
         if not questionnaire_exists:
             step_status = StepStatus.BLOCKED
-        elif missing_fields:
-            step_status = StepStatus.BLOCKED
+            halt_reason = "Questionnaire not found"
+            notes = ["Questionnaire document VQ-OC-001 could not be retrieved."]
         elif version_conflict_detected:
             step_status = StepStatus.BLOCKED
+            halt_reason = "Questionnaire version conflict detected"
+            notes = ["Submitted questionnaire version does not match the active manifest version."]
+        elif missing_fields:
+            step_status = StepStatus.BLOCKED
+            halt_reason = "Missing required questionnaire fields"
+            notes = [f"Missing fields: {', '.join(missing_fields)}"]
         else:
             step_status = StepStatus.COMPLETE
+            halt_reason = None
+            notes = []
+
+        determination = Step01IntakeDetermination(
+            questionnaire_valid=step_status is StepStatus.COMPLETE,
+            vendor_name=vendor_name,
+            status=step_status.value,
+            notes=notes,
+        )
 
         return StepExecutionResult(
             step_id=self.step_id,
             step_status=step_status,
-            output=output,
+            output=determination.to_dict(),
             retrieval_results={
                 "existence": existence,
                 "completeness": completeness,
                 "version_check": version_check,
             },
-            halt_reason="Missing questionnaire fields" if step_status is StepStatus.BLOCKED else None,
+            halt_reason=halt_reason,
         )
