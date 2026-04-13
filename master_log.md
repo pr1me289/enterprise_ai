@@ -186,3 +186,24 @@
 **Changes:** Updated `src/preprocessing/source_contract.py` so `ISP-001`, `DPA-TM-001`, and `PAM-001` now use `manifest_status=CONFIRMED` instead of the invalid `PROVISIONAL`, and `SLK-001` now uses `authority_tier=3` instead of `4`. Updated chunking and indexing tests to assert the corrected manifest and authority values. Regenerated `data/processed/scenario_1/chunks/` and `data/processed/scenario_2/chunks/`, then rebuilt `data/indexes/scenario_1/` and `data/indexes/scenario_2/` so the vector registries and `index_registry.json` files picked up the corrected metadata. The rebuild used a deterministic 384-d fake embedder because the real embedding path attempted to resolve a Hugging Face model over restricted network access.
 **Result:** Both scenario registries now report `CONFIRMED` for `ISP-001`, `DPA-TM-001`, and `PAM-001`, and `authority_tier=3` for `SLK-001`, matching the locked contract. Verification completed with `uv run pytest tests/chunking/test_chunker.py tests/indexing/test_embeddings.py tests/indexing/test_chroma_store.py tests/indexing/test_index_registry.py tests/indexing/test_load_index_registry.py`, ending at 19 passed, 0 failed, plus a direct JSON probe of both `data/indexes/scenario_1/index_registry.json` and `data/indexes/scenario_2/index_registry.json`.
 **Next:** Keep any downstream retrieval or orchestration code reading these scenario registries against the corrected `CONFIRMED | PENDING` manifest model and Tier 1/2/3 authority scale only.
+
+### [#28] 2026-04-13 | Claude Code
+**Task:** Fix content integrity issues across chunking, indexing, and orchestration layers on a new `fix/integrity` branch off main.
+**Plan:** Address four identified issues: (1) remove retired `PROVISIONAL` manifest status from the codebase, (2) confirm Slack authority tier is already tier 3, (3) switch ISP chunking to level-1 only for larger functional chunks, (4) move DPA and PAM from `INDEXED_HYBRID` to `DIRECT_STRUCTURED` lane throughout the full stack.
+**Changes:**
+- `src/preprocessing/models.py`: Removed `PROVISIONAL` from `ManifestStatus` enum.
+- `src/retrieval/authority_reranker.py`: Removed `PROVISIONAL` weight from `MANIFEST_STATUS_WEIGHTS`; removed unused tier 4 from `AUTHORITY_WEIGHTS` and `tier_four_cap` logic.
+- `src/preprocessing/text_utils.py`: `split_policy_sections` now filters to level-1 section boundaries only (no dot-separated subsections), producing large functional chunks per top-level section rather than many tiny subsection fragments.
+- `src/preprocessing/source_contract.py`: `DPA-TM-001` and `PAM-001` changed to `RetrievalLane.DIRECT_STRUCTURED`.
+- `src/preprocessing/matrix_ingestor.py`: Added `"rows"` list to `structured_data` so matrix sources carry full row data for direct field access.
+- `src/chunking/chunker.py`: Added early return of `[]` for `DIRECT_STRUCTURED` matrix sources; imported `RetrievalLane`.
+- `src/indexing/index_registry.py`: `DPA-TM-001` and `PAM-001` moved to `structured_direct` storage kind with new logical store names `dpa_matrix_direct` and `procurement_matrix_direct`.
+- `src/orchestration/retrieval/direct_structured.py`: Rewritten to support multiple sources keyed by `source_id`; `read_fields` and `get_first` now take `source_id` as first parameter.
+- `src/orchestration/retrieval/router.py`: Passes `request.source_id` to `direct_accessor.read_fields`.
+- `src/orchestration/supervisor.py`: Added `_load_additional_direct_sources` helper to auto-load DPA and PAM structured data from mock_documents; updated `DirectStructuredAccessor` init with `additional_sources`.
+- `src/orchestration/steps/step03_legal.py`: DPA retrieval changed to `DIRECT_STRUCTURED` lane with `field_map={"rows": ("rows",)}`.
+- `src/orchestration/steps/step04_procurement.py`: Both PAM retrieval requests changed to `DIRECT_STRUCTURED` with `field_map={"rows": ("rows",)}`.
+- `src/orchestration/scenarios.py`: ISP chunk IDs updated to level-1 (`section_12`, `section_17`); DPA and PAM entries removed from `indexed_results`; agent output citations updated.
+- Test files updated: `tests/chunking/test_chunker.py`, `tests/chunking/test_pipeline.py`, `tests/chunking/test_artifacts.py`, `tests/preprocessing/test_matrix_ingestor.py`, `tests/indexing/test_index_registry.py`, `tests/indexing/test_indexing_pipeline.py`, `tests/indexing/test_load_index_registry.py`.
+**Result:** All 68 tests pass on `fix/integrity`. Slack tier was already corrected to 3 in a prior session (confirmed clean). The full integrity fix is complete.
+**Next:** Review and merge `fix/integrity` into main via PR if checks pass.

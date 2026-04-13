@@ -25,7 +25,6 @@ class RetrievalLane(str, Enum):
 
 class ManifestStatus(str, Enum):
     CONFIRMED = "CONFIRMED"
-    PROVISIONAL = "PROVISIONAL"
     PENDING = "PENDING"
 
 

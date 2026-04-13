@@ -5,6 +5,9 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from preprocessing import load_source as _load_source
+from preprocessing.source_contract import SOURCE_CONTRACTS_BY_ID
+
 from orchestration.agents.llm_agent_runner import LLMAgentRunner, MockLLMAdapter
 from orchestration.audit.audit_logger import AuditLogger
 from orchestration.config.source_manifest import DEFAULT_STAKEHOLDER_MAP, build_source_manifest
@@ -28,6 +31,25 @@ from orchestration.validation.bundle_validator import BundleValidator
 from orchestration.validation.output_validator import OutputValidator
 
 
+def _load_additional_direct_sources(repo_root: Path) -> dict[str, Any]:
+    """Auto-discover and load DPA and PAM structured data from mock_documents."""
+    additional: dict[str, Any] = {}
+    mock_docs = repo_root / "mock_documents"
+    for source_id in ("DPA-TM-001", "PAM-001"):
+        contract = SOURCE_CONTRACTS_BY_ID[source_id]
+        for hint in contract.path_hints:
+            matches = sorted(mock_docs.glob(f"*{hint}*"))
+            if matches:
+                try:
+                    source = _load_source(matches[0])
+                    if source.structured_data:
+                        additional[source_id] = source.structured_data
+                except Exception:  # noqa: BLE001
+                    pass
+                break
+    return additional
+
+
 class Supervisor:
     """Deterministic sequential Supervisor."""
 
@@ -46,7 +68,12 @@ class Supervisor:
         self.manifest = build_source_manifest()
         self.state = PipelineState.initialize(self.manifest.manifest_version)
         self.audit_logger = AuditLogger(self.state.pipeline_run_id)
-        self.direct_accessor = DirectStructuredAccessor(questionnaire_path, overrides=questionnaire_overrides)
+        additional_direct = _load_additional_direct_sources(self.repo_root)
+        self.direct_accessor = DirectStructuredAccessor(
+            questionnaire_path,
+            overrides=questionnaire_overrides,
+            additional_sources=additional_direct,
+        )
         self.indexed_backend = indexed_backend or MockHybridIndexedBackend(
             chunk_dir=chunk_dir or (self.repo_root / "data" / "processed" / "chunks")
         )

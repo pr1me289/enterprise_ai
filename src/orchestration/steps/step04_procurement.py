@@ -77,22 +77,22 @@ class Step04ProcurementHandler(BaseStepHandler):
             "approval_matrix_rows": self.router.route(
                 RetrievalRequest(
                     request_id="R04-SQ-04",
-                    lane=RetrievalLane.INDEXED_HYBRID,
+                    lane=RetrievalLane.DIRECT_STRUCTURED,
                     source_id="PAM-001",
                     access_role=self.definition.access_role,
                     output_name="approval_matrix_rows",
-                    search_terms=("vendor class", "deal size", "approval path", "standard", "fast track"),
+                    field_map={"rows": ("rows",)},
                 ),
                 state=state,
             ),
             "fast_track_rows": self.router.route(
                 RetrievalRequest(
                     request_id="R04-SQ-05",
-                    lane=RetrievalLane.INDEXED_HYBRID,
+                    lane=RetrievalLane.DIRECT_STRUCTURED,
                     source_id="PAM-001",
                     access_role=self.definition.access_role,
                     output_name="fast_track_rows",
-                    search_terms=("fast track", "expedited", "eligible", "low risk"),
+                    field_map={"rows": ("rows",)},
                 ),
                 state=state,
             ),

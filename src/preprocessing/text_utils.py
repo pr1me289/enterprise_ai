@@ -59,7 +59,12 @@ def stable_json_text(value: Any) -> str:
 def split_policy_sections(raw_text: str) -> list[tuple[str, str, str, int]]:
     """Split a policy document into section-boundary units."""
 
-    matches = list(INLINE_SECTION_RE.finditer(raw_text))
+    all_matches = list(INLINE_SECTION_RE.finditer(raw_text))
+    # Only split at top-level section boundaries (no subsection dots)
+    matches = [
+        m for m in all_matches
+        if "." not in normalize_section_id(m.group("section_id"))
+    ]
     if not matches:
         text = normalize_text(raw_text)
         if not text:

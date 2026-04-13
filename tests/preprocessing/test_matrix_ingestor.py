@@ -9,19 +9,19 @@ def test_dpa_matrix_xlsx_preserves_row_boundaries(mock_documents_dir: Path) -> N
     source = load_source(mock_documents_dir / "DPA_Legal_Trigger_Matrix_v1_3.xlsx")
 
     assert source.source_id == "DPA-TM-001"
-    assert source.structured_data == {
-        "columns": [
-            "ID",
-            "Trigger Condition",
-            "Data Type(s) Involved",
-            "Regulation(s) Triggered",
-            "DPA Required?",
-            "Required DPA / Contract Clauses",
-            "Additional Obligations",
-            "Lichen Action / Owner",
-        ],
-        "row_count": 27,
-    }
+    assert source.structured_data["columns"] == [
+        "ID",
+        "Trigger Condition",
+        "Data Type(s) Involved",
+        "Regulation(s) Triggered",
+        "DPA Required?",
+        "Required DPA / Contract Clauses",
+        "Additional Obligations",
+        "Lichen Action / Owner",
+    ]
+    assert source.structured_data["row_count"] == 27
+    assert "rows" in source.structured_data
+    assert len(source.structured_data["rows"]) == 27
     assert source.rows[0].row_id == "A-01"
     assert source.rows[0].order == 1
     assert "GDPR Art. 28" in source.rows[0].text

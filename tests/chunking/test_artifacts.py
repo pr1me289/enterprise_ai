@@ -20,14 +20,9 @@ def test_write_chunk_artifacts_writes_per_source_json(mock_documents_dir: Path, 
         output_dir=tmp_path,
     )
 
-    assert written == [tmp_path / "DPA-TM-001.json"]
+    assert written == []
+    assert not (tmp_path / "DPA-TM-001.json").exists()
     assert not (tmp_path / "VQ-OC-001.json").exists()
-
-    payload = json.loads((tmp_path / "DPA-TM-001.json").read_text(encoding="utf-8"))
-    assert len(payload) == 27
-    assert payload[0]["chunk_id"] == "DPA-TM-001__row_A-01"
-    assert payload[0]["source_type"] == "LEGAL_TRIGGER_MATRIX"
-    assert payload[0]["allowed_agents"] == ["legal"]
 
 
 def test_chunk_and_write_sources_builds_artifacts_from_normalized_sources(

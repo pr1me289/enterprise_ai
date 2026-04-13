@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from preprocessing import NormalizedSource, SourceType
+from preprocessing.models import RetrievalLane
 from preprocessing.text_utils import flatten_json_to_text, normalize_text
 
 from .models import Chunk, ChunkType
@@ -16,6 +17,11 @@ PRECEDENT_DOMAIN_SCOPE_BY_RECORD_ID = {
 
 
 def chunk_source(source: NormalizedSource) -> list[Chunk]:
+    if source.retrieval_lane is RetrievalLane.DIRECT_STRUCTURED and source.source_type in {
+        SourceType.LEGAL_TRIGGER_MATRIX,
+        SourceType.PROCUREMENT_APPROVAL_MATRIX,
+    }:
+        return []
     if source.source_type is SourceType.POLICY_DOCUMENT:
         return _chunk_policy(source)
     if source.source_type in {

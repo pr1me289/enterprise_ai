@@ -9,13 +9,11 @@ AUTHORITY_WEIGHTS = {
     1: 1.0,
     2: 0.9,
     3: 0.75,
-    4: 0.5,
 }
 
 MANIFEST_STATUS_WEIGHTS = {
     "CONFIRMED": 1.0,
     "PENDING": 0.9,
-    "PROVISIONAL": 0.85,
 }
 
 FRESHNESS_WEIGHTS = {
@@ -31,9 +29,7 @@ def authority_rerank(candidates: Sequence[dict]) -> list[dict]:
         authority_weight = AUTHORITY_WEIGHTS.get(int(candidate["authority_tier"]), 0.5)
         manifest_weight = MANIFEST_STATUS_WEIGHTS.get(str(metadata.get("manifest_status", "")), 1.0)
         freshness_weight = FRESHNESS_WEIGHTS.get(str(candidate.get("freshness_status", "")), 0.95)
-        tier_four_cap = 0.75 if int(candidate["authority_tier"]) == 4 else 1.0
         reranked_candidate = dict(candidate)
         reranked_candidate["score"] = candidate["score"] * authority_weight * manifest_weight * freshness_weight
-        reranked_candidate["score"] *= tier_four_cap
         reranked.append(reranked_candidate)
     return sorted(reranked, key=lambda item: item["score"], reverse=True)

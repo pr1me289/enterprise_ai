@@ -13,8 +13,8 @@ from indexing.pipeline import load_chunk_artifacts_from_dir
 
 def test_index_name_for_source_uses_explicit_contract_mapping() -> None:
     assert index_name_for_source("ISP-001") == "idx_security_policy"
-    assert index_name_for_source("DPA-TM-001") == "idx_dpa_matrix"
-    assert index_name_for_source("PAM-001") == "idx_procurement_matrix"
+    assert index_name_for_source("DPA-TM-001") == "dpa_matrix_direct"
+    assert index_name_for_source("PAM-001") == "procurement_matrix_direct"
     assert index_name_for_source("PVD-001") == "idx_precedents"
     assert index_name_for_source("SLK-001") == "idx_slack_notes"
     assert index_name_for_source("VQ-OC-001") == "vq_direct_access"
@@ -28,8 +28,6 @@ def test_group_chunks_by_index_name_uses_per_source_logical_indices(repo_root) -
 
     assert set(grouped) == {
         "idx_security_policy",
-        "idx_dpa_matrix",
-        "idx_procurement_matrix",
         "idx_slack_notes",
     }
     assert grouped["idx_security_policy"][0].source_id == "ISP-001"
@@ -55,9 +53,7 @@ def test_build_index_registry_payload_is_source_level_and_uses_store_mapping(rep
 
     assert payload["registry_version"] == "1.0"
     assert set(payload["sources"]) == {
-        "DPA-TM-001",
         "ISP-001",
-        "PAM-001",
         "SLK-001",
         "VQ-OC-001",
         "SHM-001",

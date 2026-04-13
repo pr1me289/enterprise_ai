@@ -41,15 +41,15 @@ SOURCE_STORE_CONFIG: dict[str, SourceStoreDefinition] = {
     ),
     "DPA-TM-001": SourceStoreDefinition(
         source_id="DPA-TM-001",
-        logical_store_name="idx_dpa_matrix",
-        storage_kind="vector_bm25",
-        backends=("chroma", "bm25"),
+        logical_store_name="dpa_matrix_direct",
+        storage_kind="structured_direct",
+        backends=("structured_json",),
     ),
     "PAM-001": SourceStoreDefinition(
         source_id="PAM-001",
-        logical_store_name="idx_procurement_matrix",
-        storage_kind="vector_bm25",
-        backends=("chroma", "bm25"),
+        logical_store_name="procurement_matrix_direct",
+        storage_kind="structured_direct",
+        backends=("structured_json",),
     ),
     "PVD-001": SourceStoreDefinition(
         source_id="PVD-001",

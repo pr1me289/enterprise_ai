@@ -30,45 +30,36 @@ def test_policy_source_chunks_by_section(mock_documents_dir: Path) -> None:
     assert not chunks[0].text.endswith("---")
     assert chunks[0].chunk_order == 1
     section_ids = {chunk.section_id for chunk in chunks}
-    assert "6" not in section_ids
+    assert "6" in section_ids
     assert "6.1" not in section_ids
-    assert "6.2" not in section_ids
-    assert "6.1.1" in section_ids
-    assert any(chunk.section_id == "12.1.4" for chunk in chunks)
-    nda_chunk = next(chunk for chunk in chunks if chunk.section_id == "12.1.4")
+    assert "6.1.1" not in section_ids
+    assert any(chunk.section_id == "12" for chunk in chunks)
+    nda_chunk = next(chunk for chunk in chunks if chunk.section_id == "12")
     assert "Onboarding may not proceed to the information-exchange phase" in nda_chunk.text
 
 
-def test_dpa_matrix_chunks_one_row_per_chunk(scenario_1_mock_documents_dir: Path) -> None:
+def test_dpa_matrix_is_direct_structured_and_not_chunked(scenario_1_mock_documents_dir: Path) -> None:
     source = load_source(scenario_1_mock_documents_dir / "DPA_Legal_Trigger_Matrix_v1_3.csv")
 
     chunks = chunk_source(source)
 
-    assert len(chunks) == 27
-    assert chunks[0].chunk_type == "ROW"
-    assert chunks[0].chunk_id == "DPA-TM-001__row_A-01"
-    assert chunks[0].row_id == "A-01"
-    assert chunks[0].citation_label == "DPA-TM-001 row A-01"
-    assert "GDPR Art. 28" in chunks[0].text
-    assert chunks[0].source_type == "LEGAL_TRIGGER_MATRIX"
-    assert chunks[0].document_date == "2026-04-04"
-    assert chunks[0].freshness_status == "CURRENT"
-    assert chunks[0].is_primary_citable is True
-    assert chunks[-1].row_id == "G-02"
+    assert chunks == []
+    assert source.retrieval_lane.value == "DIRECT_STRUCTURED"
+    assert source.structured_data is not None
+    assert "rows" in source.structured_data
+    assert len(source.structured_data["rows"]) == 27
 
 
-def test_procurement_matrix_chunks_one_row_per_chunk(scenario_1_mock_documents_dir: Path) -> None:
+def test_procurement_matrix_is_direct_structured_and_not_chunked(scenario_1_mock_documents_dir: Path) -> None:
     source = load_source(scenario_1_mock_documents_dir / "Procurement_Approval_Matrix_v2_0.csv")
 
     chunks = chunk_source(source)
 
-    assert len(chunks) == 20
-    assert chunks[0].row_id == "A-T1"
-    assert chunks[0].source_type == "PROCUREMENT_APPROVAL_MATRIX"
-    assert chunks[0].allowed_agents == ("procurement",)
-    assert chunks[0].is_primary_citable is True
-    assert chunks[-1].row_id == "E-T4"
-    assert chunks[-1].authority_tier == 1
+    assert chunks == []
+    assert source.retrieval_lane.value == "DIRECT_STRUCTURED"
+    assert source.structured_data is not None
+    assert "rows" in source.structured_data
+    assert len(source.structured_data["rows"]) == 20
 
 
 def test_precedent_source_chunks_by_record(mock_documents_dir: Path) -> None:
@@ -152,7 +143,7 @@ def test_chunk_sources_returns_source_id_keyed_map(
     chunk_map = chunk_sources(sources)
 
     assert set(chunk_map) == {"DPA-TM-001", "VQ-OC-001", "SLK-001", "SHM-001"}
-    assert len(chunk_map["DPA-TM-001"]) == 27
+    assert chunk_map["DPA-TM-001"] == []
     assert chunk_map["VQ-OC-001"] == []
     assert len(chunk_map["SLK-001"]) == 4
     assert len(chunk_map["SHM-001"]) == 15

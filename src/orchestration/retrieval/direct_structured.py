@@ -1,4 +1,4 @@
-"""Direct structured access for the questionnaire lane."""
+"""Direct structured access for direct-structured lane sources."""
 
 from __future__ import annotations
 
@@ -19,32 +19,42 @@ def _deep_merge(base: dict[str, Any], overrides: dict[str, Any]) -> dict[str, An
 
 
 class DirectStructuredAccessor:
-    """Field-level access into the questionnaire JSON object."""
+    """Field-level access into direct-structured source payloads."""
 
-    def __init__(self, questionnaire_path: str | Path, *, overrides: dict[str, Any] | None = None) -> None:
-        payload = json.loads(Path(questionnaire_path).read_text(encoding="utf-8"))
-        self.payload = _deep_merge(payload, overrides or {})
+    def __init__(
+        self,
+        questionnaire_path: str | Path,
+        *,
+        overrides: dict[str, Any] | None = None,
+        additional_sources: dict[str, dict[str, Any]] | None = None,
+    ) -> None:
+        questionnaire_payload = json.loads(Path(questionnaire_path).read_text(encoding="utf-8"))
+        self._payloads: dict[str, dict[str, Any]] = {
+            "VQ-OC-001": _deep_merge(questionnaire_payload, overrides or {}),
+        }
+        if additional_sources:
+            self._payloads.update(additional_sources)
 
-    def get_first(self, candidate_paths: tuple[str, ...]) -> Any:
+    def get_first(self, source_id: str, candidate_paths: tuple[str, ...]) -> Any:
+        payload = self._payloads.get(source_id, {})
         for field_path in candidate_paths:
             try:
-                return self._resolve_path(field_path)
-            except KeyError:
+                current: Any = payload
+                for key in field_path.split("."):
+                    current = current[key]
+                return current
+            except (KeyError, TypeError):
                 continue
         raise KeyError(candidate_paths[0])
 
-    def read_fields(self, field_map: dict[str, tuple[str, ...]]) -> tuple[dict[str, Any], list[str]]:
+    def read_fields(self, source_id: str, field_map: dict[str, tuple[str, ...]]) -> tuple[dict[str, Any], list[str]]:
+        if source_id not in self._payloads:
+            return {}, list(field_map.keys())
         values: dict[str, Any] = {}
         missing: list[str] = []
         for output_key, candidate_paths in field_map.items():
             try:
-                values[output_key] = self.get_first(candidate_paths)
+                values[output_key] = self.get_first(source_id, candidate_paths)
             except KeyError:
                 missing.append(output_key)
         return values, missing
-
-    def _resolve_path(self, field_path: str) -> Any:
-        current: Any = self.payload
-        for key in field_path.split("."):
-            current = current[key]
-        return current

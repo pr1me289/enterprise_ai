@@ -32,7 +32,7 @@ class RetrievalRouter:
 
     def route(self, request: RetrievalRequest, *, state: PipelineState) -> RetrievalResult:
         if request.lane is RetrievalLane.DIRECT_STRUCTURED:
-            payload, missing = self.direct_accessor.read_fields(request.field_map)
+            payload, missing = self.direct_accessor.read_fields(request.source_id, request.field_map)
             result = RetrievalResult(
                 request=request,
                 payload=payload,

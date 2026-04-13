@@ -20,25 +20,19 @@ def test_build_chunk_artifacts_from_paths_uses_preprocessing_and_writes_json(
         output_dir=tmp_path,
     )
 
-    assert {path.name for path in written} == {"ISP-001.json", "DPA-TM-001.json"}
+    assert {path.name for path in written} == {"ISP-001.json"}
     assert not (tmp_path / "VQ-OC-001.json").exists()
 
     policy_payload = json.loads((tmp_path / "ISP-001.json").read_text(encoding="utf-8"))
-    dpa_payload = json.loads((tmp_path / "DPA-TM-001.json").read_text(encoding="utf-8"))
     assert policy_payload[0]["chunk_type"] == "SECTION"
     assert policy_payload[0]["source_type"] == "POLICY_DOCUMENT"
     assert policy_payload[0]["section_id"] == "1"
     assert policy_payload[0]["document_date"] == "2026-04-04"
     assert policy_payload[0]["freshness_status"] == "CURRENT"
     assert policy_payload[0]["is_primary_citable"] is True
-    assert all(chunk["section_id"] not in {"6", "6.1", "6.2"} for chunk in policy_payload)
+    assert all(chunk["section_id"] not in {"6.1", "6.1.1", "12.1.4"} for chunk in policy_payload)
     assert not any(chunk["text"].endswith("---") for chunk in policy_payload)
-    assert any(chunk["section_id"] == "12.1.4" for chunk in policy_payload)
-    assert dpa_payload[0]["freshness_status"] == "CURRENT"
-    assert dpa_payload[0]["source_type"] == "LEGAL_TRIGGER_MATRIX"
-    assert dpa_payload[0]["document_date"] == "2026-04-04"
-    assert dpa_payload[0]["is_primary_citable"] is True
-    assert dpa_payload[0]["chunk_type"] == "ROW"
+    assert any(chunk["section_id"] == "12" for chunk in policy_payload)
 
 
 def test_build_scenario_chunk_artifacts_writes_scenario_specific_outputs(
@@ -53,18 +47,10 @@ def test_build_scenario_chunk_artifacts_writes_scenario_specific_outputs(
         repo_root=repo_root,
     )
 
-    assert {path.name for path in written} == {
-        "ISP-001.json",
-        "DPA-TM-001.json",
-        "PAM-001.json",
-        "SLK-001.json",
-        "SHM-001.json",
-    }
+    assert {path.name for path in written} == {"ISP-001.json", "SLK-001.json", "SHM-001.json"}
     assert not (output_dir / "VQ-OC-001.json").exists()
 
-    dpa_payload = json.loads((output_dir / "DPA-TM-001.json").read_text(encoding="utf-8"))
     stakeholder_payload = json.loads((output_dir / "SHM-001.json").read_text(encoding="utf-8"))
-    assert dpa_payload[0]["row_id"] == "A-01"
     assert stakeholder_payload[0]["source_type"] == "STAKEHOLDER_MAP"
     assert stakeholder_payload[0]["record_id"] == "SUMMARY"
 

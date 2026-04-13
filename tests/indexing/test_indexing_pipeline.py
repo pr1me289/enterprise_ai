@@ -223,8 +223,6 @@ def test_build_storage_indices_for_scenario_writes_scenario_specific_outputs(
     )
 
     assert result["vector_counts"] == {
-        "idx_dpa_matrix": 27,
-        "idx_procurement_matrix": 20,
         "idx_security_policy": 82,
         "idx_slack_notes": 4,
     }

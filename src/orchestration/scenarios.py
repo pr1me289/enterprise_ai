@@ -45,25 +45,16 @@ def _chunk(
 def complete_demo_scenario() -> ScenarioFixture:
     indexed_results = {
         ("ISP-001", ("ERP integration tier", "12.2", "integration classification", "tier")): [
-            _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_12_2_3", section_id="12.2.3", text="Export-only integrations are Tier 3."),
+            _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_12", section_id="12", text="Export-only integrations are Tier 3."),
         ],
         ("ISP-001", ("regulated data", "data classification", "third-party access", "12")): [
             _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_12", section_id="12", text="Unregulated export-only data may qualify for low-risk treatment."),
         ],
         ("ISP-001", ("fast track", "manual review", "regulated data", "third-party risk")): [
-            _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_17_3", section_id="17.3", text="Low-risk export-only vendors may be fast-tracked."),
+            _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_17", section_id="17", text="Low-risk export-only vendors may be fast-tracked."),
         ],
         ("ISP-001", ("NDA", "12.1.4", "information exchange", "non-disclosure")): [
-            _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_12_1_4", section_id="12.1.4", text="NDA must be executed before information exchange."),
-        ],
-        ("DPA-TM-001", ("EU personal data", "GDPR", "Art. 28", "employee data")): [
-            _chunk(source_id="DPA-TM-001", version="2.1", chunk_id="DPA-TM-001__row_A-01", row_id="A-01", text="GDPR Art. 28 DPA required when EU personal data is processed."),
-        ],
-        ("PAM-001", ("vendor class", "deal size", "approval path", "standard", "fast track")): [
-            _chunk(source_id="PAM-001", version="3.0", chunk_id="PAM-001__row_A-T1", row_id="A-T1", text="Class A under threshold may use FAST_TRACK."),
-        ],
-        ("PAM-001", ("fast track", "expedited", "eligible", "low risk")): [
-            _chunk(source_id="PAM-001", version="3.0", chunk_id="PAM-001__row_FAST", row_id="FAST-01", text="Fast-track routing row."),
+            _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_12", section_id="12", text="NDA must be executed before information exchange."),
         ],
         ("SLK-001", ("OptiChain", "vendor approval", "procurement", "onboarding")): [],
     }
@@ -82,8 +73,8 @@ def complete_demo_scenario() -> ScenarioFixture:
                 {
                     "source_id": "ISP-001",
                     "version": "4.2",
-                    "chunk_id": "ISP-001__section_12_2_3",
-                    "section_id": "12.2.3",
+                    "chunk_id": "ISP-001__section_12",
+                    "section_id": "12",
                     "citation_class": "PRIMARY",
                 }
             ],
@@ -99,8 +90,8 @@ def complete_demo_scenario() -> ScenarioFixture:
                 {
                     "source_id": "ISP-001",
                     "version": "4.2",
-                    "chunk_id": "ISP-001__section_12_1_4",
-                    "section_id": "12.1.4",
+                    "chunk_id": "ISP-001__section_12",
+                    "section_id": "12",
                     "citation_class": "PRIMARY",
                 }
             ],
@@ -154,7 +145,7 @@ def complete_demo_scenario() -> ScenarioFixture:
                 {
                     "source_name": "ISP-001",
                     "version": "4.2",
-                    "section": "12.2.3",
+                    "section": "12",
                     "retrieval_timestamp": "",
                     "agent_id": "it_security_agent",
                 },
@@ -231,16 +222,16 @@ def complete_demo_scenario() -> ScenarioFixture:
 def escalated_security_scenario() -> ScenarioFixture:
     indexed_results = {
         ("ISP-001", ("ERP integration tier", "12.2", "integration classification", "tier")): [
-            _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_12_2", section_id="12.2", text="Ambiguous ERP patterns require manual review."),
+            _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_12", section_id="12", text="Ambiguous ERP patterns require manual review."),
         ],
         ("ISP-001", ("regulated data", "data classification", "third-party access", "12")): [
             _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_12", section_id="12", text="Employee-linked data is regulated."),
         ],
         ("ISP-001", ("fast track", "manual review", "regulated data", "third-party risk")): [
-            _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_17_3", section_id="17.3", text="Ambiguous integrations are not fast-track eligible."),
+            _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_17", section_id="17", text="Ambiguous integrations are not fast-track eligible."),
         ],
         ("ISP-001", ("NDA", "12.1.4", "information exchange", "non-disclosure")): [
-            _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_12_1_4", section_id="12.1.4", text="NDA must be executed before information exchange."),
+            _chunk(source_id="ISP-001", version="4.2", chunk_id="ISP-001__section_12", section_id="12", text="NDA must be executed before information exchange."),
         ],
     }
     agent_outputs = {
@@ -264,8 +255,8 @@ def escalated_security_scenario() -> ScenarioFixture:
                 {
                     "source_id": "ISP-001",
                     "version": "4.2",
-                    "chunk_id": "ISP-001__section_12_2",
-                    "section_id": "12.2",
+                    "chunk_id": "ISP-001__section_12",
+                    "section_id": "12",
                     "citation_class": "PRIMARY",
                 }
             ],

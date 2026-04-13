@@ -30,7 +30,7 @@ def ingest_matrix(path: str | Path, contract: SourceContract) -> NormalizedSourc
     ]
 
     raw_text = "\n\n".join(row.text for row in normalized_rows)
-    structured_data = {"columns": columns, "row_count": len(normalized_rows)}
+    structured_data = {"columns": columns, "rows": [row.values for row in normalized_rows], "row_count": len(normalized_rows)}
 
     return NormalizedSource(
         source_id=contract.source_id,

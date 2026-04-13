@@ -48,9 +48,7 @@ def test_registry_helpers_expose_canonical_source_to_store_map(repo_root, tmp_pa
     assert get_entry_by_logical_store_name("vq_direct_access", registry_path)["source_id"] == "VQ-OC-001"
     assert get_entry_by_logical_store_name("stakeholder_map_direct_access", registry_path)["source_id"] == "SHM-001"
     assert list_indexed_sources(registry_path) == [
-        "DPA-TM-001",
         "ISP-001",
-        "PAM-001",
         "SLK-001",
     ]
     assert list_structured_sources(registry_path) == ["SHM-001", "VQ-OC-001"]

@@ -71,11 +71,11 @@ class Step03LegalHandler(BaseStepHandler):
             "dpa_trigger_rows": self.router.route(
                 RetrievalRequest(
                     request_id="R03-SQ-04",
-                    lane=RetrievalLane.INDEXED_HYBRID,
+                    lane=RetrievalLane.DIRECT_STRUCTURED,
                     source_id="DPA-TM-001",
                     access_role=self.definition.access_role,
                     output_name="dpa_trigger_rows",
-                    search_terms=("EU personal data", "GDPR", "Art. 28", "employee data"),
+                    field_map={"rows": ("rows",)},
                 ),
                 state=state,
             ),
