@@ -12,6 +12,11 @@ from .models import Chunk
 
 
 DEFAULT_CHUNK_ARTIFACT_DIR = Path("data/processed/chunks")
+DEFAULT_SCENARIO_CHUNK_ROOT = Path("data/processed")
+
+
+def scenario_chunk_artifact_dir(scenario_name: str) -> Path:
+    return DEFAULT_SCENARIO_CHUNK_ROOT / scenario_name / "chunks"
 
 
 def write_chunk_artifacts(

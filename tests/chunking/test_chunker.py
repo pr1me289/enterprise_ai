@@ -39,8 +39,8 @@ def test_policy_source_chunks_by_section(mock_documents_dir: Path) -> None:
     assert "Onboarding may not proceed to the information-exchange phase" in nda_chunk.text
 
 
-def test_dpa_matrix_chunks_one_row_per_chunk(mock_documents_dir: Path) -> None:
-    source = load_source(mock_documents_dir / "DPA_Legal_Trigger_Matrix_v1_3.xlsx")
+def test_dpa_matrix_chunks_one_row_per_chunk(scenario_1_mock_documents_dir: Path) -> None:
+    source = load_source(scenario_1_mock_documents_dir / "DPA_Legal_Trigger_Matrix_v1_3.csv")
 
     chunks = chunk_source(source)
 
@@ -57,8 +57,8 @@ def test_dpa_matrix_chunks_one_row_per_chunk(mock_documents_dir: Path) -> None:
     assert chunks[-1].row_id == "G-02"
 
 
-def test_procurement_matrix_chunks_one_row_per_chunk(mock_documents_dir: Path) -> None:
-    source = load_source(mock_documents_dir / "Procurement_Approval_Matrix_v2_0.xlsx")
+def test_procurement_matrix_chunks_one_row_per_chunk(scenario_1_mock_documents_dir: Path) -> None:
+    source = load_source(scenario_1_mock_documents_dir / "Procurement_Approval_Matrix_v2_0.csv")
 
     chunks = chunk_source(source)
 
@@ -106,6 +106,29 @@ def test_slack_source_chunks_by_thread(mock_documents_dir: Path) -> None:
     assert "vendor-eval-optichain" in chunks[0].text
 
 
+def test_stakeholder_map_chunks_by_structured_entry(scenario_1_mock_documents_dir: Path) -> None:
+    source = load_source(scenario_1_mock_documents_dir / "Stakeholder_Map_PRQ_2024_0047.json")
+
+    chunks = chunk_source(source)
+
+    assert len(chunks) == 15
+    assert all(chunk.chunk_type == "RECORD" for chunk in chunks)
+    assert all(chunk.source_type == "STAKEHOLDER_MAP" for chunk in chunks)
+    assert chunks[0].record_id == "SUMMARY"
+    assert chunks[0].citation_label == "SHM-001 summary"
+    assert chunks[0].allowed_agents == ("checkoff",)
+    assert chunks[0].text.startswith("stakeholder_map.document_id: STAKEHOLDER-MAP-001")
+    assert chunks[1].record_id == "ROLE-IT-SECURITY"
+    assert "role.role_label: IT Security" in chunks[1].text
+    approval_chunk = next(chunk for chunk in chunks if chunk.record_id == "APPROVAL-02")
+    assert approval_chunk.citation_label == "SHM-001 approval General Counsel"
+    assert "approval.status: ESCALATED" in approval_chunk.text
+    escalation_chunk = next(chunk for chunk in chunks if chunk.record_id == "ESC-002")
+    assert "escalation.resolution_owner: General Counsel" in escalation_chunk.text
+    assert chunks[-1].record_id == "VENDOR-CONTACT"
+    assert "vendor_contact.email: j.levi@optichain.io" in chunks[-1].text
+
+
 def test_questionnaire_source_is_not_chunked(mock_documents_dir: Path) -> None:
     source = load_source(mock_documents_dir / "OptiChain_VSQ_001_v2_1.json")
 
@@ -114,19 +137,24 @@ def test_questionnaire_source_is_not_chunked(mock_documents_dir: Path) -> None:
     assert chunks == []
 
 
-def test_chunk_sources_returns_source_id_keyed_map(mock_documents_dir: Path) -> None:
+def test_chunk_sources_returns_source_id_keyed_map(
+    mock_documents_dir: Path,
+    scenario_1_mock_documents_dir: Path,
+) -> None:
     sources = [
-        load_source(mock_documents_dir / "DPA_Legal_Trigger_Matrix_v1_3.xlsx"),
+        load_source(scenario_1_mock_documents_dir / "DPA_Legal_Trigger_Matrix_v1_3.csv"),
         load_source(mock_documents_dir / "OptiChain_VSQ_001_v2_1.json"),
         load_source(mock_documents_dir / "Slack_Thread_Export_001.json"),
+        load_source(scenario_1_mock_documents_dir / "Stakeholder_Map_PRQ_2024_0047.json"),
     ]
 
     chunk_map = chunk_sources(sources)
 
-    assert set(chunk_map) == {"DPA-TM-001", "VQ-OC-001", "SLK-001"}
+    assert set(chunk_map) == {"DPA-TM-001", "VQ-OC-001", "SLK-001", "SHM-001"}
     assert len(chunk_map["DPA-TM-001"]) == 27
     assert chunk_map["VQ-OC-001"] == []
     assert len(chunk_map["SLK-001"]) == 4
+    assert len(chunk_map["SHM-001"]) == 15
 
 
 def test_chunk_source_rejects_unsupported_source_type() -> None:

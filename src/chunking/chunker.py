@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from preprocessing import NormalizedSource, SourceType
+from preprocessing.text_utils import flatten_json_to_text, normalize_text
 
 from .models import Chunk, ChunkType
 
@@ -26,6 +27,8 @@ def chunk_source(source: NormalizedSource) -> list[Chunk]:
         return _chunk_precedent(source)
     if source.source_type is SourceType.SLACK_THREAD:
         return _chunk_slack(source)
+    if source.source_type is SourceType.STAKEHOLDER_MAP:
+        return _chunk_stakeholder_map(source)
     if source.source_type is SourceType.VENDOR_QUESTIONNAIRE:
         return []
     raise ValueError(f"Unsupported source type for chunking: {source.source_type}")
@@ -96,6 +99,97 @@ def _chunk_slack(source: NormalizedSource) -> list[Chunk]:
     ]
 
 
+def _chunk_stakeholder_map(source: NormalizedSource) -> list[Chunk]:
+    data = source.structured_data or {}
+    chunks: list[Chunk] = []
+    chunk_order = 1
+
+    summary_payload = {
+        "document_id": data.get("document_id"),
+        "vendor": data.get("vendor"),
+        "procurement_reference": data.get("procurement_reference"),
+        "pipeline_run_scope": data.get("pipeline_run_scope"),
+        "source_references": data.get("source_references"),
+        "checkoff_agent_note": data.get("checkoff_agent_note"),
+    }
+    chunks.append(
+        _build_chunk(
+            source,
+            chunk_type=ChunkType.RECORD,
+            chunk_order=chunk_order,
+            text=normalize_text(flatten_json_to_text(summary_payload, "stakeholder_map")),
+            citation_label=f"{source.source_id} summary",
+            record_id="SUMMARY",
+            suffix="record_summary",
+        )
+    )
+    chunk_order += 1
+
+    for role in data.get("roles", []):
+        role_id = str(role.get("role_id") or f"ROLE-{chunk_order:03d}")
+        role_label = str(role.get("role_label") or role_id)
+        chunks.append(
+            _build_chunk(
+                source,
+                chunk_type=ChunkType.RECORD,
+                chunk_order=chunk_order,
+                text=_stakeholder_chunk_text(role_label, role, prefix="role"),
+                citation_label=f"{source.source_id} role {role_id}",
+                record_id=role_id,
+                suffix=f"record_{_sanitize_identifier(role_id)}",
+            )
+        )
+        chunk_order += 1
+
+    for index, approval in enumerate(data.get("optichain_required_approvals", []), start=1):
+        approval_id = f"APPROVAL-{index:02d}"
+        approver_role = str(approval.get("approver_role") or approval_id)
+        chunks.append(
+            _build_chunk(
+                source,
+                chunk_type=ChunkType.RECORD,
+                chunk_order=chunk_order,
+                text=_stakeholder_chunk_text(approver_role, approval, prefix="approval"),
+                citation_label=f"{source.source_id} approval {approver_role}",
+                record_id=approval_id,
+                suffix=f"record_{_sanitize_identifier(approval_id)}",
+            )
+        )
+        chunk_order += 1
+
+    for escalation in data.get("optichain_escalation_routing", []):
+        escalation_id = str(escalation.get("escalation_id") or f"ESC-{chunk_order:03d}")
+        condition = str(escalation.get("condition") or escalation_id)
+        chunks.append(
+            _build_chunk(
+                source,
+                chunk_type=ChunkType.RECORD,
+                chunk_order=chunk_order,
+                text=_stakeholder_chunk_text(condition, escalation, prefix="escalation"),
+                citation_label=f"{source.source_id} escalation {escalation_id}",
+                record_id=escalation_id,
+                suffix=f"record_{_sanitize_identifier(escalation_id)}",
+            )
+        )
+        chunk_order += 1
+
+    vendor_contact = data.get("vendor_contact")
+    if vendor_contact:
+        chunks.append(
+            _build_chunk(
+                source,
+                chunk_type=ChunkType.RECORD,
+                chunk_order=chunk_order,
+                text=_stakeholder_chunk_text("vendor_contact", vendor_contact, prefix="vendor_contact"),
+                citation_label=f"{source.source_id} vendor contact",
+                record_id="VENDOR-CONTACT",
+                suffix="record_vendor_contact",
+            )
+        )
+
+    return chunks
+
+
 def _build_chunk(
     source: NormalizedSource,
     *,
@@ -139,6 +233,10 @@ def _policy_citation_label(source_id: str, section_id: str) -> str:
     if section_id and section_id != "document":
         return f"{source_id} §{section_id}"
     return source_id
+
+
+def _stakeholder_chunk_text(title: str, payload: object, *, prefix: str) -> str:
+    return normalize_text(f"{prefix}_title: {title}\n{flatten_json_to_text(payload, prefix)}")
 
 
 def _sanitize_identifier(value: str) -> str:

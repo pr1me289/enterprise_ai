@@ -32,22 +32,27 @@ def test_write_chunk_artifacts_writes_per_source_json(mock_documents_dir: Path, 
 
 def test_chunk_and_write_sources_builds_artifacts_from_normalized_sources(
     mock_documents_dir: Path,
+    scenario_1_mock_documents_dir: Path,
     tmp_path: Path,
 ) -> None:
     sources = [
         load_source(mock_documents_dir / "Vendor_Precedent_Log_v1_1.json"),
         load_source(mock_documents_dir / "Slack_Thread_Export_001.json"),
         load_source(mock_documents_dir / "OptiChain_VSQ_001_v2_1.json"),
+        load_source(scenario_1_mock_documents_dir / "Stakeholder_Map_PRQ_2024_0047.json"),
     ]
 
     written = chunk_and_write_sources(sources, output_dir=tmp_path)
 
-    assert {path.name for path in written} == {"PVD-001.json", "SLK-001.json"}
+    assert {path.name for path in written} == {"PVD-001.json", "SLK-001.json", "SHM-001.json"}
     assert not (tmp_path / "VQ-OC-001.json").exists()
 
     precedent_payload = json.loads((tmp_path / "PVD-001.json").read_text(encoding="utf-8"))
     slack_payload = json.loads((tmp_path / "SLK-001.json").read_text(encoding="utf-8"))
+    stakeholder_payload = json.loads((tmp_path / "SHM-001.json").read_text(encoding="utf-8"))
     assert precedent_payload[0]["record_id"] == "PVD-001-REC-001"
     assert precedent_payload[2]["domain_scope"] == "legal"
     assert slack_payload[0]["thread_id"] == "SLK-001-THREAD-01"
     assert all(chunk["allowed_agents"] == ["procurement"] for chunk in slack_payload)
+    assert stakeholder_payload[0]["record_id"] == "SUMMARY"
+    assert stakeholder_payload[-1]["record_id"] == "VENDOR-CONTACT"

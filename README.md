@@ -68,6 +68,7 @@ Planned preprocessing behavior by source:
 - DPA legal trigger matrix: row-level chunking
 - Procurement approval matrix: row-level chunking
 - Vendor questionnaire: no chunking, direct structured access
+- Stakeholder map: structured-entry chunking
 - Slack or meeting notes: thread-level chunking
 
 ## Purpose
@@ -110,7 +111,7 @@ Typical current usage:
 3. Review `core_documents/design_doc.md` next for the engineering architecture and output contracts.
 4. Review `STRATEGY.md` for the locked retrieval and preprocessing approach.
 5. Use `src/preprocessing/` to normalize raw source files into `NormalizedSource` objects with inherited source-level metadata.
-6. Use `src/chunking/` to convert chunkable normalized sources into canonical `Chunk` objects and write JSON artifacts to `data/processed/chunks/`.
+6. Use `src/chunking/` to convert chunkable normalized sources into canonical `Chunk` objects and write JSON artifacts to scenario-specific directories such as `data/processed/scenario_1/chunks/` and `data/processed/scenario_2/chunks/`.
 7. Use `src/indexing/` to embed indexed-hybrid chunk artifacts and build per-source Chroma collections, BM25 bundles, a direct structured questionnaire store, and an index registry.
 8. Use `src/retrieval/` to route source-specific queries through permission checks, hybrid search, authority-aware reranking, and retrieval manifest generation.
 9. Use `src/orchestration/` for the first-pass static Supervisor state machine, step handlers, lane-specific retrieval routing, bundle assembly, mocked LLM-agent execution, validation, and append-only audit logging.
@@ -120,8 +121,8 @@ Current implementation notes:
 
 - The pipeline status model is now limited to three terminal signals: `COMPLETE`, `BLOCKED`, and `ESCALATED`. The prior `PROVISIONAL` status signal has been removed from the current workflow model.
 - Preprocessing detects source type, preserves source structure, and attaches source-level metadata before any chunking. For this demo, all current normalized sources inherit the same source-level defaults: `document_date=2026-04-04` and `freshness_status=CURRENT`.
-- The `source_type` contract is now intentionally explicit and source-specific: `POLICY_DOCUMENT`, `LEGAL_TRIGGER_MATRIX`, `PROCUREMENT_APPROVAL_MATRIX`, `VENDOR_QUESTIONNAIRE`, `VENDOR_PRECEDENT`, and `SLACK_THREAD`.
-- Chunking consumes `NormalizedSource` objects only, attaches finalized chunk metadata at creation time, and writes inspectable intermediate JSON artifacts. Legacy precedent handling remains in code, but precedent outputs are not used by the active workflow.
+- The `source_type` contract is now intentionally explicit and source-specific: `POLICY_DOCUMENT`, `LEGAL_TRIGGER_MATRIX`, `PROCUREMENT_APPROVAL_MATRIX`, `VENDOR_QUESTIONNAIRE`, `STAKEHOLDER_MAP`, `VENDOR_PRECEDENT`, and `SLACK_THREAD`.
+- Chunking consumes `NormalizedSource` objects only, attaches finalized chunk metadata at creation time, and writes inspectable intermediate JSON artifacts. Active scenario chunk outputs now live under `data/processed/scenario_1/chunks/` and `data/processed/scenario_2/chunks/`. The questionnaire is still excluded from chunk output, while the stakeholder map now emits structured-entry chunks. Legacy precedent handling remains in code, but precedent outputs are not used by the active workflow.
 - Indexing now consumes finalized chunk artifacts, embeds only indexed-hybrid chunks with `sentence-transformers/all-MiniLM-L6-v2`, and persists vectors plus inherited chunk metadata into Chroma.
 - Storage/indexing now builds per-source logical indices over shared backends: active workflow collections are `idx_security_policy`, `idx_dpa_matrix`, `idx_procurement_matrix`, and `idx_slack_notes`; BM25 bundles are written under `data/bm25/`; a direct structured questionnaire store is written at `vq_direct_access`; and `data/indexes/index_registry.json` remains the explainable source-to-store map. Legacy precedent indices may still be emitted by existing scripts but are not used by the current workflow.
 - Retrieval scaffolding now includes explicit source routing, endpoint permission guards, hybrid fusion, authority-aware reranking, and retrieval manifest objects under `src/retrieval/`.
@@ -216,9 +217,9 @@ Keep this section updated as the project evolves.
 # Run preprocessing on one or more source files from Python
 PYTHONPATH=src python3 -c "from preprocessing import load_source; print(load_source('mock_documents/OptiChain_VSQ_001_v2_1.json').to_dict()['source_id'])"
 
-# Build chunk artifacts for chunkable sources
-# Legacy precedent inputs may still be accepted by the chunking pipeline, but precedent outputs are not used by the current workflow.
-PYTHONPATH=src python3 -c "from chunking.pipeline import build_chunk_artifacts_from_paths; build_chunk_artifacts_from_paths(['mock_documents/IT_Security_Policy_V4.2.md','mock_documents/DPA_Legal_Trigger_Matrix_v1_3.xlsx','mock_documents/Procurement_Approval_Matrix_v2_0.xlsx','mock_documents/Vendor_Precedent_Log_v1_1.json','mock_documents/Slack_Thread_Export_001.json'])"
+# Build scenario-specific chunk artifacts
+# The questionnaire is still excluded from chunk output; stakeholder-map entries are now chunked.
+PYTHONPATH=src python3 -c "from chunking.pipeline import build_scenario_chunk_artifacts; build_scenario_chunk_artifacts('scenario_1'); build_scenario_chunk_artifacts('scenario_2')"
 
 # Build and persist embeddings for all current chunk artifacts
 PYTHONPATH=src python3 -c "from indexing.pipeline import build_and_persist_embeddings_from_chunk_dir; build_and_persist_embeddings_from_chunk_dir()"

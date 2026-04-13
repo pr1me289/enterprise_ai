@@ -3,7 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from chunking.pipeline import build_chunk_artifacts_from_paths
+from chunking.artifacts import scenario_chunk_artifact_dir
+from chunking.pipeline import build_chunk_artifacts_from_paths, build_scenario_chunk_artifacts
 
 
 def test_build_chunk_artifacts_from_paths_uses_preprocessing_and_writes_json(
@@ -38,3 +39,36 @@ def test_build_chunk_artifacts_from_paths_uses_preprocessing_and_writes_json(
     assert dpa_payload[0]["document_date"] == "2026-04-04"
     assert dpa_payload[0]["is_primary_citable"] is True
     assert dpa_payload[0]["chunk_type"] == "ROW"
+
+
+def test_build_scenario_chunk_artifacts_writes_scenario_specific_outputs(
+    repo_root: Path,
+    tmp_path: Path,
+) -> None:
+    output_dir = tmp_path / "scenario_1" / "chunks"
+
+    written = build_scenario_chunk_artifacts(
+        "scenario_1",
+        output_dir=output_dir,
+        repo_root=repo_root,
+    )
+
+    assert {path.name for path in written} == {
+        "ISP-001.json",
+        "DPA-TM-001.json",
+        "PAM-001.json",
+        "SLK-001.json",
+        "SHM-001.json",
+    }
+    assert not (output_dir / "VQ-OC-001.json").exists()
+
+    dpa_payload = json.loads((output_dir / "DPA-TM-001.json").read_text(encoding="utf-8"))
+    stakeholder_payload = json.loads((output_dir / "SHM-001.json").read_text(encoding="utf-8"))
+    assert dpa_payload[0]["row_id"] == "A-01"
+    assert stakeholder_payload[0]["source_type"] == "STAKEHOLDER_MAP"
+    assert stakeholder_payload[0]["record_id"] == "SUMMARY"
+
+
+def test_scenario_chunk_artifact_dir_uses_separate_paths() -> None:
+    assert scenario_chunk_artifact_dir("scenario_1") == Path("data/processed/scenario_1/chunks")
+    assert scenario_chunk_artifact_dir("scenario_2") == Path("data/processed/scenario_2/chunks")
