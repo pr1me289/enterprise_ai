@@ -258,3 +258,30 @@
 - `tests/orchestration/test_step_handlers.py`: New file — 39 tests covering: Step 01 happy path and typed output contract; Step 01 gate (always open); Step 01 BLOCKED on missing fields; Step 02 COMPLETE and ESCALATED paths; Step 02 escalation payload construction; Step 02 gate blocks when Step 01 not COMPLETE; Step 02 `REQUIRED_OUTPUT_FIELDS` contract; Step 02 fast-track eligibility logic; Step 03 COMPLETE path; Step 03 gate blocks when Step 02 not COMPLETE; Step 03 not executed after Step 02 escalation; Step 03 DPA trigger and NDA status inspection; Step 04 COMPLETE fast-track path; Step 04 gate checks (not terminal, no determination, escalated-with-determination); Step 04 upstream incorporation; Step 05 COMPLETE and checklist assembly; Step 05 compilation of all prior determinations; Step 05 gate checks; Step 05 blockers empty on clean path; Step 05 citation aggregation; Step 06 COMPLETE and stakeholder guidance; Step 06 does not alter checklist result; Step 06 guidance references Step 05 checklist data; Step 06 gate checks; full pipeline Scenario 1 and Scenario 2 assertions.
 **Result:** All 216 tests pass (177 pre-existing + 39 new). Both demo scenarios continue to run correctly end-to-end.
 **Next:** Integrate live LLM-backed step handlers once deterministic pipeline is validated.
+
+### [#33] 2026-04-13 | Claude Code
+**Task:** Build the full Deterministic Orchestration Test Harness as specified in deterministic_orchestration_test_harness_prompt.md.
+**Plan:** Read all source files and spec; create test_harness/ package with mock agents, console monitor, reporters, result assertions, and CLI runner; write pytest tests; run all tests to confirm 227/227 pass; smoke-test CLI.
+**Changes:**
+- Created `test_harness/__init__.py`
+- Created `test_harness/scenario_fixtures.py` — HarnessFixture dataclass, 3 scenario fixtures (SCENARIO_1_COMPLETE, SCENARIO_2_ESCALATED, SCENARIO_BLOCKED_MISSING_QUESTIONNAIRE)
+- Created `test_harness/console_monitor.py` — ConsoleMonitor with ANSI color, all event types
+- Created `test_harness/mock_agents/__init__.py`
+- Created `test_harness/mock_agents/mock_step_01_intake.py` — bundle-aware, validates vendor_name, BLOCKED on missing questionnaire
+- Created `test_harness/mock_agents/mock_step_02_security.py` — validates erp_type/eu_flag/nda fields, Slack not primary, Thread 4 excluded
+- Created `test_harness/mock_agents/mock_step_03_legal.py` — validates upstream security output, EU/NDA fields; ESCALATED for scenario 2
+- Created `test_harness/mock_agents/mock_step_04_procurement.py` — validates it_security_output and legal_output present
+- Created `test_harness/mock_agents/mock_step_05_checklist.py` — validates all upstream agent outputs and pipeline_run_id
+- Created `test_harness/mock_agents/mock_step_06_checkoff.py` — validates finalized_checklist and stakeholder_map
+- Created `test_harness/reporters/__init__.py`
+- Created `test_harness/reporters/event_logger.py` — JSONL event log to artifacts/test_runs/<scenario>/<run_id>/events.jsonl
+- Created `test_harness/reporters/bundle_trace_writer.py` — per-step bundle trace to bundle_trace.json
+- Created `test_harness/reporters/final_state_writer.py` — final_state.json + audit_log.json
+- Created `test_harness/result_assertions.py` — assert_global, assert_retrieval, assert_bundles, assert_status, run_all_assertions
+- Created `test_harness/run_test_scenario.py` — CLI entry point, Option B wrapper loop, _ScenarioMockAdapter, _build_agent_overrides
+- Created `test_harness/_empty_questionnaire.json` — minimal empty questionnaire for blocked scenario
+- Created `tests/orchestration/test_harness_scenarios.py` — 11 pytest tests covering all 3 scenarios
+- Modified `tests/conftest.py` — added REPO_ROOT to sys.path for test_harness package import
+- Created `artifacts/test_runs/` directory
+**Result:** All 227 tests pass (216 pre-existing + 11 new). CLI smoke test confirms PASS for scenario_1_complete. All 3 scenarios (complete/escalated/blocked) behave correctly. Artifacts written to artifacts/test_runs/.
+**Next:** Wire live LLM agents once orchestration layer is validated.

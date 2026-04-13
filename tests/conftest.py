@@ -13,6 +13,9 @@ MOCK_DOCUMENTS = REPO_ROOT / "mock_documents"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 
 @pytest.fixture
 def repo_root() -> Path:
