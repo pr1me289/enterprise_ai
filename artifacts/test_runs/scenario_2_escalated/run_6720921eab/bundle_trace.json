@@ -1,0 +1,32 @@
+[
+  {
+    "step_id": "STEP-01",
+    "admissibility_status": "ADMISSIBLE",
+    "admitted_count": 0,
+    "excluded_count": 0,
+    "admitted_chunks": [],
+    "excluded_chunks": [],
+    "structured_fields_keys": [],
+    "source_provenance": []
+  },
+  {
+    "step_id": "STEP-02",
+    "admissibility_status": "ADMISSIBLE",
+    "admitted_count": 0,
+    "excluded_count": 0,
+    "admitted_chunks": [],
+    "excluded_chunks": [],
+    "structured_fields_keys": [],
+    "source_provenance": []
+  },
+  {
+    "step_id": "STEP-03",
+    "admissibility_status": "ADMISSIBLE",
+    "admitted_count": 0,
+    "excluded_count": 0,
+    "admitted_chunks": [],
+    "excluded_chunks": [],
+    "structured_fields_keys": [],
+    "source_provenance": []
+  }
+]
