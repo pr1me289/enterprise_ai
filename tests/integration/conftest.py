@@ -30,3 +30,37 @@ def splice_upstream():
         return out
 
     return _splice
+
+
+@pytest.fixture
+def report_handoff(live_monitor):
+    """Return a helper that emits a ``HANDOFF`` verdict into the monitor.
+
+    Tests should call ``report_handoff(invariant=..., upstream=..., downstream=...,
+    passed=..., detail=...)`` at the point of their invariant check. The helper
+    also raises ``AssertionError`` when ``passed`` is False so the test still
+    fails as a normal pytest failure — the monitor event is purely an
+    observability signal.
+    """
+
+    def _report(
+        *,
+        invariant: str,
+        upstream: str,
+        downstream: str,
+        passed: bool,
+        detail: str = "",
+    ) -> None:
+        live_monitor.handoff(
+            invariant=invariant,
+            upstream=upstream,
+            downstream=downstream,
+            passed=passed,
+            detail=detail,
+        )
+        if not passed:
+            raise AssertionError(
+                f"handoff invariant {invariant!r} violated: {upstream}→{downstream}; {detail}"
+            )
+
+    return _report

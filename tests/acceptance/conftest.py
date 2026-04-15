@@ -45,3 +45,34 @@ def assert_no_primary_tier3_citation():
         )
 
     return _check
+
+
+@pytest.fixture
+def report_acceptance(live_monitor):
+    """Return a helper that emits an ``ACCEPTANCE`` verdict and asserts.
+
+    Using this helper instead of a bare ``assert`` causes each A-xx result
+    to surface in the live console stream *and* be tallied in the session
+    summary — you can see at a glance which acceptance checks are passing
+    on the current run.
+    """
+
+    def _report(
+        *,
+        check_id: str,
+        agent: str,
+        passed: bool,
+        detail: str = "",
+    ) -> None:
+        live_monitor.acceptance(
+            check_id=check_id,
+            agent=agent,
+            passed=passed,
+            detail=detail,
+        )
+        if not passed:
+            raise AssertionError(
+                f"acceptance check {check_id} violated for {agent}: {detail}"
+            )
+
+    return _report

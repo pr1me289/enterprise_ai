@@ -25,6 +25,7 @@ AGENT = "procurement_agent"
 def test_a02_fast_track_passthrough_scenario_1(
     run_llm_agent,
     scenario_1_bundles: dict[str, Any],
+    report_acceptance,
 ) -> None:
     """Paired-run equality: STEP-04.fast_track_eligible == STEP-02.fast_track_eligible."""
     pipeline_run_id = scenario_1_bundles["_pipeline_run_id"]
@@ -39,10 +40,11 @@ def test_a02_fast_track_passthrough_scenario_1(
         bundle=scenario_1_bundles[AGENT],
         pipeline_run_id=pipeline_run_id,
     )
-    assert step02.get("fast_track_eligible") == step04.get("fast_track_eligible"), (
-        "A-02 violated: STEP-04.fast_track_eligible "
-        f"({step04.get('fast_track_eligible')!r}) != STEP-02.fast_track_eligible "
-        f"({step02.get('fast_track_eligible')!r})"
+    report_acceptance(
+        check_id="A-02",
+        agent=AGENT,
+        passed=(step02.get("fast_track_eligible") == step04.get("fast_track_eligible")),
+        detail=f"step02={step02.get('fast_track_eligible')!r} step04={step04.get('fast_track_eligible')!r}",
     )
 
 
@@ -51,13 +53,19 @@ def test_a04_no_primary_tier3_citation_scenario_1(
     run_llm_agent,
     scenario_1_bundles: dict[str, Any],
     assert_no_primary_tier3_citation,
+    report_acceptance,
 ) -> None:
     output = run_llm_agent(
         agent_name=AGENT,
         bundle=scenario_1_bundles[AGENT],
         pipeline_run_id=scenario_1_bundles["_pipeline_run_id"],
     )
-    assert_no_primary_tier3_citation(output)
+    try:
+        assert_no_primary_tier3_citation(output)
+        report_acceptance(check_id="A-04", agent=AGENT, passed=True, detail="scenario_1")
+    except AssertionError as exc:
+        report_acceptance(check_id="A-04", agent=AGENT, passed=False, detail=f"scenario_1: {exc}")
+        raise
 
 
 @pytest.mark.scenario2
@@ -65,10 +73,16 @@ def test_a04_no_primary_tier3_citation_scenario_2(
     run_llm_agent,
     scenario_2_bundles: dict[str, Any],
     assert_no_primary_tier3_citation,
+    report_acceptance,
 ) -> None:
     output = run_llm_agent(
         agent_name=AGENT,
         bundle=scenario_2_bundles[AGENT],
         pipeline_run_id=scenario_2_bundles["_pipeline_run_id"],
     )
-    assert_no_primary_tier3_citation(output)
+    try:
+        assert_no_primary_tier3_citation(output)
+        report_acceptance(check_id="A-04", agent=AGENT, passed=True, detail="scenario_2")
+    except AssertionError as exc:
+        report_acceptance(check_id="A-04", agent=AGENT, passed=False, detail=f"scenario_2: {exc}")
+        raise

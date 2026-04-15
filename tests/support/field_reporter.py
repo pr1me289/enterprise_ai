@@ -145,11 +145,13 @@ def evaluate_expectations(
     expectation_set: ExpectationSet,
     pipeline_run_id: str,
     extra_context: dict[str, Any] | None = None,
+    monitor: Any | None = None,
 ) -> tuple[list[FieldResult], str]:
     """Evaluate every expectation, print per-field report, return (results, summary).
 
-    The summary string is always printed; the caller asserts on
-    ``all(r.passed for r in results)`` after the call.
+    If ``monitor`` is provided, each field's verdict is also forwarded as a
+    ``FIELD_VERDICT`` event so the live console shows every ground-truth
+    assertion as it happens (and the session-end totals count it).
     """
     results = [_evaluate_one(output, exp) for exp in expectation_set.expectations]
     passed_count = sum(1 for r in results if r.passed)
@@ -168,6 +170,14 @@ def evaluate_expectations(
         flag = "PASS" if r.passed else "FAIL"
         preview = _truncate(r.observed)
         lines.append(f"  [{flag}] {r.path:<40} {r.description:<35} observed={preview} :: {r.reason}")
+        if monitor is not None:
+            monitor.field_verdict(
+                path=r.path,
+                description=r.description,
+                passed=r.passed,
+                observed=r.observed,
+                reason=r.reason,
+            )
 
     summary = f"\n  summary: {passed_count}/{total} fields passed"
     lines.append(summary)

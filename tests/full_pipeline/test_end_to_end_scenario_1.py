@@ -25,7 +25,7 @@ pytestmark = [pytest.mark.api, pytest.mark.full_pipeline, pytest.mark.scenario1]
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
-def test_scenario_1_full_pipeline_runs_to_completion(anthropic_client) -> None:
+def test_scenario_1_full_pipeline_runs_to_completion(anthropic_client, live_monitor) -> None:
     from agents.llm_caller import AnthropicLLMAdapter
     from orchestration.models.enums import StepId
     from orchestration.scenarios import complete_demo_scenario
@@ -46,6 +46,33 @@ def test_scenario_1_full_pipeline_runs_to_completion(anthropic_client) -> None:
         llm_adapter=adapter,
     )
     supervisor.run()
+
+    # Stream a PIPELINE_STEP event per step for Layer-4 visibility. The event
+    # mirrors the shape emitted by the mock-harness console monitor so the
+    # two layers render identically.
+    step_keys = (
+        (StepId.STEP_01, "step_01_intake"),
+        (StepId.STEP_02, "step_02_security_classification"),
+        (StepId.STEP_03, "step_03_legal"),
+        (StepId.STEP_04, "step_04_procurement"),
+        (StepId.STEP_05, "step_05_checklist"),
+        (StepId.STEP_06, "step_06_guidance"),
+    )
+    for step_id, key in step_keys:
+        ran = supervisor.last_bundle_by_step.get(step_id) is not None
+        output = supervisor.state.determinations.get(key) or {}
+        status = (
+            output.get("overall_status")
+            or output.get("status")
+            or ("RAN" if ran else "SKIPPED")
+        )
+        live_monitor.pipeline_step(
+            step_id=step_id.value,
+            event="step",
+            determination=key,
+            ran=ran,
+            status=status,
+        )
 
     # STEP-05 should have run and produced a COMPLETE roll-up.
     step05_bundle = supervisor.last_bundle_by_step.get(StepId.STEP_05)

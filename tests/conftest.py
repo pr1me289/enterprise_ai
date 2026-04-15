@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -50,16 +51,9 @@ def scenario_2_mock_documents_dir(repo_root: Path) -> Path:
 
 
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
-    """Auto-skip ``@pytest.mark.api`` tests unless ``-m api`` was passed.
-
-    The default pytest behavior runs everything marked — we want the opposite:
-    API tests are *opt-in* because they cost money and require a key. The
-    convention: skip any test carrying the ``api`` marker unless the user
-    explicitly asked for it via ``-m`` containing ``api``.
-    """
+    """Auto-skip ``@pytest.mark.api`` tests unless ``-m api`` was passed."""
     marker_expr = config.getoption("-m", default="") or ""
     if "api" in marker_expr:
-        # User asked for api tests explicitly — verify the key is present.
         if not os.environ.get("ANTHROPIC_API_KEY"):
             _load_dotenv_if_available()
         if not os.environ.get("ANTHROPIC_API_KEY"):
@@ -84,7 +78,7 @@ def _load_dotenv_if_available() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Shared LLM-testing fixtures
+# Bundle loaders
 # ---------------------------------------------------------------------------
 
 
@@ -102,49 +96,197 @@ def scenario_2_bundles() -> dict[str, dict[str, Any]]:
     return build_bundles("scenario_2")
 
 
-@pytest.fixture(scope="session")
-def anthropic_client():
-    """A single Anthropic SDK client reused across every API test.
+# ---------------------------------------------------------------------------
+# Live monitor — wired at pytest_configure so hooks and fixtures share one
+# ---------------------------------------------------------------------------
 
-    Cuts socket churn and per-test construction cost. Tests never touch the
-    client directly — they use ``run_llm_agent`` which threads it into the
-    call layer.
+
+def pytest_configure(config: pytest.Config) -> None:
+    from tests.support.live_monitor import LiveMonitor
+
+    if not hasattr(config, "_live_monitor"):
+        config._live_monitor = LiveMonitor()  # type: ignore[attr-defined]
+
+
+@pytest.fixture(scope="session")
+def live_monitor(pytestconfig: pytest.Config):
+    """Session-scoped event monitor shared across tests and pytest hooks."""
+    return pytestconfig._live_monitor  # type: ignore[attr-defined]
+
+
+@pytest.fixture(scope="session")
+def anthropic_client(live_monitor):
+    """A single Anthropic SDK client wrapped with the live-monitor interceptor.
+
+    Every ``messages.create`` call is timed and token counts are recorded
+    into the shared monitor. Tests never touch the client directly — they
+    use ``run_llm_agent`` which threads it through the call layer.
     """
     _load_dotenv_if_available()
     from anthropic import Anthropic
 
-    return Anthropic()
+    from tests.support.live_monitor import InstrumentedAnthropic
+
+    return InstrumentedAnthropic(Anthropic(), live_monitor)
 
 
 @pytest.fixture
-def run_llm_agent(anthropic_client):
+def run_llm_agent(anthropic_client, live_monitor, request):
     """Factory: invoke a domain agent against the real API via ``agents.llm_caller``.
 
-    Uses the internal ``_call_agent`` helper so we can inject a shared client,
-    avoid per-test ``Anthropic()`` construction, and still load the spec file
-    from disk — identical semantics to the five public ``call_*`` functions
-    but with the shared client threaded in.
+    Emits ``AGENT_CALL_START`` before the call and ``AGENT_CALL_OK`` (or
+    ``AGENT_CALL_ERR``) after, so the live console shows every agent
+    invocation end-to-end.
     """
     from agents.llm_caller import _call_agent  # type: ignore[attr-defined]
 
+    scenario = _scenario_from_markers(request.node.iter_markers())
+
     def _invoke(*, agent_name: str, bundle: dict[str, Any], pipeline_run_id: str) -> dict[str, Any]:
-        return _call_agent(
-            agent_name=agent_name,
-            bundle=bundle,
+        live_monitor.agent_call_start(
+            agent=agent_name,
+            scenario=scenario,
             pipeline_run_id=pipeline_run_id,
-            step_metadata={"step_id": _step_for_agent(agent_name), "pipeline_run_id": pipeline_run_id},
-            client=anthropic_client,
         )
+        if hasattr(live_monitor, "_last_call"):
+            delattr(live_monitor, "_last_call")
+        try:
+            output = _call_agent(
+                agent_name=agent_name,
+                bundle=bundle,
+                pipeline_run_id=pipeline_run_id,
+                step_metadata={"step_id": _step_for_agent(agent_name), "pipeline_run_id": pipeline_run_id},
+                client=anthropic_client,
+            )
+        except Exception as exc:  # pragma: no cover — defensive; _call_agent catches internally
+            live_monitor.agent_call_err(
+                agent=agent_name,
+                elapsed=0.0,
+                error=f"{type(exc).__name__}: {exc}",
+            )
+            raise
+        last = getattr(live_monitor, "_last_call", {})
+        live_monitor.agent_call_ok(
+            agent=agent_name,
+            elapsed=last.get("elapsed", 0.0),
+            input_tokens=last.get("input_tokens"),
+            output_tokens=last.get("output_tokens"),
+            status=str(output.get("status") or output.get("overall_status") or "ok"),
+        )
+        return output
 
     return _invoke
 
 
 def _step_for_agent(agent_name: str) -> str:
-    mapping = {
+    return {
         "it_security_agent": "STEP-02",
         "legal_agent": "STEP-03",
         "procurement_agent": "STEP-04",
         "checklist_assembler": "STEP-05",
         "checkoff_agent": "STEP-06",
-    }
-    return mapping.get(agent_name, "UNKNOWN")
+    }.get(agent_name, "UNKNOWN")
+
+
+def _layer_from_markers(markers) -> str:
+    names = {m.name for m in markers}
+    for layer in ("layer_unit", "layer_handoff", "layer_acceptance", "full_pipeline"):
+        if layer in names:
+            return layer
+    return "other"
+
+
+def _scenario_from_markers(markers) -> str | None:
+    names = {m.name for m in markers}
+    if "scenario1" in names:
+        return "scenario_1"
+    if "scenario2" in names:
+        return "scenario_2"
+    return None
+
+
+# ---------------------------------------------------------------------------
+# Pytest hooks — session banner, per-test timing, session summary
+# ---------------------------------------------------------------------------
+
+
+def pytest_collection_finish(session: pytest.Session) -> None:
+    api_items = [item for item in session.items if "api" in item.keywords]
+    if not api_items:
+        return
+    _load_dotenv_if_available()
+    monitor = session.config._live_monitor  # type: ignore[attr-defined]
+    layers: set[str] = set()
+    scenarios: set[str] = set()
+    for item in api_items:
+        layers.add(_layer_from_markers(item.iter_markers()))
+        scen = _scenario_from_markers(item.iter_markers())
+        if scen:
+            scenarios.add(scen)
+    monitor.session_start(
+        model=os.environ.get("ANTHROPIC_MODEL", "<sdk default>"),
+        api_key=os.environ.get("ANTHROPIC_API_KEY"),
+        layers=tuple(sorted(layers)),
+        scenarios=tuple(sorted(scenarios)),
+        test_count=len(api_items),
+    )
+
+
+_TEST_START_TIMES: dict[str, float] = {}
+
+
+def pytest_runtest_logstart(nodeid: str, location) -> None:
+    _TEST_START_TIMES[nodeid] = time.monotonic()
+
+
+def pytest_runtest_logreport(report: pytest.TestReport) -> None:
+    # Fire once per test: either on call, or on setup if it was skipped.
+    if not (report.when == "call" or (report.when == "setup" and report.skipped)):
+        return
+    if "api" not in report.keywords:
+        return
+
+    import _pytest.config as _pc
+
+    config = getattr(_pc, "_current", None)
+    # Preferred path: recover the monitor directly via the session.
+    monitor = None
+    if hasattr(report, "config"):
+        monitor = getattr(report.config, "_live_monitor", None)  # type: ignore[attr-defined]
+    if monitor is None:
+        monitor = getattr(pytest, "_live_monitor", None)
+    if monitor is None:
+        # Fall back to the session config captured in pytest_configure.
+        if config and hasattr(config, "_live_monitor"):
+            monitor = config._live_monitor  # type: ignore[attr-defined]
+    if monitor is None:
+        return
+
+    layer = "other"
+    for candidate in ("layer_unit", "layer_handoff", "layer_acceptance", "full_pipeline"):
+        if candidate in report.keywords:
+            layer = candidate
+            break
+    duration = time.monotonic() - _TEST_START_TIMES.get(report.nodeid, time.monotonic())
+    outcome = "skipped" if (report.when == "setup" and report.skipped) else report.outcome
+    monitor.test_result(
+        node_id=report.nodeid,
+        layer=layer,
+        outcome=outcome,
+        duration=duration,
+    )
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_sessionstart(session: pytest.Session) -> None:
+    """Stash the session's config on the monitor plugin for later hooks."""
+    # Alias the monitor on the pytest module so report hooks (which don't
+    # receive config) can reach it reliably.
+    pytest._live_monitor = session.config._live_monitor  # type: ignore[attr-defined]
+
+
+def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
+    monitor = getattr(session.config, "_live_monitor", None)
+    if monitor is None:
+        return
+    monitor.session_end()

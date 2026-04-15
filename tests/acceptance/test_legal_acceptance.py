@@ -22,55 +22,55 @@ AGENT = "legal_agent"
 def test_a02_dpa_required_plus_not_executed_sets_blocker(
     run_llm_agent,
     scenario_2_bundles: dict[str, Any],
+    report_acceptance,
 ) -> None:
     output = run_llm_agent(
         agent_name=AGENT,
         bundle=scenario_2_bundles[AGENT],
         pipeline_run_id=scenario_2_bundles["_pipeline_run_id"],
     )
-    assert output.get("dpa_required") is True, (
-        f"A-02 precondition not met (dpa_required != True); output={output!r}"
-    )
-    assert output.get("dpa_blocker") is True, (
-        f"A-02 violated: dpa_required=True but dpa_blocker!=True; output={output!r}"
+    report_acceptance(
+        check_id="A-02",
+        agent=AGENT,
+        passed=(output.get("dpa_required") is True and output.get("dpa_blocker") is True),
+        detail=f"dpa_required={output.get('dpa_required')!r} dpa_blocker={output.get('dpa_blocker')!r}",
     )
 
 
 def test_a03_nda_not_executed_sets_blocker(
     run_llm_agent,
     scenario_2_bundles: dict[str, Any],
+    report_acceptance,
 ) -> None:
     output = run_llm_agent(
         agent_name=AGENT,
         bundle=scenario_2_bundles[AGENT],
         pipeline_run_id=scenario_2_bundles["_pipeline_run_id"],
     )
-    assert output.get("nda_status") != "EXECUTED", (
-        f"A-03 precondition not met (nda_status == EXECUTED); output={output!r}"
-    )
-    assert output.get("nda_blocker") is True, (
-        f"A-03 violated: nda_status!=EXECUTED but nda_blocker!=True; output={output!r}"
+    nda_status = output.get("nda_status")
+    nda_blocker = output.get("nda_blocker")
+    report_acceptance(
+        check_id="A-03",
+        agent=AGENT,
+        passed=(nda_status != "EXECUTED" and nda_blocker is True),
+        detail=f"nda_status={nda_status!r} nda_blocker={nda_blocker!r}",
     )
 
 
 def test_a07_dpa_blocker_forces_escalated_never_complete(
     run_llm_agent,
     scenario_2_bundles: dict[str, Any],
+    report_acceptance,
 ) -> None:
     output = run_llm_agent(
         agent_name=AGENT,
         bundle=scenario_2_bundles[AGENT],
         pipeline_run_id=scenario_2_bundles["_pipeline_run_id"],
     )
-    assert output.get("dpa_blocker") is True, (
-        f"A-07 precondition not met (dpa_blocker != True); output={output!r}"
-    )
     status = output.get("status")
-    assert status == "escalated", (
-        f"A-07 violated: dpa_blocker=True must force status=escalated, "
-        f"got status={status!r}; output={output!r}"
-    )
-    assert status != "complete", (
-        f"A-07 violated: dpa_blocker=True must not return status=complete; "
-        f"output={output!r}"
+    report_acceptance(
+        check_id="A-07",
+        agent=AGENT,
+        passed=(output.get("dpa_blocker") is True and status == "escalated"),
+        detail=f"dpa_blocker={output.get('dpa_blocker')!r} status={status!r}",
     )

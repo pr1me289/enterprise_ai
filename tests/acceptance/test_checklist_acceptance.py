@@ -27,6 +27,7 @@ def test_a01_single_escalation_forces_escalated(
     run_llm_agent,
     scenario_1_bundles: dict[str, Any],
     upstream: str,
+    report_acceptance,
 ) -> None:
     bundle = set_value(scenario_1_bundles[AGENT], f"{upstream}.status", "escalated")
     output = run_llm_agent(
@@ -35,13 +36,11 @@ def test_a01_single_escalation_forces_escalated(
         pipeline_run_id=scenario_1_bundles["_pipeline_run_id"],
     )
     overall = output.get("overall_status")
-    assert overall == "ESCALATED", (
-        f"A-01 violated for upstream={upstream}: overall_status={overall!r} "
-        f"(expected ESCALATED); output={output!r}"
-    )
-    assert overall != "COMPLETE", (
-        f"A-01 violated for upstream={upstream}: overall_status returned COMPLETE; "
-        f"output={output!r}"
+    report_acceptance(
+        check_id="A-01",
+        agent=AGENT,
+        passed=(overall == "ESCALATED" and overall != "COMPLETE"),
+        detail=f"upstream={upstream} overall_status={overall!r}",
     )
 
 
@@ -50,6 +49,7 @@ def test_a05_missing_domain_output_forces_blocked(
     run_llm_agent,
     scenario_1_bundles: dict[str, Any],
     upstream: str,
+    report_acceptance,
 ) -> None:
     bundle = drop_key(scenario_1_bundles[AGENT], upstream)
     output = run_llm_agent(
@@ -57,6 +57,10 @@ def test_a05_missing_domain_output_forces_blocked(
         bundle=bundle,
         pipeline_run_id=scenario_1_bundles["_pipeline_run_id"],
     )
-    assert output.get("overall_status") == "BLOCKED", (
-        f"A-05 violated for missing upstream={upstream}; output={output!r}"
+    overall = output.get("overall_status")
+    report_acceptance(
+        check_id="A-05",
+        agent=AGENT,
+        passed=(overall == "BLOCKED"),
+        detail=f"missing_upstream={upstream} overall_status={overall!r}",
     )

@@ -23,6 +23,7 @@ def test_legal_escalation_forces_procurement_escalation(
     run_llm_agent,
     scenario_2_bundles: dict[str, Any],
     splice_upstream,
+    report_handoff,
 ) -> None:
     pipeline_run_id = scenario_2_bundles["_pipeline_run_id"]
 
@@ -46,8 +47,11 @@ def test_legal_escalation_forces_procurement_escalation(
         pipeline_run_id=pipeline_run_id,
     )
 
-    assert step04_output.get("status") == "escalated", (
-        "legal_escalation_forces_procurement_escalation invariant violated; "
-        f"step03_status=escalated step04_status={step04_output.get('status')!r} "
-        f"full_step04={step04_output!r}"
+    step04_status = step04_output.get("status")
+    report_handoff(
+        invariant="legal_escalation_forces_procurement_escalation",
+        upstream="STEP-03",
+        downstream="STEP-04",
+        passed=(step04_status == "escalated"),
+        detail=f"step03=escalated step04={step04_status!r}",
     )

@@ -29,6 +29,7 @@ def test_single_upstream_blocked_forces_overall_blocked(
     run_llm_agent,
     scenario_1_bundles: dict[str, Any],
     splice_upstream,
+    report_handoff,
     upstream: str,
 ) -> None:
     """A ``blocked`` status on any one upstream domain output forces BLOCKED."""
@@ -37,7 +38,6 @@ def test_single_upstream_blocked_forces_overall_blocked(
         path=f"{upstream}.status",
         value="blocked",
     )
-    # Provide a plausible error string so the bundle is well-formed.
     bundle = splice_upstream(bundle, path=f"{upstream}.error", value="simulated block")
 
     output = run_llm_agent(
@@ -45,9 +45,13 @@ def test_single_upstream_blocked_forces_overall_blocked(
         bundle=bundle,
         pipeline_run_id=scenario_1_bundles["_pipeline_run_id"],
     )
-    assert output.get("overall_status") == "BLOCKED", (
-        f"upstream_block_propagates invariant violated for upstream={upstream}; "
-        f"output={output!r}"
+    overall = output.get("overall_status")
+    report_handoff(
+        invariant="upstream_block_propagates_to_checklist",
+        upstream=upstream,
+        downstream="STEP-05",
+        passed=(overall == "BLOCKED"),
+        detail=f"overall_status={overall!r}",
     )
 
 
@@ -57,6 +61,7 @@ def test_single_upstream_escalated_forces_overall_escalated(
     run_llm_agent,
     scenario_1_bundles: dict[str, Any],
     splice_upstream,
+    report_handoff,
     upstream: str,
 ) -> None:
     """An ``escalated`` status on any one upstream domain output must bubble up."""
@@ -70,7 +75,11 @@ def test_single_upstream_escalated_forces_overall_escalated(
         bundle=bundle,
         pipeline_run_id=scenario_1_bundles["_pipeline_run_id"],
     )
-    assert output.get("overall_status") == "ESCALATED", (
-        f"upstream_escalation_propagates invariant violated for upstream={upstream}; "
-        f"output={output!r}"
+    overall = output.get("overall_status")
+    report_handoff(
+        invariant="upstream_escalation_propagates_to_checklist",
+        upstream=upstream,
+        downstream="STEP-05",
+        passed=(overall == "ESCALATED"),
+        detail=f"overall_status={overall!r}",
     )

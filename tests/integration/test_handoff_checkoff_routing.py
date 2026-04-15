@@ -25,6 +25,7 @@ pytestmark = [pytest.mark.api, pytest.mark.layer_handoff]
 def test_checkoff_runs_on_escalated(
     run_llm_agent,
     scenario_2_bundles: dict[str, Any],
+    report_handoff,
 ) -> None:
     """Scenario-2 STEP-06 bundle carries overall_status=ESCALATED upstream."""
     output = run_llm_agent(
@@ -32,9 +33,13 @@ def test_checkoff_runs_on_escalated(
         bundle=scenario_2_bundles["checkoff_agent"],
         pipeline_run_id=scenario_2_bundles["_pipeline_run_id"],
     )
-    assert output.get("status") == "complete", (
-        "checkoff_runs_on_escalated invariant violated; "
-        f"output={output!r}"
+    status = output.get("status")
+    report_handoff(
+        invariant="checkoff_runs_on_escalated",
+        upstream="STEP-05(ESCALATED)",
+        downstream="STEP-06",
+        passed=(status == "complete"),
+        detail=f"status={status!r}",
     )
 
 
@@ -42,6 +47,7 @@ def test_checkoff_runs_on_escalated(
 def test_checkoff_blocks_when_checklist_missing(
     run_llm_agent,
     scenario_1_bundles: dict[str, Any],
+    report_handoff,
 ) -> None:
     bundle = drop_key(scenario_1_bundles["checkoff_agent"], "finalized_checklist")
     output = run_llm_agent(
@@ -49,7 +55,11 @@ def test_checkoff_blocks_when_checklist_missing(
         bundle=bundle,
         pipeline_run_id=scenario_1_bundles["_pipeline_run_id"],
     )
-    assert output.get("status") != "complete", (
-        "checkoff_blocks_when_checklist_missing invariant violated; "
-        f"output={output!r}"
+    status = output.get("status")
+    report_handoff(
+        invariant="checkoff_blocks_when_checklist_missing",
+        upstream="STEP-05(absent)",
+        downstream="STEP-06",
+        passed=(status != "complete"),
+        detail=f"status={status!r}",
     )

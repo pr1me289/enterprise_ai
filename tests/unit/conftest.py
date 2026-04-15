@@ -30,16 +30,12 @@ RunLLMFn = Callable[..., dict[str, Any]]
 
 
 @pytest.fixture
-def invoke_and_assert(run_llm_agent: RunLLMFn):
+def invoke_and_assert(run_llm_agent: RunLLMFn, live_monitor):
     """Return a helper that runs an agent and asserts every expected field.
 
-    Usage:
-        invoke_and_assert(
-            scenario="scenario_1",
-            agent_name="it_security_agent",
-            bundle=bundle,
-            pipeline_run_id=pipeline_run_id,
-        )
+    The helper threads the session-scoped ``live_monitor`` into the
+    per-field reporter so each expectation verdict is streamed as a
+    ``FIELD_VERDICT`` event on top of the human-readable block report.
     """
 
     def _invoke(
@@ -61,6 +57,7 @@ def invoke_and_assert(run_llm_agent: RunLLMFn):
             expectation_set=expectation_set,
             pipeline_run_id=pipeline_run_id,
             extra_context=extra_context,
+            monitor=live_monitor,
         )
         assert_all_passed(results)
         return output, results

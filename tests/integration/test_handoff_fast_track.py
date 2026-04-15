@@ -26,6 +26,7 @@ def test_fast_track_passthrough_scenario_1(
     run_llm_agent,
     scenario_1_bundles: dict[str, Any],
     splice_upstream,
+    report_handoff,
 ) -> None:
     pipeline_run_id = scenario_1_bundles["_pipeline_run_id"]
 
@@ -52,8 +53,11 @@ def test_fast_track_passthrough_scenario_1(
         pipeline_run_id=pipeline_run_id,
     )
 
-    assert step04_output.get("fast_track_eligible") == upstream_flag, (
-        "fast_track_passthrough invariant violated; "
-        f"step02={upstream_flag!r} step04={step04_output.get('fast_track_eligible')!r} "
-        f"full_step04={step04_output!r}"
+    downstream_flag = step04_output.get("fast_track_eligible")
+    report_handoff(
+        invariant="fast_track_passthrough",
+        upstream="STEP-02",
+        downstream="STEP-04",
+        passed=(downstream_flag == upstream_flag),
+        detail=f"step02={upstream_flag!r} step04={downstream_flag!r}",
     )
