@@ -203,3 +203,43 @@ Construct bundles from the actual scenario source documents in the repo. Do not 
 5. Scenario 2 full run produces `overall_status = ESCALATED` with `dpa_blocker` and `nda_blocker` in `blockers[]` and five stakeholder guidance documents in STEP-06 output
 6. `pytest -m api` with a valid API key produces a clear per-field pass/fail report
 7. No test is model-specific — suite passes on both Haiku and Sonnet
+
+---
+
+## Progress Log
+
+### 2026-04-15 — branch `testing/llm-call-layer-testing`
+
+Branch renamed from `feat/llm-call-layer` to `feature/llm-call-layer`; testing work lives on `testing/llm-call-layer-testing` branched off the renamed feature branch.
+
+**Built**
+
+- `pyproject.toml` — pytest markers: `api`, `scenario1`, `scenario2`, `layer_unit`, `layer_handoff`, `layer_acceptance`, `full_pipeline`. `addopts = "-ra --strict-markers"`.
+- `tests/conftest.py` — session-scoped `scenario_1_bundles` / `scenario_2_bundles` / `anthropic_client` fixtures; `run_llm_agent` factory that threads the shared client through `_call_agent`; API-test gating via `pytest_collection_modifyitems` (opt-in with `-m api` + `ANTHROPIC_API_KEY`).
+- `tests/support/expected_outputs.py` — ground-truth `FieldExpectation` / `ExpectationSet` tables (`SCENARIO_1_EXPECTATIONS`, `SCENARIO_2_EXPECTATIONS`) + cross-step `HANDOFF_INVARIANTS`.
+- `tests/support/field_reporter.py` — per-field PASS/FAIL printer with rule precedence `one_of > non_empty > empty > predicate > equals`; `assert_all_passed` surfaces every failure, not just the first.
+- `tests/support/bundle_builder.py` — dual strategy: mock-pipeline capture for Scenario 1 via `ScenarioLLMAdapter` + `ScenarioIndexedBackend`; synthesis for Scenario 2 by patching S1 baselines with S2 ground-truth upstream outputs. STEP-02 Scenario 2 uses a live mock run with scenario-2 questionnaire overrides so policy evidence is real.
+- `scripts/regenerate_test_fixtures.py` — regenerates the 10 JSON bundle fixtures (5 agents × 2 scenarios) under `tests/fixtures/bundles/`.
+
+**Test layers landed**
+
+| Layer | Directory | Marker | Count |
+|-------|-----------|--------|-------|
+| 1 — per-agent unit | `tests/unit/` | `layer_unit` + `api` | 19 |
+| 2 — handoff invariants | `tests/integration/` | `layer_handoff` + `api` | 10 |
+| 3 — acceptance checks (A-01..A-07) | `tests/acceptance/` | `layer_acceptance` + `api` | 16 |
+| 4 — full pipeline end-to-end | `tests/full_pipeline/` | `full_pipeline` + `api` | 1 |
+
+All 46 API-gated tests skip cleanly under the default `pytest` invocation. The existing non-API suite (227 tests) still passes. The deterministic mock-pipeline harness under `test_harness/` is untouched and still green on `scenario_1_complete`.
+
+**Deviations from the prompt**
+
+- **Scenario 1 questionnaire path** — `scenario_1_mock_documents/OptiChain_VSQ_001_v2_1_scenario01.json` uses `submission_id` / nested shape that does not satisfy STEP-01's `document_id` + `version` required fields. We start from `mock_documents/OptiChain_VSQ_001_v2_1.json` and layer scenario deltas through `questionnaire_overrides`. The prompt already sanctions scenario-2 synthesis; this extends the same pattern to scenario-1 for the same reason.
+- **Scenario 2 STEP-02 bundle** — built from a fresh mock-pipeline run with scenario-2 questionnaire overrides (not a patch of the scenario-1 bundle), so policy evidence matches the escalated path.
+- **Shared client in `run_llm_agent`** — the fixture calls `_call_agent` directly (not `AnthropicLLMAdapter.generate_structured_json`) so the system prompt is loaded from disk; passing `spec_text=""` would bypass `load_system_prompt()`.
+
+**Open items**
+
+- Run the full API suite against a real key and capture per-field reports; tune any brittle expectations surfaced by live runs.
+- Consider Layer-4 scenario-2 full-pipeline coverage (currently Layer 4 is scenario-1 only; scenario-2 is covered by layered per-step tests).
+- Author-time review of `HANDOFF_INVARIANTS` once real-model outputs land — some invariants may need tighter wording.

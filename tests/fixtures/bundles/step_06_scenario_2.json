@@ -1,0 +1,551 @@
+{
+  "scenario": "scenario_2",
+  "agent": "checkoff_agent",
+  "bundle": {
+    "source_ids": [
+      "STEP-05",
+      "PIPELINE_CONFIG",
+      "STEP-02",
+      "STEP-03",
+      "STEP-04"
+    ],
+    "finalized_checklist": {
+      "pipeline_run_id": "SCENARIO_2_PIPELINE_RUN_ID",
+      "vendor_name": "OptiChain, Inc.",
+      "overall_status": "ESCALATED",
+      "data_classification": "REGULATED",
+      "fast_track_eligible": false,
+      "approval_path": "STANDARD",
+      "required_security_actions": [
+        {
+          "action_type": "SECURITY_REVIEW",
+          "reason": "ERP integration tier remains unclassified pending architecture review.",
+          "owner": "IT Security"
+        }
+      ],
+      "required_approvals": [
+        {
+          "approver_role": "CISO",
+          "status": "PENDING",
+          "blocker": true
+        },
+        {
+          "approver_role": "General Counsel",
+          "status": "ESCALATED",
+          "blocker": true
+        },
+        {
+          "approver_role": "CPO",
+          "status": "PENDING",
+          "blocker": false
+        },
+        {
+          "approver_role": "VP Operations",
+          "status": "PENDING",
+          "blocker": true
+        },
+        {
+          "approver_role": "SVP Operations",
+          "status": "PENDING",
+          "blocker": true
+        }
+      ],
+      "blockers": [
+        {
+          "blocker_type": "DPA_NOT_EXECUTED",
+          "description": "GDPR Art. 28 DPA not executed; EU personal data in scope.",
+          "resolution_owner": "General Counsel",
+          "citation": {
+            "source_id": "DPA-TM-001",
+            "row_id": "A-01"
+          }
+        },
+        {
+          "blocker_type": "NDA_UNCONFIRMED",
+          "description": "NDA draft transmitted 2024-02-19; not countersigned.",
+          "resolution_owner": "Procurement / Legal",
+          "citation": {
+            "source_id": "ISP-001",
+            "section_id": "12.1.4"
+          }
+        },
+        {
+          "blocker_type": "ERP_TIER_UNCLASSIFIED",
+          "description": "ERP integration tier unassigned; pending architecture review.",
+          "resolution_owner": "IT Security",
+          "citation": {
+            "source_id": "ISP-001",
+            "section_id": "12.2"
+          }
+        }
+      ]
+    },
+    "stakeholder_map": {
+      "document_id": "STAKEHOLDER-MAP-001",
+      "version": "1.0",
+      "effective_date": "2024-03-05",
+      "procurement_reference": "PRQ-2024-0047",
+      "vendor": "OptiChain, Inc.",
+      "pipeline_run_scope": "AI-assisted vendor onboarding pipeline \u2014 all agents and routing operations within a single pipeline run",
+      "source_references": [
+        "PRD \u00a74 (Stakeholder Map)",
+        "PROC-CLASS-MEMO-0047 (Classification Record)",
+        "CC-001 v1.1 \u00a713 (Escalation Ownership)",
+        "VSQ-001 v2.1 (Named contacts)",
+        "SLACK-EXPORT-001 (Named reviewers)"
+      ],
+      "checkoff_agent_note": "This file is the primary input for the Checkoff Agent alongside the finalized checklist. It provides the role-to-stakeholder mapping, required approver list, escalation ownership, and routing guidance needed to produce stakeholder-ready next-step documents. The Checkoff Agent may not query any index endpoint \u2014 it consumes this file and assembled agent outputs only.",
+      "roles": [
+        {
+          "role_id": "ROLE-IT-SECURITY",
+          "role_label": "IT Security",
+          "function": "Technical risk gatekeeping",
+          "owns": [
+            "Vendor risk classification",
+            "Fast-track eligibility determination",
+            "ERP integration tier assignment (ISP-001 \u00a712.2)",
+            "Architecture diagram review",
+            "Access provisioning review (ISP-001 \u00a76)"
+          ],
+          "not_responsible_for": [
+            "DPA terms or legal review",
+            "Budget approval",
+            "Contract negotiation"
+          ],
+          "pipeline_steps_owned": [
+            "R-02",
+            "R-04"
+          ],
+          "escalation_triggers": [
+            "ERP integration tier unclassified or ambiguous",
+            "Data classification ambiguous (ERP type field unclear)",
+            "Tier 1 source conflict involving IT Security Policy"
+          ],
+          "named_individuals": [
+            {
+              "name": "D. Achterberg",
+              "title": "IT Security Reviewer",
+              "responsibilities": [
+                "Technical review of OptiChain questionnaire Q2.2",
+                "Architecture diagram review for ERP tier assignment",
+                "Formal tier determination under ISP-001 \u00a712.2"
+              ],
+              "source": "SLACK-EXPORT-001 THREAD-01, THREAD-03"
+            },
+            {
+              "name": "K. Whitfield",
+              "title": "CISO",
+              "responsibilities": [
+                "CISO sign-off required for Class A / T3 approval path",
+                "Co-sign approval memo with General Counsel",
+                "Final authority on ERP tier assignment for Tier 2+ integrations"
+              ],
+              "required_sign_off": true,
+              "sign_off_basis": "PROC-MATRIX-001 \u00a74 Class A / T3",
+              "source": "ISP-001 v4.2 document owner; CC-001 \u00a713 escalation owner"
+            }
+          ]
+        },
+        {
+          "role_id": "ROLE-LEGAL",
+          "role_label": "Legal / Privacy",
+          "function": "Contractual and regulatory compliance",
+          "owns": [
+            "DPA requirement determination",
+            "Contract clause review",
+            "NDA status confirmation",
+            "SCC applicability assessment",
+            "Data subject rights obligations"
+          ],
+          "not_responsible_for": [
+            "Security risk scoring",
+            "Procurement path routing",
+            "Budget approval"
+          ],
+          "pipeline_steps_owned": [
+            "R-03"
+          ],
+          "escalation_triggers": [
+            "DPA required but no executed DPA on record (hard blocker)",
+            "NDA status unconfirmed (ISP-001 \u00a712.1.4)",
+            "Tier 1 source conflict involving DPA Legal Trigger Matrix",
+            "Government or law enforcement data request received by vendor",
+            "Vendor proposes new sub-processor post-DPA execution"
+          ],
+          "named_individuals": [
+            {
+              "name": "R. Lim",
+              "title": "Legal Reviewer / Privacy Counsel",
+              "responsibilities": [
+                "DPA requirement determination per DPA Legal Trigger Matrix",
+                "NDA status confirmation in Lichen contract records",
+                "GDPR Art. 28 DPA drafting and negotiation",
+                "EU data residency and SCC assessment",
+                "Flagging NDA PROVISIONAL status per ISP-001 \u00a712.1.4"
+              ],
+              "source": "SLACK-EXPORT-001 THREAD-02, THREAD-03"
+            },
+            {
+              "name": "General Counsel",
+              "title": "General Counsel",
+              "responsibilities": [
+                "GC sign-off required for Class A / T3 approval path",
+                "Co-sign approval memo with CISO",
+                "Final authority on DPA execution and legal blockers",
+                "Escalation owner for DPA-related blockers"
+              ],
+              "required_sign_off": true,
+              "sign_off_basis": "PROC-MATRIX-001 \u00a74 Class A / T3; CC-001 \u00a713",
+              "source": "DPA-MATRIX-001 v1.3 document owner; CC-001 \u00a713 escalation owner"
+            }
+          ]
+        },
+        {
+          "role_id": "ROLE-PROCUREMENT",
+          "role_label": "Procurement",
+          "function": "Process ownership and vendor relationship management",
+          "owns": [
+            "Approval path determination",
+            "Vendor questionnaire intake and validation",
+            "Fast-track eligibility confirmation",
+            "Vendor class and tier assignment",
+            "Onboarding record documentation",
+            "Vendor communications (all vendor-facing comms routed through Procurement)"
+          ],
+          "not_responsible_for": [
+            "Security or legal review outcomes",
+            "DPA terms",
+            "ERP tier assignment"
+          ],
+          "pipeline_steps_owned": [
+            "R-01",
+            "R-02",
+            "R-04"
+          ],
+          "escalation_triggers": [
+            "Questionnaire not submitted or incomplete",
+            "Multiple questionnaire versions detected",
+            "NDA unconfirmed (information-exchange hold owner)",
+            "No approval matrix row matches vendor/deal combination"
+          ],
+          "named_individuals": [
+            {
+              "name": "M. Osei",
+              "title": "Senior Procurement Manager",
+              "responsibilities": [
+                "Questionnaire receipt and intake validation",
+                "Vendor class and tier assignment (Class A / T3 confirmed)",
+                "Onboarding record management",
+                "Routing formal information requests to vendors",
+                "NDA status logging in onboarding record",
+                "Overall onboarding status coordination"
+              ],
+              "source": "PROC-CLASS-MEMO-0047; SLACK-EXPORT-001 THREAD-01, THREAD-02, THREAD-03"
+            },
+            {
+              "name": "CPO (Chief Procurement Officer)",
+              "title": "Chief Procurement Officer",
+              "responsibilities": [
+                "CPO sign-off required for Class A / T3 approval path",
+                "Fast-track approval authority",
+                "Escalation owner for questionnaire version conflicts and NDA blockers"
+              ],
+              "required_sign_off": true,
+              "sign_off_basis": "PROC-MATRIX-001 \u00a74 Class A / T3",
+              "source": "PROC-MATRIX-001 v2.0; CC-001 \u00a713"
+            },
+            {
+              "name": "Procurement Director",
+              "title": "Procurement Director",
+              "responsibilities": [
+                "Escalation owner when no approval matrix row matches vendor/deal combination"
+              ],
+              "source": "CC-001 \u00a713"
+            }
+          ]
+        },
+        {
+          "role_id": "ROLE-COMPLIANCE-RISK",
+          "role_label": "Compliance / Risk",
+          "function": "Regulatory oversight",
+          "owns": [
+            "SOC 2 and audit certification review",
+            "Regulatory flag escalation"
+          ],
+          "not_responsible_for": [
+            "Contract negotiation",
+            "Security risk scoring",
+            "Approval path routing"
+          ],
+          "pipeline_steps_owned": [],
+          "escalation_triggers": [],
+          "named_individuals": []
+        },
+        {
+          "role_id": "ROLE-BUSINESS-OWNER",
+          "role_label": "Business Owner",
+          "function": "Requesting business unit sponsor; provides operational context and required sign-offs",
+          "owns": [
+            "Business case for vendor engagement",
+            "VP / SVP / EVP sign-off per approval path",
+            "Operational readiness confirmation"
+          ],
+          "not_responsible_for": [
+            "Security, legal, or procurement review outcomes",
+            "DPA terms",
+            "ERP tier assignment"
+          ],
+          "pipeline_steps_owned": [
+            "R-06"
+          ],
+          "escalation_triggers": [],
+          "named_individuals": [
+            {
+              "name": "P. Horak",
+              "title": "VP Operations",
+              "responsibilities": [
+                "VP-level business owner sign-off (required for Class A / T3)",
+                "Internal sponsor for OptiChain engagement",
+                "Communicating data-exchange hold to ops team",
+                "Liaison between pipeline status and OptiChain sales team"
+              ],
+              "required_sign_off": true,
+              "sign_off_basis": "PROC-MATRIX-001 \u00a74 Class A / T3 (VP + SVP required)",
+              "source": "VSQ-001 v2.1 (Lichen Internal Sponsor); PROC-CLASS-MEMO-0047; SLACK-EXPORT-001"
+            },
+            {
+              "name": "SVP Operations",
+              "title": "SVP Operations",
+              "responsibilities": [
+                "SVP-level business owner sign-off (required for Class A / T3)"
+              ],
+              "required_sign_off": true,
+              "sign_off_basis": "PROC-MATRIX-001 \u00a74 Class A / T3 (VP + SVP required)",
+              "source": "PROC-CLASS-MEMO-0047; PROC-MATRIX-001 v2.0"
+            }
+          ]
+        }
+      ],
+      "optichain_required_approvals": [
+        {
+          "approver_role": "CISO",
+          "named_individual": "K. Whitfield",
+          "approval_type": "CISO Sign-off",
+          "basis": "PROC-MATRIX-001 \u00a74 Class A / T3",
+          "status": "PENDING",
+          "blocked_by": [
+            "ERP integration tier unassigned (ISP-001 \u00a712.2)"
+          ]
+        },
+        {
+          "approver_role": "General Counsel",
+          "named_individual": "General Counsel",
+          "approval_type": "GC Sign-off + DPA execution",
+          "basis": "PROC-MATRIX-001 \u00a74 Class A / T3; DPA-MATRIX-001 rows A-01, E-01",
+          "status": "ESCALATED",
+          "blocked_by": [
+            "GDPR Art. 28 DPA not yet executed (hard blocker)"
+          ]
+        },
+        {
+          "approver_role": "CPO",
+          "named_individual": "CPO",
+          "approval_type": "CPO Sign-off",
+          "basis": "PROC-MATRIX-001 \u00a74 Class A / T3",
+          "status": "PENDING",
+          "blocked_by": []
+        },
+        {
+          "approver_role": "VP Operations",
+          "named_individual": "P. Horak",
+          "approval_type": "VP Business Owner Sign-off",
+          "basis": "PROC-MATRIX-001 \u00a74 Class A / T3",
+          "status": "PENDING",
+          "blocked_by": [
+            "All three blocking items must be resolved first"
+          ]
+        },
+        {
+          "approver_role": "SVP Operations",
+          "named_individual": "SVP Operations",
+          "approval_type": "SVP Business Owner Sign-off",
+          "basis": "PROC-MATRIX-001 \u00a74 Class A / T3",
+          "status": "PENDING",
+          "blocked_by": [
+            "All three blocking items must be resolved first"
+          ]
+        }
+      ],
+      "optichain_escalation_routing": [
+        {
+          "escalation_id": "ESC-001",
+          "condition": "ERP integration tier unclassified",
+          "evidence_condition": "integration_type field UNCLASSIFIED \u2014 PENDING REVIEW in VSQ Q2.2",
+          "policy_reference": "ISP-001 \u00a712.2",
+          "status": "PROVISIONAL",
+          "resolution_owner": "IT Security (D. Achterberg / K. Whitfield)",
+          "resolution_action": "Request architecture diagram from OptiChain. Assign integration tier within 10 business days.",
+          "downstream_blocked": [
+            "CISO sign-off",
+            "Fast-track determination",
+            "Overall COMPLETE status"
+          ]
+        },
+        {
+          "escalation_id": "ESC-002",
+          "condition": "GDPR Art. 28 DPA not yet executed",
+          "evidence_condition": "dpa_status = NOT YET EXECUTED; triggers DPA-MATRIX-001 rows A-01 (EU personal data) and E-01 (system access with personal data)",
+          "policy_reference": "DPA-MATRIX-001 rows A-01, E-01; GDPR Art. 28",
+          "status": "ESCALATED",
+          "blocker_type": "HARD \u2014 no data exchange permitted until resolved",
+          "resolution_owner": "General Counsel",
+          "resolution_action": "Draft and execute GDPR Art. 28 DPA before any EU employee data is exchanged or system access proceeds.",
+          "downstream_blocked": [
+            "Information exchange",
+            "Integration planning",
+            "Overall COMPLETE status"
+          ]
+        },
+        {
+          "escalation_id": "ESC-003",
+          "condition": "NDA execution unconfirmed",
+          "evidence_condition": "existing_nda_status = PROVISIONAL; draft transmitted 2024-02-19, not countersigned as of 2024-03-04",
+          "policy_reference": "ISP-001 \u00a712.1.4",
+          "status": "PROVISIONAL",
+          "blocker_type": "Information-exchange phase blocked",
+          "resolution_owner": "Procurement / Legal (M. Osei / R. Lim)",
+          "resolution_action": "Procurement to confirm fully executed NDA with OptiChain's legal counterpart. 'In progress' does not satisfy ISP-001 \u00a712.1.4.",
+          "downstream_blocked": [
+            "Information exchange",
+            "Data sharing",
+            "Integration planning"
+          ]
+        }
+      ],
+      "vendor_contact": {
+        "name": "Jordan Lev\u00ed",
+        "title": "Director of Enterprise Sales",
+        "email": "j.levi@optichain.io",
+        "phone": "+1 (415) 882-4401",
+        "implementation_manager": {
+          "name": "Sarah Okonkwo",
+          "email": "s.okonkwo@optichain.io"
+        },
+        "routing_note": "All vendor communications must be routed through Procurement (M. Osei). No domain reviewers or business owners may communicate onboarding status directly to vendor contacts."
+      }
+    },
+    "domain_outputs": {
+      "it_security_agent": {
+        "integration_type_normalized": "AMBIGUOUS",
+        "integration_tier": "UNCLASSIFIED_PENDING_REVIEW",
+        "data_classification": "REGULATED",
+        "eu_personal_data_present": "YES",
+        "fast_track_eligible": false,
+        "fast_track_rationale": "DISALLOWED_AMBIGUOUS_SCOPE",
+        "security_followup_required": true,
+        "nda_status_from_questionnaire": "PENDING",
+        "required_security_actions": [
+          {
+            "action_type": "SECURITY_REVIEW",
+            "reason": "ERP integration tier remains unclassified pending architecture review.",
+            "owner": "IT Security"
+          }
+        ],
+        "policy_citations": [
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_12",
+            "section_id": "12.2",
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "status": "escalated"
+      },
+      "legal_agent": {
+        "dpa_required": true,
+        "dpa_blocker": true,
+        "nda_status": "PENDING",
+        "nda_blocker": true,
+        "trigger_rule_cited": [
+          {
+            "row_id": "A-01",
+            "matrix_id": "DPA-TM-001",
+            "version": "1.3"
+          },
+          {
+            "row_id": "E-01",
+            "matrix_id": "DPA-TM-001",
+            "version": "1.3"
+          }
+        ],
+        "policy_citations": [
+          {
+            "source_id": "DPA-TM-001",
+            "version": "1.3",
+            "chunk_id": "DPA-TM-001__row_A-01",
+            "row_id": "A-01",
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "status": "escalated"
+      },
+      "procurement_agent": {
+        "approval_path": "STANDARD",
+        "fast_track_eligible": false,
+        "required_approvals": [
+          {
+            "approver_role": "CISO",
+            "status": "PENDING",
+            "blocker": true
+          },
+          {
+            "approver_role": "General Counsel",
+            "status": "ESCALATED",
+            "blocker": true
+          },
+          {
+            "approver_role": "CPO",
+            "status": "PENDING",
+            "blocker": false
+          },
+          {
+            "approver_role": "VP Operations",
+            "status": "PENDING",
+            "blocker": true
+          },
+          {
+            "approver_role": "SVP Operations",
+            "status": "PENDING",
+            "blocker": true
+          }
+        ],
+        "estimated_timeline": "Blocked pending DPA execution and ERP tier assignment",
+        "policy_citations": [
+          {
+            "source_id": "PAM-001",
+            "version": "2.0",
+            "chunk_id": "PAM-001__row_A-T3",
+            "row_id": "A-T3",
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "status": "escalated"
+      }
+    },
+    "escalations": [
+      {
+        "escalation_id": "ESC-002",
+        "condition": "GDPR Art. 28 DPA not yet executed",
+        "status": "ESCALATED",
+        "resolution_owner": "General Counsel"
+      }
+    ],
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    }
+  },
+  "pipeline_run_id": "scenario_2_synthesized"
+}

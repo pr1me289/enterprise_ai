@@ -1,0 +1,83 @@
+{
+  "scenario": "scenario_2",
+  "agent": "procurement_agent",
+  "bundle": {
+    "source_ids": [
+      "STEP-02",
+      "STEP-03",
+      "VQ-OC-001",
+      "PAM-001",
+      "SLK-001"
+    ],
+    "it_security_output": {
+      "integration_type_normalized": "AMBIGUOUS",
+      "integration_tier": "UNCLASSIFIED_PENDING_REVIEW",
+      "data_classification": "REGULATED",
+      "eu_personal_data_present": "YES",
+      "fast_track_eligible": false,
+      "fast_track_rationale": "DISALLOWED_AMBIGUOUS_SCOPE",
+      "security_followup_required": true,
+      "nda_status_from_questionnaire": "PENDING",
+      "required_security_actions": [
+        {
+          "action_type": "SECURITY_REVIEW",
+          "reason": "ERP integration tier remains unclassified pending architecture review.",
+          "owner": "IT Security"
+        }
+      ],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12.2",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "escalated"
+    },
+    "legal_output": {
+      "dpa_required": true,
+      "dpa_blocker": true,
+      "nda_status": "PENDING",
+      "nda_blocker": true,
+      "trigger_rule_cited": [
+        {
+          "row_id": "A-01",
+          "matrix_id": "DPA-TM-001",
+          "version": "1.3"
+        },
+        {
+          "row_id": "E-01",
+          "matrix_id": "DPA-TM-001",
+          "version": "1.3"
+        }
+      ],
+      "policy_citations": [
+        {
+          "source_id": "DPA-TM-001",
+          "version": "1.3",
+          "chunk_id": "DPA-TM-001__row_A-01",
+          "row_id": "A-01",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "escalated"
+    },
+    "questionnaire": {
+      "vendor_class": "Class A \u2014 Enterprise Platform",
+      "deal_size": 210000,
+      "existing_nda_status": "EXECUTED",
+      "existing_msa": false
+    },
+    "approval_path_matrix_rows": [],
+    "fast_track_routing_rows": [],
+    "slack_procurement_chunks": [],
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    }
+  },
+  "pipeline_run_id": "scenario_2_synthesized"
+}

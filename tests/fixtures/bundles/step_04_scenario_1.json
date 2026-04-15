@@ -1,0 +1,61 @@
+{
+  "scenario": "scenario_1",
+  "agent": "procurement_agent",
+  "bundle": {
+    "source_ids": [
+      "STEP-02",
+      "STEP-03",
+      "VQ-OC-001",
+      "PAM-001",
+      "SLK-001"
+    ],
+    "it_security_output": {
+      "data_classification": "UNREGULATED",
+      "fast_track_eligible": true,
+      "integration_tier": "TIER_3",
+      "security_followup_required": false,
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "legal_output": {
+      "dpa_required": false,
+      "dpa_blocker": false,
+      "nda_status": "EXECUTED",
+      "nda_blocker": false,
+      "trigger_rule_cited": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "questionnaire": {
+      "vendor_class": "Class A \u2014 Enterprise Platform",
+      "deal_size": 210000,
+      "existing_nda_status": "EXECUTED",
+      "existing_msa": false
+    },
+    "approval_path_matrix_rows": [],
+    "fast_track_routing_rows": [],
+    "slack_procurement_chunks": [],
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    }
+  },
+  "pipeline_run_id": "run_ac50900c01"
+}

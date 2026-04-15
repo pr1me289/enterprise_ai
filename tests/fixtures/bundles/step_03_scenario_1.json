@@ -1,0 +1,51 @@
+{
+  "scenario": "scenario_1",
+  "agent": "legal_agent",
+  "bundle": {
+    "source_ids": [
+      "STEP-02",
+      "VQ-OC-001",
+      "DPA-TM-001",
+      "ISP-001"
+    ],
+    "security_output": {
+      "data_classification": "UNREGULATED",
+      "status": "complete",
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "citation_class": "PRIMARY"
+        }
+      ]
+    },
+    "questionnaire": {
+      "eu_personal_data_flag": false,
+      "data_subjects_eu": false,
+      "existing_nda_status": "EXECUTED"
+    },
+    "dpa_trigger_rows": [],
+    "nda_clause_chunks": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12",
+        "section_id": "12",
+        "row_id": null,
+        "thread_id": null,
+        "text": "NDA must be executed before information exchange.",
+        "retrieval_score": 1.0,
+        "rerank_score": 1.0,
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    }
+  },
+  "pipeline_run_id": "run_ac50900c01"
+}

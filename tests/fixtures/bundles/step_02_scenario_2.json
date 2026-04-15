@@ -1,0 +1,87 @@
+{
+  "scenario": "scenario_2",
+  "agent": "it_security_agent",
+  "bundle": {
+    "questionnaire": {
+      "integration_details.erp_type": "AMBIGUOUS",
+      "integration_details.erp_system": "SAP S/4HANA",
+      "integration_details.integration_description": "Vendor may deploy an extraction agent with service-account credentials to pull ERP data on a recurring schedule.",
+      "data_classification_self_reported": true,
+      "regulated_data_types": [
+        "Shift schedules",
+        "Employee IDs for EU-based facilities"
+      ],
+      "eu_personal_data_flag": true,
+      "data_subjects_eu": true,
+      "existing_nda_status": "PENDING"
+    },
+    "policy_chunks": {
+      "erp_tier_policy_chunks": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "row_id": null,
+          "thread_id": null,
+          "text": "Export-only integrations are Tier 3.",
+          "retrieval_score": 1.0,
+          "rerank_score": 1.0,
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "classification_policy_chunks": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "row_id": null,
+          "thread_id": null,
+          "text": "Unregulated export-only data may qualify for low-risk treatment.",
+          "retrieval_score": 1.0,
+          "rerank_score": 1.0,
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "fast_track_policy_chunks": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_17",
+          "section_id": "17",
+          "row_id": null,
+          "thread_id": null,
+          "text": "Low-risk export-only vendors may be fast-tracked.",
+          "retrieval_score": 1.0,
+          "rerank_score": 1.0,
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "nda_policy_chunks": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "row_id": null,
+          "thread_id": null,
+          "text": "NDA must be executed before information exchange.",
+          "retrieval_score": 1.0,
+          "rerank_score": 1.0,
+          "citation_class": "PRIMARY"
+        }
+      ]
+    },
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    },
+    "source_ids": [
+      "VQ-OC-001",
+      "ISP-001"
+    ]
+  },
+  "pipeline_run_id": "scenario_2_synthesized"
+}

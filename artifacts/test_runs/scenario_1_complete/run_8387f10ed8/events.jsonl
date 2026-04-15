@@ -1,0 +1,49 @@
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RUN_INIT", "step": null, "payload": {"pipeline_run_id": "run_8387f10ed8", "scenario": "scenario_1_complete"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "STEP_ENTER", "step": "STEP-01", "payload": {"step": "STEP-01"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-01", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 3}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-01", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 10}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-01", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 2}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "BUNDLE_READY", "step": "STEP-01", "payload": {"admitted": 0, "excluded": 0, "admissible": false, "admissibility_status": "PARTIAL", "placeholder": true}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "STEP_RESULT", "step": "STEP-01", "payload": {"step_status": "COMPLETE", "overall_status": "IN_PROGRESS"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "STEP_ENTER", "step": "STEP-02", "payload": {"step": "STEP-02"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-02", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 3}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-02", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 2}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-02", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 2}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-02", "payload": {"source": "ISP-001", "lane": "indexed_hybrid", "records": 0}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-02", "payload": {"source": "ISP-001", "lane": "indexed_hybrid", "records": 0}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-02", "payload": {"source": "ISP-001", "lane": "indexed_hybrid", "records": 0}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-02", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 1}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-02", "payload": {"source": "ISP-001", "lane": "indexed_hybrid", "records": 0}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "BUNDLE_READY", "step": "STEP-02", "payload": {"admitted": 0, "excluded": 0, "admissible": true, "admissibility_status": "ADMISSIBLE"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "STEP_RESULT", "step": "STEP-02", "payload": {"step_status": "COMPLETE", "overall_status": "IN_PROGRESS"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "STEP_ENTER", "step": "STEP-03", "payload": {"step": "STEP-03"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-03", "payload": {"source": "STEP-02", "lane": "runtime_read", "records": 3}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-03", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 2}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-03", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 1}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-03", "payload": {"source": "DPA-TM-001", "lane": "indexed_hybrid", "records": 0}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-03", "payload": {"source": "ISP-001", "lane": "indexed_hybrid", "records": 0}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "BUNDLE_READY", "step": "STEP-03", "payload": {"admitted": 0, "excluded": 0, "admissible": true, "admissibility_status": "ADMISSIBLE"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "STEP_RESULT", "step": "STEP-03", "payload": {"step_status": "COMPLETE", "overall_status": "IN_PROGRESS"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "STEP_ENTER", "step": "STEP-04", "payload": {"step": "STEP-04"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-04", "payload": {"source": "STEP-02", "lane": "runtime_read", "records": 6}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-04", "payload": {"source": "STEP-03", "lane": "runtime_read", "records": 7}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-04", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 4}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-04", "payload": {"source": "PAM-001", "lane": "indexed_hybrid", "records": 0}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-04", "payload": {"source": "PAM-001", "lane": "indexed_hybrid", "records": 0}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-04", "payload": {"source": "SLK-001", "lane": "indexed_hybrid", "records": 0}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "BUNDLE_READY", "step": "STEP-04", "payload": {"admitted": 0, "excluded": 0, "admissible": true, "admissibility_status": "ADMISSIBLE"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "STEP_RESULT", "step": "STEP-04", "payload": {"step_status": "COMPLETE", "overall_status": "IN_PROGRESS"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "STEP_ENTER", "step": "STEP-05", "payload": {"step": "STEP-05"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-05", "payload": {"source": "PIPELINE_STATE", "lane": "runtime_read", "records": 3}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-05", "payload": {"source": "AUDIT_LOG", "lane": "runtime_read", "records": 1}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-05", "payload": {"source": "PIPELINE_STATE", "lane": "runtime_read", "records": 2}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "BUNDLE_READY", "step": "STEP-05", "payload": {"admitted": 0, "excluded": 0, "admissible": true, "admissibility_status": "ADMISSIBLE"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "STEP_RESULT", "step": "STEP-05", "payload": {"step_status": "COMPLETE", "overall_status": "COMPLETE"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "STEP_ENTER", "step": "STEP-06", "payload": {"step": "STEP-06"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-06", "payload": {"source": "STEP-05", "lane": "runtime_read", "records": 7}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-06", "payload": {"source": "PIPELINE_CONFIG", "lane": "runtime_read", "records": 3}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-06", "payload": {"source": "PIPELINE_STATE", "lane": "runtime_read", "records": 3}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RETRIEVE", "step": "STEP-06", "payload": {"source": "PIPELINE_STATE", "lane": "runtime_read", "records": 1}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "BUNDLE_READY", "step": "STEP-06", "payload": {"admitted": 0, "excluded": 0, "admissible": true, "admissibility_status": "ADMISSIBLE"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "STEP_RESULT", "step": "STEP-06", "payload": {"step_status": "COMPLETE", "overall_status": "COMPLETE"}}
+{"timestamp": "2026-04-15T17:32:11Z", "event_type": "RUN_COMPLETE", "step": null, "payload": {"overall_status": "COMPLETE"}}

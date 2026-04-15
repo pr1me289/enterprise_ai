@@ -1,0 +1,151 @@
+{
+  "scenario": "scenario_1",
+  "agent": "checkoff_agent",
+  "bundle": {
+    "source_ids": [
+      "STEP-05",
+      "PIPELINE_CONFIG",
+      "STEP-02",
+      "STEP-03",
+      "STEP-04"
+    ],
+    "finalized_checklist": {
+      "overall_status": "COMPLETE",
+      "blockers": [],
+      "required_approvals": [
+        {
+          "approver": "Procurement Manager",
+          "domain": "procurement",
+          "status": "PENDING",
+          "blocker": false,
+          "estimated_completion": "2 business days"
+        }
+      ],
+      "required_security_actions": [],
+      "citations": [
+        {
+          "source_name": "ISP-001",
+          "version": "4.2",
+          "section": "12",
+          "retrieval_timestamp": "",
+          "agent_id": "it_security_agent"
+        },
+        {
+          "source_name": "PAM-001",
+          "version": "3.0",
+          "section": "A-T1",
+          "retrieval_timestamp": "",
+          "agent_id": "procurement_agent"
+        }
+      ],
+      "data_classification": "UNREGULATED",
+      "approval_path": "FAST_TRACK"
+    },
+    "stakeholder_map": {
+      "stakeholder_map": {
+        "IT Security": {
+          "domain": "security",
+          "contact": "K. Whitfield"
+        },
+        "Legal (General Counsel)": {
+          "domain": "legal",
+          "contact": "General Counsel"
+        },
+        "Procurement": {
+          "domain": "procurement",
+          "contact": "Procurement Manager"
+        },
+        "Procurement Director": {
+          "domain": "procurement",
+          "contact": "Procurement Director"
+        },
+        "Procurement / Legal": {
+          "domain": "procurement",
+          "contact": "Procurement + Legal"
+        }
+      },
+      "approver_contacts": {
+        "security": "K. Whitfield",
+        "legal": "General Counsel",
+        "procurement": "Procurement Director"
+      },
+      "escalation_owners": {
+        "ERP integration tier unclassified": "IT Security",
+        "GDPR Art. 28 DPA not yet executed": "Legal (General Counsel)",
+        "NDA execution unconfirmed": "Procurement / Legal"
+      }
+    },
+    "domain_outputs": {
+      "step_02": {
+        "integration_type_normalized": "EXPORT_ONLY",
+        "integration_tier": "TIER_3",
+        "data_classification": "UNREGULATED",
+        "eu_personal_data_present": "NO",
+        "fast_track_eligible": true,
+        "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+        "security_followup_required": false,
+        "nda_status_from_questionnaire": "EXECUTED",
+        "required_security_actions": [],
+        "policy_citations": [
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_12",
+            "section_id": "12",
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "status": "complete"
+      },
+      "step_03": {
+        "dpa_required": false,
+        "dpa_blocker": false,
+        "nda_status": "EXECUTED",
+        "nda_blocker": false,
+        "trigger_rule_cited": [],
+        "policy_citations": [
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_12",
+            "section_id": "12",
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "status": "complete"
+      },
+      "step_04": {
+        "approval_path": "FAST_TRACK",
+        "fast_track_eligible": true,
+        "required_approvals": [
+          {
+            "approver": "Procurement Manager",
+            "domain": "procurement",
+            "status": "PENDING",
+            "blocker": false,
+            "estimated_completion": "2 business days"
+          }
+        ],
+        "estimated_timeline": "2 business days",
+        "policy_citations": [
+          {
+            "source_id": "PAM-001",
+            "version": "3.0",
+            "chunk_id": "PAM-001__row_A-T1",
+            "row_id": "A-T1",
+            "approval_path_condition": "Class A / 210000",
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "status": "complete"
+      }
+    },
+    "escalations": [],
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    }
+  },
+  "pipeline_run_id": "run_ac50900c01"
+}

@@ -21,6 +21,16 @@ package = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "api: tests that hit the real Anthropic API (skipped unless -m api is passed)",
+    "scenario1: clean governed-completion scenario expectations",
+    "scenario2: escalated/regulated scenario expectations",
+    "layer_unit: per-agent unit tests (Layer 1)",
+    "layer_handoff: cross-agent handoff tests (Layer 2)",
+    "layer_acceptance: acceptance-check tests (Layer 3)",
+    "full_pipeline: end-to-end pipeline runs across all six steps",
+]
+addopts = "-ra --strict-markers"
 
 [dependency-groups]
 dev = [
