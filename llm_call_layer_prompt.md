@@ -108,3 +108,51 @@ Locate the existing mock agent call sites in the orchestration layer and replace
 3. The state machine's advance and halt logic behaves identically to the mock run
 4. All five mock call sites in the orchestration layer are replaced with `llm_caller.py` functions
 5. No mock agent code remains in the active execution path
+
+---
+
+## Implementation Log
+
+### 2026-04-15 — Infrastructure built on `feat/llm-call-layer`
+
+**Branch:** `feat/llm-call-layer` (off `main`)
+
+**New package — `src/agents/`:**
+- `__init__.py` — exports `AnthropicLLMAdapter` and the five `call_*` functions
+- `_prompts.py` — `SPEC_PATHS` map + `load_system_prompt(agent_name, repo_root)`; appends an `OUTPUT_INSTRUCTION` block instructing the model to return a single JSON object with no prose or code fences
+- `_validator.py` — `REQUIRED_FIELDS` map (mirrors `orchestration.validation.output_validator.REQUIRED_OUTPUT_FIELDS`) and `find_missing_fields(agent_name, output)`; never raises, never mutates
+- `llm_caller.py` — the call layer:
+  - `_build_client()` — loads `.env` via `python-dotenv`, constructs `anthropic.Anthropic()`
+  - `_user_message_from_bundle()` — JSON-serializes `{evidence_bundle, step_metadata}` for the user turn
+  - `_strip_code_fences()` + `_parse_json_response()` — tolerate ` ```json ... ``` ` wrappers and enforce dict shape
+  - `_blocked_output()` — STEP-05 gets `{pipeline_run_id, vendor_name, overall_status: "BLOCKED", error}`; all other agents get `{status: "blocked", error}` (matches each step's OutputValidator halt signal)
+  - `_call_agent()` — shared pipeline wrapping spec load → API call → parse → presence-check; every `Exception` is caught and converted to a blocked payload (logged with agent name + pipeline_run_id)
+  - `call_it_security_agent`, `call_legal_agent`, `call_procurement_agent`, `call_checklist_assembler`, `call_checkoff_agent` — each `(bundle, pipeline_run_id) -> dict`
+  - `AnthropicLLMAdapter` — implements the orchestration `LLMAdapter` protocol; lazy client construction; one instance reused across all five agent calls in a run; plugs into `Supervisor(llm_adapter=...)`
+
+**Wiring change — `src/orchestration/supervisor.py`:**
+- Default `llm_adapter` flipped from `MockLLMAdapter()` to `AnthropicLLMAdapter(repo_root=..., pipeline_run_id=...)`
+- Type on the constructor parameter widened from `MockLLMAdapter | None` to `LLMAdapter | None` so the Protocol is the contract, not the mock
+- No state machine / PipelineState / bundle assembly / audit changes
+
+**Dependencies added via `uv add`:**
+- `anthropic>=0.95.0`
+- `python-dotenv>=1.2.2`
+
+**Smoke test — `scripts/smoke_test_llm_agents.py`:**
+- Default mode: full `complete_demo_scenario` pipeline run with `AnthropicLLMAdapter`, prints `overall_status`, per-step statuses, audit entry count, and the STEP-05 / STEP-06 top-level status fields
+- `--per-agent` mode: captures each step's real `ContextBundle.structured_fields` from a mock run (via `supervisor.last_bundle_by_step`), then invokes each of the five `call_*` functions directly
+- Loads `.env` and exits 2 if `ANTHROPIC_API_KEY` is not set
+
+**Verification (no API key required):**
+- `PYTHONPATH=src uv run python -c "from agents import AnthropicLLMAdapter, call_it_security_agent, call_legal_agent, call_procurement_agent, call_checklist_assembler, call_checkoff_agent"` — public API imports clean
+- `PYTHONPATH=src uv run python -c "import scripts.smoke_test_llm_agents"` — smoke script imports clean
+- `PYTHONPATH=src uv run pytest tests/orchestration -q` — **162 passed** (all existing tests continue to pass; `ScenarioLLMAdapter` is still explicitly injected everywhere tests need it)
+
+**Deviation from prompt:**
+- Spec filenames on disk do not carry version suffixes. The actual files are `IT_Security_Agent_Spec.md`, `Legal_Agent_Spec.md`, `Procurement_Agent_Spec.md`, `Checklist_Assembler_Spec.md`, `Checkoff_Agent_Spec.md` — not the `_v0_8` / `_v0_7` / etc. forms named in the prompt. `SPEC_PATHS` in `_prompts.py` uses the on-disk names.
+
+**Open items:**
+- Execute the smoke test with a live `ANTHROPIC_API_KEY` (user said they'd provide the key when needed) — both default and `--per-agent` modes
+- Commit `feat/llm-call-layer` once the user approves (per CLAUDE.md: feature branches only, no direct commits to main; conventional commit format)
+- Add a `master_log.md` entry for this session once the commit lands

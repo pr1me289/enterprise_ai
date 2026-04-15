@@ -5,6 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from agents.llm_caller import AnthropicLLMAdapter
+from orchestration.agents.base import LLMAdapter
 from orchestration.agents.llm_agent_runner import LLMAgentRunner, MockLLMAdapter
 from orchestration.audit.audit_logger import AuditLogger
 from orchestration.config.source_manifest import DEFAULT_STAKEHOLDER_MAP, build_source_manifest
@@ -39,7 +41,7 @@ class Supervisor:
         questionnaire_path: str | Path,
         chunk_dir: str | Path | None = None,
         questionnaire_overrides: dict[str, Any] | None = None,
-        llm_adapter: MockLLMAdapter | None = None,
+        llm_adapter: LLMAdapter | None = None,
         pipeline_config: dict[str, Any] | None = None,
         indexed_backend: Any | None = None,
     ) -> None:
@@ -66,7 +68,11 @@ class Supervisor:
         self.output_validator = OutputValidator()
         self.agent_runner = LLMAgentRunner(
             repo_root=self.repo_root,
-            adapter=llm_adapter or MockLLMAdapter(),
+            adapter=llm_adapter
+            or AnthropicLLMAdapter(
+                repo_root=self.repo_root,
+                pipeline_run_id=self.state.pipeline_run_id,
+            ),
         )
         # Cache of the last ContextBundle produced for each step.  Exposed for
         # test harnesses and observability tooling — production callers should

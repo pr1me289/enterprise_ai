@@ -6,7 +6,7 @@
   "source_id": "SLK-001",
   "source_name": "Slack / Meeting Thread Notes",
   "source_type": "SLACK_THREAD",
-  "authority_tier": 4,
+  "authority_tier": 3,
   "citation_class": "SUPPLEMENTARY",
   "domain": "procurement",
   "thread_count": 4,
