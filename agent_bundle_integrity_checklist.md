@@ -259,6 +259,7 @@ The Procurement Agent should receive:
      - `vendor_class`
      - `deal_size`
      - `existing_nda_status`
+     - `existing_msa`
 
 4. Procurement Approval Matrix (`PAM-001`)
    - relevant row-targeted chunks only
