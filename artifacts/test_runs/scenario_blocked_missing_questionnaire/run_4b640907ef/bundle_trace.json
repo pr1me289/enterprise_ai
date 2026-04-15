@@ -1,0 +1,12 @@
+[
+  {
+    "step_id": "STEP-01",
+    "admissibility_status": "PARTIAL",
+    "admitted_count": 0,
+    "excluded_count": 0,
+    "admitted_chunks": [],
+    "excluded_chunks": [],
+    "structured_fields_keys": [],
+    "source_provenance": []
+  }
+]

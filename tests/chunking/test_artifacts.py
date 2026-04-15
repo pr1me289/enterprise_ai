@@ -20,8 +20,9 @@ def test_write_chunk_artifacts_writes_per_source_json(mock_documents_dir: Path, 
         output_dir=tmp_path,
     )
 
-    assert written == []
-    assert not (tmp_path / "DPA-TM-001.json").exists()
+    # DPA matrix is INDEXED_HYBRID — its rows are chunked and written.
+    assert {path.name for path in written} == {"DPA-TM-001.json"}
+    assert (tmp_path / "DPA-TM-001.json").exists()
     assert not (tmp_path / "VQ-OC-001.json").exists()
 
 

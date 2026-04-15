@@ -38,28 +38,34 @@ def test_policy_source_chunks_by_section(mock_documents_dir: Path) -> None:
     assert "Onboarding may not proceed to the information-exchange phase" in nda_chunk.text
 
 
-def test_dpa_matrix_is_direct_structured_and_not_chunked(scenario_1_mock_documents_dir: Path) -> None:
+def test_dpa_matrix_chunks_by_row(scenario_1_mock_documents_dir: Path) -> None:
     source = load_source(scenario_1_mock_documents_dir / "DPA_Legal_Trigger_Matrix_v1_3.csv")
 
     chunks = chunk_source(source)
 
-    assert chunks == []
-    assert source.retrieval_lane.value == "DIRECT_STRUCTURED"
+    assert source.retrieval_lane.value == "INDEXED_HYBRID"
     assert source.structured_data is not None
     assert "rows" in source.structured_data
     assert len(source.structured_data["rows"]) == 27
+    assert len(chunks) == 27
+    assert all(chunk.chunk_type == "ROW" for chunk in chunks)
+    assert all(chunk.source_id == "DPA-TM-001" for chunk in chunks)
+    assert chunks[0].citation_label.startswith("DPA-TM-001 row")
 
 
-def test_procurement_matrix_is_direct_structured_and_not_chunked(scenario_1_mock_documents_dir: Path) -> None:
+def test_procurement_matrix_chunks_by_row(scenario_1_mock_documents_dir: Path) -> None:
     source = load_source(scenario_1_mock_documents_dir / "Procurement_Approval_Matrix_v2_0.csv")
 
     chunks = chunk_source(source)
 
-    assert chunks == []
-    assert source.retrieval_lane.value == "DIRECT_STRUCTURED"
+    assert source.retrieval_lane.value == "INDEXED_HYBRID"
     assert source.structured_data is not None
     assert "rows" in source.structured_data
     assert len(source.structured_data["rows"]) == 20
+    assert len(chunks) == 20
+    assert all(chunk.chunk_type == "ROW" for chunk in chunks)
+    assert all(chunk.source_id == "PAM-001" for chunk in chunks)
+    assert chunks[0].citation_label.startswith("PAM-001 row")
 
 
 def test_precedent_source_chunks_by_record(mock_documents_dir: Path) -> None:
@@ -143,7 +149,7 @@ def test_chunk_sources_returns_source_id_keyed_map(
     chunk_map = chunk_sources(sources)
 
     assert set(chunk_map) == {"DPA-TM-001", "VQ-OC-001", "SLK-001", "SHM-001"}
-    assert chunk_map["DPA-TM-001"] == []
+    assert len(chunk_map["DPA-TM-001"]) == 27
     assert chunk_map["VQ-OC-001"] == []
     assert len(chunk_map["SLK-001"]) == 4
     assert len(chunk_map["SHM-001"]) == 15

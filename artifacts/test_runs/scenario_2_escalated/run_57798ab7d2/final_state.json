@@ -1,0 +1,121 @@
+{
+  "pipeline_run_id": "run_57798ab7d2",
+  "vendor_name": "OptiChain, Inc.",
+  "manifest_version": "CC-001-v1.4",
+  "initialized_at": "2026-04-15T15:21:53Z",
+  "overall_status": "ESCALATED",
+  "current_step": "STEP-03",
+  "step_statuses": {
+    "STEP-01": "COMPLETE",
+    "STEP-02": "COMPLETE",
+    "STEP-03": "ESCALATED",
+    "STEP-04": "PENDING",
+    "STEP-05": "PENDING",
+    "STEP-06": "PENDING"
+  },
+  "determinations": {
+    "step_01_intake": {
+      "questionnaire_valid": true,
+      "vendor_name": "OptiChain, Inc.",
+      "status": "COMPLETE",
+      "notes": []
+    },
+    "step_02_security_classification": {
+      "integration_type_normalized": "EXPORT_ONLY",
+      "integration_tier": "TIER_3",
+      "data_classification": "UNREGULATED",
+      "eu_personal_data_present": "NO",
+      "fast_track_eligible": true,
+      "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+      "security_followup_required": false,
+      "nda_status_from_questionnaire": "EXECUTED",
+      "required_security_actions": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "step_03_legal": {
+      "dpa_required": true,
+      "dpa_blocker": true,
+      "nda_status": "EXECUTED",
+      "nda_blocker": false,
+      "trigger_rule_cited": [
+        {
+          "source_id": "DPA-TM-001",
+          "version": "1.3",
+          "row_id": "R1",
+          "trigger_condition": "EU personal data present and DPA not executed.",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "policy_citations": [
+        {
+          "source_id": "DPA-TM-001",
+          "version": "1.3",
+          "chunk_id": "DPA-TM-001__row_R1",
+          "section_id": "R1",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "escalated"
+    },
+    "step_04_procurement": null,
+    "step_05_checklist": null,
+    "step_06_guidance": null
+  },
+  "escalations": [
+    {
+      "entry_id": "audit_6e11016fce",
+      "pipeline_run_id": "run_57798ab7d2",
+      "agent_id": "legal_agent",
+      "event_type": "ESCALATION",
+      "timestamp": "2026-04-15T15:21:53Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-03",
+        "evidence_condition": "Legal blocker or missing citation evidence requires human action.",
+        "resolution_owner": "Legal (General Counsel)"
+      }
+    }
+  ],
+  "audit_refs": [
+    "audit_f0e7d92e22",
+    "audit_541c4cdc58",
+    "audit_0a5ac7bdde",
+    "audit_7fe09baf39",
+    "audit_146eece56e",
+    "audit_3eac44c5b8",
+    "audit_6bff2a47a8",
+    "audit_3008e68caa",
+    "audit_3a8df598d4",
+    "audit_e9579d6d44",
+    "audit_7602b0fc66",
+    "audit_bc01c5c666",
+    "audit_0768bfd538",
+    "audit_a815be8cc6",
+    "audit_ac8abf7de6",
+    "audit_62ff0d7e27",
+    "audit_049f8a7f13",
+    "audit_81bfb8ba53",
+    "audit_f71c0d31da",
+    "audit_81210ea475",
+    "audit_513e8731d1",
+    "audit_c70ff5c007",
+    "audit_0ceb558188",
+    "audit_88b46e44d0",
+    "audit_fe697e9c03",
+    "audit_7bab117e04",
+    "audit_6e11016fce"
+  ],
+  "next_step_queue": [
+    "STEP-04"
+  ]
+}

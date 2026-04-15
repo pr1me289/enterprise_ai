@@ -1,0 +1,176 @@
+{
+  "pipeline_run_id": "run_8997a6f4ae",
+  "vendor_name": "OptiChain, Inc.",
+  "manifest_version": "CC-001-v1.4",
+  "initialized_at": "2026-04-15T15:21:34Z",
+  "overall_status": "COMPLETE",
+  "current_step": "STEP-06",
+  "step_statuses": {
+    "STEP-01": "COMPLETE",
+    "STEP-02": "COMPLETE",
+    "STEP-03": "COMPLETE",
+    "STEP-04": "COMPLETE",
+    "STEP-05": "COMPLETE",
+    "STEP-06": "COMPLETE"
+  },
+  "determinations": {
+    "step_01_intake": {
+      "questionnaire_valid": true,
+      "vendor_name": "OptiChain, Inc.",
+      "status": "COMPLETE",
+      "notes": []
+    },
+    "step_02_security_classification": {
+      "integration_type_normalized": "EXPORT_ONLY",
+      "integration_tier": "TIER_3",
+      "data_classification": "UNREGULATED",
+      "eu_personal_data_present": "NO",
+      "fast_track_eligible": true,
+      "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+      "security_followup_required": false,
+      "nda_status_from_questionnaire": "EXECUTED",
+      "required_security_actions": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "step_03_legal": {
+      "dpa_required": false,
+      "dpa_blocker": false,
+      "nda_status": "EXECUTED",
+      "nda_blocker": false,
+      "trigger_rule_cited": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "step_04_procurement": {
+      "approval_path": "FAST_TRACK",
+      "fast_track_eligible": true,
+      "required_approvals": [
+        {
+          "approver": "Procurement Manager",
+          "domain": "procurement",
+          "status": "PENDING",
+          "blocker": false,
+          "estimated_completion": "2 business days"
+        }
+      ],
+      "estimated_timeline": "2 business days",
+      "policy_citations": [
+        {
+          "source_id": "PAM-001",
+          "version": "3.0",
+          "chunk_id": "PAM-001__row_A-T1",
+          "row_id": "A-T1",
+          "approval_path_condition": "Class A / 210000",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "step_05_checklist": {
+      "pipeline_run_id": "run_8997a6f4ae",
+      "vendor_name": "OptiChain, Inc.",
+      "overall_status": "COMPLETE",
+      "data_classification": "UNREGULATED",
+      "dpa_required": false,
+      "fast_track_eligible": true,
+      "required_security_actions": [],
+      "approval_path": "FAST_TRACK",
+      "required_approvals": [
+        {
+          "approver": "Procurement Manager",
+          "domain": "procurement",
+          "status": "PENDING",
+          "blocker": false,
+          "estimated_completion": "2 business days"
+        }
+      ],
+      "blockers": [],
+      "citations": []
+    },
+    "step_06_guidance": {
+      "guidance_documents": [
+        {
+          "stakeholder_role": "Procurement Manager",
+          "domain": "procurement",
+          "instructions": "Pipeline status is COMPLETE. Review procurement approval and complete signoff.",
+          "blockers_owned": [],
+          "required_security_actions": [],
+          "next_steps": [
+            "Review approval requirement for procurement"
+          ],
+          "citations": []
+        }
+      ],
+      "status": "complete"
+    }
+  },
+  "escalations": [],
+  "audit_refs": [
+    "audit_facab6ac20",
+    "audit_30fc857415",
+    "audit_dadd278fa5",
+    "audit_5a68806bf9",
+    "audit_c717be8e3a",
+    "audit_c4b48e6853",
+    "audit_4e73d75e05",
+    "audit_1020983a87",
+    "audit_9b328366b3",
+    "audit_6436e1d847",
+    "audit_0fba941c5f",
+    "audit_2a8ab59c27",
+    "audit_5137854ddc",
+    "audit_4ba0e04f82",
+    "audit_aebe78e53c",
+    "audit_bb6fce525d",
+    "audit_1165690c08",
+    "audit_38cdf1a4e9",
+    "audit_7794c13915",
+    "audit_e95e687b31",
+    "audit_f7435c10b6",
+    "audit_97369b6fe8",
+    "audit_1881fdd1f9",
+    "audit_5478953ddb",
+    "audit_087d39c943",
+    "audit_1c01cd8ed6",
+    "audit_5100971ec8",
+    "audit_162ca94554",
+    "audit_fe83d0fb3c",
+    "audit_ad6b3c7789",
+    "audit_f884309dc1",
+    "audit_c9d6f94cef",
+    "audit_b9ec4b9f92",
+    "audit_befe83cc82",
+    "audit_1dd58085a1",
+    "audit_cf862631d5",
+    "audit_8916a92696",
+    "audit_3c7598ddbc",
+    "audit_65e7d56312",
+    "audit_35b1fb5823",
+    "audit_1321083af6",
+    "audit_7ba4443838",
+    "audit_93f017bc43",
+    "audit_bc9d1b9b1d",
+    "audit_90f2c8f247",
+    "audit_f93084a44f",
+    "audit_a7ed96ab59",
+    "audit_473ab45096"
+  ],
+  "next_step_queue": []
+}

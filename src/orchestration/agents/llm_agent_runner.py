@@ -176,11 +176,12 @@ class MockLLMAdapter:
         dpa_rows = bundle["dpa_trigger_rows"]
         nda_clause_chunks = bundle["nda_clause_chunks"]
         nda_status = _normalize_nda_status(questionnaire.get("existing_nda_status"))
-        dpa_status_raw = str(questionnaire.get("dpa_status_raw", "UNKNOWN"))
 
+        # DPA execution status is never self-attested inside the pipeline; if a
+        # DPA is required it must be confirmed via human escalation.
         if security_output["data_classification"] == "REGULATED" or eu_confirmed:
             dpa_required = True
-            dpa_blocker = "EXECUTED" not in dpa_status_raw.upper()
+            dpa_blocker = True
         else:
             dpa_required = False
             dpa_blocker = False
@@ -372,11 +373,13 @@ class MockLLMAdapter:
         checklist = bundle["finalized_checklist"]
         stakeholder_payload = bundle["stakeholder_map"]
         stakeholder_map = stakeholder_payload.get("stakeholder_map", {})
+        escalations = bundle.get("escalations", []) or []
 
         roles = {
             approval["approver"] for approval in checklist.get("required_approvals", [])
         }
         roles.update(blocker["resolution_owner"] for blocker in checklist.get("blockers", []))
+        roles.update(item.get("resolution_owner") for item in escalations if item.get("resolution_owner"))
         if not roles:
             roles.add("Procurement")
 
@@ -388,6 +391,13 @@ class MockLLMAdapter:
                 item for item in checklist.get("required_security_actions", [])
                 if item["owner"] == role
             ]
+            escalations_owned = [
+                item for item in escalations if item.get("resolution_owner") == role
+            ]
+            escalation_reasons = [
+                item.get("evidence_condition") or item.get("reason") or ""
+                for item in escalations_owned
+            ]
             next_steps = [
                 f"Review approval requirement for {approval['domain']}"
                 for approval in checklist.get("required_approvals", [])
@@ -395,6 +405,9 @@ class MockLLMAdapter:
             ]
             next_steps.extend(
                 f"Resolve blocker: {blocker['description']}" for blocker in blockers_owned
+            )
+            next_steps.extend(
+                f"Resolve escalation: {reason}" for reason in escalation_reasons if reason
             )
             if not next_steps:
                 next_steps = ["No action required at this stage."]
@@ -404,10 +417,11 @@ class MockLLMAdapter:
                     "domain": role_domain,
                     "instructions": (
                         f"Pipeline status is {checklist['overall_status']}. "
-                        f"Review the approvals, blockers, and citations scoped to {role}."
+                        f"Review the approvals, blockers, escalations, and citations scoped to {role}."
                     ),
                     "blockers_owned": blockers_owned,
                     "required_security_actions": security_actions,
+                    "escalation_reason": escalation_reasons,
                     "next_steps": next_steps,
                     "citations": checklist.get("citations", []),
                 }

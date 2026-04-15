@@ -599,7 +599,7 @@ class TestStep05Checklist:
     def test_gate_allowed_when_all_prior_steps_terminal(
         self, mock_documents_dir: Path, repo_root: Path
     ) -> None:
-        """Step 05 gate opens when all Steps 01-04 are terminal (COMPLETE or ESCALATED)."""
+        """Step 05 gate opens when all Steps 01-04 are terminal AND determinations are present."""
         scenario = complete_demo_scenario()
         supervisor = Supervisor(
             repo_root=repo_root,
@@ -610,6 +610,10 @@ class TestStep05Checklist:
         )
         for step in (StepId.STEP_01, StepId.STEP_02, StepId.STEP_03, StepId.STEP_04):
             supervisor.state.step_statuses[step] = StepStatus.COMPLETE
+        # Gate additionally requires upstream determinations to be populated.
+        supervisor.state.determinations["step_02_security_classification"] = {"status": "complete"}
+        supervisor.state.determinations["step_03_legal"] = {"status": "complete"}
+        supervisor.state.determinations["step_04_procurement"] = {"status": "complete"}
         gate = supervisor.handlers[StepId.STEP_05].check_gate(supervisor.state)
         assert gate.allowed is True
 

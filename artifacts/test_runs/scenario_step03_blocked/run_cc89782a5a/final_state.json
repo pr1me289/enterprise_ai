@@ -1,0 +1,89 @@
+{
+  "pipeline_run_id": "run_cc89782a5a",
+  "vendor_name": "OptiChain, Inc.",
+  "manifest_version": "CC-001-v1.4",
+  "initialized_at": "2026-04-15T15:21:54Z",
+  "overall_status": "BLOCKED",
+  "current_step": "STEP-03",
+  "step_statuses": {
+    "STEP-01": "COMPLETE",
+    "STEP-02": "COMPLETE",
+    "STEP-03": "BLOCKED",
+    "STEP-04": "PENDING",
+    "STEP-05": "PENDING",
+    "STEP-06": "PENDING"
+  },
+  "determinations": {
+    "step_01_intake": {
+      "questionnaire_valid": true,
+      "vendor_name": "OptiChain, Inc.",
+      "status": "COMPLETE",
+      "notes": []
+    },
+    "step_02_security_classification": {
+      "integration_type_normalized": "EXPORT_ONLY",
+      "integration_tier": "TIER_3",
+      "data_classification": "UNREGULATED",
+      "eu_personal_data_present": "NO",
+      "fast_track_eligible": true,
+      "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+      "security_followup_required": false,
+      "nda_status_from_questionnaire": "EXECUTED",
+      "required_security_actions": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "step_03_legal": {
+      "status": "blocked",
+      "errors": [
+        "dpa_required",
+        "policy_citations",
+        "trigger_rule_cited",
+        "nda_blocker",
+        "dpa_blocker",
+        "nda_status"
+      ]
+    },
+    "step_04_procurement": null,
+    "step_05_checklist": null,
+    "step_06_guidance": null
+  },
+  "escalations": [],
+  "audit_refs": [
+    "audit_9e3e3267cb",
+    "audit_f86c9e7152",
+    "audit_a1ddf88a55",
+    "audit_2f1d587a7d",
+    "audit_d81ca91719",
+    "audit_ed812a17ac",
+    "audit_eac8fb569e",
+    "audit_7be34d28c8",
+    "audit_9fbf739532",
+    "audit_eb17350de0",
+    "audit_906bde15e8",
+    "audit_3d20679c9b",
+    "audit_79d2f928ac",
+    "audit_fc74da5046",
+    "audit_025519832f",
+    "audit_82ed45676a",
+    "audit_601f4a01ed",
+    "audit_f08c493f46",
+    "audit_2f1a5ecf2c",
+    "audit_b6ec01a7d1",
+    "audit_e20307df6a",
+    "audit_4177865805",
+    "audit_dcae5cb886",
+    "audit_4ed513be4d",
+    "audit_0743af6b3a",
+    "audit_c8702b028c"
+  ],
+  "next_step_queue": []
+}

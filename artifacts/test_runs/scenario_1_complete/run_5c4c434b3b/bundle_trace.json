@@ -1,0 +1,199 @@
+[
+  {
+    "step_id": "STEP-01",
+    "admissibility_status": "PARTIAL",
+    "admitted_count": 0,
+    "excluded_count": 0,
+    "admitted_chunks": [],
+    "excluded_chunks": [],
+    "structured_fields_keys": [],
+    "source_provenance": []
+  },
+  {
+    "step_id": "STEP-02",
+    "admissibility_status": "ADMISSIBLE",
+    "admitted_count": 0,
+    "excluded_count": 0,
+    "admitted_chunks": [],
+    "excluded_chunks": [],
+    "structured_fields_keys": [
+      "questionnaire",
+      "policy_chunks",
+      "bundle_meta",
+      "source_ids"
+    ],
+    "source_provenance": [
+      {
+        "source_id": "VQ-OC-001",
+        "output_name": "integration_inputs",
+        "lane": "direct_structured",
+        "chunk_count": 0
+      },
+      {
+        "source_id": "ISP-001",
+        "output_name": "erp_tier_policy_chunks",
+        "lane": "indexed_hybrid",
+        "chunk_count": 0
+      }
+    ]
+  },
+  {
+    "step_id": "STEP-03",
+    "admissibility_status": "ADMISSIBLE",
+    "admitted_count": 0,
+    "excluded_count": 0,
+    "admitted_chunks": [],
+    "excluded_chunks": [],
+    "structured_fields_keys": [
+      "source_ids",
+      "security_output",
+      "questionnaire",
+      "dpa_trigger_rows",
+      "nda_clause_chunks",
+      "bundle_meta"
+    ],
+    "source_provenance": [
+      {
+        "source_id": "STEP-02",
+        "output_name": "upstream_security",
+        "lane": "runtime_read",
+        "chunk_count": 0
+      },
+      {
+        "source_id": "VQ-OC-001",
+        "output_name": "eu_inputs",
+        "lane": "direct_structured",
+        "chunk_count": 0
+      },
+      {
+        "source_id": "DPA-TM-001",
+        "output_name": "dpa_trigger_rows",
+        "lane": "direct_structured",
+        "chunk_count": 0
+      },
+      {
+        "source_id": "ISP-001",
+        "output_name": "nda_clause_chunks",
+        "lane": "indexed_hybrid",
+        "chunk_count": 0
+      }
+    ]
+  },
+  {
+    "step_id": "STEP-04",
+    "admissibility_status": "ADMISSIBLE",
+    "admitted_count": 0,
+    "excluded_count": 0,
+    "admitted_chunks": [],
+    "excluded_chunks": [],
+    "structured_fields_keys": [
+      "source_ids",
+      "it_security_output",
+      "legal_output",
+      "questionnaire",
+      "approval_path_matrix_rows",
+      "fast_track_routing_rows",
+      "slack_procurement_chunks",
+      "bundle_meta"
+    ],
+    "source_provenance": [
+      {
+        "source_id": "STEP-02",
+        "output_name": "it_security_output",
+        "lane": "runtime_read",
+        "chunk_count": 0
+      },
+      {
+        "source_id": "STEP-03",
+        "output_name": "legal_output",
+        "lane": "runtime_read",
+        "chunk_count": 0
+      },
+      {
+        "source_id": "VQ-OC-001",
+        "output_name": "vendor_relationship",
+        "lane": "direct_structured",
+        "chunk_count": 0
+      },
+      {
+        "source_id": "PAM-001",
+        "output_name": "approval_matrix_rows",
+        "lane": "direct_structured",
+        "chunk_count": 0
+      },
+      {
+        "source_id": "SLK-001",
+        "output_name": "slack_procurement",
+        "lane": "indexed_hybrid",
+        "chunk_count": 0
+      }
+    ]
+  },
+  {
+    "step_id": "STEP-05",
+    "admissibility_status": "ADMISSIBLE",
+    "admitted_count": 0,
+    "excluded_count": 0,
+    "admitted_chunks": [],
+    "excluded_chunks": [],
+    "structured_fields_keys": [
+      "source_ids",
+      "pipeline_run_id",
+      "vendor_name",
+      "it_security_agent",
+      "legal_agent",
+      "procurement_agent",
+      "audit_log_entries",
+      "bundle_meta"
+    ],
+    "source_provenance": [
+      {
+        "source_id": "PIPELINE_STATE",
+        "output_name": "all_agent_outputs",
+        "lane": "runtime_read",
+        "chunk_count": 0
+      },
+      {
+        "source_id": "AUDIT_LOG",
+        "output_name": "audit_log",
+        "lane": "runtime_read",
+        "chunk_count": 0
+      }
+    ]
+  },
+  {
+    "step_id": "STEP-06",
+    "admissibility_status": "ADMISSIBLE",
+    "admitted_count": 0,
+    "excluded_count": 0,
+    "admitted_chunks": [],
+    "excluded_chunks": [],
+    "structured_fields_keys": [
+      "source_ids",
+      "finalized_checklist",
+      "stakeholder_map",
+      "domain_outputs",
+      "bundle_meta"
+    ],
+    "source_provenance": [
+      {
+        "source_id": "STEP-05",
+        "output_name": "finalized_checklist",
+        "lane": "runtime_read",
+        "chunk_count": 0
+      },
+      {
+        "source_id": "PIPELINE_CONFIG",
+        "output_name": "stakeholder_map",
+        "lane": "runtime_read",
+        "chunk_count": 0
+      },
+      {
+        "source_id": "PIPELINE_STATE",
+        "output_name": "domain_outputs",
+        "lane": "runtime_read",
+        "chunk_count": 0
+      }
+    ]
+  }
+]

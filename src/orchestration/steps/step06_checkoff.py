@@ -68,6 +68,18 @@ class Step06CheckoffHandler(BaseStepHandler):
                 ),
                 state=state,
             ),
+            "escalations": self.router.route(
+                RetrievalRequest(
+                    request_id="R06-SQ-04",
+                    lane=RetrievalLane.RUNTIME_READ,
+                    source_id="PIPELINE_STATE",
+                    access_role=self.definition.access_role,
+                    output_name="escalations",
+                    runtime_target="pipeline_state",
+                    field_map={"escalations": ("escalations",)},
+                ),
+                state=state,
+            ),
         }
 
         present_fields = {

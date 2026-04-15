@@ -46,6 +46,7 @@ class ScenarioLLMAdapter(MockLLMAdapter):
         prompt: str,
         bundle: dict[str, Any],
         step_metadata: dict[str, Any],
+        context_bundle: Any = None,
     ) -> dict[str, Any]:
         if agent_name in self.outputs:
             payload = deepcopy(self.outputs[agent_name])
@@ -60,4 +61,5 @@ class ScenarioLLMAdapter(MockLLMAdapter):
             prompt=prompt,
             bundle=bundle,
             step_metadata=step_metadata,
+            context_bundle=context_bundle,
         )

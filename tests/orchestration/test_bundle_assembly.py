@@ -170,7 +170,6 @@ def _minimal_step03_retrievals() -> dict[str, RetrievalResult]:
         ),
         "eu_inputs": _make_direct_result(payload={"eu_personal_data_flag": False, "data_subjects_eu": False}),
         "nda_inputs": _make_direct_result(payload={"existing_nda_status": "EXECUTED"}),
-        "dpa_status": _make_direct_result(payload={"dpa_required": False}),
         "dpa_trigger_rows": _make_direct_result(
             source_id="DPA-TM-001",
             payload={"rows": [dpa_row]},

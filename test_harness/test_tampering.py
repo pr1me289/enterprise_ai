@@ -278,15 +278,15 @@ def test_retrieval_lane_divergence_fires() -> None:
     entries = [
         _retrieval_audit_entry(
             request_id="R03-SQ-04",
-            source="DPA-TM-001",  # expected lane: direct_structured
-            lane="indexed_hybrid",
+            source="DPA-TM-001",  # expected lane: indexed_hybrid
+            lane="direct_structured",
         )
     ]
     fixture = _scoped_fixture("STEP-03")
     _expect_fail(
         "retrieval_lane_divergence",
         lambda: assert_retrieval_lanes(entries, fixture),
-        contains="expected 'direct_structured'",
+        contains="expected 'indexed_hybrid'",
     )
 
 

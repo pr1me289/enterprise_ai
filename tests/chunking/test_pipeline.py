@@ -20,7 +20,7 @@ def test_build_chunk_artifacts_from_paths_uses_preprocessing_and_writes_json(
         output_dir=tmp_path,
     )
 
-    assert {path.name for path in written} == {"ISP-001.json"}
+    assert {path.name for path in written} == {"ISP-001.json", "DPA-TM-001.json"}
     assert not (tmp_path / "VQ-OC-001.json").exists()
 
     policy_payload = json.loads((tmp_path / "ISP-001.json").read_text(encoding="utf-8"))
@@ -47,7 +47,13 @@ def test_build_scenario_chunk_artifacts_writes_scenario_specific_outputs(
         repo_root=repo_root,
     )
 
-    assert {path.name for path in written} == {"ISP-001.json", "SLK-001.json", "SHM-001.json"}
+    assert {path.name for path in written} == {
+        "ISP-001.json",
+        "SLK-001.json",
+        "SHM-001.json",
+        "DPA-TM-001.json",
+        "PAM-001.json",
+    }
     assert not (output_dir / "VQ-OC-001.json").exists()
 
     stakeholder_payload = json.loads((output_dir / "SHM-001.json").read_text(encoding="utf-8"))

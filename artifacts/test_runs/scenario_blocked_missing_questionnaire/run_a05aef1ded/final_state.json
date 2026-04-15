@@ -1,0 +1,42 @@
+{
+  "pipeline_run_id": "run_a05aef1ded",
+  "vendor_name": null,
+  "manifest_version": "CC-001-v1.4",
+  "initialized_at": "2026-04-15T15:21:53Z",
+  "overall_status": "BLOCKED",
+  "current_step": "STEP-01",
+  "step_statuses": {
+    "STEP-01": "BLOCKED",
+    "STEP-02": "PENDING",
+    "STEP-03": "PENDING",
+    "STEP-04": "PENDING",
+    "STEP-05": "PENDING",
+    "STEP-06": "PENDING"
+  },
+  "determinations": {
+    "step_01_intake": {
+      "questionnaire_valid": false,
+      "vendor_name": "",
+      "status": "BLOCKED",
+      "notes": [
+        "Questionnaire document VQ-OC-001 could not be retrieved."
+      ]
+    },
+    "step_02_security_classification": null,
+    "step_03_legal": null,
+    "step_04_procurement": null,
+    "step_05_checklist": null,
+    "step_06_guidance": null
+  },
+  "escalations": [],
+  "audit_refs": [
+    "audit_728f91553d",
+    "audit_b765348928",
+    "audit_731ed01cef",
+    "audit_f6e58b64a2",
+    "audit_1846a3a88b",
+    "audit_7755a4dd76",
+    "audit_9670f1ded3"
+  ],
+  "next_step_queue": []
+}

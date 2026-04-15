@@ -58,25 +58,14 @@ class Step03LegalHandler(BaseStepHandler):
                 ),
                 state=state,
             ),
-            "dpa_status": self.router.route(
-                RetrievalRequest(
-                    request_id="R03-SQ-03B",
-                    lane=RetrievalLane.DIRECT_STRUCTURED,
-                    source_id="VQ-OC-001",
-                    access_role=self.definition.access_role,
-                    output_name="dpa_status",
-                    field_map={"dpa_status_raw": ("legal_and_contractual_status.dpa_status",)},
-                ),
-                state=state,
-            ),
             "dpa_trigger_rows": self.router.route(
                 RetrievalRequest(
                     request_id="R03-SQ-04",
-                    lane=RetrievalLane.DIRECT_STRUCTURED,
+                    lane=RetrievalLane.INDEXED_HYBRID,
                     source_id="DPA-TM-001",
                     access_role=self.definition.access_role,
                     output_name="dpa_trigger_rows",
-                    field_map={"rows": ("rows",)},
+                    search_terms=("DPA", "trigger", "EU", "personal data", "controller"),
                 ),
                 state=state,
             ),
@@ -97,13 +86,11 @@ class Step03LegalHandler(BaseStepHandler):
             *retrievals["upstream_security"].payload.keys(),
             *retrievals["eu_inputs"].payload.keys(),
             *retrievals["nda_inputs"].payload.keys(),
-            *retrievals["dpa_status"].payload.keys(),
         }
         missing_fields = [
             *retrievals["upstream_security"].missing_fields,
             *retrievals["eu_inputs"].missing_fields,
             *retrievals["nda_inputs"].missing_fields,
-            *retrievals["dpa_status"].missing_fields,
         ]
         validation = self.bundle_validator.validate(
             step_id=self.step_id.value,

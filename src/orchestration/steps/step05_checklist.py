@@ -13,6 +13,21 @@ class Step05ChecklistHandler(BaseStepHandler):
         required_steps = (StepId.STEP_01, StepId.STEP_02, StepId.STEP_03, StepId.STEP_04)
         if not all(state.step_statuses[step] in {StepStatus.COMPLETE, StepStatus.ESCALATED} for step in required_steps):
             return GateDecision(allowed=False, reason="STEP-01 through STEP-04 must be terminal", resolution_owner="Supervisor")
+        # Gate also requires that upstream domain determinations are actually
+        # recorded in pipeline_state — a terminal step status alone is not
+        # sufficient evidence that the agent produced a determination.
+        required_determinations = (
+            "step_02_security_classification",
+            "step_03_legal",
+            "step_04_procurement",
+        )
+        missing = [key for key in required_determinations if state.determinations.get(key) is None]
+        if missing:
+            return GateDecision(
+                allowed=False,
+                reason=f"Missing upstream determinations: {missing!r}",
+                resolution_owner="Supervisor",
+            )
         return GateDecision(allowed=True)
 
     def execute(self, state: PipelineState) -> StepExecutionResult:

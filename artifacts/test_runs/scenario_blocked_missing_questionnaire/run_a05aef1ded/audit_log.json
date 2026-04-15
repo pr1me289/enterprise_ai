@@ -1,0 +1,200 @@
+[
+  {
+    "entry_id": "audit_728f91553d",
+    "pipeline_run_id": "run_a05aef1ded",
+    "agent_id": "supervisor",
+    "event_type": "RUN_EVENT",
+    "timestamp": "2026-04-15T15:21:53Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "message": "Pipeline initialized",
+      "manifest_version": "CC-001-v1.4"
+    }
+  },
+  {
+    "entry_id": "audit_b765348928",
+    "pipeline_run_id": "run_a05aef1ded",
+    "agent_id": "supervisor",
+    "event_type": "STATUS_CHANGE",
+    "timestamp": "2026-04-15T15:21:53Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-01",
+      "from_status": "PENDING",
+      "to_status": "IN_PROGRESS",
+      "reason": null
+    }
+  },
+  {
+    "entry_id": "audit_731ed01cef",
+    "pipeline_run_id": "run_a05aef1ded",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-15T15:21:53Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "document_id",
+        "value_present": false
+      },
+      {
+        "field_path": "submission_date",
+        "value_present": false
+      },
+      {
+        "field_path": "vendor_name",
+        "value_present": false
+      }
+    ],
+    "details": {
+      "request_id": "R01-SQ-01",
+      "lane": "direct_structured",
+      "admitted_count": 3,
+      "excluded_count": 0,
+      "output_name": "questionnaire_exists",
+      "missing_fields": [
+        "document_id",
+        "submission_date",
+        "vendor_name"
+      ],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_f6e58b64a2",
+    "pipeline_run_id": "run_a05aef1ded",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-15T15:21:53Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "vendor_name",
+        "value_present": false
+      },
+      {
+        "field_path": "integration_details.erp_type",
+        "value_present": false
+      },
+      {
+        "field_path": "data_classification_self_reported",
+        "value_present": false
+      },
+      {
+        "field_path": "regulated_data_types",
+        "value_present": false
+      },
+      {
+        "field_path": "eu_personal_data_flag",
+        "value_present": false
+      },
+      {
+        "field_path": "data_subjects_eu",
+        "value_present": false
+      },
+      {
+        "field_path": "existing_nda_status",
+        "value_present": false
+      },
+      {
+        "field_path": "existing_msa",
+        "value_present": false
+      },
+      {
+        "field_path": "vendor_class",
+        "value_present": false
+      },
+      {
+        "field_path": "contract_value_annual",
+        "value_present": false
+      }
+    ],
+    "details": {
+      "request_id": "R01-SQ-02",
+      "lane": "direct_structured",
+      "admitted_count": 10,
+      "excluded_count": 0,
+      "output_name": "questionnaire_complete",
+      "missing_fields": [
+        "vendor_name",
+        "integration_details.erp_type",
+        "data_classification_self_reported",
+        "regulated_data_types",
+        "eu_personal_data_flag",
+        "data_subjects_eu",
+        "existing_nda_status",
+        "existing_msa",
+        "vendor_class",
+        "contract_value_annual"
+      ],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_1846a3a88b",
+    "pipeline_run_id": "run_a05aef1ded",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-15T15:21:53Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "document_id",
+        "value_present": false
+      },
+      {
+        "field_path": "submission_version",
+        "value_present": false
+      }
+    ],
+    "details": {
+      "request_id": "R01-SQ-03",
+      "lane": "direct_structured",
+      "admitted_count": 2,
+      "excluded_count": 0,
+      "output_name": "version_conflict_detected",
+      "missing_fields": [
+        "document_id",
+        "submission_version"
+      ],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_7755a4dd76",
+    "pipeline_run_id": "run_a05aef1ded",
+    "agent_id": "supervisor",
+    "event_type": "DETERMINATION",
+    "timestamp": "2026-04-15T15:21:53Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-01",
+      "output": {
+        "questionnaire_valid": false,
+        "vendor_name": "",
+        "status": "BLOCKED",
+        "notes": [
+          "Questionnaire document VQ-OC-001 could not be retrieved."
+        ]
+      }
+    }
+  },
+  {
+    "entry_id": "audit_9670f1ded3",
+    "pipeline_run_id": "run_a05aef1ded",
+    "agent_id": "supervisor",
+    "event_type": "STATUS_CHANGE",
+    "timestamp": "2026-04-15T15:21:53Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-01",
+      "from_status": "IN_PROGRESS",
+      "to_status": "BLOCKED",
+      "reason": "Questionnaire not found"
+    }
+  }
+]

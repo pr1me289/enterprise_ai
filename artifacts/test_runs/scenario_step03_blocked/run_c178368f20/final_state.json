@@ -1,0 +1,90 @@
+{
+  "pipeline_run_id": "run_c178368f20",
+  "vendor_name": "OptiChain, Inc.",
+  "manifest_version": "CC-001-v1.4",
+  "initialized_at": "2026-04-15T01:02:07Z",
+  "overall_status": "BLOCKED",
+  "current_step": "STEP-03",
+  "step_statuses": {
+    "STEP-01": "COMPLETE",
+    "STEP-02": "COMPLETE",
+    "STEP-03": "BLOCKED",
+    "STEP-04": "PENDING",
+    "STEP-05": "PENDING",
+    "STEP-06": "PENDING"
+  },
+  "determinations": {
+    "step_01_intake": {
+      "questionnaire_valid": true,
+      "vendor_name": "OptiChain, Inc.",
+      "status": "COMPLETE",
+      "notes": []
+    },
+    "step_02_security_classification": {
+      "integration_type_normalized": "EXPORT_ONLY",
+      "integration_tier": "TIER_3",
+      "data_classification": "UNREGULATED",
+      "eu_personal_data_present": "NO",
+      "fast_track_eligible": true,
+      "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+      "security_followup_required": false,
+      "nda_status_from_questionnaire": "EXECUTED",
+      "required_security_actions": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "step_03_legal": {
+      "status": "blocked",
+      "errors": [
+        "policy_citations",
+        "dpa_blocker",
+        "dpa_required",
+        "trigger_rule_cited",
+        "nda_status",
+        "nda_blocker"
+      ]
+    },
+    "step_04_procurement": null,
+    "step_05_checklist": null,
+    "step_06_guidance": null
+  },
+  "escalations": [],
+  "audit_refs": [
+    "audit_d45a5daaf1",
+    "audit_66b4adf962",
+    "audit_a5481ca62d",
+    "audit_4962fe7b20",
+    "audit_7fb5cc068a",
+    "audit_5ec6ab81cc",
+    "audit_f05294a417",
+    "audit_c68fde873a",
+    "audit_b1e58d6e14",
+    "audit_2d69a5c277",
+    "audit_0c65d2cec2",
+    "audit_d557a827e4",
+    "audit_7274823850",
+    "audit_9c490c044b",
+    "audit_0237473974",
+    "audit_8435ee9796",
+    "audit_3a1b9b1215",
+    "audit_05c9ba7b5e",
+    "audit_3e5929ae78",
+    "audit_0da565b6dc",
+    "audit_79f589411a",
+    "audit_2afcbf9a8c",
+    "audit_e524874eb2",
+    "audit_c4eb7b6398",
+    "audit_ce6b891ddd",
+    "audit_4ea23b7f51",
+    "audit_67cadcf267"
+  ],
+  "next_step_queue": []
+}

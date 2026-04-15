@@ -215,7 +215,6 @@ class BundleAssembler:
         questionnaire = {
             **retrievals["eu_inputs"].payload,
             **retrievals["nda_inputs"].payload,
-            **retrievals["dpa_status"].payload,
         }
 
         bundle = ContextBundle(
@@ -308,6 +307,11 @@ class BundleAssembler:
         provenance = _build_provenance(["STEP-05", "PIPELINE_CONFIG", "STEP-02", "STEP-03", "STEP-04"], retrievals)
         admissibility = _resolve_admissibility(validation)
 
+        escalations_payload = (
+            retrievals["escalations"].payload.get("escalations", [])
+            if "escalations" in retrievals
+            else []
+        )
         bundle = ContextBundle(
             step_id=step_id,
             admitted_evidence=admitted,
@@ -317,6 +321,7 @@ class BundleAssembler:
                 "finalized_checklist": retrievals["finalized_checklist"].payload,
                 "stakeholder_map": retrievals["stakeholder_map"].payload,
                 "domain_outputs": retrievals["domain_outputs"].payload,
+                "escalations": escalations_payload,
                 "bundle_meta": validation,
             },
             source_provenance=provenance,
