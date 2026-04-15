@@ -14,4 +14,5 @@ class LLMAdapter(Protocol):
         prompt: str,
         bundle: dict[str, Any],
         step_metadata: dict[str, Any],
+        context_bundle: Any = None,
     ) -> dict[str, Any]: ...

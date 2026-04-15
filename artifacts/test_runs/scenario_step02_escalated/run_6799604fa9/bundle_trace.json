@@ -1,0 +1,40 @@
+[
+  {
+    "step_id": "STEP-01",
+    "admissibility_status": "PARTIAL",
+    "admitted_count": 0,
+    "excluded_count": 0,
+    "admitted_chunks": [],
+    "excluded_chunks": [],
+    "structured_fields_keys": [],
+    "source_provenance": []
+  },
+  {
+    "step_id": "STEP-02",
+    "admissibility_status": "ADMISSIBLE",
+    "admitted_count": 0,
+    "excluded_count": 0,
+    "admitted_chunks": [],
+    "excluded_chunks": [],
+    "structured_fields_keys": [
+      "questionnaire",
+      "policy_chunks",
+      "bundle_meta",
+      "source_ids"
+    ],
+    "source_provenance": [
+      {
+        "source_id": "VQ-OC-001",
+        "output_name": "integration_inputs",
+        "lane": "direct_structured",
+        "chunk_count": 0
+      },
+      {
+        "source_id": "ISP-001",
+        "output_name": "erp_tier_policy_chunks",
+        "lane": "indexed_hybrid",
+        "chunk_count": 0
+      }
+    ]
+  }
+]

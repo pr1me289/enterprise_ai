@@ -68,10 +68,40 @@ def _validate_bundle(bundle: ContextBundle) -> None:
             )
 
 
+_ESCALATED_OUTPUT = {
+    "approval_path": "STANDARD",
+    "fast_track_eligible": False,
+    "required_approvals": [],
+    "estimated_timeline": "",
+    "policy_citations": [],
+    "status": "escalated",
+}
+
+_BLOCKED_OUTPUT = {
+    "status": "blocked",
+    "errors": ["Bundle violation: prohibited source detected in Procurement bundle."],
+}
+
+
 def run(
     bundle: ContextBundle,
     scenario_name: str,
+    signal: str = "complete",
 ) -> tuple[dict[str, Any], str, EscalationPayload | None]:
-    """Execute mock STEP-04 Procurement routing determination."""
+    """Execute mock STEP-04 Procurement routing determination.
+
+    Validates the bundle first (raising ValueError on structural violations),
+    then fires the pre-determined signal requested by the scenario.
+    """
     _validate_bundle(bundle)
+
+    signal_norm = signal.lower()
+    if signal_norm == "escalated":
+        escalation = EscalationPayload(
+            evidence_condition="No matching approval-matrix row for the vendor profile.",
+            resolution_owner="Procurement",
+        )
+        return _ESCALATED_OUTPUT.copy(), "ESCALATED", escalation
+    if signal_norm == "blocked":
+        return _BLOCKED_OUTPUT.copy(), "BLOCKED", None
     return _COMPLETE_OUTPUT.copy(), "COMPLETE", None

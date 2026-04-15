@@ -37,13 +37,24 @@ def _validate_bundle(bundle: ContextBundle) -> None:
 def run(
     bundle: ContextBundle,
     scenario_name: str,
+    signal: str = "complete",
 ) -> tuple[dict[str, Any], str, EscalationPayload | None]:
-    """Execute mock STEP-06 checkoff guidance generation."""
+    """Execute mock STEP-06 checkoff guidance generation.
+
+    Validates the bundle first (raising ValueError on structural violations),
+    then fires the pre-determined signal requested by the scenario.
+    """
     _validate_bundle(bundle)
 
     sf = bundle.structured_fields
     checklist: dict[str, Any] = sf.get("finalized_checklist", {})
     overall_status: str = checklist.get("overall_status", "COMPLETE")
+
+    signal_norm = signal.lower()
+    if signal_norm == "blocked":
+        return ({"status": "blocked", "guidance_documents": []}, "BLOCKED", None)
+    if signal_norm == "escalated":
+        return ({"status": "escalated", "guidance_documents": []}, "ESCALATED", None)
 
     guidance_documents = [
         {

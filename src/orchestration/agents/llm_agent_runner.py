@@ -26,8 +26,12 @@ class LLMAgentRunner:
         self.adapter = adapter
 
     def run(self, *, agent_name: str, bundle: Any, step_metadata: dict[str, Any]) -> dict[str, Any]:
-        # Accept either a ContextBundle (typed) or a plain dict.  Agents always
-        # receive the flat structured_fields dict so downstream logic is unchanged.
+        # Accept either a ContextBundle (typed) or a plain dict.  Real LLM
+        # adapters receive the flat structured_fields dict (the only thing
+        # they should serialize into a prompt), but mock adapters that need
+        # to inspect admitted_evidence / excluded_evidence get the full
+        # ContextBundle via context_bundle.
+        context_bundle = bundle if hasattr(bundle, "structured_fields") else None
         bundle_dict: dict[str, Any] = (
             bundle.structured_fields if hasattr(bundle, "structured_fields") else bundle
         )
@@ -39,6 +43,7 @@ class LLMAgentRunner:
             prompt=prompt,
             bundle=bundle_dict,
             step_metadata=step_metadata,
+            context_bundle=context_bundle,
         )
 
     def _load_spec(self, agent_name: str) -> str:
@@ -77,8 +82,9 @@ class MockLLMAdapter:
         prompt: str,
         bundle: dict[str, Any],
         step_metadata: dict[str, Any],
+        context_bundle: Any = None,
     ) -> dict[str, Any]:
-        del spec_text, prompt, step_metadata
+        del spec_text, prompt, step_metadata, context_bundle
         if agent_name == "it_security_agent":
             return self._run_it_security(bundle)
         if agent_name == "legal_agent":

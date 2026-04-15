@@ -28,8 +28,10 @@ class BundleTraceWriter:
                     "source_id": c.source_id,
                     "chunk_id": c.chunk_id,
                     "authority_tier": c.authority_tier,
+                    "retrieval_lane": c.retrieval_lane,
                     "is_primary_citable": c.is_primary_citable,
                     "citation_label": c.citation_label,
+                    "extra_metadata": dict(c.extra_metadata),
                 }
                 for c in bundle.admitted_evidence
             ],

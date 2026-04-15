@@ -1,5 +1,13 @@
 # Necessary Fixes — Deterministic Orchestration Test Harness
 
+---
+
+## User Directive (verbatim, 2026-04-14)
+
+> Okay I want you to loop and iterate through your own assessment of gaps, working on the current branch, and fix the shortcomings in our current pipeline. Maintain, for the sake of simplicity of our testing phase, that we still use mock agents for this testing run of the pipeline. But, the pipeline should use the orchestration layer, our supervisor as the guiding instrument for shifting the pipeline from step to step, and following the execution graph laid out through our design doc and context contract and orchestration layer plan. Then, our retrieval engine should gather preumptively chunked and embedded or non-embedded sources, depending on how they are registered in our core documents, and then the supervisor should bundle the proper items to give to the correct domain agents based on their authority. For the sake of simplicity, in the testing run, just test whether, when domain agents fire pre-determined signals of ESCALATED, BLOCKED, or COMPLETE, the rest of the pipeline operates properly. The purpose of having a static python state machine for our supervisor is to be deterministic. And this testing phase should be checking the integrity of our pipeline process and whether it follows the steps we set out in the core documents in the correct order and based on the process and rules we have set out. We want eerything in the orchestration layer (the supervisor), the retrieval engine, the chunking & embedding services, and the context bundle assembly process to be functioning properly and flawlessly before we use actual LLM agents instead of mock agents. I want you to put this prompt, word-for-word in the top of your necessary_fixes.md document prior to beginning work and save it. Begin iterating and serve as an integrity checker for us now.
+
+---
+
 **Branch:** `feature/supervisor-orchestration-retrieval`
 **Audit date:** 2026-04-14
 **Auditor:** Claude (Opus 4.6)
@@ -25,7 +33,7 @@ Do not consider the harness "thorough" until every item below is checked off.
 
 ## Priority 1 — Bundle capture is fake (blocks every bundle assertion)
 
-### [ ] 1.1 Capture the real `ContextBundle` produced inside each step handler
+### [x] 1.1 Capture the real `ContextBundle` produced inside each step handler
 
 - **Location:** `test_harness/run_test_scenario.py`, function `_record_bundle_trace_from_state` (around lines 354–400), called from the main loop at ~line 298.
 - **What is wrong:** The function synthesises an empty `ContextBundle`:
@@ -53,7 +61,7 @@ Do not consider the harness "thorough" until every item below is checked off.
 
 ## Priority 2 — Dead code: bundle-aware mock agents are never used
 
-### [ ] 2.1 Wire up or remove the `test_harness/mock_agents/*.py` files
+### [x] 2.1 Wire up or remove the `test_harness/mock_agents/*.py` files
 
 - **Location:** `test_harness/mock_agents/mock_step_01_intake.py` through `mock_step_06_checkoff.py`.
 - **What is wrong:** These six files implement bundle-aware mock agents with exactly the validation logic the checklist requires (required fields, forbidden sources, Slack-primary violations, Thread 4 exclusion). They are **not imported anywhere** — `grep -r "from test_harness.mock_agents"` returns zero matches. The harness instead routes all agent calls through `_ScenarioMockAdapter` → `MockLLMAdapter` (in `src/orchestration/agents/llm_agent_runner.py`), which does not reproduce these validations.
@@ -69,7 +77,7 @@ Do not consider the harness "thorough" until every item below is checked off.
 
 ## Priority 3 — Fixture `bundle_invariants` are weaker than the checklist
 
-### [ ] 3.1 Tighten STEP-03 Legal invariants
+### [x] 3.1 Tighten STEP-03 Legal invariants
 
 - **Location:** `test_harness/scenario_fixtures.py`, the `bundle_invariants` entries for STEP-03 in `SCENARIO_1_COMPLETE` and `SCENARIO_2_ESCALATED`.
 - **What is wrong:** STEP-03 currently asserts presence of `VQ-OC-001` plus two VQ fields only. The checklist requires:
@@ -80,14 +88,14 @@ Do not consider the harness "thorough" until every item below is checked off.
 - **What should happen:** Add `required_source_ids=["DPA-TM-001", "ISP-001", "VQ-OC-001"]`, `required_structured_fields=["it_security_output.data_classification"]`, and `forbidden_source_ids=["PAM-001", "SLK-001"]`. Also add a section-specific assertion that `ISP-001__section_12_1_4` (or equivalent chunk id) appears in admitted evidence.
 - **Acceptance criteria:** An intentionally-degraded bundle (any single required item removed) causes FAIL.
 
-### [ ] 3.2 Tighten STEP-04 Procurement invariants
+### [x] 3.2 Tighten STEP-04 Procurement invariants
 
 - **Location:** Same file, STEP-04 invariants in both complete/escalated fixtures.
 - **What is wrong:** Only `VQ-OC-001` is required; checklist requires STEP-02 full output, STEP-03 full output, required VQ procurement fields (`vendor_class`, `deal_size`, `existing_nda_status`), and `PAM-001` rows. Conditional `SLK-001` supplementary is allowed only when flagged and must never be primary.
 - **What should happen:** Add `required_source_ids=["PAM-001", "VQ-OC-001"]`, `required_structured_fields=["it_security_output", "legal_output"]`, `forbidden_source_ids=["DPA-TM-001"]`, `slack_must_not_be_primary=True`.
 - **Acceptance criteria:** Same pattern as 3.1.
 
-### [ ] 3.3 Add real STEP-05 Checklist Assembler invariants
+### [x] 3.3 Add real STEP-05 Checklist Assembler invariants
 
 - **Location:** Same file, STEP-05 invariants.
 - **What is wrong:** `required_source_ids=[]` and `required_structured_fields=[]`. Checklist requires structured outputs of STEP-02/03/04 and audit-log entries; forbids all raw source documents.
@@ -96,7 +104,7 @@ Do not consider the harness "thorough" until every item below is checked off.
   - `forbidden_source_ids=["VQ-OC-001", "ISP-001", "DPA-TM-001", "PAM-001", "SLK-001"]` — the Assembler sees no raw sources.
 - **Acceptance criteria:** Smuggling any raw chunk into the STEP-05 bundle causes FAIL.
 
-### [ ] 3.4 Add real STEP-06 Checkoff invariants
+### [x] 3.4 Add real STEP-06 Checkoff invariants
 
 - **Location:** Same file, STEP-06 invariants.
 - **What is wrong:** Both required lists are empty. Checklist requires finalized checklist, stakeholder map, approver list, required security actions, escalation reasons (if any), and domain determination summaries. Forbids all raw source documents and all index queries.
@@ -106,7 +114,7 @@ Do not consider the harness "thorough" until every item below is checked off.
   - Add a separate invariant that the Checkoff Agent emits **zero** retrieval audit entries (see 4.2).
 - **Acceptance criteria:** A test that injects a raw source chunk or an index query for STEP-06 causes FAIL.
 
-### [ ] 3.5 Add a `forbidden_source_ids` check to `assert_bundles`
+### [x] 3.5 Add a `forbidden_source_ids` check to `assert_bundles`
 
 - **Location:** `test_harness/result_assertions.py`, function `assert_bundles`.
 - **What is wrong:** The `BundleInvariant` dataclass already has (or should have — verify in `scenario_fixtures.py`) a `forbidden_source_ids` field, but `assert_bundles` doesn't read it.
@@ -117,7 +125,7 @@ Do not consider the harness "thorough" until every item below is checked off.
 
 ## Priority 4 — Retrieval-lane conformance is not asserted
 
-### [ ] 4.1 Add a lane-per-source assertion
+### [x] 4.1 Add a lane-per-source assertion
 
 - **Location:** `test_harness/result_assertions.py`, new function `assert_retrieval_lanes` (called from `run_all_assertions`).
 - **What is wrong:** The harness already emits a `RETRIEVE` event with a `lane` field (`run_test_scenario.py:284-288`), and the checklist declares the lane for each source:
@@ -131,7 +139,7 @@ Do not consider the harness "thorough" until every item below is checked off.
 - **What should happen:** In `assert_retrieval_lanes`, walk the audit log entries where `event_type == "RETRIEVAL"` and confirm `(source_queried, details["lane"])` matches the expected mapping. Fail on mismatch.
 - **Acceptance criteria:** Temporarily swapping the lane for `ISP-001` in the retrieval layer causes a harness FAIL.
 
-### [ ] 4.2 Assert STEP-06 emits zero retrieval events
+### [x] 4.2 Assert STEP-06 emits zero retrieval events
 
 - **Location:** Same file, extend `assert_retrieval_lanes` or add `assert_checkoff_no_retrieval`.
 - **What is wrong:** The checklist is explicit: "If the Checkoff Agent issues any index query, fail closed and log it." No assertion enforces this.
@@ -142,7 +150,7 @@ Do not consider the harness "thorough" until every item below is checked off.
 
 ## Priority 5 — Supervisor does not halt on ESCALATED on its own
 
-### [ ] 5.1 Halt on ESCALATED inside `Supervisor.execute_next_step()`
+### [x] 5.1 Halt on ESCALATED inside `Supervisor.execute_next_step()`
 
 - **Location:** `src/orchestration/supervisor.py`, end of `execute_next_step` — returns `self.state.overall_status is not RunStatus.BLOCKED and bool(self.state.next_step_queue)`.
 - **What is wrong:** Only `BLOCKED` halts the supervisor's own loop. `ESCALATED` halting depends entirely on the harness wrapper (`run_test_scenario.py:258-260`). Any production caller using `execute_next_step()` directly would not halt on escalation.
@@ -163,30 +171,30 @@ Do not consider the harness "thorough" until every item below is checked off.
 
 For each item below, add a new `HarnessFixture` in `test_harness/scenario_fixtures.py`, register it in `run_test_scenario.py`'s `--scenario` choices, and drive it with the appropriate adapter override.
 
-### [ ] 6.1 Add `scenario_step02_escalated_ambiguous_integration`
+### [x] 6.1 Add `scenario_step02_escalated_ambiguous_integration`
 
 - **Trigger:** Questionnaire fields produce AMBIGUOUS integration tier classification in `MockLLMAdapter._run_it_security`. Use questionnaire override rather than agent override so the real bundle-aware adapter path is exercised.
 - **Expected terminal:** STEP-02, overall=ESCALATED. STEP-03/04/05/06 stay PENDING.
 - **Why:** Proves STEP-02's escalation path works and that downstream steps do not run.
 
-### [ ] 6.2 Add `scenario_step04_escalated_no_pam_row`
+### [x] 6.2 Add `scenario_step04_escalated_no_pam_row`
 
 - **Trigger:** Questionnaire `vendor_class` / `deal_size` combination yields no matching `PAM-001` row.
 - **Expected terminal:** STEP-04, overall=ESCALATED. STEP-05/06 stay PENDING.
 - **Why:** Checklist allows an ESCALATED status here; currently untested.
 
-### [ ] 6.3 Add `scenario_step03_blocked_prohibited_source`
+### [x] 6.3 Add `scenario_step03_blocked_prohibited_source`
 
 - **Trigger:** Force a prohibited source into the STEP-03 bundle (e.g., via a bundle-assembler test hook or a questionnaire that trips the prohibition logic in `MockLLMAdapter._run_legal`, which returns `{"status": "blocked"}` when `meta["prohibited_sources"]` is present — see `llm_agent_runner.py:~line 165`).
 - **Expected terminal:** STEP-03, overall=BLOCKED. STEP-04/05/06 stay PENDING.
 - **Why:** The only BLOCKED scenario today is STEP-01 (missing questionnaire). The adapter's other BLOCKED paths are dead until tested.
 
-### [ ] 6.4 Add `scenario_step05_propagates_escalation`
+### [x] 6.4 Add `scenario_step05_propagates_escalation`
 
 - **Trigger:** STEP-03 returns ESCALATED (reuse scenario 2's override), but instead of halting the harness early, verify the Assembler would treat this correctly if it ever ran. If the plan says STEP-05 never runs after an ESCALATED upstream, then the existing scenario 2 already covers this — document that and add an explicit assertion in `assert_global` that STEP-05 and STEP-06 are PENDING on scenario 2.
 - **Why:** Makes the "STEP-06 never runs after ESCALATED" invariant explicit rather than implicit.
 
-### [ ] 6.5 Verify COMPLETE path exercises real agent logic
+### [x] 6.5 Verify COMPLETE path exercises real agent logic
 
 - **Location:** `run_test_scenario.py`, `_build_agent_overrides`.
 - **What is wrong:** Scenario 1 hard-codes outputs for `legal_agent`, `procurement_agent`, `checklist_assembler`, and `checkoff_agent` — four of five agents never see their bundle. This was originally added to work around a type mismatch (`dpa_trigger_rows` being a `{"rows": [...]}` dict vs a list — see `_build_agent_overrides` docstring).
@@ -200,12 +208,12 @@ For each item below, add a new `HarnessFixture` in `test_harness/scenario_fixtur
 
 ## Priority 7 — Documentation and traceability
 
-### [ ] 7.1 Add a `master_log.md` entry for this audit and each fix batch
+### [x] 7.1 Add a `master_log.md` entry for this audit and each fix batch
 
 - **Location:** `master_log.md` at repo root.
 - **What:** One session entry per fix batch, using the format in `CLAUDE.md`. Reference this file by name in each entry's **Plan** line.
 
-### [ ] 7.2 Update the test-harness prompt doc if invariants change
+### [x] 7.2 Update the test-harness prompt doc if invariants change
 
 - **Location:** `deterministic_orchestration_test_harness_prompt.md`.
 - **What:** If any fix changes the expected shape of fixtures or the assertion set, update the prompt doc so the harness spec and the harness stay in lock-step.
@@ -216,11 +224,11 @@ For each item below, add a new `HarnessFixture` in `test_harness/scenario_fixtur
 
 A future agent should be able to answer **yes** to every line below before closing out this file.
 
-- [ ] `uv run python test_harness/run_test_scenario.py --scenario scenario_1_complete` PASSes with no agent overrides beyond scenario 2's legal override.
-- [ ] `uv run python test_harness/run_test_scenario.py --scenario scenario_2_escalated` PASSes and STEP-04/05/06 are PENDING.
-- [ ] `uv run python test_harness/run_test_scenario.py --scenario scenario_blocked_missing_questionnaire` PASSes and all steps except STEP-01 are PENDING.
-- [ ] Each new status-signal scenario (6.1–6.4) PASSes.
-- [ ] For each of the following tampering injections, the harness **FAILs** (confirming assertions have teeth):
+- [x] `uv run python test_harness/run_test_scenario.py --scenario scenario_1_complete` PASSes with no agent overrides beyond scenario 2's legal override.
+- [x] `uv run python test_harness/run_test_scenario.py --scenario scenario_2_escalated` PASSes and STEP-04/05/06 are PENDING.
+- [x] `uv run python test_harness/run_test_scenario.py --scenario scenario_blocked_missing_questionnaire` PASSes and all steps except STEP-01 are PENDING.
+- [x] Each new status-signal scenario (6.1–6.4) PASSes.
+- [x] For each of the following tampering injections, the harness **FAILs** (confirming assertions have teeth):
   - Inject a `DPA-TM-001` chunk into the STEP-02 bundle.
   - Inject a `PAM-001` chunk into the STEP-03 bundle.
   - Inject a `SLK-001` chunk marked `is_primary_citable=True` into the STEP-04 bundle.
@@ -228,8 +236,8 @@ A future agent should be able to answer **yes** to every line below before closi
   - Inject any raw source chunk into the STEP-05 or STEP-06 bundle.
   - Swap the retrieval lane for `ISP-001` from `INDEXED_HYBRID` to `DIRECT_STRUCTURED`.
   - Make STEP-06 emit a retrieval event.
-- [ ] `bundle_trace.json` shows real, non-empty `admitted_chunks` for STEP-02/03/04 on scenario 1.
-- [ ] `ruff check .` and `pytest` pass.
+- [x] `bundle_trace.json` shows real, non-empty `admitted_chunks` for STEP-02/03/04 on scenario 1.
+- [x] `ruff check .` and `pytest` pass.
 
 ---
 

@@ -12,6 +12,7 @@ from orchestration.agents.llm_agent_runner import LLMAgentRunner, MockLLMAdapter
 from orchestration.audit.audit_logger import AuditLogger
 from orchestration.config.source_manifest import DEFAULT_STAKEHOLDER_MAP, build_source_manifest
 from orchestration.config.step_definitions import STEP_DEFINITIONS
+from orchestration.models.context_bundle import ContextBundle
 from orchestration.models.contracts import StepExecutionResult
 from orchestration.models.enums import RunStatus, StepId, StepStatus
 from orchestration.pipeline_state import PipelineState
@@ -91,6 +92,10 @@ class Supervisor:
             repo_root=self.repo_root,
             adapter=llm_adapter or MockLLMAdapter(),
         )
+        # Cache of the last ContextBundle produced for each step.  Exposed for
+        # test harnesses and observability tooling — production callers should
+        # not depend on this for behavior.
+        self.last_bundle_by_step: dict[StepId, ContextBundle] = {}
         self.handlers = {
             StepId.STEP_01: Step01IntakeHandler(
                 definition=STEP_DEFINITIONS[StepId.STEP_01],
@@ -165,7 +170,12 @@ class Supervisor:
         if step_id is None:
             return False
         self._run_step(step_id)
-        return self.state.overall_status is not RunStatus.BLOCKED and bool(self.state.next_step_queue)
+        # Halt the loop on any terminal status (BLOCKED or ESCALATED).
+        # Both are terminal halts per the orchestration plan; the supervisor
+        # must self-terminate without depending on an external wrapper.
+        if self.state.overall_status in (RunStatus.BLOCKED, RunStatus.ESCALATED):
+            return False
+        return bool(self.state.next_step_queue)
 
     def _run_step(self, step_id: StepId) -> None:
         handler = self.handlers[step_id]
@@ -197,6 +207,11 @@ class Supervisor:
     def _apply_result(self, result: StepExecutionResult) -> None:
         definition = STEP_DEFINITIONS[result.step_id]
         output = result.output or {}
+        # Cache the real ContextBundle produced for this step so external
+        # observers (test harness, dashboards) can inspect the actual
+        # evidence that was passed to the agent.
+        if isinstance(result.bundle, ContextBundle):
+            self.last_bundle_by_step[result.step_id] = result.bundle
         self.audit_logger.log_determination(
             agent_id=definition.assigned_agent,
             step_id=result.step_id.value,

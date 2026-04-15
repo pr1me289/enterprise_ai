@@ -47,15 +47,21 @@ _COMPLETE_OUTPUT = {
 }
 
 _ESCALATED_OUTPUT = {
-    "integration_type_normalized": "EXPORT_ONLY",
-    "integration_tier": "TIER_3",
-    "data_classification": "UNREGULATED",
-    "eu_personal_data_present": "YES",
-    "fast_track_eligible": True,
-    "fast_track_rationale": "ELIGIBLE_LOW_RISK",
-    "security_followup_required": False,
+    "integration_type_normalized": "AMBIGUOUS",
+    "integration_tier": "UNCLASSIFIED_PENDING_REVIEW",
+    "data_classification": "REGULATED",
+    "eu_personal_data_present": "UNKNOWN",
+    "fast_track_eligible": False,
+    "fast_track_rationale": "DISALLOWED_AMBIGUOUS_SCOPE",
+    "security_followup_required": True,
     "nda_status_from_questionnaire": "EXECUTED",
-    "required_security_actions": [],
+    "required_security_actions": [
+        {
+            "action_type": "SECURITY_REVIEW",
+            "reason": "Integration scope ambiguous; manual review required.",
+            "owner": "IT Security",
+        }
+    ],
     "policy_citations": [
         {
             "source_id": "ISP-001",
@@ -65,7 +71,12 @@ _ESCALATED_OUTPUT = {
             "citation_class": "PRIMARY",
         }
     ],
-    "status": "complete",
+    "status": "escalated",
+}
+
+_BLOCKED_OUTPUT = {
+    "status": "blocked",
+    "errors": ["Bundle violation: prohibited source detected in IT Security bundle."],
 }
 
 
@@ -111,13 +122,22 @@ def _validate_bundle(bundle: ContextBundle) -> None:
 def run(
     bundle: ContextBundle,
     scenario_name: str,
+    signal: str = "complete",
 ) -> tuple[dict[str, Any], str, EscalationPayload | None]:
-    """Execute mock STEP-02 IT Security determination."""
+    """Execute mock STEP-02 IT Security determination.
+
+    Validates the bundle first (raising ValueError on structural violations),
+    then fires the pre-determined signal requested by the scenario.
+    """
     _validate_bundle(bundle)
 
-    # Scenario 2 uses STEP-02 as COMPLETE (escalation occurs at STEP-03)
-    if scenario_name in ("scenario_1_complete", "scenario_2_escalated"):
-        return _COMPLETE_OUTPUT.copy(), "COMPLETE", None
-
-    # Default: complete
+    signal_norm = signal.lower()
+    if signal_norm == "escalated":
+        escalation = EscalationPayload(
+            evidence_condition="Security classification requires review before downstream execution.",
+            resolution_owner="IT Security",
+        )
+        return _ESCALATED_OUTPUT.copy(), "ESCALATED", escalation
+    if signal_norm == "blocked":
+        return _BLOCKED_OUTPUT.copy(), "BLOCKED", None
     return _COMPLETE_OUTPUT.copy(), "COMPLETE", None

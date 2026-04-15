@@ -34,13 +34,49 @@ def _validate_bundle(bundle: ContextBundle) -> None:
 def run(
     bundle: ContextBundle,
     scenario_name: str,
+    signal: str = "complete",
 ) -> tuple[dict[str, Any], str, EscalationPayload | None]:
-    """Execute mock STEP-05 Checklist assembly."""
+    """Execute mock STEP-05 Checklist assembly.
+
+    Validates the bundle first (raising ValueError on structural violations),
+    then fires the pre-determined signal requested by the scenario.
+    """
     _validate_bundle(bundle)
 
     sf = bundle.structured_fields
     pipeline_run_id: str = sf.get("pipeline_run_id", "")
     vendor_name: str = sf.get("vendor_name", "")
+
+    signal_norm = signal.lower()
+    if signal_norm == "blocked":
+        return (
+            {
+                "pipeline_run_id": pipeline_run_id,
+                "vendor_name": vendor_name,
+                "overall_status": "BLOCKED",
+                "blockers": [
+                    {
+                        "blocker_type": "BUNDLE_VIOLATION",
+                        "description": "Checklist assembler bundle contained prohibited sources.",
+                        "resolution_owner": "Supervisor",
+                        "citation": "checklist_assembler:bundle_meta",
+                    }
+                ],
+            },
+            "BLOCKED",
+            None,
+        )
+    if signal_norm == "escalated":
+        return (
+            {
+                "pipeline_run_id": pipeline_run_id,
+                "vendor_name": vendor_name,
+                "overall_status": "ESCALATED",
+                "blockers": [],
+            },
+            "ESCALATED",
+            None,
+        )
 
     output = {
         "pipeline_run_id": pipeline_run_id,

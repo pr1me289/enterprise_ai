@@ -8,9 +8,11 @@ from __future__ import annotations
 
 from typing import Any
 
+from orchestration.audit.schemas import AuditEntry
 from orchestration.config.step_definitions import STEP_ORDER
 from orchestration.models.enums import StepId, StepStatus
 from orchestration.pipeline_state import PipelineState
+from preprocessing.source_contract import SOURCE_CONTRACTS_BY_ID
 from test_harness.scenario_fixtures import HarnessFixture
 
 
@@ -138,6 +140,37 @@ def assert_bundles(
                 f"admissibility — prohibited sources were admitted."
             )
 
+        # Required source IDs: every expected source must appear in provenance
+        provenance_source_ids = {p["source_id"] for p in trace.get("source_provenance", [])}
+        admitted_source_ids = {c["source_id"] for c in trace["admitted_chunks"]}
+        available_source_ids = provenance_source_ids | admitted_source_ids
+        for sid in invariant.required_source_ids:
+            if sid not in available_source_ids:
+                raise AssertionError(
+                    f"assert_bundles: {step_id} — required source {sid!r} "
+                    f"not found in provenance or admitted chunks. "
+                    f"provenance={sorted(provenance_source_ids)!r}"
+                )
+
+        # Forbidden source IDs: must not appear in provenance or admitted chunks
+        for sid in invariant.forbidden_source_ids:
+            if sid in available_source_ids:
+                raise AssertionError(
+                    f"assert_bundles: {step_id} — forbidden source {sid!r} "
+                    f"appeared in bundle "
+                    f"(provenance={sorted(provenance_source_ids)!r}, "
+                    f"admitted={sorted(admitted_source_ids)!r})."
+                )
+
+        # Required structured fields: must appear as top-level keys
+        present_keys = set(trace.get("structured_fields_keys", []))
+        for field_key in invariant.required_structured_fields:
+            if field_key not in present_keys:
+                raise AssertionError(
+                    f"assert_bundles: {step_id} — required structured field "
+                    f"{field_key!r} missing. Present keys: {sorted(present_keys)!r}"
+                )
+
         # Check Slack not primary evidence
         if invariant.slack_must_not_be_primary:
             for chunk in trace["admitted_chunks"]:
@@ -149,11 +182,9 @@ def assert_bundles(
 
         # Check Thread 4 excluded
         if invariant.thread4_must_be_excluded:
-            for exc in trace["excluded_chunks"]:
-                _ = exc  # having exclusion records is acceptable
-            # Also check admitted does not contain Thread 4
             for chunk in trace["admitted_chunks"]:
-                if chunk.get("extra_metadata", {}).get("thread_id") in ("T4", "4", "thread_4"):
+                extra = chunk.get("extra_metadata") or {}
+                if extra.get("thread_id") in ("T4", "4", "thread_4"):
                     raise AssertionError(
                         f"assert_bundles: {step_id} — Thread 4 chunk was admitted: "
                         f"{chunk['chunk_id']!r}"
@@ -185,6 +216,120 @@ def assert_status(state: PipelineState, fixture: HarnessFixture) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Retrieval-lane conformance
+# ---------------------------------------------------------------------------
+
+# Sources not in source_contract.py but legitimately queried via RUNTIME_READ
+# as stand-ins for upstream-step outputs and other runtime state.
+_RUNTIME_READ_STAND_INS = {
+    "STEP-02",
+    "STEP-03",
+    "STEP-04",
+    "STEP-05",
+    "AUDIT_LOG",
+    "PIPELINE_CONFIG",
+    "PIPELINE_STATE",
+}
+
+
+def _request_step_from_request_id(request_id: str | None) -> str | None:
+    """Extract the step id (e.g. 'STEP-02') from a retrieval request_id prefix.
+
+    Step handlers use the request_id convention ``R<nn>-SQ-<kk>`` where ``nn``
+    is the zero-padded step number.  Return the canonical ``STEP-<nn>`` id or
+    None if no prefix is found.
+    """
+    if not request_id or not request_id.startswith("R"):
+        return None
+    prefix = request_id[1:3]
+    if prefix.isdigit():
+        return f"STEP-{prefix}"
+    return None
+
+
+def assert_retrieval_lanes(
+    audit_entries: list[AuditEntry],
+    fixture: HarnessFixture,
+) -> None:
+    """Assert every retrieval used the lane declared in source_contract.py.
+
+    Divergence between a canonical source's declared lane and the lane the
+    supervisor actually used is a bundle-integrity violation.  Stand-in
+    sources (STEP-02, STEP-03, AUDIT_LOG, PIPELINE_CONFIG, ...) are exempt
+    because they are not canonical sources — they model runtime reads.
+    """
+    del fixture  # not currently scenario-specific
+
+    for entry in audit_entries:
+        if entry.event_type.value != "RETRIEVAL":
+            continue
+        source_id = entry.source_queried or ""
+        actual_lane = (entry.details or {}).get("lane", "")
+        if source_id in _RUNTIME_READ_STAND_INS:
+            if actual_lane != "runtime_read":
+                raise AssertionError(
+                    f"assert_retrieval_lanes: stand-in source {source_id!r} "
+                    f"queried via lane={actual_lane!r}; expected 'runtime_read'."
+                )
+            continue
+        contract = SOURCE_CONTRACTS_BY_ID.get(source_id)
+        if contract is None:
+            # Unknown source — don't enforce here; other assertions will catch.
+            continue
+        # Normalise to lowercase because preprocessing.RetrievalLane uses
+        # uppercase values while orchestration.RetrievalLane uses lowercase.
+        expected_lane = contract.retrieval_lane.value.lower()
+        if actual_lane.lower() != expected_lane:
+            raise AssertionError(
+                f"assert_retrieval_lanes: {source_id!r} queried via "
+                f"lane={actual_lane!r}; expected {expected_lane!r} per "
+                f"source_contract.py."
+            )
+
+
+def assert_no_retrieval_in_forbidden_steps(
+    audit_entries: list[AuditEntry],
+    fixture: HarnessFixture,
+) -> None:
+    """Assert steps listed as forbidden_retrieval_steps emit zero RETRIEVAL entries.
+
+    STEP-05 (Checklist Assembler) and STEP-06 (Checkoff) are downstream-only
+    consumers per the context contract — they read runtime state via
+    pipeline-state reads, but must not issue raw retrieval requests against
+    indexed or direct stores.
+    """
+    if not fixture.forbidden_retrieval_steps:
+        return
+
+    forbidden: set[str] = set(fixture.forbidden_retrieval_steps)
+    offenders: list[str] = []
+
+    for entry in audit_entries:
+        if entry.event_type.value != "RETRIEVAL":
+            continue
+        source_id = entry.source_queried or ""
+        # Skip runtime-read stand-ins — they model pipeline-state reads,
+        # which are allowed for downstream-only consumers.
+        if source_id in _RUNTIME_READ_STAND_INS:
+            continue
+        details = entry.details or {}
+        request_id = details.get("request_id")
+        step_id = _request_step_from_request_id(request_id)
+        if step_id in forbidden:
+            offenders.append(
+                f"{step_id} performed forbidden retrieval "
+                f"source={source_id!r} request_id={request_id!r} "
+                f"lane={details.get('lane')!r}"
+            )
+
+    if offenders:
+        raise AssertionError(
+            "assert_no_retrieval_in_forbidden_steps: "
+            + "; ".join(offenders)
+        )
+
+
+# ---------------------------------------------------------------------------
 # Run all assertions
 # ---------------------------------------------------------------------------
 
@@ -192,13 +337,21 @@ def run_all_assertions(
     state: PipelineState,
     bundle_trace: list[dict[str, Any]],
     fixture: HarnessFixture,
+    audit_entries: list[AuditEntry] | None = None,
 ) -> list[str]:
     """Run all assertions and return list of failure messages (empty = pass)."""
     failures: list[str] = []
+    audit_entries = audit_entries or []
 
     for name, fn, args in [
         ("assert_global", assert_global, (state, fixture)),
         ("assert_retrieval", assert_retrieval, (state, fixture)),
+        ("assert_retrieval_lanes", assert_retrieval_lanes, (audit_entries, fixture)),
+        (
+            "assert_no_retrieval_in_forbidden_steps",
+            assert_no_retrieval_in_forbidden_steps,
+            (audit_entries, fixture),
+        ),
         ("assert_bundles", assert_bundles, (bundle_trace, fixture)),
         ("assert_status", assert_status, (state, fixture)),
     ]:

@@ -276,7 +276,7 @@ class BundleAssembler:
         step_id = StepId.STEP_05
         domain_outputs = retrievals["all_agent_outputs"].payload
         admitted, excluded = self._assemble_chunks(step_id, retrievals, optichain_context=True)
-        provenance = _build_provenance(["STEP-02", "STEP-03", "STEP-04", "AUDIT_LOG", "VQ-OC-001"], retrievals)
+        provenance = _build_provenance(["STEP-02", "STEP-03", "STEP-04", "AUDIT_LOG", "PIPELINE_STATE"], retrievals)
         admissibility = _resolve_admissibility(validation)
 
         bundle = ContextBundle(
@@ -284,9 +284,9 @@ class BundleAssembler:
             admitted_evidence=admitted,
             excluded_evidence=excluded,
             structured_fields={
-                "source_ids": ["STEP-02", "STEP-03", "STEP-04", "AUDIT_LOG", "VQ-OC-001"],
+                "source_ids": ["STEP-02", "STEP-03", "STEP-04", "AUDIT_LOG", "PIPELINE_STATE"],
                 "pipeline_run_id": retrievals["pipeline_state"].payload.get("pipeline_run_id"),
-                "vendor_name": retrievals["questionnaire_header"].payload.get("vendor_name"),
+                "vendor_name": retrievals["pipeline_state"].payload.get("vendor_name"),
                 "it_security_agent": domain_outputs.get("it_security_agent"),
                 "legal_agent": domain_outputs.get("legal_agent"),
                 "procurement_agent": domain_outputs.get("procurement_agent"),

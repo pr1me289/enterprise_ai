@@ -9,8 +9,15 @@ ALLOWED_SOURCES = {
     "STEP-02": {"VQ-OC-001", "ISP-001"},
     "STEP-03": {"STEP-02", "VQ-OC-001", "DPA-TM-001", "ISP-001"},
     "STEP-04": {"STEP-02", "STEP-03", "VQ-OC-001", "PAM-001", "SLK-001"},
-    "STEP-05": {"STEP-02", "STEP-03", "STEP-04", "AUDIT_LOG", "VQ-OC-001"},
-    "STEP-06": {"STEP-05", "PIPELINE_CONFIG", "STEP-02", "STEP-03", "STEP-04"},
+    "STEP-05": {"STEP-02", "STEP-03", "STEP-04", "AUDIT_LOG", "PIPELINE_STATE"},
+    "STEP-06": {
+        "STEP-05",
+        "PIPELINE_CONFIG",
+        "PIPELINE_STATE",
+        "STEP-02",
+        "STEP-03",
+        "STEP-04",
+    },
 }
 
 REQUIRED_FIELDS = {

@@ -53,18 +53,10 @@ class Step05ChecklistHandler(BaseStepHandler):
                     access_role=self.definition.access_role,
                     output_name="pipeline_state",
                     runtime_target="pipeline_state",
-                    field_map={"pipeline_run_id": ("pipeline_run_id",)},
-                ),
-                state=state,
-            ),
-            "questionnaire_header": self.router.route(
-                RetrievalRequest(
-                    request_id="R05-SQ-03",
-                    lane=RetrievalLane.DIRECT_STRUCTURED,
-                    source_id="VQ-OC-001",
-                    access_role=self.definition.access_role,
-                    output_name="questionnaire_header",
-                    field_map={"vendor_name": ("vendor_profile.vendor_legal_name",)},
+                    field_map={
+                        "pipeline_run_id": ("pipeline_run_id",),
+                        "vendor_name": ("vendor_name",),
+                    },
                 ),
                 state=state,
             ),
@@ -75,7 +67,7 @@ class Step05ChecklistHandler(BaseStepHandler):
         }
         validation = self.bundle_validator.validate(
             step_id=self.step_id.value,
-            source_ids=["STEP-02", "STEP-03", "STEP-04", "AUDIT_LOG", "VQ-OC-001"],
+            source_ids=["STEP-02", "STEP-03", "STEP-04", "AUDIT_LOG", "PIPELINE_STATE"],
             present_fields=present_fields,
             missing_fields=retrievals["all_agent_outputs"].missing_fields,
         )

@@ -98,19 +98,32 @@ def _validate_bundle(bundle: ContextBundle) -> None:
             )
 
 
+_BLOCKED_OUTPUT = {
+    "status": "blocked",
+    "errors": ["Bundle violation: prohibited source detected in Legal bundle."],
+}
+
+
 def run(
     bundle: ContextBundle,
     scenario_name: str,
+    signal: str = "complete",
 ) -> tuple[dict[str, Any], str, EscalationPayload | None]:
-    """Execute mock STEP-03 Legal determination."""
+    """Execute mock STEP-03 Legal determination.
+
+    Validates the bundle first (raising ValueError on structural violations),
+    then fires the pre-determined signal requested by the scenario.
+    """
     _validate_bundle(bundle)
 
-    if scenario_name == "scenario_2_escalated":
+    signal_norm = signal.lower()
+    if signal_norm == "escalated":
         escalation = EscalationPayload(
             evidence_condition="EU personal data present and DPA not executed — GDPR Art. 28 blocker.",
             resolution_owner="Legal (General Counsel)",
             additional_context={"dpa_required": True, "dpa_blocker": True},
         )
         return _ESCALATED_OUTPUT.copy(), "ESCALATED", escalation
-
+    if signal_norm == "blocked":
+        return _BLOCKED_OUTPUT.copy(), "BLOCKED", None
     return _COMPLETE_OUTPUT.copy(), "COMPLETE", None

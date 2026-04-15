@@ -18,18 +18,18 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_REPO_ROOT / "src"))
 sys.path.insert(0, str(_REPO_ROOT))
 
-from orchestration.agents.llm_agent_runner import MockLLMAdapter
 from orchestration.models.context_bundle import ContextBundle
 from orchestration.models.enums import RunStatus, StepId, StepStatus
 from orchestration.pipeline_state import PipelineState
 from orchestration.supervisor import Supervisor
 
+from test_harness.bundle_aware_adapter import BundleAwareMockAdapter
 from test_harness.console_monitor import ConsoleMonitor
 from test_harness.reporters.bundle_trace_writer import BundleTraceWriter
 from test_harness.reporters.event_logger import EventLogger
 from test_harness.reporters.final_state_writer import FinalStateWriter
 from test_harness.result_assertions import run_all_assertions
-from test_harness.scenario_fixtures import HarnessFixture, get_fixture
+from test_harness.scenario_fixtures import FIXTURES, HarnessFixture, get_fixture
 
 # ---------------------------------------------------------------------------
 # Questionnaire path resolution
@@ -60,156 +60,6 @@ def _resolve_questionnaire_path(fixture: HarnessFixture, repo_root: Path) -> Pat
 
 
 # ---------------------------------------------------------------------------
-# Harness-level MockLLMAdapter that honours scenario overrides
-# ---------------------------------------------------------------------------
-
-class _ScenarioMockAdapter(MockLLMAdapter):
-    """Extends MockLLMAdapter to carry the scenario name.
-
-    The base MockLLMAdapter already implements deterministic logic that works
-    for the complete scenario.  For the escalated scenario we need the legal
-    agent to return ESCALATED.  We pass scenario-specific override outputs here.
-    """
-
-    def __init__(self, scenario_name: str, agent_overrides: dict[str, dict] | None = None) -> None:
-        self.scenario_name = scenario_name
-        self._overrides = agent_overrides or {}
-
-    def generate_structured_json(self, *, agent_name, spec_text, prompt, bundle, step_metadata):
-        # If a test-harness-level override is registered, use it.
-        if agent_name in self._overrides:
-            return dict(self._overrides[agent_name])
-        # Fall back to the parent deterministic logic.
-        return super().generate_structured_json(
-            agent_name=agent_name,
-            spec_text=spec_text,
-            prompt=prompt,
-            bundle=bundle,
-            step_metadata=step_metadata,
-        )
-
-
-def _build_agent_overrides(fixture: HarnessFixture) -> dict[str, dict]:
-    """Build per-agent output overrides for the scenario.
-
-    The base MockLLMAdapter._run_legal expects dpa_trigger_rows to be a list,
-    but the bundle assembler stores it as a dict payload {"rows": [...]}.
-    We provide explicit overrides for all agent invocations to avoid this
-    ambiguity and keep the harness fully deterministic.
-    """
-    overrides: dict[str, dict] = {}
-
-    if fixture.scenario_name == "scenario_1_complete":
-        overrides["legal_agent"] = {
-            "dpa_required": False,
-            "dpa_blocker": False,
-            "nda_status": "EXECUTED",
-            "nda_blocker": False,
-            "trigger_rule_cited": [],
-            "policy_citations": [
-                {
-                    "source_id": "ISP-001",
-                    "version": "4.2",
-                    "chunk_id": "ISP-001__section_12",
-                    "section_id": "12",
-                    "citation_class": "PRIMARY",
-                }
-            ],
-            "status": "complete",
-        }
-        overrides["procurement_agent"] = {
-            "approval_path": "FAST_TRACK",
-            "fast_track_eligible": True,
-            "required_approvals": [
-                {
-                    "approver": "Procurement Manager",
-                    "domain": "procurement",
-                    "status": "PENDING",
-                    "blocker": False,
-                    "estimated_completion": "2 business days",
-                }
-            ],
-            "estimated_timeline": "2 business days",
-            "policy_citations": [
-                {
-                    "source_id": "PAM-001",
-                    "version": "3.0",
-                    "chunk_id": "PAM-001__row_A-T1",
-                    "row_id": "A-T1",
-                    "approval_path_condition": "Class A / 210000",
-                    "citation_class": "PRIMARY",
-                }
-            ],
-            "status": "complete",
-        }
-        overrides["checklist_assembler"] = {
-            "pipeline_run_id": "",
-            "vendor_name": "OptiChain, Inc.",
-            "overall_status": "COMPLETE",
-            "data_classification": "UNREGULATED",
-            "dpa_required": False,
-            "fast_track_eligible": True,
-            "required_security_actions": [],
-            "approval_path": "FAST_TRACK",
-            "required_approvals": [
-                {
-                    "approver": "Procurement Manager",
-                    "domain": "procurement",
-                    "status": "PENDING",
-                    "blocker": False,
-                    "estimated_completion": "2 business days",
-                }
-            ],
-            "blockers": [],
-            "citations": [],
-        }
-        overrides["checkoff_agent"] = {
-            "guidance_documents": [
-                {
-                    "stakeholder_role": "Procurement Manager",
-                    "domain": "procurement",
-                    "instructions": "Pipeline status is COMPLETE. Review procurement approval.",
-                    "blockers_owned": [],
-                    "required_security_actions": [],
-                    "next_steps": ["Review approval requirement for procurement"],
-                    "citations": [],
-                }
-            ],
-            "status": "complete",
-        }
-
-    elif fixture.scenario_name == "scenario_2_escalated":
-        # STEP-02 stays complete; STEP-03 legal agent must return ESCALATED.
-        overrides["legal_agent"] = {
-            "dpa_required": True,
-            "dpa_blocker": True,
-            "nda_status": "EXECUTED",
-            "nda_blocker": False,
-            "trigger_rule_cited": [
-                {
-                    "source_id": "DPA-TM-001",
-                    "version": "1.3",
-                    "row_id": "R1",
-                    "trigger_condition": "EU personal data present and DPA not executed.",
-                    "citation_class": "PRIMARY",
-                }
-            ],
-            "policy_citations": [
-                {
-                    "source_id": "DPA-TM-001",
-                    "version": "1.3",
-                    "chunk_id": "DPA-TM-001__row_R1",
-                    "section_id": "R1",
-                    "citation_class": "PRIMARY",
-                }
-            ],
-            "status": "escalated",
-        }
-
-    return overrides
-
-
-# ---------------------------------------------------------------------------
 # Core scenario runner
 # ---------------------------------------------------------------------------
 
@@ -230,9 +80,9 @@ def run_scenario(scenario_name: str, *, artifacts_root: Path | None = None) -> t
     if questionnaire_path is None:
         questionnaire_path = repo_root / "test_harness" / "_empty_questionnaire.json"
 
-    adapter = _ScenarioMockAdapter(
+    adapter = BundleAwareMockAdapter(
         scenario_name=scenario_name,
-        agent_overrides=_build_agent_overrides(fixture),
+        agent_signals=fixture.agent_signals,
     )
 
     supervisor = Supervisor(
@@ -335,6 +185,7 @@ def run_scenario(scenario_name: str, *, artifacts_root: Path | None = None) -> t
         state=supervisor.state,
         bundle_trace=bundle_trace_writer.traces,
         fixture=fixture,
+        audit_entries=supervisor.audit_logger.entries,
     )
 
     passed = len(failures) == 0
@@ -359,44 +210,49 @@ def _record_bundle_trace_from_state(
     monitor: ConsoleMonitor,
     event_logger: EventLogger,
 ) -> None:
-    """Build a synthetic bundle trace entry from state and audit log data."""
-    step_status = supervisor.state.step_statuses.get(step_id, StepStatus.PENDING)
+    """Record the real ContextBundle produced by the step handler.
 
-    # Synthesise a minimal ContextBundle from available info
-    # The real bundle is assembled inside the step handler — we reconstruct
-    # a summary from the audit log entries for this step.
-    retrieval_entries = [
-        e for e in supervisor.audit_logger.entries
-        if e.event_type.value == "RETRIEVAL"
-        and any(e.details.get("step_id") == step_str or True for _ in [None])  # all retrievals
-    ]
+    Reads from ``supervisor.last_bundle_by_step`` which is populated by the
+    Supervisor each time a step's ``StepExecutionResult`` carries a bundle.
+    If a step BLOCKED at the gate (no handler.execute call), no bundle was
+    produced — we record a minimal ``PARTIAL`` placeholder so downstream
+    assertions still see a trace entry for the step.
+    """
+    real_bundle = supervisor.last_bundle_by_step.get(step_id)
+    if real_bundle is not None:
+        bundle_trace_writer.record(step_str, real_bundle)
+        admitted_count = len(real_bundle.admitted_evidence)
+        excluded_count = len(real_bundle.excluded_evidence)
+        admissible = real_bundle.admissibility_status in ("ADMISSIBLE", "PARTIAL")
+        monitor.on_bundle_ready(step_str, admitted_count, excluded_count, admissible)
+        event_logger.append(
+            "BUNDLE_READY",
+            step_str,
+            {
+                "admitted": admitted_count,
+                "excluded": excluded_count,
+                "admissible": admissible,
+                "admissibility_status": real_bundle.admissibility_status,
+            },
+        )
+        return
 
-    admitted_count = sum(
-        e.details.get("admitted_count", 0) for e in retrieval_entries[-10:]
-    )
-    excluded_count = sum(
-        e.details.get("excluded_count", 0) for e in retrieval_entries[-10:]
-    )
-    admissible = step_status not in (StepStatus.BLOCKED,)
-
-    # Build a synthetic ContextBundle-compatible object for the trace
-    from orchestration.models.context_bundle import ContextBundle, ExcludedChunk
-    from orchestration.models.retrieved_chunk import RetrievedChunk
-
-    synthetic_bundle = ContextBundle(
+    # No bundle was produced (step blocked at gate).  Emit a placeholder so
+    # the trace remains complete for assertions that check status semantics.
+    placeholder = ContextBundle(
         step_id=step_id,
         admitted_evidence=[],
         excluded_evidence=[],
         structured_fields={},
         source_provenance=[],
-        admissibility_status="ADMISSIBLE" if admissible else "PARTIAL",
+        admissibility_status="PARTIAL",
     )
-    bundle_trace_writer.record(step_str, synthetic_bundle)
-    monitor.on_bundle_ready(step_str, admitted_count, excluded_count, admissible)
+    bundle_trace_writer.record(step_str, placeholder)
+    monitor.on_bundle_ready(step_str, 0, 0, False)
     event_logger.append(
         "BUNDLE_READY",
         step_str,
-        {"admitted": admitted_count, "excluded": excluded_count, "admissible": admissible},
+        {"admitted": 0, "excluded": 0, "admissible": False, "admissibility_status": "PARTIAL", "placeholder": True},
     )
 
 
@@ -423,11 +279,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--scenario",
         required=True,
-        choices=[
-            "scenario_1_complete",
-            "scenario_2_escalated",
-            "scenario_blocked_missing_questionnaire",
-        ],
+        choices=sorted(FIXTURES.keys()),
     )
     args = parser.parse_args()
 

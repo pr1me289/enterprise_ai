@@ -1,0 +1,8 @@
+{"timestamp": "2026-04-15T00:32:43Z", "event_type": "RUN_INIT", "step": null, "payload": {"pipeline_run_id": "run_02a138c7fb", "scenario": "scenario_blocked_missing_questionnaire"}}
+{"timestamp": "2026-04-15T00:32:43Z", "event_type": "STEP_ENTER", "step": "STEP-01", "payload": {"step": "STEP-01"}}
+{"timestamp": "2026-04-15T00:32:43Z", "event_type": "RETRIEVE", "step": "STEP-01", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 3}}
+{"timestamp": "2026-04-15T00:32:43Z", "event_type": "RETRIEVE", "step": "STEP-01", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 10}}
+{"timestamp": "2026-04-15T00:32:43Z", "event_type": "RETRIEVE", "step": "STEP-01", "payload": {"source": "VQ-OC-001", "lane": "direct_structured", "records": 2}}
+{"timestamp": "2026-04-15T00:32:43Z", "event_type": "BUNDLE_READY", "step": "STEP-01", "payload": {"admitted": 0, "excluded": 0, "admissible": false, "admissibility_status": "PARTIAL", "placeholder": true}}
+{"timestamp": "2026-04-15T00:32:43Z", "event_type": "STEP_RESULT", "step": "STEP-01", "payload": {"step_status": "BLOCKED", "overall_status": "BLOCKED"}}
+{"timestamp": "2026-04-15T00:32:43Z", "event_type": "RUN_HALT", "step": null, "payload": {"overall_status": "BLOCKED", "halted_at": "STEP-01"}}
