@@ -102,7 +102,12 @@ _VALID_LEGAL = {
     "nda_blocker": False,
     "trigger_rule_cited": [],
     "policy_citations": [
-        {"source_id": "ISP-001", "version": "4.2", "section": "12.1.4"}
+        {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "section_id": "12.1.4",
+            "citation_class": "PRIMARY",
+        }
     ],
     "status": "complete",
 }

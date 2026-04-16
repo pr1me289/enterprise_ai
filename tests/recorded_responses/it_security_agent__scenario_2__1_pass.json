@@ -1,0 +1,57 @@
+{
+  "agent_name": "it_security_agent",
+  "scenario": "scenario_2",
+  "pipeline_run_id": "scenario_2_synthesized",
+  "run_number": 1,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260416T161741Z",
+  "system_prompt_path": "agent_spec_docs/IT_Security_Agent_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_02_scenario_2.json",
+  "raw_text": "```json\n{\n  \"integration_type_normalized\": \"AMBIGUOUS\",\n  \"integration_tier\": \"UNCLASSIFIED_PENDING_REVIEW\",\n  \"data_classification\": \"REGULATED\",\n  \"eu_personal_data_present\": true,\n  \"fast_track_eligible\": false,\n  \"fast_track_rationale\": \"DISALLOWED_AMBIGUOUS_SCOPE\",\n  \"security_followup_required\": true,\n  \"nda_status_from_questionnaire\": \"PENDING\",\n  \"required_security_actions\": [\n    {\n      \"action_type\": \"Clarify integration architecture\",\n      \"reason\": \"Integration pattern is ambiguous. Questionnaire describes a potential service-account extraction agent accessing ERP directly, which would be TIER_1 if confirmed. This must be clarified before security review can proceed.\",\n      \"owner\": \"Vendor / Procurement Agent\"\n    },\n    {\n      \"action_type\": \"Full security review required\",\n      \"reason\": \"Data classification is REGULATED (EU personal data and employee records present). Integration involves ERP-connected regulated data. Security review is required regardless of tier confirmation.\",\n      \"owner\": \"IT Security Team\"\n    },\n    {\n      \"action_type\": \"NDA execution required\",\n      \"reason\": \"Existing NDA status is PENDING. Per ISP-001 \u00a712, NDA must be executed before information exchange.\",\n      \"owner\": \"Legal / Procurement Agent\"\n    }\n  ],\n  \"policy_citations\": [\n    {\n      \"source_id\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"chunk_id\": \"ISP-001__section_12\",\n      \"section_id\": \"12\",\n      \"citation_class\": \"PRIMARY\"\n    },\n    {\n      \"source_id\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"chunk_id\": \"ISP-001__section_17\",\n      \"section_id\": \"17\",\n      \"citation_class\": \"PRIMARY\"\n    }\n  ],\n  \"status\": \"escalated\"\n}\n```",
+  "parsed_output": {
+    "integration_type_normalized": "AMBIGUOUS",
+    "integration_tier": "UNCLASSIFIED_PENDING_REVIEW",
+    "data_classification": "REGULATED",
+    "eu_personal_data_present": true,
+    "fast_track_eligible": false,
+    "fast_track_rationale": "DISALLOWED_AMBIGUOUS_SCOPE",
+    "security_followup_required": true,
+    "nda_status_from_questionnaire": "PENDING",
+    "required_security_actions": [
+      {
+        "action_type": "Clarify integration architecture",
+        "reason": "Integration pattern is ambiguous. Questionnaire describes a potential service-account extraction agent accessing ERP directly, which would be TIER_1 if confirmed. This must be clarified before security review can proceed.",
+        "owner": "Vendor / Procurement Agent"
+      },
+      {
+        "action_type": "Full security review required",
+        "reason": "Data classification is REGULATED (EU personal data and employee records present). Integration involves ERP-connected regulated data. Security review is required regardless of tier confirmation.",
+        "owner": "IT Security Team"
+      },
+      {
+        "action_type": "NDA execution required",
+        "reason": "Existing NDA status is PENDING. Per ISP-001 \u00a712, NDA must be executed before information exchange.",
+        "owner": "Legal / Procurement Agent"
+      }
+    ],
+    "policy_citations": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12",
+        "section_id": "12",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_17",
+        "section_id": "17",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "escalated"
+  },
+  "error": null
+}

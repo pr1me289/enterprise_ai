@@ -328,10 +328,18 @@ def _evaluate_legal(output: dict[str, Any], scenario: str, report: EvaluationRep
     # (either trigger_rule_cited or policy_citations).
     pc = output.get("policy_citations")
     if isinstance(pc, list):
+        # Same rationale as STEP-02 (see _evaluate_it_security): domain-agent
+        # policy_citations[] is machine-to-machine provenance, so the required
+        # keys are source_id, version, section_id, and citation_class (matches
+        # Agent Spec, ORCH-PLAN STEP-03 output contract, and CC-001 §7).
+        # chunk_id is expected per the same contracts but is a soft
+        # expectation here — the evaluator does not hard-fail on its absence.
+        # section (no _id) is the human-facing label used only by the
+        # Checklist Assembler's citations[] per Design Doc §10.
         _check_citation_entries(
             output,
             "policy_citations",
-            required_keys=("source_id", "version", "section"),
+            required_keys=("source_id", "version", "section_id", "citation_class"),
             report=report,
         )
         _check_source_id_in(output, "policy_citations", ("ISP-001", "DPA-TM-001"), report)
