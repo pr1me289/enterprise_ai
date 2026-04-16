@@ -195,7 +195,7 @@ Tier assignment must cite the relevant ISP-001 §12.2 row.
 
 | Condition | `data_classification` |
 |---|---|
-| `eu_personal_data_present = YES` | `REGULATED` |
+| `eu_personal_data_present = true` | `REGULATED` |
 | Integration involves regulated, sensitive, or ERP-connected data | `REGULATED` |
 | Integration confirmed export-only, no regulated data types | `UNREGULATED` |
 | Integration type or data scope cannot be confirmed | `AMBIGUOUS` |
@@ -209,7 +209,7 @@ Tier assignment must cite the relevant ISP-001 §12.2 row.
 | `integration_tier = UNCLASSIFIED_PENDING_REVIEW` | `true` — architecture documentation required |
 | `data_classification = REGULATED` and `integration_tier = TIER_1` | `true` — full security review required |
 | `data_classification = REGULATED` and `integration_tier = TIER_2` | `true` — security review required |
-| `eu_personal_data_present = YES` and `integration_tier` is not `TIER_3` | `true` — data handling review required |
+| `eu_personal_data_present = true` and `integration_tier` is not `TIER_3` | `true` — data handling review required |
 | `integration_type_normalized = AMBIGUOUS` | `true` — integration pattern must be clarified before review can proceed |
 | `data_classification = UNREGULATED` and `integration_tier = TIER_3` and no ambiguity | `false` |
 
@@ -238,10 +238,10 @@ The agent must return a single schema-valid JSON object. No other output format 
   "integration_type_normalized": "DIRECT_API | MIDDLEWARE | EXPORT_ONLY | AMBIGUOUS",
   "integration_tier": "TIER_1 | TIER_2 | TIER_3 | UNCLASSIFIED_PENDING_REVIEW",
   "data_classification": "REGULATED | UNREGULATED | AMBIGUOUS",
-  "eu_personal_data_present": "YES | NO | UNKNOWN",
-  "fast_track_eligible": true,
+  "eu_personal_data_present": true | false,
+  "fast_track_eligible": true | false,
   "fast_track_rationale": "DISALLOWED_REGULATED_DATA | DISALLOWED_INTEGRATION_RISK | DISALLOWED_AMBIGUOUS_SCOPE | ELIGIBLE_LOW_RISK",
-  "security_followup_required": true,
+  "security_followup_required": true | false,
   "nda_status_from_questionnaire": "EXECUTED | PENDING | NOT_STARTED | UNKNOWN",
   "required_security_actions": [
     {
