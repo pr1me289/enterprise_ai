@@ -68,6 +68,14 @@ EXPECTED_STATUS: dict[tuple[str, str], str] = {
     # Pure gate-condition test — the agent must halt rather than infer through
     # the missing input.
     ("legal_agent", "scenario_4"): "blocked",
+    # scenario_5: Two DPA-TM-001 rows (A-01 and A-06) both apply to the vendor
+    # profile but produce contradictory trigger outcomes (REQUIRED vs NOT
+    # REQUIRED). Per CC-001 §4.1, a Tier 1 vs Tier 1 conflict cannot be
+    # auto-suppressed. Per Legal_Agent_Spec.md §8.5 ("Tier 1 DPA sources
+    # conflict on the same trigger question" → escalated) and §9.2 (escalated
+    # output: all determination fields present, unresolvable fields set to
+    # null). NDA is independently resolvable (existing_nda_status=EXECUTED).
+    ("legal_agent", "scenario_5"): "escalated",
     ("procurement_agent", "scenario_1"): "complete",
     ("procurement_agent", "scenario_2"): "escalated",
     # Checklist Assembler uses overall_status, not status
@@ -118,6 +126,17 @@ def _check_general(output: Any, agent_name: str, report: EvaluationReport) -> bo
     # and hard-fail if determination fields are present.
     is_blocked = output.get("status") == "blocked"
 
+    # Escalated-output null-field allowance: Legal Agent Spec §9.2 permits
+    # null for unresolvable determination fields on escalated runs. This is
+    # specific to the Legal Agent — other agents (IT Security, Procurement)
+    # do not define a null-field escalation model. The general check skips
+    # the null-value failure for legal_agent escalated runs; the scenario-
+    # specific evaluator (e.g., scenario_5) validates exactly which fields
+    # must vs. must not be null.
+    is_legal_escalated = (
+        agent_name == "legal_agent" and output.get("status") == "escalated"
+    )
+
     # Required-field presence, using the call-layer contract as source of truth.
     required = REQUIRED_FIELDS.get(agent_name, ())
     for field_name in required:
@@ -128,7 +147,13 @@ def _check_general(output: Any, agent_name: str, report: EvaluationReport) -> bo
             continue
         value = output[field_name]
         if value is None:
-            report.failures.append(f"required field is null: {field_name!r}")
+            if is_legal_escalated:
+                # Legal Agent Spec §9.2 permits null for unresolvable fields
+                # on escalated runs. Scenario-specific evaluators validate
+                # which fields should vs. should not be null.
+                pass
+            else:
+                report.failures.append(f"required field is null: {field_name!r}")
         elif isinstance(value, str) and value == "":
             report.failures.append(f"required field is empty string: {field_name!r}")
         elif isinstance(value, (list, tuple)) and len(value) == 0:
@@ -331,6 +356,26 @@ def _evaluate_legal(output: dict[str, Any], scenario: str, report: EvaluationRep
         if dpa_blk is True and dpa_req is False:
             report.failures.append("dpa_blocker=true is inconsistent with dpa_required=false")
 
+    # scenario_2 non-null enforcement — scenario_2 is a resolved-escalation
+    # case (dpa_blocker=true is a workflow consequence, not an evidence gap).
+    # All determination fields are resolvable and must be non-null per §9.2
+    # ("fields the agent can resolve carry their derived values"). The general
+    # null check is bypassed for legal_agent escalated runs (to support §9.2
+    # null fields in scenario_5), so this block re-establishes the non-null
+    # requirement for scenario_2 specifically.
+    if scenario == "scenario_2" and output.get("status") == "escalated":
+        _scenario_2_required_non_null = (
+            "dpa_required", "dpa_blocker", "nda_status", "nda_blocker",
+            "trigger_rule_cited", "policy_citations",
+        )
+        for det_field in _scenario_2_required_non_null:
+            if det_field in output and output[det_field] is None:
+                report.failures.append(
+                    f"scenario_2: {det_field} is null but all determination "
+                    "fields are resolvable in this scenario — per §9.2, "
+                    "resolved fields must carry their derived values"
+                )
+
     # scenario_3 hard checks — the scenario exists to stress the
     # dpa_required-vs-dpa_blocker distinction. Bundle provides
     # eu_personal_data_flag=true + A-01 trigger row (→ dpa_required must be
@@ -461,6 +506,179 @@ def _evaluate_legal(output: dict[str, Any], scenario: str, report: EvaluationRep
                     "'data_classification' — this is the primary upstream field "
                     "that was absent from the bundle"
                 )
+
+    # scenario_5 hard checks — Tier 1 DPA matrix conflict (A-01 REQUIRED vs
+    # A-06 NOT REQUIRED). Both rows apply to the vendor profile. Per CC-001
+    # §4.1, a Tier 1 vs Tier 1 conflict cannot be auto-suppressed — neither
+    # source may be silently dropped. Per Legal_Agent_Spec.md §8.5 ("Tier 1
+    # DPA sources conflict on the same trigger question" → escalated) and §9.2
+    # (escalated output: all determination fields present; unresolvable fields
+    # = null). The NDA determination is independently resolvable from
+    # questionnaire evidence (existing_nda_status=EXECUTED, ISP-001 §12.1.4
+    # present), so only the DPA fields should be null.
+    if scenario == "scenario_5":
+        status_val = output.get("status")
+        if status_val != "escalated":
+            report.failures.append(
+                f"scenario_5: status={status_val!r} but bundle contains two "
+                "conflicting Tier 1 DPA-TM-001 rows (A-01: REQUIRED vs A-06: "
+                "NOT REQUIRED) — must emit 'escalated' per §8.5 (Tier 1 DPA "
+                "sources conflict on the same trigger question)"
+            )
+
+        # §9.2 + A-10: all six determination fields must be PRESENT (not
+        # absent) on an escalated run. Absent = blocked shape violation.
+        _escalated_required_fields = (
+            "dpa_required", "dpa_blocker", "nda_status", "nda_blocker",
+            "trigger_rule_cited", "policy_citations",
+        )
+        for det_field in _escalated_required_fields:
+            if det_field not in output:
+                report.failures.append(
+                    f"scenario_5: {det_field} is absent from output but must "
+                    "be present on an escalated run per §9.2 and A-10 — "
+                    "absent fields belong to the §9.1 blocked shape only"
+                )
+
+        # DPA fields must be null — the Tier 1 conflict makes the DPA
+        # determination unresolvable per §9.2.
+        if "dpa_required" in output and output["dpa_required"] is not None:
+            report.failures.append(
+                f"scenario_5: dpa_required={output['dpa_required']!r} but "
+                "must be null — two Tier 1 rows conflict on the trigger "
+                "question, making the DPA determination unresolvable per §9.2. "
+                "The model silently picked one row instead of escalating the "
+                "conflict (A-05 violation)."
+            )
+        if "dpa_blocker" in output and output["dpa_blocker"] is not None:
+            report.failures.append(
+                f"scenario_5: dpa_blocker={output['dpa_blocker']!r} but must "
+                "be null — cannot derive a blocker from an unresolved "
+                "dpa_required per §9.2"
+            )
+        if "trigger_rule_cited" in output and output["trigger_rule_cited"] is not None:
+            report.failures.append(
+                f"scenario_5: trigger_rule_cited={output['trigger_rule_cited']!r} "
+                "but must be null — no citation can be made for an unresolved "
+                "DPA determination per §9.2"
+            )
+
+        # NDA fields must be resolved (not null) — NDA is independently
+        # resolvable from questionnaire evidence (existing_nda_status=EXECUTED)
+        # and ISP-001 §12.1.4 is present in the bundle.
+        nda_val = output.get("nda_status")
+        if "nda_status" in output:
+            if nda_val is None:
+                report.failures.append(
+                    "scenario_5: nda_status is null but NDA is independently "
+                    "resolvable — bundle provides existing_nda_status=EXECUTED "
+                    "and ISP-001 §12.1.4 clause; per §9.2, resolved fields "
+                    "must carry their derived values"
+                )
+            elif nda_val not in NDA_STATUS_VALUES:
+                report.failures.append(
+                    f"scenario_5: nda_status={nda_val!r} is not a valid enum "
+                    f"value — must be one of {NDA_STATUS_VALUES}"
+                )
+            elif nda_val != "EXECUTED":
+                report.failures.append(
+                    f"scenario_5: nda_status={nda_val!r} but bundle provides "
+                    "existing_nda_status='EXECUTED' — agent must normalize to "
+                    "'EXECUTED' per §8.4"
+                )
+
+        nda_blk_val = output.get("nda_blocker")
+        if "nda_blocker" in output:
+            if nda_blk_val is None:
+                report.failures.append(
+                    "scenario_5: nda_blocker is null but NDA is independently "
+                    "resolvable — per §9.2, resolved fields carry derived values"
+                )
+            elif not isinstance(nda_blk_val, bool):
+                report.failures.append(
+                    f"scenario_5: nda_blocker must be a boolean, got "
+                    f"{type(nda_blk_val).__name__}={nda_blk_val!r}"
+                )
+            elif nda_blk_val is True:
+                report.failures.append(
+                    "scenario_5: nda_blocker=true but nda_status should be "
+                    "'EXECUTED' (from bundle) — per §8.4, nda_blocker must be "
+                    "false when nda_status='EXECUTED'"
+                )
+
+        # policy_citations must be present and contain the resolved ISP-001
+        # §12.1.4 NDA citation. The NDA determination is complete so its
+        # citation must appear.
+        pc_val = output.get("policy_citations")
+        if "policy_citations" in output:
+            if pc_val is None:
+                report.failures.append(
+                    "scenario_5: policy_citations is null but the NDA "
+                    "determination is resolved — must contain at least the "
+                    "ISP-001 §12.1.4 NDA citation per §9.2 (include citations "
+                    "for resolved determinations)"
+                )
+            elif isinstance(pc_val, list):
+                # Check for ISP-001 §12.1.4 NDA citation
+                has_nda_citation = any(
+                    isinstance(entry, dict)
+                    and entry.get("source_id") == "ISP-001"
+                    and str(entry.get("section_id", "")).startswith("12.1.4")
+                    for entry in pc_val
+                )
+                if not has_nda_citation:
+                    report.failures.append(
+                        "scenario_5: policy_citations does not contain an "
+                        "ISP-001 §12.1.4 NDA citation — NDA determination is "
+                        "resolved and the clause is present in the bundle; the "
+                        "citation must appear per §9.2 and §11"
+                    )
+
+                # Soft check: §9 note says "policy_citations array on an
+                # escalated output must cite both conflicting chunks when the
+                # escalation is clause-level." However, §9 output field
+                # constraints say "on escalated runs, omit citations for
+                # determinations that could not be resolved." These two rules
+                # are in tension. The §9 note is the specific rule for Tier 1
+                # conflicts; the output field constraint is the general rule.
+                # We warn rather than hard-fail because the LLM may reasonably
+                # follow either interpretation.
+                conflict_row_ids = {"A-01", "A-06"}
+                found_conflict_rows = {
+                    entry.get("row_id")
+                    for entry in pc_val
+                    if isinstance(entry, dict)
+                    and entry.get("source_id") == "DPA-TM-001"
+                    and entry.get("row_id") in conflict_row_ids
+                }
+                if found_conflict_rows != conflict_row_ids:
+                    missing = conflict_row_ids - found_conflict_rows
+                    report.warnings.append(
+                        f"scenario_5: policy_citations is missing DPA-TM-001 "
+                        f"conflicting row(s) {missing} — §9 note says "
+                        "'policy_citations must cite both conflicting chunks "
+                        "when the escalation is clause-level', but §9 output "
+                        "field constraints say 'omit citations for "
+                        "determinations that could not be resolved'. Spec "
+                        "tension — logged as warning, not failure."
+                    )
+
+        # blocked_reason and blocked_fields must be ABSENT — those belong to
+        # the §9.1 blocked shape only, not the §9.2 escalated shape.
+        if "blocked_reason" in output:
+            report.failures.append(
+                f"scenario_5: blocked_reason is present in output "
+                f"(value={output['blocked_reason']!r}) but must be absent on "
+                "an escalated run — blocked_reason belongs to the §9.1 blocked "
+                "output shape only"
+            )
+        if "blocked_fields" in output:
+            report.failures.append(
+                f"scenario_5: blocked_fields is present in output "
+                f"(value={output['blocked_fields']!r}) but must be absent on "
+                "an escalated run — blocked_fields belongs to the §9.1 blocked "
+                "output shape only"
+            )
 
     # nda_blocker must be True when nda_status is not EXECUTED
     nda = output.get("nda_status")

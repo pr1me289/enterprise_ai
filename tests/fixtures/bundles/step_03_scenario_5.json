@@ -1,0 +1,77 @@
+{
+  "scenario": "scenario_5",
+  "agent": "legal_agent",
+  "bundle": {
+    "source_ids": [
+      "STEP-02",
+      "VQ-OC-001",
+      "DPA-TM-001",
+      "ISP-001"
+    ],
+    "security_output": {
+      "data_classification": "REGULATED",
+      "status": "complete",
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12.2",
+          "citation_class": "PRIMARY"
+        }
+      ]
+    },
+    "questionnaire": {
+      "eu_personal_data_flag": true,
+      "data_subjects_eu": true,
+      "existing_nda_status": "EXECUTED",
+      "existing_dpa_status": "PENDING"
+    },
+    "dpa_trigger_rows": [
+      {
+        "source_id": "DPA-TM-001",
+        "version": "2.1-scenario5",
+        "chunk_id": "DPA-TM-001__row_A-01",
+        "section_id": null,
+        "row_id": "A-01",
+        "thread_id": null,
+        "text": "ID: A-01\nTrigger Condition: Vendor will process personal data of EU/EEA data subjects on behalf of Lichen\nData Types Involved: Any personal data of EU/EEA individuals (name, email, ID, behavioral, device identifiers)\nRegulations Triggered: GDPR Art. 28; GDPR Art. 4(8)\nDPA Required?: REQUIRED\nRequired DPA / Contract Clauses: GDPR Art. 28 DPA; mandatory clauses: subject matter & duration; nature & purpose of processing; data type & data subject categories; obligations & rights of controller\nAdditional Obligations: Lichen Legal must execute Art. 28 DPA before any processing begins.\nLichen Action / Owner: Owner: General Counsel / Privacy Team",
+        "retrieval_score": 0.94,
+        "rerank_score": 0.92,
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "DPA-TM-001",
+        "version": "2.1-scenario5",
+        "chunk_id": "DPA-TM-001__row_A-06",
+        "section_id": null,
+        "row_id": "A-06",
+        "thread_id": null,
+        "text": "ID: A-06\nTrigger Condition: Vendor processes only operational scheduling metadata derived from EU employee shift patterns, with no persistent storage of personally identifiable fields and processing limited to aggregate statistical outputs\nData Types Involved: Derived scheduling metrics, shift-pattern aggregates, anonymized operational KPIs — no direct personal identifiers retained by vendor\nRegulations Triggered: GDPR Recital 26 (anonymization exclusion); GDPR Art. 2(1) material scope limitation\nDPA Required?: NOT REQUIRED\nRequired DPA / Contract Clauses: None — processing falls outside GDPR material scope when limited to anonymized operational outputs with no persistent PII storage\nAdditional Obligations: Vendor must attest in writing that no personally identifiable employee data is retained beyond the aggregation step. Lichen Privacy Team must verify the anonymization methodology before engagement.\nLichen Action / Owner: Owner: Privacy Team (verification only)",
+        "retrieval_score": 0.91,
+        "rerank_score": 0.89,
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "nda_clause_chunks": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12_1_4",
+        "section_id": "12.1.4",
+        "row_id": null,
+        "thread_id": null,
+        "text": "12.1.4 Non-Disclosure Agreement Requirement. A fully executed non-disclosure agreement (NDA) must be in place between Lichen Manufacturing and the third-party vendor before any exchange of confidential information, proprietary data, or access credentials may occur. No information exchange is permitted prior to NDA execution. The NDA must cover the full scope of data expected to be shared during the vendor engagement, including technical architecture details, employee data schemas, and integration specifications.",
+        "retrieval_score": 1.0,
+        "rerank_score": 1.0,
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    }
+  },
+  "pipeline_run_id": "scenario_5_synthesized"
+}

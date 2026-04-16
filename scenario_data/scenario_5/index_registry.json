@@ -1,0 +1,69 @@
+{
+  "scenario": "scenario_5",
+  "description": "Scenario-scoped index registry for Tier 1 DPA matrix conflict test. Points retrieval at scenario-5-specific indices only. Production indices are not touched.",
+  "generated_at": null,
+  "indices": [
+    {
+      "source_id": "DPA-TM-001",
+      "source_name": "DPA Legal Trigger Matrix (scenario 5 — conflict variant)",
+      "source_type": "LEGAL_TRIGGER_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "2.1-scenario5",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "manifest_status": "CONFIRMED",
+      "allowed_agents": ["legal"],
+      "is_primary_citable": true,
+      "storage_kind": "vector_bm25",
+      "logical_store_name": "idx_dpa_matrix__scenario5",
+      "backends": ["chroma", "bm25"],
+      "backend_locations": {
+        "chroma_collection": "idx_dpa_matrix__scenario5",
+        "chroma_persist_dir": "scenario_data/scenario_5/chroma/",
+        "bm25_bundle": "scenario_data/scenario_5/bm25/idx_dpa_matrix__scenario5.pkl"
+      }
+    },
+    {
+      "source_id": "ISP-001",
+      "source_name": "IT Security Policy v4.2",
+      "source_type": "POLICY_DOCUMENT",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "4.2",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "manifest_status": "CONFIRMED",
+      "allowed_agents": ["it_security", "legal", "procurement"],
+      "is_primary_citable": true,
+      "storage_kind": "vector_bm25",
+      "logical_store_name": "idx_security_policy",
+      "backends": ["chroma", "bm25"],
+      "backend_locations": {
+        "chroma_collection": "idx_security_policy",
+        "chroma_persist_dir": "data/indexes/scenario_1/chroma/",
+        "bm25_bundle": "data/bm25/scenario_1/idx_security_policy.pkl"
+      },
+      "note": "ISP-001 uses production indices — no conflict variant needed for this scenario."
+    },
+    {
+      "source_id": "VQ-OC-001",
+      "source_name": "OptiChain Vendor Questionnaire",
+      "source_type": "VENDOR_QUESTIONNAIRE",
+      "authority_tier": 2,
+      "retrieval_lane": "DIRECT_STRUCTURED",
+      "version": "Submission rev. 1",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "manifest_status": "CONFIRMED",
+      "allowed_agents": ["it_security", "legal", "procurement", "checklist_assembler", "checkoff_agent"],
+      "is_primary_citable": true,
+      "storage_kind": "structured",
+      "logical_store_name": "vq_direct_access",
+      "backends": ["json"],
+      "backend_locations": {
+        "structured_store": "data/structured/scenario_1/vq_direct_access.json"
+      }
+    }
+  ]
+}
