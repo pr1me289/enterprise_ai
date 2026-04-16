@@ -28,7 +28,7 @@ These conditions must pass on every agent output before agent-specific checks be
 
 - [ ] **`data_classification`** — must be exactly one of: `REGULATED`, `UNREGULATED`, `AMBIGUOUS` (uppercase). No other values permitted. This field drives every downstream determination and must be present even when `status` is `escalated`.
 - [ ] **`fast_track_eligible`** — must be a boolean (`true` or `false`). Must be `false` when `data_classification` is `REGULATED` or `AMBIGUOUS`. If `data_classification` is `UNREGULATED` and the agent returns `fast_track_eligible: true`, verify a policy citation supports this.
-- [ ] **`policy_citations`** — must be a non-empty array. Each entry must include at minimum: `source_id` (`ISP-001`), `version`, `section`. An empty array is a test failure — the agent must cite the specific ISP-001 clause(s) that support its classification determination.
+- [ ] **`policy_citations`** — must be a non-empty array. Each entry must include at minimum: `source_id` (`ISP-001`), `version`, `section_id`. `section_id` is the machine-to-machine provenance field defined by the Agent Spec, ORCH-PLAN STEP-02 output contract, and CC-001 §7; do not confuse it with the Checklist Assembler's human-facing `section` label (Design Doc §10). An empty array is a test failure — the agent must cite the specific ISP-001 clause(s) that support its classification determination.
 - [ ] **`status`** — see general rules. Expected values by scenario:
   - Scenario 1 (clean vendor, export-only): `complete`
   - Scenario 2 (ERP ambiguity): `escalated`

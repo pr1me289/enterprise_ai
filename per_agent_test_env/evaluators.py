@@ -250,10 +250,15 @@ def _evaluate_it_security(output: dict[str, Any], scenario: str, report: Evaluat
     _check_non_empty_array(
         output, "policy_citations", report, where="STEP-02 must cite the ISP-001 clause(s)"
     )
+    # Domain-agent policy_citations[] is machine-to-machine provenance, so
+    # the required key is section_id (matches Agent Spec, ORCH-PLAN STEP-02
+    # output contract, and CC-001 §7). section (no _id) is the human-facing
+    # label used only by the Checklist Assembler's citations[] per Design
+    # Doc §10 — do not conflate the two.
     _check_citation_entries(
         output,
         "policy_citations",
-        required_keys=("source_id", "version", "section"),
+        required_keys=("source_id", "version", "section_id"),
         report=report,
     )
     _check_source_id_in(output, "policy_citations", ("ISP-001",), report)

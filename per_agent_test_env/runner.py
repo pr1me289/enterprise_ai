@@ -94,8 +94,54 @@ def _utc_timestamp() -> str:
     return _dt.datetime.now(_dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 
-def _record_filename(agent_name: str, scenario: str, timestamp: str) -> str:
-    return f"{agent_name}__{scenario}__{timestamp}.json"
+def _next_run_number(record_dir: Path, agent_name: str, scenario: str) -> int:
+    """Find the next run number for an ``(agent, scenario)`` pair.
+
+    Convention: ``{agent}__{scenario}__{N}[_pass|_fail].json`` where ``N``
+    is a positive integer. Starts at 1 for a new ``(agent, scenario)``
+    pair. Legacy timestamp-named files (non-digit leading chars after the
+    prefix) are ignored so they do not pollute the counter.
+    """
+    prefix = f"{agent_name}__{scenario}__"
+    max_n = 0
+    if not record_dir.exists():
+        return 1
+    for entry in record_dir.iterdir():
+        name = entry.name
+        if not name.startswith(prefix):
+            continue
+        tail = name[len(prefix):].removesuffix(".json")
+        digits = ""
+        for ch in tail:
+            if ch.isdigit():
+                digits += ch
+            else:
+                break
+        if not digits:
+            continue
+        try:
+            n = int(digits)
+        except ValueError:
+            continue
+        if n > max_n:
+            max_n = n
+    return max_n + 1
+
+
+def _staging_filename(agent_name: str, scenario: str, run_number: int) -> str:
+    """Filename used for the pre-evaluation write.
+
+    Intentionally has no ``_pass``/``_fail`` suffix — that suffix is
+    applied by renaming after the evaluator runs. Keeping the suffix out
+    of the initial write preserves the record-before-evaluate contract:
+    the payload is on disk before the evaluator is invoked, and only the
+    filename is updated after the verdict is known.
+    """
+    return f"{agent_name}__{scenario}__{run_number}.json"
+
+
+def _final_filename(agent_name: str, scenario: str, run_number: int, passed: bool) -> str:
+    return f"{agent_name}__{scenario}__{run_number}_{'pass' if passed else 'fail'}.json"
 
 
 def _write_record(
@@ -225,12 +271,17 @@ def run_agent_test(
 
     # Step 5 — RECORD TO DISK BEFORE EVALUATION. This is a strict ordering
     # requirement from the per-agent prompt. Do not move the evaluator
-    # call above this block.
-    filename = _record_filename(agent_name, scenario, timestamp)
+    # call above this block. The file is written under a staging name
+    # (no pass/fail suffix); the suffix is applied by renaming after the
+    # evaluator returns. The payload on disk is identical either way —
+    # only the filename changes post-eval.
+    run_number = _next_run_number(record_dir, agent_name, scenario)
+    staging_name = _staging_filename(agent_name, scenario, run_number)
     record_payload: dict[str, Any] = {
         "agent_name": agent_name,
         "scenario": scenario,
         "pipeline_run_id": pipeline_run_id,
+        "run_number": run_number,
         "model": model_name,
         "max_tokens": max_tokens_value,
         "timestamp_utc": timestamp,
@@ -240,7 +291,7 @@ def run_agent_test(
         "parsed_output": parsed,
         "error": error,
     }
-    record_file = _write_record(record_dir, filename, record_payload)
+    staged_path = _write_record(record_dir, staging_name, record_payload)
 
     # Step 6 — evaluate the recorded response. Never re-call the model here.
     report: EvaluationReport = evaluate_recorded(
@@ -249,6 +300,18 @@ def run_agent_test(
         parsed_output=parsed,
         error=error,
     )
+
+    # Step 6.5 — rename the staged file to include the pass/fail verdict.
+    # This is a pure filename change; the recorded payload is unchanged.
+    final_name = _final_filename(agent_name, scenario, run_number, report.passed)
+    record_file = record_dir / final_name
+    if record_file.exists():
+        # Extremely unlikely (would require a race on the same run_number),
+        # but do not silently overwrite a prior record.
+        raise RunnerError(
+            f"recorded-response target already exists: {record_file}"
+        )
+    staged_path.rename(record_file)
 
     recorded = RecordedCall(
         agent_name=agent_name,
