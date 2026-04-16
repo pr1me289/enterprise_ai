@@ -887,32 +887,39 @@ def test_evaluator_scenario_3_legal_hard_fails_when_status_not_complete() -> Non
 # ---------------------------------------------------------------------------
 # Scenario 4 — Legal Agent: blocked on missing upstream input (pure gate
 # condition). No IT Security output in the bundle → inadmissible → must
-# emit status=blocked with no determination attempted.
+# emit the §9.1 blocked output shape with no determination fields present.
 # ---------------------------------------------------------------------------
 
 
-def test_evaluator_scenario_4_legal_accepts_minimal_blocked_output() -> None:
-    # Minimal blocked output per Legal_Agent_Spec.md §9: only `status` is
-    # required. Determination fields absent. Must pass.
-    report = evaluators.evaluate_recorded(
-        agent_name="legal_agent",
-        scenario="scenario_4",
-        parsed_output={"status": "blocked"},
-        error=None,
-    )
-    assert report.passed, f"minimal blocked output must pass; failures={report.failures}"
-
-
-def test_evaluator_scenario_4_legal_accepts_blocked_with_null_determinations() -> None:
-    # Explicit nulls on determination fields are also permitted on a blocked
-    # run — the spec says these fields are "required only on non-blocked
-    # runs," not that they're forbidden. Null values signal "no determination"
-    # just as absence does.
+def test_evaluator_scenario_4_legal_accepts_valid_blocked_output() -> None:
+    # Valid §9.1 blocked output: status + blocked_reason + blocked_fields.
+    # Determination fields entirely absent. Must pass.
     report = evaluators.evaluate_recorded(
         agent_name="legal_agent",
         scenario="scenario_4",
         parsed_output={
             "status": "blocked",
+            "blocked_reason": ["MISSING_UPSTREAM_IT_SECURITY_OUTPUT"],
+            "blocked_fields": ["data_classification"],
+        },
+        error=None,
+    )
+    assert report.passed, f"valid §9.1 blocked output must pass; failures={report.failures}"
+
+
+def test_evaluator_scenario_4_legal_hard_fails_when_determination_fields_present_as_null() -> None:
+    # Per §9.1: determination fields must be entirely ABSENT on blocked
+    # runs — not null, not empty. Null implies the field exists but has
+    # no value; absent means the agent declined to produce a determination.
+    # Even with correct blocked_reason/blocked_fields, the presence of
+    # null determination fields is a hard failure.
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_4",
+        parsed_output={
+            "status": "blocked",
+            "blocked_reason": ["MISSING_UPSTREAM_IT_SECURITY_OUTPUT"],
+            "blocked_fields": ["data_classification"],
             "dpa_required": None,
             "dpa_blocker": None,
             "nda_status": None,
@@ -922,7 +929,31 @@ def test_evaluator_scenario_4_legal_accepts_blocked_with_null_determinations() -
         },
         error=None,
     )
-    assert report.passed, f"blocked with null determinations must pass; failures={report.failures}"
+    assert not report.passed, f"null determination fields on blocked run must fail; failures={report.failures}"
+    # Each present determination field should produce its own failure.
+    for field in ("dpa_required", "dpa_blocker", "nda_status", "nda_blocker",
+                  "trigger_rule_cited", "policy_citations"):
+        assert any(
+            field in f and "absent" in f for f in report.failures
+        ), f"expected absent-field failure for {field!r}; failures={report.failures}"
+
+
+def test_evaluator_scenario_4_legal_hard_fails_when_blocked_reason_missing() -> None:
+    # §9.1 requires blocked_reason. Output with only status=blocked and
+    # no blocked_reason must fail.
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_4",
+        parsed_output={"status": "blocked"},
+        error=None,
+    )
+    assert not report.passed
+    assert any(
+        "blocked_reason" in f and "missing" in f for f in report.failures
+    ), f"expected blocked_reason missing failure; failures={report.failures}"
+    assert any(
+        "blocked_fields" in f and "missing" in f for f in report.failures
+    ), f"expected blocked_fields missing failure; failures={report.failures}"
 
 
 def test_evaluator_scenario_4_legal_hard_fails_when_status_not_blocked() -> None:
@@ -967,12 +998,14 @@ def test_evaluator_scenario_4_legal_hard_fails_when_status_not_blocked() -> None
 
 
 def test_evaluator_scenario_4_legal_hard_fails_when_determination_attempted_on_blocked() -> None:
-    # Edge case: model sets status=blocked but also emits non-null
-    # determination fields. Per the build prompt this is still the "attempted
-    # determination" failure mode — the spec permits minimal output, not
-    # determinations alongside blocked.
+    # Edge case: model sets status=blocked but also emits determination
+    # fields alongside the blocked status. Per §9.1, determination fields
+    # must be entirely absent on a blocked run — present-with-any-value
+    # (including null) is a contract violation.
     bad = {
         "status": "blocked",
+        "blocked_reason": ["MISSING_UPSTREAM_IT_SECURITY_OUTPUT"],
+        "blocked_fields": ["data_classification"],
         "dpa_required": True,  # determination attempted despite blocked
         "trigger_rule_cited": [
             {
@@ -992,12 +1025,13 @@ def test_evaluator_scenario_4_legal_hard_fails_when_determination_attempted_on_b
     )
     assert not report.passed
     assert any(
-        "scenario_4" in f and "dpa_required" in f and "inadmissible" in f
+        "scenario_4" in f and "dpa_required" in f and "absent" in f
         for f in report.failures
-    ), f"expected scenario_4 determination-attempted failure; failures={report.failures}"
+    ), f"expected scenario_4 determination-present failure per §9.1; failures={report.failures}"
     assert any(
-        "scenario_4" in f and "trigger_rule_cited" in f for f in report.failures
-    ), f"expected scenario_4 trigger-attempted failure; failures={report.failures}"
+        "scenario_4" in f and "trigger_rule_cited" in f and "absent" in f
+        for f in report.failures
+    ), f"expected scenario_4 trigger-present failure per §9.1; failures={report.failures}"
 
 
 def test_general_rules_allow_blocked_minimal_output() -> None:

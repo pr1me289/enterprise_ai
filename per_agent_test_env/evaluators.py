@@ -32,6 +32,14 @@ DATA_CLASSIFICATION_VALUES: tuple[str, ...] = ("REGULATED", "UNREGULATED", "AMBI
 NDA_STATUS_VALUES: tuple[str, ...] = ("EXECUTED", "PENDING", "NOT_STARTED", "UNKNOWN")
 APPROVAL_PATH_VALUES: tuple[str, ...] = ("STANDARD", "FAST_TRACK", "EXECUTIVE_APPROVAL")
 
+# Legal Agent §9.1 blocked_reason enum values.
+LEGAL_BLOCKED_REASON_VALUES: tuple[str, ...] = (
+    "MISSING_UPSTREAM_IT_SECURITY_OUTPUT",
+    "MISSING_QUESTIONNAIRE_EU_FIELDS",
+    "MISSING_DPA_TRIGGER_MATRIX",
+    "MISSING_NDA_CLAUSE",
+)
+
 # Scenario-expected status signals from the checklist's final summary table.
 # These are *soft* expectations: they are reported as warnings, not failures.
 EXPECTED_STATUS: dict[tuple[str, str], str] = {
@@ -101,14 +109,13 @@ def _check_general(output: Any, agent_name: str, report: EvaluationReport) -> bo
         report.failures.append(f"output is not a JSON object (got {type(output).__name__})")
         return False
 
-    # Blocked-minimal-output allowance: each domain-agent spec permits a
-    # minimal object on the BLOCKED terminal state (Legal §9: "On a blocked
-    # run, the agent may emit a minimal object containing status and any
-    # available error or audit context. Non-status determination fields are
-    # required only on non-blocked runs."). When status=blocked, only the
-    # status field itself is required; determination fields are optional.
-    # Agent-specific checks may still add scenario-specific hard-checks
-    # (e.g. flagging a determination attempted on a gate-condition bundle).
+    # Blocked-output allowance: when status=blocked, skip required-field
+    # checks for determination fields. Per Legal Agent Spec §9.1,
+    # determination fields must be entirely absent on blocked runs (the
+    # agent must emit the §9.1 blocked output shape instead). The general
+    # check only enforces that `status` itself is present; agent-specific
+    # evaluators enforce the §9.1 shape (blocked_reason, blocked_fields)
+    # and hard-fail if determination fields are present.
     is_blocked = output.get("status") == "blocked"
 
     # Required-field presence, using the call-layer contract as source of truth.
@@ -356,13 +363,17 @@ def _evaluate_legal(output: dict[str, Any], scenario: str, report: EvaluationRep
             )
 
     # scenario_4 hard checks — bundle has no upstream STEP-02 output, so the
-    # agent must emit status=blocked and must NOT attempt a DPA or NDA
-    # determination. Per Legal_Agent_Spec.md §8.5 ("upstream_data_classification
-    # absent" → blocked) and §12 ("data_classification absent from STEP-02
-    # output | Bundle is inadmissible. Emit status: blocked. Do not proceed.").
-    # Pure gate-condition test — any emitted determination field (dpa_required,
-    # dpa_blocker, nda_status, nda_blocker with non-null value) indicates the
-    # model inferred through the missing input rather than halting.
+    # agent must emit the §9.1 blocked output shape and must NOT attempt a DPA
+    # or NDA determination. Per Legal_Agent_Spec.md §8.5 ("upstream_data_
+    # classification absent" → blocked, output shape switching rule) and §12
+    # ("data_classification absent from STEP-02 output | Bundle is inadmissible.
+    # Emit the §9.1 blocked output shape. Do not proceed.").
+    #
+    # §9.1 contract: determination fields must be entirely ABSENT from the
+    # output — not null, not empty. Absent means the agent correctly declined
+    # to produce a determination it had no basis to make. The output must
+    # contain only: status, blocked_reason (enum array), blocked_fields
+    # (canonical field name array).
     if scenario == "scenario_4":
         status_val = output.get("status")
         if status_val != "blocked":
@@ -372,23 +383,84 @@ def _evaluate_legal(output: dict[str, Any], scenario: str, report: EvaluationRep
                 "data_classification absent) and §12 (inadmissible bundle; do not "
                 "proceed)"
             )
-        # "Determination attempted" failure mode: the spec permits a minimal
-        # blocked object; emitting a non-null determination is an attempt to
-        # infer through the missing input.
-        for det_field in ("dpa_required", "dpa_blocker", "nda_status", "nda_blocker"):
-            if det_field in output and output[det_field] is not None:
+
+        # Determination fields must be entirely absent per §9.1 — not null,
+        # not empty, absent. Present-with-any-value (including null) means
+        # the model attempted to produce a field it had no evidentiary basis
+        # to produce.
+        _blocked_forbidden_fields = (
+            "dpa_required", "dpa_blocker", "nda_status", "nda_blocker",
+            "trigger_rule_cited", "policy_citations",
+        )
+        for det_field in _blocked_forbidden_fields:
+            if det_field in output:
                 report.failures.append(
-                    f"scenario_4: {det_field}={output[det_field]!r} was emitted "
-                    "despite missing upstream STEP-02 output — model attempted a "
-                    "determination on an inadmissible bundle instead of halting"
+                    f"scenario_4: {det_field} is present in output (value="
+                    f"{output[det_field]!r}) but must be entirely absent on a "
+                    "blocked run per §9.1 — absent means the agent declined to "
+                    "produce a determination it had no basis to make"
                 )
-        trigger = output.get("trigger_rule_cited")
-        if isinstance(trigger, list) and len(trigger) > 0:
+
+        # blocked_reason — §9.1 requires a non-empty enum array.
+        blocked_reason = output.get("blocked_reason")
+        if blocked_reason is None:
             report.failures.append(
-                "scenario_4: trigger_rule_cited is non-empty on a blocked gate-"
-                "condition bundle — model attempted a DPA trigger determination "
-                "instead of halting"
+                "scenario_4: blocked_reason is missing — §9.1 requires a non-empty "
+                "enum array listing the gate-condition failure(s)"
             )
+        elif not isinstance(blocked_reason, list):
+            report.failures.append(
+                f"scenario_4: blocked_reason must be an array, got "
+                f"{type(blocked_reason).__name__}"
+            )
+        elif len(blocked_reason) == 0:
+            report.failures.append(
+                "scenario_4: blocked_reason is empty — must contain at least one "
+                "enum value per §9.1"
+            )
+        else:
+            for idx, reason in enumerate(blocked_reason):
+                if reason not in LEGAL_BLOCKED_REASON_VALUES:
+                    report.failures.append(
+                        f"scenario_4: blocked_reason[{idx}]={reason!r} is not a "
+                        f"valid enum value — must be one of "
+                        f"{LEGAL_BLOCKED_REASON_VALUES}"
+                    )
+            # For this specific scenario the missing input is upstream
+            # IT Security output.
+            if "MISSING_UPSTREAM_IT_SECURITY_OUTPUT" not in blocked_reason:
+                report.failures.append(
+                    "scenario_4: blocked_reason does not contain "
+                    "'MISSING_UPSTREAM_IT_SECURITY_OUTPUT' — this is the specific "
+                    "gate-condition failure for this bundle (no STEP-02 output)"
+                )
+
+        # blocked_fields — §9.1 requires a non-empty array of canonical field
+        # names (per CC-001 §15) that were absent from the upstream input.
+        blocked_fields = output.get("blocked_fields")
+        if blocked_fields is None:
+            report.failures.append(
+                "scenario_4: blocked_fields is missing — §9.1 requires a non-empty "
+                "array of canonical field names that were absent upstream"
+            )
+        elif not isinstance(blocked_fields, list):
+            report.failures.append(
+                f"scenario_4: blocked_fields must be an array, got "
+                f"{type(blocked_fields).__name__}"
+            )
+        elif len(blocked_fields) == 0:
+            report.failures.append(
+                "scenario_4: blocked_fields is empty — must name the specific "
+                "upstream fields that were absent"
+            )
+        else:
+            # data_classification is the critical missing field in this scenario.
+            if "data_classification" not in blocked_fields:
+                report.warnings.append(
+                    "scenario_4: blocked_fields does not contain "
+                    "'data_classification' — this is the primary upstream field "
+                    "that was absent from the bundle"
+                )
 
     # nda_blocker must be True when nda_status is not EXECUTED
     nda = output.get("nda_status")

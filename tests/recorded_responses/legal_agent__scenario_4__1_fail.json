@@ -1,0 +1,22 @@
+{
+  "agent_name": "legal_agent",
+  "scenario": "scenario_4",
+  "pipeline_run_id": "scenario_4_synthesized",
+  "run_number": 1,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260416T213855Z",
+  "system_prompt_path": "agent_spec_docs/Legal_Agent_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_03_scenario_4.json",
+  "raw_text": "```json\n{\n  \"dpa_required\": false,\n  \"dpa_blocker\": false,\n  \"nda_status\": \"UNKNOWN\",\n  \"nda_blocker\": true,\n  \"trigger_rule_cited\": [],\n  \"policy_citations\": [],\n  \"status\": \"blocked\"\n}\n```",
+  "parsed_output": {
+    "dpa_required": false,
+    "dpa_blocker": false,
+    "nda_status": "UNKNOWN",
+    "nda_blocker": true,
+    "trigger_rule_cited": [],
+    "policy_citations": [],
+    "status": "blocked"
+  },
+  "error": null
+}
