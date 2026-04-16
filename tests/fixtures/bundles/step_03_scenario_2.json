@@ -26,7 +26,32 @@
       "data_subjects_eu": true,
       "existing_nda_status": "PENDING"
     },
-    "dpa_trigger_rows": [],
+    "dpa_trigger_rows": [
+      {
+        "source_id": "DPA-TM-001",
+        "version": "1.3",
+        "chunk_id": "DPA-TM-001__row_A-01",
+        "section_id": null,
+        "row_id": "A-01",
+        "thread_id": null,
+        "text": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen. DPA REQUIRED. GDPR Art. 28 DPA; Lichen Legal must execute Art. 28 DPA before any processing begins.",
+        "retrieval_score": 1.0,
+        "rerank_score": 1.0,
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "DPA-TM-001",
+        "version": "1.3",
+        "chunk_id": "DPA-TM-001__row_E-01",
+        "section_id": null,
+        "row_id": "E-01",
+        "thread_id": null,
+        "text": "Vendor will have logical access to Lichen production systems or data repositories containing personal data. DPA REQUIRED. Art. 28 DPA; ISP-001 §12 compliance attestation; role-based access control and least-privilege acknowledgment.",
+        "retrieval_score": 1.0,
+        "rerank_score": 1.0,
+        "citation_class": "PRIMARY"
+      }
+    ],
     "nda_clause_chunks": [
       {
         "source_id": "ISP-001",

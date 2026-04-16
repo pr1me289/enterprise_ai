@@ -38,7 +38,13 @@ EXPECTED_STATUS: dict[tuple[str, str], str] = {
     ("it_security_agent", "scenario_1"): "complete",
     ("it_security_agent", "scenario_2"): "escalated",
     ("legal_agent", "scenario_1"): "complete",
-    ("legal_agent", "scenario_2"): "complete",  # NDA blocker does not escalate
+    # scenario_2: DPA required but not executed → dpa_blocker=true →
+    # status=escalated per Legal Agent Spec §14 A-07 (hard rule: agent must
+    # not emit complete when a DPA blocker is confirmed) and
+    # demo_scenario_02_escalated.md (STEP-03 is the first step in the chain
+    # to emit ESCALATED). NDA blocker alone does not escalate, but a DPA
+    # blocker does.
+    ("legal_agent", "scenario_2"): "escalated",
     ("procurement_agent", "scenario_1"): "complete",
     ("procurement_agent", "scenario_2"): "escalated",
     # Checklist Assembler uses overall_status, not status
@@ -328,34 +334,58 @@ def _evaluate_legal(output: dict[str, Any], scenario: str, report: EvaluationRep
     # (either trigger_rule_cited or policy_citations).
     pc = output.get("policy_citations")
     if isinstance(pc, list):
-        # Same rationale as STEP-02 (see _evaluate_it_security): domain-agent
-        # policy_citations[] is machine-to-machine provenance, so the required
-        # keys are source_id, version, section_id, and citation_class (matches
-        # Agent Spec, ORCH-PLAN STEP-03 output contract, and CC-001 §7).
-        # chunk_id is expected per the same contracts but is a soft
-        # expectation here — the evaluator does not hard-fail on its absence.
-        # section (no _id) is the human-facing label used only by the
-        # Checklist Assembler's citations[] per Design Doc §10.
-        _check_citation_entries(
-            output,
-            "policy_citations",
-            required_keys=("source_id", "version", "section_id", "citation_class"),
-            report=report,
-        )
+        # Legal Agent Spec §11 specifies per-source-id required keys for
+        # policy_citations entries (the §9 output-contract template shows a
+        # generic shape; §11 is authoritative on *which* keys are required
+        # per source type):
+        #   - ISP-001 (section-indexed): source_id, version, chunk_id,
+        #     section_id, citation_class
+        #   - DPA-TM-001 (row-indexed):  source_id, version, row_id,
+        #     trigger_condition, citation_class
+        # A single uniform required-keys tuple does not fit because the two
+        # sources have different primary identifiers. Do not confuse
+        # section_id with the Checklist Assembler's human-facing `section`
+        # label (Design Doc §10).
+        _legal_policy_citation_required_keys_by_source = {
+            "ISP-001": ("source_id", "version", "chunk_id", "section_id", "citation_class"),
+            "DPA-TM-001": ("source_id", "version", "row_id", "trigger_condition", "citation_class"),
+        }
+        for idx, entry in enumerate(pc):
+            if not isinstance(entry, dict):
+                report.failures.append(f"policy_citations[{idx}] is not an object")
+                continue
+            src = entry.get("source_id")
+            required = _legal_policy_citation_required_keys_by_source.get(src)
+            if required is None:
+                # Unknown/missing source_id is handled by _check_source_id_in
+                # below — don't double-report a key-schema failure here.
+                continue
+            for key in required:
+                if key not in entry or entry[key] in (None, ""):
+                    report.failures.append(
+                        f"policy_citations[{idx}] (source_id={src!r}) missing required key {key!r}"
+                    )
         _check_source_id_in(output, "policy_citations", ("ISP-001", "DPA-TM-001"), report)
 
     if nda_blk is True:
-        # Look for ISP-001 §12.1.4 reference in either array
+        # Look for ISP-001 §12.1.4 reference in either array.
+        # Domain-agent citations carry ``section_id`` (machine-to-machine provenance)
+        # per the Agent Spec, ORCH-PLAN STEP-03 output contract, and CC-001 §7 —
+        # not ``section`` (the Checklist Assembler's human-facing label per
+        # Design Doc §10). Match on the *value* of ``section_id`` so this check
+        # validates the proper clause, not just the presence of any section id.
         sections = []
         for bucket in (output.get("policy_citations") or [], output.get("trigger_rule_cited") or []):
             if isinstance(bucket, list):
                 for entry in bucket:
                     if isinstance(entry, dict):
-                        sections.append(f"{entry.get('source_id')}/{entry.get('section') or entry.get('row_id')}")
+                        sections.append(
+                            f"{entry.get('source_id')}/{entry.get('section_id') or entry.get('row_id')}"
+                        )
         if not any(
             isinstance(entry, dict)
             and entry.get("source_id") == "ISP-001"
-            and str(entry.get("section", "")).startswith("12.1.4")
+            and str(entry.get("section_id", "")).startswith("12.1.4")
             for entry in (pc or [])
         ):
             report.warnings.append(
@@ -420,6 +450,54 @@ def _evaluate_procurement(output: dict[str, Any], scenario: str, report: Evaluat
         et = output.get("estimated_timeline")
         if et is None or (isinstance(et, str) and et.strip() == ""):
             report.failures.append("estimated_timeline is missing or empty on status='complete'")
+
+    # policy_citations: per Procurement Agent Spec §9 output contract and §11
+    # provenance, Procurement cites PAM-001 rows (and optionally SLK-001 as
+    # SUPPLEMENTARY). Required keys are source_id, version, row_id,
+    # approval_path_condition, citation_class — this is row-indexed, not
+    # section-indexed, so section_id is not part of the Procurement contract.
+    # chunk_id is expected per the spec but is a soft expectation here.
+    # ISP-001 and DPA-TM-001 are explicitly outside Procurement's retrieval
+    # lane (spec §5, §11) and are never re-cited in Procurement's output.
+    pc = output.get("policy_citations")
+    if isinstance(pc, list):
+        # Non-empty on complete runs — §14 A-01 requires a PRIMARY PAM-001 row
+        # citation for every COMPLETE approval_path determination.
+        if status == "complete" and len(pc) == 0:
+            report.failures.append(
+                "policy_citations empty on status='complete' — §14 A-01 requires "
+                "at least one PRIMARY PAM-001 row citation"
+            )
+        _check_citation_entries(
+            output,
+            "policy_citations",
+            required_keys=(
+                "source_id",
+                "version",
+                "row_id",
+                "approval_path_condition",
+                "citation_class",
+            ),
+            report=report,
+        )
+        _check_source_id_in(output, "policy_citations", ("PAM-001", "SLK-001"), report)
+
+        # On COMPLETE runs, the matched matrix row must appear as PRIMARY PAM-001
+        # per §14 A-01. SUPPLEMENTARY-only or SLK-001-only citations are not
+        # sufficient for a COMPLETE determination.
+        if status == "complete":
+            primary_pam = any(
+                isinstance(entry, dict)
+                and entry.get("source_id") == "PAM-001"
+                and entry.get("citation_class") == "PRIMARY"
+                and entry.get("row_id") not in (None, "")
+                for entry in pc
+            )
+            if not primary_pam:
+                report.failures.append(
+                    "status='complete' requires at least one PRIMARY PAM-001 citation "
+                    "with a non-empty row_id (Procurement Agent Spec §14 A-01)"
+                )
 
 
 # ---------------------------------------------------------------------------

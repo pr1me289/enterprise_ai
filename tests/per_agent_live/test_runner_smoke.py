@@ -122,7 +122,14 @@ _VALID_PROCUREMENT = {
     ],
     "estimated_timeline": "5 business days",
     "policy_citations": [
-        {"source_id": "PAM-001", "version": "3.0", "section": "4"}
+        {
+            "source_id": "PAM-001",
+            "version": "3.0",
+            "chunk_id": "PAM-001__row_P-01",
+            "row_id": "P-01",
+            "approval_path_condition": "Class A vendor, deal_size > 100k → STANDARD path",
+            "citation_class": "PRIMARY",
+        }
     ],
     "status": "complete",
 }
@@ -459,6 +466,322 @@ def test_evaluator_soft_warns_on_unexpected_scenario_status() -> None:
     )
     assert report.passed, f"should pass hard checks; failures={report.failures}"
     assert any("scenario-expected" in w for w in report.warnings)
+
+
+# ---------------------------------------------------------------------------
+# Evaluator — proper ID-value checks (not just key presence)
+# ---------------------------------------------------------------------------
+
+
+def test_evaluator_flags_wrong_nda_section_id_value() -> None:
+    # nda_blocker=true demands the ISP-001 §12.1.4 NDA clause specifically.
+    # A citation with a different section_id value (e.g. "99") must surface
+    # the warning even though the section_id KEY is present and non-empty —
+    # this exercises the section→section_id drift fix and proves the check
+    # is validating the *value*, not just the presence of the key.
+    bad = dict(
+        _VALID_LEGAL,
+        nda_status="PENDING",
+        nda_blocker=True,
+        policy_citations=[
+            {
+                "source_id": "ISP-001",
+                "version": "4.2",
+                "section_id": "99",
+                "citation_class": "PRIMARY",
+            }
+        ],
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_2",
+        parsed_output=bad,
+        error=None,
+    )
+    assert any("12.1.4" in w for w in report.warnings), (
+        f"expected a §12.1.4 warning when section_id value does not match; "
+        f"warnings={report.warnings}"
+    )
+
+
+def test_evaluator_clears_nda_warning_with_correct_section_id_value() -> None:
+    # The complementary case: when section_id VALUE starts with "12.1.4",
+    # no §12.1.4 warning should fire — confirming the check reads section_id,
+    # not the legacy "section" key.
+    good = dict(
+        _VALID_LEGAL,
+        nda_status="PENDING",
+        nda_blocker=True,
+        policy_citations=[
+            {
+                "source_id": "ISP-001",
+                "version": "4.2",
+                "section_id": "12.1.4",
+                "citation_class": "PRIMARY",
+            }
+        ],
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_2",
+        parsed_output=good,
+        error=None,
+    )
+    assert not any("12.1.4" in w for w in report.warnings), (
+        f"§12.1.4 warning should not fire when section_id value matches; "
+        f"warnings={report.warnings}"
+    )
+
+
+def test_evaluator_flags_procurement_missing_citation_keys() -> None:
+    # Procurement policy_citations entries must carry row_id,
+    # approval_path_condition, and citation_class per Agent Spec §9/§11.
+    # An entry missing row_id is a failure even if source_id and version
+    # are present — i.e. the check verifies the *proper row_id value*
+    # is emitted, not just a partial citation.
+    bad = dict(
+        _VALID_PROCUREMENT,
+        policy_citations=[
+            {"source_id": "PAM-001", "version": "3.0"}  # missing row_id, etc.
+        ],
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="procurement_agent",
+        scenario="scenario_1",
+        parsed_output=bad,
+        error=None,
+    )
+    assert not report.passed
+    joined = "\n".join(report.failures)
+    assert "row_id" in joined
+    assert "approval_path_condition" in joined
+    assert "citation_class" in joined
+
+
+def test_evaluator_flags_procurement_empty_row_id_value() -> None:
+    # A row_id that is present but empty-string must fail the same way a
+    # missing row_id does — the check validates the *value*, not just
+    # the presence of the key.
+    bad = dict(
+        _VALID_PROCUREMENT,
+        policy_citations=[
+            {
+                "source_id": "PAM-001",
+                "version": "3.0",
+                "row_id": "",
+                "approval_path_condition": "Class A vendor, deal_size > 100k",
+                "citation_class": "PRIMARY",
+            }
+        ],
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="procurement_agent",
+        scenario="scenario_1",
+        parsed_output=bad,
+        error=None,
+    )
+    assert not report.passed
+    assert any("row_id" in f for f in report.failures)
+
+
+def test_evaluator_flags_procurement_citing_out_of_lane_source() -> None:
+    # Procurement's retrieval lane is PAM-001 and SLK-001 only — ISP-001
+    # or DPA-TM-001 citations are a contract violation per Agent Spec §5/§11.
+    bad = dict(
+        _VALID_PROCUREMENT,
+        policy_citations=[
+            {
+                "source_id": "ISP-001",
+                "version": "4.2",
+                "row_id": "P-01",
+                "approval_path_condition": "Class A vendor",
+                "citation_class": "PRIMARY",
+            }
+        ],
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="procurement_agent",
+        scenario="scenario_1",
+        parsed_output=bad,
+        error=None,
+    )
+    assert not report.passed
+    assert any("ISP-001" in f and "outside permitted sources" in f for f in report.failures)
+
+
+def test_evaluator_accepts_legal_dpa_tm_001_citation_with_row_id() -> None:
+    # Per Legal Agent Spec §11: DPA-TM-001 entries in policy_citations are
+    # row-indexed and carry source_id, version, row_id, trigger_condition,
+    # citation_class — NOT section_id. This must pass the key-schema check.
+    payload = dict(
+        _VALID_LEGAL,
+        dpa_required=True,
+        dpa_blocker=True,
+        status="escalated",
+        trigger_rule_cited=[
+            {
+                "source_id": "DPA-TM-001",
+                "version": "1.3",
+                "row_id": "A-01",
+                "trigger_condition": "EU/EEA data subjects processed on behalf of Lichen",
+            }
+        ],
+        policy_citations=[
+            {
+                "source_id": "ISP-001",
+                "version": "4.2",
+                "chunk_id": "ISP-001__section_12",
+                "section_id": "12.1.4",
+                "citation_class": "PRIMARY",
+            },
+            {
+                "source_id": "DPA-TM-001",
+                "version": "1.3",
+                "row_id": "A-01",
+                "trigger_condition": "EU/EEA data subjects processed on behalf of Lichen",
+                "citation_class": "PRIMARY",
+            },
+        ],
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_2",
+        parsed_output=payload,
+        error=None,
+    )
+    assert report.passed, f"row-indexed DPA-TM-001 entry must pass; failures={report.failures}"
+
+
+def test_evaluator_flags_legal_dpa_tm_001_missing_row_id() -> None:
+    # A DPA-TM-001 entry lacking row_id must hard-fail per §11 — the
+    # per-source-id schema requires row_id for row-indexed sources.
+    bad = dict(
+        _VALID_LEGAL,
+        dpa_required=True,
+        dpa_blocker=True,
+        status="escalated",
+        trigger_rule_cited=[
+            {
+                "source_id": "DPA-TM-001",
+                "version": "1.3",
+                "row_id": "A-01",
+                "trigger_condition": "EU/EEA data subjects",
+            }
+        ],
+        policy_citations=[
+            {
+                "source_id": "DPA-TM-001",
+                "version": "1.3",
+                # row_id intentionally missing
+                "trigger_condition": "EU/EEA data subjects",
+                "citation_class": "PRIMARY",
+            }
+        ],
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_2",
+        parsed_output=bad,
+        error=None,
+    )
+    assert not report.passed
+    assert any("DPA-TM-001" in f and "row_id" in f for f in report.failures), (
+        f"expected per-source-id failure naming DPA-TM-001 and row_id; "
+        f"failures={report.failures}"
+    )
+
+
+def test_evaluator_flags_legal_isp_001_missing_section_id() -> None:
+    # The complementary case — ISP-001 entries are section-indexed and
+    # must still fail when section_id is missing. This guards against a
+    # regression where the per-source-id refactor accidentally relaxes
+    # the ISP-001 contract.
+    bad = dict(
+        _VALID_LEGAL,
+        policy_citations=[
+            {
+                "source_id": "ISP-001",
+                "version": "4.2",
+                "chunk_id": "ISP-001__section_12",
+                # section_id intentionally missing
+                "citation_class": "PRIMARY",
+            }
+        ],
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_1",
+        parsed_output=bad,
+        error=None,
+    )
+    assert not report.passed
+    assert any("ISP-001" in f and "section_id" in f for f in report.failures)
+
+
+def test_evaluator_scenario_2_legal_soft_expects_escalated() -> None:
+    # Per spec §14 A-07 and demo_scenario_02_escalated.md, Legal's
+    # scenario_2 must emit ESCALATED. If the model returns 'complete'
+    # the scenario-status soft check must fire a warning naming
+    # 'escalated' as the expected value.
+    payload = dict(
+        _VALID_LEGAL,
+        dpa_required=True,
+        dpa_blocker=True,
+        status="complete",  # deliberately wrong vs spec §14 A-07
+        trigger_rule_cited=[
+            {
+                "source_id": "DPA-TM-001",
+                "version": "1.3",
+                "row_id": "A-01",
+                "trigger_condition": "EU/EEA data subjects",
+            }
+        ],
+        policy_citations=[
+            {
+                "source_id": "DPA-TM-001",
+                "version": "1.3",
+                "row_id": "A-01",
+                "trigger_condition": "EU/EEA data subjects",
+                "citation_class": "PRIMARY",
+            }
+        ],
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_2",
+        parsed_output=payload,
+        error=None,
+    )
+    assert any("scenario-expected" in w and "escalated" in w for w in report.warnings), (
+        f"expected soft warning naming 'escalated' as scenario_2 expectation; "
+        f"warnings={report.warnings}"
+    )
+
+
+def test_evaluator_flags_procurement_complete_missing_primary_pam() -> None:
+    # §14 A-01 acceptance check: a COMPLETE approval_path determination
+    # requires at least one PRIMARY PAM-001 citation with a non-empty row_id.
+    # SUPPLEMENTARY-only or SLK-001-only citations must fail on complete.
+    bad = dict(
+        _VALID_PROCUREMENT,
+        policy_citations=[
+            {
+                "source_id": "SLK-001",
+                "version": "1.0",
+                "row_id": "thread_42",
+                "approval_path_condition": "Procurement thread context",
+                "citation_class": "SUPPLEMENTARY",
+            }
+        ],
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="procurement_agent",
+        scenario="scenario_1",
+        parsed_output=bad,
+        error=None,
+    )
+    assert not report.passed
+    assert any("PRIMARY PAM-001" in f for f in report.failures)
 
 
 # ---------------------------------------------------------------------------

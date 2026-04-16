@@ -28,6 +28,7 @@ After each confirmed test run, append a brief entry to `results/test_results.md`
 **Status signal:** complete / escalated / blocked — expected vs. actual
 **Semantic validity:** PASS / FAIL — one line on any contradiction found
 **Notes:** one or two sentences max on anything notable or flagged
+**Test depth:** coding agent opinion piece on whether domain agent is being tested sufficiently on capabilities
 ```
 
 Keep entries short. The recorded response is the source of truth — the results file is a summary only. Evaluations must stay consistent with `llm_agent_output_evaluation_checklist.md`.

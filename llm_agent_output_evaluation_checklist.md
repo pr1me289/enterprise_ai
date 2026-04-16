@@ -61,10 +61,10 @@ These conditions must pass on every agent output before agent-specific checks be
 - [ ] **`nda_status`** — must be exactly one of: `EXECUTED`, `PENDING`, `NOT_STARTED`, `UNKNOWN` (uppercase). This is the Legal Agent's normalized determination, not a raw passthrough of the questionnaire field.
 - [ ] **`nda_blocker`** — must be a boolean. Must be `true` when `nda_status` is anything other than `EXECUTED`.
 - [ ] **`trigger_rule_cited`** — must be a non-empty array when `dpa_required: true`. Each entry must include: `source_id` (`DPA-TM-001`), `version`, `row_id`, `trigger_condition`. If `dpa_required: false`, this may be an empty array — but the agent should still cite the absence determination.
-- [ ] **`policy_citations`** — when present, each entry must include at minimum: `source_id` (`ISP-001` or `DPA-TM-001`), `version`, `section_id`, `citation_class`. `section_id` and `citation_class` are the machine-to-machine provenance fields defined by the Agent Spec, ORCH-PLAN STEP-03 output contract, and CC-001 §7; do not confuse `section_id` with the Checklist Assembler's human-facing `section` label (Design Doc §10). `chunk_id` is expected per the same contracts and should be verified when present, but its absence is logged as a warning rather than a hard failure. Required to carry the ISP-001 §12.1.4 NDA clause when `nda_blocker: true` (see semantic checks below).
+- [ ] **`policy_citations`** — each entry must include at minimum: `source_id`, `version`, `citation_class`, plus the per-source-id primary identifier keys defined in Legal Agent Spec §11. ISP-001 is section-indexed and requires `chunk_id` + `section_id`. DPA-TM-001 is row-indexed and requires `row_id` + `trigger_condition`. A uniform required-keys tuple does not fit because the two sources have different primary identifiers — do not flatten them together. Do not confuse `section_id` with the Checklist Assembler's human-facing `section` label (Design Doc §10). Required to carry an ISP-001 §12.1.4 NDA clause entry when `nda_blocker: true` and at least one PRIMARY DPA-TM-001 entry when `dpa_required: true` (see semantic checks below).
 - [ ] **`status`** — see general rules. Expected values by scenario:
   - Scenario 1 (no EU data, NDA executed): `complete`
-  - Scenario 2 (EU data present, NDA unconfirmed): `complete` with `nda_blocker: true` (the blocker is a workflow consequence, not an evidence gap — status should still be `complete` unless the NDA clause itself is unretrievable, in which case `escalated`)
+  - Scenario 2 (EU data present, DPA required but not executed, NDA unconfirmed): `escalated` — per Agent Spec §14 A-07 (`dpa_blocker = true` → `status = escalated`; the agent must not emit `complete` when a DPA blocker is confirmed) and demo_scenario_02_escalated.md (STEP-03 is the first step in the scenario chain to emit `ESCALATED`)
 
 ### Semantic Validity Checks
 
@@ -95,6 +95,7 @@ These conditions must pass on every agent output before agent-specific checks be
 - [ ] **`executive_approval_required`** — must be a boolean. Must be `true` when `approval_path: EXECUTIVE_APPROVAL`.
 - [ ] **`required_approvals`** — must be a non-empty array on `status: complete` runs. Each entry must include at minimum: `approver`, `domain`. An empty array is a test failure on resolved runs.
 - [ ] **`estimated_timeline`** — must be a non-null string describing the expected approval timeline. Cannot be omitted or empty on complete runs.
+- [ ] **`policy_citations`** — must be a non-empty array on `status: complete` runs. Each entry must include at minimum: `source_id` (`PAM-001` or `SLK-001`), `version`, `row_id`, `approval_path_condition`, `citation_class`. These are the machine-to-machine provenance fields defined by the Agent Spec §9 output contract and §11 provenance, and §14 A-01 acceptance check; PAM-001 is row-indexed (not section-indexed), so `section_id` is not part of the Procurement contract — do not confuse Procurement `policy_citations[]` with Checklist Assembler `citations[]`. `chunk_id` is expected per the Agent Spec but is a soft expectation — its absence is logged as a warning rather than a hard failure. On `status: complete`, at least one entry must be `source_id: PAM-001` with `citation_class: PRIMARY` and a non-empty `row_id` per §14 A-01. Citations to ISP-001 or DPA-TM-001 are a contract violation (outside Procurement's retrieval lane per spec §5 and §11).
 - [ ] **`status`** — see general rules. Expected values by scenario:
   - Scenario 1 (clean path): `complete`
   - Scenario 2 (upstream escalation present or no matrix row match): `escalated`
@@ -192,7 +193,7 @@ Use this as a quick reference during test evaluation.
 | Agent | Expected `complete` conditions | Expected `escalated` conditions | Expected `blocked` conditions |
 |---|---|---|---|
 | IT Security (STEP-02) | Unambiguous ERP type, clean classification | ERP type ambiguous; no policy section resolves the tier | Required questionnaire fields absent |
-| Legal (STEP-03) | DPA determination made; NDA status normalized | NDA clause (ISP-001 §12.1.4) unretrievable; Tier 1 conflict | Upstream IT Security output absent |
+| Legal (STEP-03) | `dpa_required = false` OR (`dpa_required = true` AND executed DPA confirmed); NDA status normalized | `dpa_blocker = true` (DPA required but not executed) per spec §14 A-07; NDA clause (ISP-001 §12.1.4) unretrievable; Tier 1 conflict | Upstream IT Security output absent |
 | Procurement (STEP-04) | Approval path determined; matrix row matched | No matrix row matches vendor/deal combination | Upstream IT Security or Legal output absent |
 | Checklist Assembler (STEP-05) | All three domain outputs present and schema-valid | Any upstream agent returned `escalated` | Any upstream agent returned `blocked` or output is absent |
 | Checkoff Agent (STEP-06) | Guidance documents produced; approvers routed | N/A — does not make determinations | STEP-05 did not reach `COMPLETE` |

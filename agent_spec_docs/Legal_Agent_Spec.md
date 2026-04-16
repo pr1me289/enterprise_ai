@@ -258,16 +258,25 @@ The agent must return a single schema-valid JSON object. No other output format 
   ],
   "policy_citations": [
     {
-      "source_id": "ISP-001 | DPA-TM-001",
+      "source_id": "ISP-001",
       "version": "string",
       "chunk_id": "string",
       "section_id": "string",
+      "citation_class": "PRIMARY | SUPPLEMENTARY"
+    },
+    {
+      "source_id": "DPA-TM-001",
+      "version": "string",
+      "row_id": "string",
+      "trigger_condition": "string",
       "citation_class": "PRIMARY | SUPPLEMENTARY"
     }
   ],
   "status": "complete | escalated | blocked"
 }
 ```
+
+> `policy_citations[]` entries are shaped **per source**. ISP-001 is a sectioned document and is cited with `chunk_id` + `section_id`. DPA-TM-001 is a trigger matrix and is cited with `row_id` + `trigger_condition` — `section_id` is not meaningful for a matrix row and must not be emitted as a stand-in. See §11 for the full per-source-id schema and provenance requirements.
 
 > Escalation context — triggering condition, conflicting sources, and resolution owner — is captured in the append-only audit log per CC-001 §13.1 and the orchestration plan global audit rules. The `policy_citations` array on an `escalated` output must cite both conflicting chunks when the escalation is clause-level. The audit log is the authoritative escalation record.
 
