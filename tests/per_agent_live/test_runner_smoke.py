@@ -89,8 +89,8 @@ _VALID_IT_SECURITY = {
     "nda_status_from_questionnaire": "EXECUTED",
     "required_security_actions": [],
     "policy_citations": [
-        {"source_id": "ISP-001", "version": "4.2", "section_id": "12"},
-        {"source_id": "ISP-001", "version": "4.2", "section_id": "17"},
+        {"source_id": "ISP-001", "version": "4.2", "section_id": "12", "citation_class": "PRIMARY"},
+        {"source_id": "ISP-001", "version": "4.2", "section_id": "17", "citation_class": "PRIMARY"},
     ],
     "status": "complete",
 }

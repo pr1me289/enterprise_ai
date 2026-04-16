@@ -4,6 +4,8 @@
 
 Before any live API call, tell me exactly which agent, which test file, and which fixture you are about to run. Wait for explicit confirmation before proceeding. Do not run `pytest -m api`, any live API call, the per-agent test environment, or the full pipeline automatically under any circumstances.
 
+Whenever I give you permission to make an API call, first consider from initial intuition whether you foresee failure, success, or are unsure: if failure, raise your concerns and do not run the call yet; if success or unsure, proceed with the call as instructed.
+
 ## Scope Rules
 
 - Run the smallest possible scope: one agent, one fixture, one scenario at a time

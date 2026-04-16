@@ -1,0 +1,41 @@
+{
+  "agent_name": "it_security_agent",
+  "scenario": "scenario_1",
+  "pipeline_run_id": "run_ac50900c01",
+  "run_number": 2,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260416T153133Z",
+  "system_prompt_path": "agent_spec_docs/IT_Security_Agent_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_02_scenario_1.json",
+  "raw_text": "```json\n{\n  \"integration_type_normalized\": \"EXPORT_ONLY\",\n  \"integration_tier\": \"TIER_3\",\n  \"data_classification\": \"UNREGULATED\",\n  \"eu_personal_data_present\": \"NO\",\n  \"fast_track_eligible\": true,\n  \"fast_track_rationale\": \"ELIGIBLE_LOW_RISK\",\n  \"security_followup_required\": false,\n  \"nda_status_from_questionnaire\": \"EXECUTED\",\n  \"required_security_actions\": [],\n  \"policy_citations\": [\n    {\n      \"source_id\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"chunk_id\": \"ISP-001__section_12\",\n      \"section_id\": \"12\",\n      \"citation_class\": \"PRIMARY\"\n    },\n    {\n      \"source_id\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"chunk_id\": \"ISP-001__section_17\",\n      \"section_id\": \"17\",\n      \"citation_class\": \"PRIMARY\"\n    }\n  ],\n  \"status\": \"complete\"\n}\n```",
+  "parsed_output": {
+    "integration_type_normalized": "EXPORT_ONLY",
+    "integration_tier": "TIER_3",
+    "data_classification": "UNREGULATED",
+    "eu_personal_data_present": "NO",
+    "fast_track_eligible": true,
+    "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+    "security_followup_required": false,
+    "nda_status_from_questionnaire": "EXECUTED",
+    "required_security_actions": [],
+    "policy_citations": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12",
+        "section_id": "12",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_17",
+        "section_id": "17",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "error": null
+}
