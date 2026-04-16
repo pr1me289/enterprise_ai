@@ -209,6 +209,7 @@
   },
   "legal_and_contractual_status": {
     "existing_nda_status": "PROVISIONAL",
+    "existing_dpa_status": "PENDING",
     "nda_details": {
       "draft_transmitted_by_vendor": "2024-02-19",
       "countersigned": false,

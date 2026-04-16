@@ -45,6 +45,21 @@ EXPECTED_STATUS: dict[tuple[str, str], str] = {
     # to emit ESCALATED). NDA blocker alone does not escalate, but a DPA
     # blocker does.
     ("legal_agent", "scenario_2"): "escalated",
+    # scenario_3: DPA required (EU data + A-01 trigger fires) AND
+    # existing_dpa_status=EXECUTED → dpa_blocker=false → status=complete per
+    # Legal Agent Spec §8.3 row 2 ("dpa_required=true AND executed DPA
+    # confirmed on record" → false) and §8.5 terminal condition ("all
+    # required evidence present and no escalation or blocked condition
+    # applies"). This scenario exists to catch models that conflate
+    # "DPA required" with "DPA is a blocker".
+    ("legal_agent", "scenario_3"): "complete",
+    # scenario_4: no upstream STEP-02 output in the bundle → inadmissible →
+    # status=blocked per Legal_Agent_Spec.md §8.5 ("upstream_data_classification
+    # absent" → blocked) and §12 ("data_classification absent from STEP-02
+    # output | Bundle is inadmissible. Emit status: blocked. Do not proceed.").
+    # Pure gate-condition test — the agent must halt rather than infer through
+    # the missing input.
+    ("legal_agent", "scenario_4"): "blocked",
     ("procurement_agent", "scenario_1"): "complete",
     ("procurement_agent", "scenario_2"): "escalated",
     # Checklist Assembler uses overall_status, not status
@@ -86,9 +101,21 @@ def _check_general(output: Any, agent_name: str, report: EvaluationReport) -> bo
         report.failures.append(f"output is not a JSON object (got {type(output).__name__})")
         return False
 
+    # Blocked-minimal-output allowance: each domain-agent spec permits a
+    # minimal object on the BLOCKED terminal state (Legal §9: "On a blocked
+    # run, the agent may emit a minimal object containing status and any
+    # available error or audit context. Non-status determination fields are
+    # required only on non-blocked runs."). When status=blocked, only the
+    # status field itself is required; determination fields are optional.
+    # Agent-specific checks may still add scenario-specific hard-checks
+    # (e.g. flagging a determination attempted on a gate-condition bundle).
+    is_blocked = output.get("status") == "blocked"
+
     # Required-field presence, using the call-layer contract as source of truth.
     required = REQUIRED_FIELDS.get(agent_name, ())
     for field_name in required:
+        if is_blocked and field_name != "status":
+            continue
         if field_name not in output:
             report.failures.append(f"required field missing: {field_name!r}")
             continue
@@ -296,6 +323,72 @@ def _evaluate_legal(output: dict[str, Any], scenario: str, report: EvaluationRep
     if isinstance(dpa_req, bool) and isinstance(dpa_blk, bool):
         if dpa_blk is True and dpa_req is False:
             report.failures.append("dpa_blocker=true is inconsistent with dpa_required=false")
+
+    # scenario_3 hard checks — the scenario exists to stress the
+    # dpa_required-vs-dpa_blocker distinction. Bundle provides
+    # eu_personal_data_flag=true + A-01 trigger row (→ dpa_required must be
+    # true) AND existing_dpa_status=EXECUTED (→ dpa_blocker must be false)
+    # per Legal_Agent_Spec.md §8.3 row 2. A model that collapses the two
+    # concepts will emit dpa_blocker=true — the specific failure mode this
+    # fixture exists to catch.
+    if scenario == "scenario_3":
+        if dpa_req is False:
+            report.failures.append(
+                "scenario_3: dpa_required=false contradicts bundle — EU personal data "
+                "flagged and DPA-TM-001 row A-01 present in dpa_trigger_rows; trigger "
+                "must fire"
+            )
+        if dpa_req is True and dpa_blk is True:
+            report.failures.append(
+                "scenario_3: dpa_blocker=true but questionnaire.existing_dpa_status="
+                "'EXECUTED' in bundle — Legal_Agent_Spec.md §8.3 row 2 requires "
+                "dpa_blocker=false when dpa_required=true AND an executed DPA is "
+                "confirmed on record. Model conflated 'DPA required' with "
+                "'DPA is a blocker'."
+            )
+        status_val = output.get("status")
+        if dpa_req is True and dpa_blk is False and status_val != "complete":
+            report.failures.append(
+                f"scenario_3: all blockers cleared (dpa_blocker=false, nda_status="
+                f"'EXECUTED' in bundle) but status={status_val!r} — expected 'complete' "
+                "per §8.5 terminal condition (all evidence present, no escalation or "
+                "blocked condition applies)"
+            )
+
+    # scenario_4 hard checks — bundle has no upstream STEP-02 output, so the
+    # agent must emit status=blocked and must NOT attempt a DPA or NDA
+    # determination. Per Legal_Agent_Spec.md §8.5 ("upstream_data_classification
+    # absent" → blocked) and §12 ("data_classification absent from STEP-02
+    # output | Bundle is inadmissible. Emit status: blocked. Do not proceed.").
+    # Pure gate-condition test — any emitted determination field (dpa_required,
+    # dpa_blocker, nda_status, nda_blocker with non-null value) indicates the
+    # model inferred through the missing input rather than halting.
+    if scenario == "scenario_4":
+        status_val = output.get("status")
+        if status_val != "blocked":
+            report.failures.append(
+                f"scenario_4: status={status_val!r} but bundle has no upstream STEP-02 "
+                "output — must emit 'blocked' per Legal_Agent_Spec.md §8.5 (upstream "
+                "data_classification absent) and §12 (inadmissible bundle; do not "
+                "proceed)"
+            )
+        # "Determination attempted" failure mode: the spec permits a minimal
+        # blocked object; emitting a non-null determination is an attempt to
+        # infer through the missing input.
+        for det_field in ("dpa_required", "dpa_blocker", "nda_status", "nda_blocker"):
+            if det_field in output and output[det_field] is not None:
+                report.failures.append(
+                    f"scenario_4: {det_field}={output[det_field]!r} was emitted "
+                    "despite missing upstream STEP-02 output — model attempted a "
+                    "determination on an inadmissible bundle instead of halting"
+                )
+        trigger = output.get("trigger_rule_cited")
+        if isinstance(trigger, list) and len(trigger) > 0:
+            report.failures.append(
+                "scenario_4: trigger_rule_cited is non-empty on a blocked gate-"
+                "condition bundle — model attempted a DPA trigger determination "
+                "instead of halting"
+            )
 
     # nda_blocker must be True when nda_status is not EXECUTED
     nda = output.get("nda_status")

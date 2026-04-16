@@ -25,7 +25,25 @@ VALID_AGENTS: tuple[str, ...] = (
     "checkoff_agent",
 )
 
-VALID_SCENARIOS: tuple[str, ...] = ("scenario_1", "scenario_2")
+VALID_SCENARIOS: tuple[str, ...] = ("scenario_1", "scenario_2", "scenario_3", "scenario_4")
+
+# Per-agent scenario availability. scenario_3 and scenario_4 are
+# Legal-Agent-only fixtures:
+#   * scenario_3 — dpa_required=true AND dpa_blocker=false (executed DPA on
+#     file). Stresses the required-vs-blocker distinction.
+#   * scenario_4 — no upstream STEP-02 output in the bundle. Pure gate-
+#     condition test: agent must emit status=blocked per Legal_Agent_Spec
+#     §8.5 and §12 instead of inferring a determination from the missing
+#     input.
+# Other agents have no scenario_3/scenario_4 bundles — callers requesting
+# one will hit BundleError via fixture_path() when the file does not exist.
+SCENARIOS_BY_AGENT: dict[str, tuple[str, ...]] = {
+    "it_security_agent": ("scenario_1", "scenario_2"),
+    "legal_agent": ("scenario_1", "scenario_2", "scenario_3", "scenario_4"),
+    "procurement_agent": ("scenario_1", "scenario_2"),
+    "checklist_assembler": ("scenario_1", "scenario_2"),
+    "checkoff_agent": ("scenario_1", "scenario_2"),
+}
 
 AGENT_TO_STEP: dict[str, str] = {
     "it_security_agent": "step_02",

@@ -48,7 +48,7 @@ The Legal Agent receives a scoped evidence bundle — pre-assembled by the Super
 It derives its owned fields in the following way:
 
 - `dpa_required` is determined by applying DPA trigger matrix rows to the upstream data classification and questionnaire-derived EU personal data posture. At least one matching Tier 1 trigger row is required for a COMPLETE affirmative determination.
-- `dpa_blocker` is derived from `dpa_required` and the absence of a confirmed executed DPA on record. It is a hard downstream blocker when true.
+- `dpa_blocker` is derived from `dpa_required` and the questionnaire `existing_dpa_status` field (canonical values `EXECUTED | PENDING | NOT_STARTED | UNKNOWN`). It is a hard downstream blocker when true. If `existing_dpa_status` is absent from the bundle, it is treated as equivalent to a non-EXECUTED status.
 - `nda_status` is normalized from questionnaire evidence (`existing_nda_status`) against the governing ISP-001 §12.1.4 clause delivered in the evidence bundle. The Legal Agent does not determine whether an NDA is required — policy already requires it. It evaluates whether execution has been confirmed.
 - `nda_blocker` is derived from `nda_status`. It is true whenever `nda_status != EXECUTED`.
 - `trigger_rule_cited` is the structured citation array of DPA trigger matrix rows only. NDA clause support is carried in `policy_citations`.
@@ -67,14 +67,17 @@ The Supervisor assembles this bundle before the agent runs. The agent must treat
 1. IT Security Agent output — `data_classification` field only
 2. Questionnaire EU personal data fields — `eu_personal_data_flag`, `data_subjects_eu`
 3. Questionnaire NDA field — `existing_nda_status`
-4. DPA legal trigger matrix rows — matching rows only
-5. ISP-001 NDA clause chunk — §12.1.4 only
+4. Questionnaire DPA field — `existing_dpa_status`
+5. DPA legal trigger matrix rows — matching rows only
+6. ISP-001 NDA clause chunk — §12.1.4 only
 
 **Required fields for an admissible STEP-03 bundle:**
 - `data_classification` from STEP-02 IT Security output (required; bundle is inadmissible without it)
 - `eu_personal_data_flag` from questionnaire
 - `data_subjects_eu` from questionnaire
 - `existing_nda_status` from questionnaire
+
+`existing_dpa_status` is a consumed field but not an admissibility requirement. If absent from the bundle, it is treated as equivalent to a non-EXECUTED status for `dpa_blocker` derivation — see §8.3.
 
 If `data_classification` is absent or the STEP-02 output is schema-invalid, the bundle is inadmissible and the agent must emit `blocked`. If questionnaire EU fields are missing, flag the absent fields explicitly and emit `escalated`. If `nda_clause_chunks` are absent, the NDA determination lacks sufficient citation evidence — emit `escalated`.
 
@@ -146,7 +149,7 @@ The Legal Agent is the **sole owner** of the following determinations. Downstrea
 - **DO** treat `data_classification` from STEP-02 as authoritative. Do not re-derive it from questionnaire evidence.
 - **DO** derive EU personal data posture for STEP-03 from questionnaire fields only: `eu_personal_data_flag` and `data_subjects_eu`.
 - **DO** require at least one DPA trigger matrix row match before emitting `dpa_required = true` as COMPLETE. If the data profile warrants a DPA but no matching row exists in the matrix, escalate rather than assert.
-- **DO** emit `dpa_blocker = true` whenever `dpa_required = true` and no executed DPA is on record. This is a hard rule.
+- **DO** emit `dpa_blocker = true` whenever `dpa_required = true` and `existing_dpa_status != EXECUTED` (including when the field is absent from the bundle). This is a hard rule.
 - **DO** emit `nda_blocker = true` whenever `nda_status != EXECUTED`. This is a hard rule.
 - **DO** cite the specific DPA trigger matrix row (`row_id`, `version`, `trigger_condition`) for every affirmative `dpa_required` determination. Generic matrix references are not sufficient.
 - **DO** cite ISP-001 §12.1.4 by section identifier for every NDA determination where the clause is present in the bundle. If the clause chunk is absent, emit `escalated` and log the missing clause evidence.
@@ -201,10 +204,12 @@ A `dpa_required = true` determination requires at least one explicitly cited tri
 
 ### 8.3 DPA Blocker Derivation
 
+The blocker derivation consumes the questionnaire `existing_dpa_status` field (canonical values `EXECUTED | PENDING | NOT_STARTED | UNKNOWN` per CC-001 §14). Absence of the field in the bundle is treated as equivalent to a non-EXECUTED status.
+
 | Condition | `dpa_blocker` |
 |---|---|
-| `dpa_required = true` AND no executed DPA on record | `true` — hard downstream blocker |
-| `dpa_required = true` AND executed DPA confirmed on record | `false` |
+| `dpa_required = true` AND `existing_dpa_status != EXECUTED` (including when the field is absent from the bundle) | `true` — hard downstream blocker |
+| `dpa_required = true` AND `existing_dpa_status = EXECUTED` | `false` |
 | `dpa_required = false` | `false` |
 
 `dpa_blocker = true` is an evidentially COMPLETE determination — the evidence supports the trigger conclusion. The blocker is a workflow consequence, not an evidence gap. The terminal STEP-03 status is `escalated` when `dpa_blocker = true`, because human legal execution is explicitly required before downstream completion.
@@ -287,7 +292,7 @@ The agent must return a single schema-valid JSON object. No other output format 
 | Field | Constraint |
 |---|---|
 | `dpa_required` | Must be emitted on every non-blocked run |
-| `dpa_blocker` | Must be emitted on every non-blocked run. Must be `true` whenever `dpa_required = true` and no executed DPA is confirmed. |
+| `dpa_blocker` | Must be emitted on every non-blocked run. Must be `true` whenever `dpa_required = true` and questionnaire `existing_dpa_status != EXECUTED` (including when the field is absent from the bundle). |
 | `nda_status` | Must be emitted on every non-blocked run. Must be one of the four defined enum values. |
 | `nda_blocker` | Must be emitted on every non-blocked run. Must be `true` whenever `nda_status != EXECUTED`. |
 | `trigger_rule_cited` | DPA trigger citations only. Must contain at least one entry when `dpa_required = true`. May be `[]` only when `dpa_required = false` as COMPLETE. |
@@ -397,7 +402,7 @@ These are the must-pass checks for this spec. They belong here as implementation
 | # | Constraint | Pass Condition |
 |---|---|---|
 | A-01 | `dpa_required` backed by at least one Tier 1 trigger matrix row when true | `trigger_rule_cited` contains at least one PRIMARY DPA-TM-001 entry with `row_id` |
-| A-02 | `dpa_blocker = true` whenever `dpa_required = true` and no executed DPA confirmed | Hard rule — no exceptions |
+| A-02 | `dpa_blocker = true` whenever `dpa_required = true` and questionnaire `existing_dpa_status != EXECUTED` (including absence of the field) | Hard rule — no exceptions |
 | A-03 | `nda_blocker = true` whenever `nda_status != EXECUTED` | Hard rule — no exceptions |
 | A-04 | No Tier 3 (Slack) source cited as PRIMARY | All Tier 3 citations remain SUPPLEMENTARY |
 | A-05 | `dpa_required = false` as COMPLETE only when classification is UNREGULATED, EU personal data is confirmed absent, and no evaluated trigger row matches | Agent does not assert `false` when data profile warrants DPA review but no matrix row was retrieved |

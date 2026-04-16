@@ -272,6 +272,10 @@ These requirements define the minimum evidence composition a bundle must satisfy
   DPA Legal Trigger Matrix --- at least one matching row   Required for a DPA determination to be admissible as RESOLVED. If no trigger-matrix row matches, the determination lacks sufficient evidence.
 
   Questionnaire --- EU personal data fields                Required for DPA scoping: eu_personal_data_flag, data_subjects_eu.
+
+  Questionnaire --- NDA status field                       Required: existing_nda_status. Consumed by the Legal Agent to normalize nda_status and derive nda_blocker.
+
+  Questionnaire --- DPA execution status field             Optional: existing_dpa_status. Consumed by the Legal Agent to derive dpa_blocker. Absence is treated as equivalent to a non-EXECUTED status (dpa_blocker defaults to true when dpa_required = true); absence does not make the bundle inadmissible.
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## 8.3 Procurement Agent Bundle
@@ -502,6 +506,8 @@ The pipeline operates across sources with different schemas, naming conventions,
   eu_personal_data_flag   Boolean: does the integration involve EU personal data subject to GDPR?                                                       VQ-OC-001                  data_subjects_eu (JSON); \"EU Data Subjects\" (DPA-TM-001 trigger column)
 
   nda_status              NDA status normalized from questionnaire evidence and ISP-001 §12.1.4 clause: EXECUTED \| PENDING \| NOT_STARTED \| UNKNOWN   Legal Agent output         existing_nda_status (JSON, raw input from VQ-OC-001); NDA confirmation clause (ISP-001 §12.1.4)
+
+  existing_dpa_status     Vendor-reported DPA execution status: EXECUTED \| PENDING \| NOT_STARTED \| UNKNOWN. Legal Agent normalizes into dpa_blocker (dpa_blocker = false when dpa_required = true AND existing_dpa_status = EXECUTED; dpa_blocker = true when dpa_required = true AND existing_dpa_status != EXECUTED or the field is absent).   VQ-OC-001                  existing_dpa_status (JSON, raw input from VQ-OC-001)
 
   dpa_required            Boolean: does a Data Processing Agreement need to be executed?                                                                Legal Agent output         dpa_required (DPA-TM-001 trigger column)
 

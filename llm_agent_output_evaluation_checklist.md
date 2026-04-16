@@ -65,6 +65,8 @@ These conditions must pass on every agent output before agent-specific checks be
 - [ ] **`status`** — see general rules. Expected values by scenario:
   - Scenario 1 (no EU data, NDA executed): `complete`
   - Scenario 2 (EU data present, DPA required but not executed, NDA unconfirmed): `escalated` — per Agent Spec §14 A-07 (`dpa_blocker = true` → `status = escalated`; the agent must not emit `complete` when a DPA blocker is confirmed) and demo_scenario_02_escalated.md (STEP-03 is the first step in the scenario chain to emit `ESCALATED`)
+  - Scenario 3 (EU data present, DPA required AND executed DPA already on file, NDA executed): `complete` — tests the `dpa_required = true` AND `dpa_blocker = false` path per Agent Spec §8.3 row 2 ("`dpa_required = true` AND executed DPA confirmed on record" → `false`). The DPA trigger still fires (A-01 row present), the obligation is already satisfied, so `dpa_blocker = false` and `status = complete`. Designed to catch models that conflate "DPA required" with "DPA is a blocker". The evaluator hard-fails when `dpa_required = true` AND `dpa_blocker = true` on this scenario.
+  - Scenario 4 (no upstream STEP-02 output in the bundle): `blocked` — pure gate-condition test per Agent Spec §8.5 ("upstream_data_classification absent" → `blocked`) and §12 ("data_classification absent from STEP-02 output | Bundle is inadmissible. Emit status: blocked. Do not proceed."). On blocked runs, §9 permits a minimal output containing only `status` and audit context; determination fields (`dpa_required`, `dpa_blocker`, `nda_status`, `nda_blocker`) must NOT be emitted with non-null values — any attempt to make a determination despite missing upstream input is a hard failure. Designed to catch models that infer through missing input rather than halting.
 
 ### Semantic Validity Checks
 
@@ -193,7 +195,7 @@ Use this as a quick reference during test evaluation.
 | Agent | Expected `complete` conditions | Expected `escalated` conditions | Expected `blocked` conditions |
 |---|---|---|---|
 | IT Security (STEP-02) | Unambiguous ERP type, clean classification | ERP type ambiguous; no policy section resolves the tier | Required questionnaire fields absent |
-| Legal (STEP-03) | `dpa_required = false` OR (`dpa_required = true` AND executed DPA confirmed); NDA status normalized | `dpa_blocker = true` (DPA required but not executed) per spec §14 A-07; NDA clause (ISP-001 §12.1.4) unretrievable; Tier 1 conflict | Upstream IT Security output absent |
+| Legal (STEP-03) | `dpa_required = false` (Scenario 1) OR `dpa_required = true` AND executed DPA confirmed (Scenario 3: `dpa_blocker = false`); NDA status normalized | `dpa_blocker = true` (Scenario 2: DPA required but not executed) per spec §14 A-07; NDA clause (ISP-001 §12.1.4) unretrievable; Tier 1 conflict | Upstream IT Security output absent (Scenario 4) per spec §8.5 / §12 — minimal output, no determination attempted |
 | Procurement (STEP-04) | Approval path determined; matrix row matched | No matrix row matches vendor/deal combination | Upstream IT Security or Legal output absent |
 | Checklist Assembler (STEP-05) | All three domain outputs present and schema-valid | Any upstream agent returned `escalated` | Any upstream agent returned `blocked` or output is absent |
 | Checkoff Agent (STEP-06) | Guidance documents produced; approvers routed | N/A — does not make determinations | STEP-05 did not reach `COMPLETE` |

@@ -24,6 +24,7 @@ for _candidate in (_REPO_ROOT / "src", _REPO_ROOT):
 
 from per_agent_test_env.bundle_loader import (
     AGENT_TO_STEP,
+    SCENARIOS_BY_AGENT,
     VALID_AGENTS,
     VALID_SCENARIOS,
     BundleError,
@@ -40,6 +41,7 @@ from per_agent_test_env.runner import (
 
 __all__ = [
     "AGENT_TO_STEP",
+    "SCENARIOS_BY_AGENT",
     "VALID_AGENTS",
     "VALID_SCENARIOS",
     "AgentTestResult",

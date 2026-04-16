@@ -19,6 +19,7 @@ from typing import Any
 import pytest
 
 from per_agent_test_env import (
+    SCENARIOS_BY_AGENT,
     VALID_AGENTS,
     VALID_SCENARIOS,
     bundle_loader,
@@ -207,8 +208,14 @@ _VALID_PAYLOADS: dict[str, dict[str, Any]] = {
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("agent", VALID_AGENTS)
-@pytest.mark.parametrize("scenario", VALID_SCENARIOS)
+_AGENT_SCENARIO_PAIRS: tuple[tuple[str, str], ...] = tuple(
+    (agent, scenario)
+    for agent in VALID_AGENTS
+    for scenario in SCENARIOS_BY_AGENT.get(agent, ())
+)
+
+
+@pytest.mark.parametrize(("agent", "scenario"), _AGENT_SCENARIO_PAIRS)
 def test_load_bundle_all_pairs(agent: str, scenario: str) -> None:
     bundle, run_id, path = load_bundle(agent, scenario, repo_root=REPO_ROOT)
     assert isinstance(bundle, dict)
@@ -755,6 +762,266 @@ def test_evaluator_scenario_2_legal_soft_expects_escalated() -> None:
     assert any("scenario-expected" in w and "escalated" in w for w in report.warnings), (
         f"expected soft warning naming 'escalated' as scenario_2 expectation; "
         f"warnings={report.warnings}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Scenario 3 — Legal Agent: dpa_required=true AND dpa_blocker=false
+# (executed DPA already on file). Stress-tests the required-vs-blocker
+# distinction per Legal_Agent_Spec.md §8.3 row 2.
+# ---------------------------------------------------------------------------
+
+
+def _scenario_3_valid_legal_payload() -> dict[str, Any]:
+    """Canonical passing scenario_3 Legal output: trigger fires, blocker cleared."""
+    return {
+        "dpa_required": True,
+        "dpa_blocker": False,  # the distinction under test
+        "nda_status": "EXECUTED",
+        "nda_blocker": False,
+        "trigger_rule_cited": [
+            {
+                "source_id": "DPA-TM-001",
+                "version": "1.3",
+                "row_id": "A-01",
+                "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen.",
+                "citation_class": "PRIMARY",
+            }
+        ],
+        "policy_citations": [
+            {
+                "source_id": "DPA-TM-001",
+                "version": "1.3",
+                "row_id": "A-01",
+                "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen.",
+                "citation_class": "PRIMARY",
+            },
+            {
+                "source_id": "ISP-001",
+                "version": "4.2",
+                "chunk_id": "ISP-001__section_12",
+                "section_id": "12",
+                "citation_class": "PRIMARY",
+            },
+        ],
+        "status": "complete",
+    }
+
+
+def test_evaluator_scenario_3_legal_accepts_valid_output() -> None:
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_3",
+        parsed_output=_scenario_3_valid_legal_payload(),
+        error=None,
+    )
+    assert report.passed, f"expected scenario_3 valid payload to pass; failures={report.failures}"
+
+
+def test_evaluator_scenario_3_legal_hard_fails_when_dpa_blocker_true() -> None:
+    # The specific failure mode scenario_3 exists to catch: model returns
+    # dpa_required=true AND dpa_blocker=true despite existing_dpa_status=
+    # EXECUTED in the bundle. Must be a hard failure with a message that
+    # names the conflation.
+    bad = dict(
+        _scenario_3_valid_legal_payload(),
+        dpa_blocker=True,
+        status="escalated",  # natural downstream consequence of blocker=true
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_3",
+        parsed_output=bad,
+        error=None,
+    )
+    assert not report.passed
+    assert any(
+        "scenario_3" in f and "dpa_blocker=true" in f and "EXECUTED" in f
+        for f in report.failures
+    ), f"expected scenario_3 blocker-conflation failure; failures={report.failures}"
+
+
+def test_evaluator_scenario_3_legal_hard_fails_when_dpa_required_false() -> None:
+    # Guard-rail: if the model misses the DPA trigger entirely (returns
+    # dpa_required=false) despite EU data + A-01 row in the bundle, that is
+    # also a scenario_3 hard failure — the whole test is premised on the
+    # trigger firing.
+    bad = dict(
+        _scenario_3_valid_legal_payload(),
+        dpa_required=False,
+        dpa_blocker=False,
+        trigger_rule_cited=[],
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_3",
+        parsed_output=bad,
+        error=None,
+    )
+    assert not report.passed
+    assert any(
+        "scenario_3" in f and "dpa_required=false" in f for f in report.failures
+    ), f"expected scenario_3 missed-trigger failure; failures={report.failures}"
+
+
+def test_evaluator_scenario_3_legal_hard_fails_when_status_not_complete() -> None:
+    # When both blockers are cleared (dpa_blocker=false, nda executed),
+    # §8.5 terminal condition requires status=complete. Anything else is a
+    # scenario_3 hard failure.
+    bad = dict(
+        _scenario_3_valid_legal_payload(),
+        status="escalated",
+    )
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_3",
+        parsed_output=bad,
+        error=None,
+    )
+    assert not report.passed
+    assert any(
+        "scenario_3" in f and "expected 'complete'" in f for f in report.failures
+    ), f"expected scenario_3 status-not-complete failure; failures={report.failures}"
+
+
+# ---------------------------------------------------------------------------
+# Scenario 4 — Legal Agent: blocked on missing upstream input (pure gate
+# condition). No IT Security output in the bundle → inadmissible → must
+# emit status=blocked with no determination attempted.
+# ---------------------------------------------------------------------------
+
+
+def test_evaluator_scenario_4_legal_accepts_minimal_blocked_output() -> None:
+    # Minimal blocked output per Legal_Agent_Spec.md §9: only `status` is
+    # required. Determination fields absent. Must pass.
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_4",
+        parsed_output={"status": "blocked"},
+        error=None,
+    )
+    assert report.passed, f"minimal blocked output must pass; failures={report.failures}"
+
+
+def test_evaluator_scenario_4_legal_accepts_blocked_with_null_determinations() -> None:
+    # Explicit nulls on determination fields are also permitted on a blocked
+    # run — the spec says these fields are "required only on non-blocked
+    # runs," not that they're forbidden. Null values signal "no determination"
+    # just as absence does.
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_4",
+        parsed_output={
+            "status": "blocked",
+            "dpa_required": None,
+            "dpa_blocker": None,
+            "nda_status": None,
+            "nda_blocker": None,
+            "trigger_rule_cited": [],
+            "policy_citations": [],
+        },
+        error=None,
+    )
+    assert report.passed, f"blocked with null determinations must pass; failures={report.failures}"
+
+
+def test_evaluator_scenario_4_legal_hard_fails_when_status_not_blocked() -> None:
+    # The canonical failure: model infers a determination from downstream
+    # evidence (questionnaire EU flag, A-01 trigger row) despite missing
+    # upstream STEP-02 output. Must hard-fail.
+    bad = {
+        "status": "escalated",
+        "dpa_required": True,
+        "dpa_blocker": True,
+        "nda_status": "PENDING",
+        "nda_blocker": True,
+        "trigger_rule_cited": [
+            {
+                "source_id": "DPA-TM-001",
+                "version": "1.3",
+                "row_id": "A-01",
+                "trigger_condition": "EU/EEA data subjects",
+                "citation_class": "PRIMARY",
+            }
+        ],
+        "policy_citations": [
+            {
+                "source_id": "DPA-TM-001",
+                "version": "1.3",
+                "row_id": "A-01",
+                "trigger_condition": "EU/EEA data subjects",
+                "citation_class": "PRIMARY",
+            }
+        ],
+    }
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_4",
+        parsed_output=bad,
+        error=None,
+    )
+    assert not report.passed
+    assert any(
+        "scenario_4" in f and "blocked" in f for f in report.failures
+    ), f"expected scenario_4 status-not-blocked failure; failures={report.failures}"
+
+
+def test_evaluator_scenario_4_legal_hard_fails_when_determination_attempted_on_blocked() -> None:
+    # Edge case: model sets status=blocked but also emits non-null
+    # determination fields. Per the build prompt this is still the "attempted
+    # determination" failure mode — the spec permits minimal output, not
+    # determinations alongside blocked.
+    bad = {
+        "status": "blocked",
+        "dpa_required": True,  # determination attempted despite blocked
+        "trigger_rule_cited": [
+            {
+                "source_id": "DPA-TM-001",
+                "version": "1.3",
+                "row_id": "A-01",
+                "trigger_condition": "EU/EEA data subjects",
+                "citation_class": "PRIMARY",
+            }
+        ],
+    }
+    report = evaluators.evaluate_recorded(
+        agent_name="legal_agent",
+        scenario="scenario_4",
+        parsed_output=bad,
+        error=None,
+    )
+    assert not report.passed
+    assert any(
+        "scenario_4" in f and "dpa_required" in f and "inadmissible" in f
+        for f in report.failures
+    ), f"expected scenario_4 determination-attempted failure; failures={report.failures}"
+    assert any(
+        "scenario_4" in f and "trigger_rule_cited" in f for f in report.failures
+    ), f"expected scenario_4 trigger-attempted failure; failures={report.failures}"
+
+
+def test_general_rules_allow_blocked_minimal_output() -> None:
+    # Cross-agent sanity check: the _check_general blocked-minimal-output
+    # allowance must not force determination-field presence on blocked runs
+    # for any domain agent. Parallels each spec's §9-equivalent minimal-
+    # blocked language (Legal §9, Procurement §9, Checklist Assembler §9,
+    # Checkoff §9).
+    report = evaluators.evaluate_recorded(
+        agent_name="procurement_agent",
+        scenario="scenario_1",
+        parsed_output={"status": "blocked"},
+        error=None,
+    )
+    # General-rule required-field checks must be skipped on blocked; the
+    # scenario-expected status for procurement scenario_1 is complete, so a
+    # soft warning is expected, but no hard failures from required-field
+    # presence.
+    required_field_failures = [
+        f for f in report.failures if f.startswith("required field missing")
+    ]
+    assert not required_field_failures, (
+        f"blocked minimal output must not trigger required-field failures; "
+        f"got: {required_field_failures}"
     )
 
 

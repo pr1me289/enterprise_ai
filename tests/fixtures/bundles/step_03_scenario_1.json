@@ -24,7 +24,8 @@
     "questionnaire": {
       "eu_personal_data_flag": false,
       "data_subjects_eu": false,
-      "existing_nda_status": "EXECUTED"
+      "existing_nda_status": "EXECUTED",
+      "existing_dpa_status": "NOT_STARTED"
     },
     "dpa_trigger_rows": [],
     "nda_clause_chunks": [

@@ -1,0 +1,35 @@
+{
+  "document_id": "VQ-OC-001",
+  "scenario": "scenario_3",
+  "scenario_description": "Recurring EU-data vendor with executed DPA already on file. Tests the distinction between dpa_required (trigger fires) and dpa_blocker (obligation already satisfied). Expected STEP-03 output: dpa_required=true, dpa_blocker=false, nda_blocker=false, status=complete.",
+  "vendor": {
+    "name": "Meridian Analytics, Ltd.",
+    "procurement_reference": "PRQ-2026-0047",
+    "vendor_class": "B",
+    "vendor_class_label": "Specialized Software — Regulated",
+    "prior_engagement": true,
+    "prior_engagement_reference": "PRQ-2023-0031"
+  },
+  "product_summary": "Renewal engagement with a vendor Lichen previously onboarded. Same product scope: workforce productivity analytics ingesting shift-level attendance and productivity metrics for EU-based plant employees. Nightly structured export. No ERP integration. No persistent vendor system credentials.",
+  "integration_details": {
+    "erp_type": "NONE",
+    "erp_integration": false,
+    "data_transfer_pattern": "EXPORT_ONLY"
+  },
+  "data_classification_self_reported": "REGULATED",
+  "regulated_data_types": [
+    "EU-based manufacturing employee shift and productivity records",
+    "Employee IDs for EU-based facilities"
+  ],
+  "eu_personal_data_flag": true,
+  "data_subjects_eu": true,
+  "existing_nda_status": "EXECUTED",
+  "existing_nda_reference": "NDA-2023-0031",
+  "existing_dpa_status": "EXECUTED",
+  "existing_dpa_reference": "DPA-2023-0031",
+  "existing_dpa_execution_date": "2023-09-10",
+  "existing_msa": true,
+  "deal_size_usd": 192000,
+  "contract_term_months": 24,
+  "fast_track_eligible_self_reported": false
+}

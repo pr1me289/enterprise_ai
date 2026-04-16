@@ -1,0 +1,45 @@
+{
+  "agent_name": "legal_agent",
+  "scenario": "scenario_3",
+  "pipeline_run_id": "scenario_3_synthesized",
+  "run_number": 1,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260416T180310Z",
+  "system_prompt_path": "agent_spec_docs/Legal_Agent_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_03_scenario_3.json",
+  "raw_text": "```json\n{\n  \"dpa_required\": true,\n  \"dpa_blocker\": false,\n  \"nda_status\": \"EXECUTED\",\n  \"nda_blocker\": false,\n  \"trigger_rule_cited\": [\n    {\n      \"source_id\": \"DPA-TM-001\",\n      \"version\": \"1.3\",\n      \"row_id\": \"A-01\",\n      \"trigger_condition\": \"Vendor will process personal data of EU/EEA data subjects on behalf of Lichen. DPA REQUIRED. GDPR Art. 28 DPA; Lichen Legal must execute Art. 28 DPA before any processing begins.\",\n      \"citation_class\": \"PRIMARY\"\n    }\n  ],\n  \"policy_citations\": [\n    {\n      \"source_id\": \"DPA-TM-001\",\n      \"version\": \"1.3\",\n      \"row_id\": \"A-01\",\n      \"trigger_condition\": \"Vendor will process personal data of EU/EEA data subjects on behalf of Lichen. DPA REQUIRED. GDPR Art. 28 DPA; Lichen Legal must execute Art. 28 DPA before any processing begins.\",\n      \"citation_class\": \"PRIMARY\"\n    },\n    {\n      \"source_id\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"chunk_id\": \"ISP-001__section_12\",\n      \"section_id\": \"12\",\n      \"citation_class\": \"PRIMARY\"\n    }\n  ],\n  \"status\": \"complete\"\n}\n```",
+  "parsed_output": {
+    "dpa_required": true,
+    "dpa_blocker": false,
+    "nda_status": "EXECUTED",
+    "nda_blocker": false,
+    "trigger_rule_cited": [
+      {
+        "source_id": "DPA-TM-001",
+        "version": "1.3",
+        "row_id": "A-01",
+        "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen. DPA REQUIRED. GDPR Art. 28 DPA; Lichen Legal must execute Art. 28 DPA before any processing begins.",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "policy_citations": [
+      {
+        "source_id": "DPA-TM-001",
+        "version": "1.3",
+        "row_id": "A-01",
+        "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen. DPA REQUIRED. GDPR Art. 28 DPA; Lichen Legal must execute Art. 28 DPA before any processing begins.",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12",
+        "section_id": "12",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "error": null
+}

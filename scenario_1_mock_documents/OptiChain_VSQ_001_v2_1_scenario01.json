@@ -84,6 +84,7 @@
 
   "existing_nda_status": "EXECUTED",
   "nda_execution_date": "2024-01-15",
+  "existing_dpa_status": "NOT_STARTED",
   "existing_msa": "YES",
   "prior_engagement_reference": "PRQ-2023-0031",
   "prior_engagement_status": "CLOSED_SUCCESSFULLY",
