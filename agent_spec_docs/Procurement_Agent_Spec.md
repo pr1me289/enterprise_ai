@@ -1,8 +1,8 @@
 # Agent Spec — Procurement Agent
-## SPEC-AGENT-PROC-001 v0.6
+## SPEC-AGENT-PROC-001 v0.7
 
 **Document ID:** SPEC-AGENT-PROC-001
-**Version:** 0.6
+**Version:** 0.7
 **Owner:** Engineering / IT Architecture
 **Last Updated:** April 13, 2026
 
@@ -77,7 +77,7 @@ The Supervisor assembles this bundle before the agent runs. The agent must treat
 - `vendor_class` from questionnaire
 - raw questionnaire field `contract_value_annual`, normalized into canonical `deal_size`
 
-If either upstream agent output is absent or schema-invalid, the bundle is inadmissible and the agent must emit `blocked`. If required questionnaire vendor relationship fields are missing, the agent must flag absent fields explicitly and emit `blocked`. A Procurement Approval Matrix row match is required for a COMPLETE `approval_path` determination — if no row matches, the agent must emit `escalated`.
+If either upstream agent output is absent or schema-invalid, the bundle is inadmissible and the agent must emit the §9.1 blocked output shape with the appropriate `blocked_reason` and `blocked_fields`. Do not produce any determination fields. If required questionnaire vendor relationship fields are missing, the agent must flag absent fields explicitly and emit the §9.1 blocked output shape. A Procurement Approval Matrix row match is required for a COMPLETE `approval_path` determination — if no row matches, the agent must emit `escalated`.
 
 **Field-normalization note:** CC-001 §15 defines `deal_size` as the canonical STEP-04 field, while the questionnaire stores this value as `contract_value_annual`. ORCH-PLAN-001 STEP-04 reads `contract_value_annual` from `vq_direct_access`; the Supervisor then normalizes that raw field into canonical `deal_size` for bundle use. This spec uses `deal_size` for determination logic and cites `contract_value_annual` only when referring to the raw questionnaire field.
 
@@ -233,6 +233,14 @@ The Procurement Agent's terminal step status is derived from the combination of 
 | Upstream STEP-03 output carries `status = escalated` and no blocked condition above has fired | `escalated` — approval path may still be determined, but the run inherits unresolved Legal escalation constraints |
 | `approval_path` determined with at least one PAM-001 citation and all required upstream inputs present and confirmed | `complete` |
 
+**Output shape switching rule:** The agent must first derive the terminal status from this table, then emit the output shape corresponding to that status:
+
+- **`complete`** — Emit the standard determination output defined in §9. All determination fields must be present and populated with their derived values. No field may be `null`.
+- **`escalated`** — Emit the standard determination output defined in §9 with the escalated field rules defined in §9.2. All determination fields must be present. Fields the agent can resolve are populated normally. Fields the agent cannot resolve — the specific cause of the escalation — are set to `null`. No field may be absent. See §9.2 for the full escalated output rules.
+- **`blocked`** — Emit the blocked output shape defined in §9.1 instead. Determination fields must be entirely absent from the output, not null. The agent must not attempt to populate `approval_path`, `fast_track_eligible`, `required_approvals`, `estimated_timeline`, or `policy_citations` on a blocked run under any circumstances, regardless of what other evidence may be present in the bundle.
+
+**BLOCKED vs ESCALATED distinction:** `blocked` means a required context bundle item is missing or inadmissible — the agent has no evidentiary basis to begin its work, so it declines to produce any determination (all determination fields absent). `escalated` means the bundle was admissible and the agent began its work, but it could not resolve one or more output contract fields based on the determination rules in this spec — it fills every field it can and sets the unresolvable field(s) to `null` so the Supervisor knows exactly where human judgment is needed.
+
 ---
 
 ## 9. Output Contract
@@ -242,13 +250,13 @@ The agent must return a single schema-valid JSON object. No other output format 
 ```json
 {
   "approval_path": "STANDARD | FAST_TRACK",
-  "fast_track_eligible": false,
+  "fast_track_eligible": true | false,
   "required_approvals": [
     {
       "approver": "string",
       "domain": "string",
       "status": "PENDING | CONFIRMED | WAIVED",
-      "blocker": false,
+      "blocker": true | false,
       "estimated_completion": "string"
     }
   ],
@@ -267,7 +275,7 @@ The agent must return a single schema-valid JSON object. No other output format 
 }
 ```
 
-> On a `blocked` run, the agent may emit a minimal object containing `status` and any available error or audit context. Non-status determination fields are required only on non-blocked runs.
+> **Blocked output rule:** On a `blocked` run, the agent MUST NOT emit determination fields (`approval_path`, `fast_track_eligible`, `required_approvals`, `estimated_timeline`, `policy_citations`). These fields must be entirely absent from the output — not null, not empty, absent. Emitting any determination field on a blocked run is a contract violation because the agent had no evidentiary basis to produce it. See §9.1 for the mandatory blocked output shape.
 
 > Escalation context — triggering condition, conflicting sources, and resolution owner — is captured in the append-only audit log per CC-001 §13.1 and the orchestration plan global audit rules. The `policy_citations` array on an `escalated` output must cite the matrix evidence gap or conflicting rows. The audit log is the authoritative escalation record.
 
@@ -275,12 +283,71 @@ The agent must return a single schema-valid JSON object. No other output format 
 
 | Field | Constraint |
 |---|---|
-| `approval_path` | Must be emitted on every non-blocked run when a path can be determined from PAM-001. Must be one of the two defined enum values: `STANDARD` or `FAST_TRACK`. May be absent or `null` on an escalated no-match run. |
-| `fast_track_eligible` | Must be emitted on every non-blocked run. Must equal the authoritative STEP-02 value exactly. |
-| `required_approvals[]` | Must be emitted on every non-blocked, non-escalated run. Must contain at least one entry when `approval_path` is COMPLETE. May be `[]` on escalated runs where no approval path is determined. |
-| `estimated_timeline` | Must be emitted on every non-blocked run when a path is determined. |
-| `policy_citations` | Must include at least one PRIMARY PAM-001 row citation when `approval_path` is COMPLETE. Tier 3 citations must be tagged `SUPPLEMENTARY`. `source_id` values for Procurement Agent citations are limited to `PAM-001` and `SLK-001` — upstream agent citations are not re-cited here. |
+| `approval_path` | Must be present on every non-blocked run. Absent on blocked runs (§9.1). Must be one of the two defined enum values (`STANDARD` or `FAST_TRACK`) on complete runs. On escalated runs, set to `null` if no PAM-001 row matches the vendor/deal combination or if Tier 1 sources conflict (§9.2). |
+| `fast_track_eligible` | Must be present on every non-blocked run. Absent on blocked runs. Must equal the authoritative STEP-02 value exactly. On escalated runs, set to `null` only if the upstream STEP-02 value was itself `null` (STEP-02 escalated with unresolved eligibility per IT Security §9.2). |
+| `required_approvals[]` | Must be present on every non-blocked run. Absent on blocked runs. Must contain at least one entry when `approval_path` is COMPLETE. On escalated runs, set to `null` if `approval_path` is `null` — cannot assemble approvals from an undetermined path (§9.2). |
+| `estimated_timeline` | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` if `approval_path` is `null` — cannot derive timeline from an undetermined path (§9.2). |
+| `policy_citations` | Must be present on every non-blocked run. Absent on blocked runs. Must include at least one PRIMARY PAM-001 row citation when `approval_path` is COMPLETE. Tier 3 citations must be tagged `SUPPLEMENTARY`. `source_id` values for Procurement Agent citations are limited to `PAM-001` and `SLK-001` — upstream agent citations are not re-cited here. On escalated runs, include citations for determinations that were resolved; when escalation is due to PAM-001 conflict, cite both conflicting rows. Set to `null` only if all citation-supporting determinations are unresolvable. |
+| `status = escalated` | All determination fields must be present (not absent). Fields the agent resolved carry their derived values. Fields the agent could not resolve are `null`. See §9.2. |
 | `status` | Lowercase. One of `complete`, `escalated`, or `blocked`. If STEP-03 is escalated, STEP-04 inherits that unresolved constraint in status handling unless a blocked condition takes precedence. |
+
+### 9.1 Blocked Output Shape
+
+When the agent derives `status = blocked` from §8.5, it MUST emit the following output shape instead of the standard determination object. The determination fields defined in §9 (`approval_path`, `fast_track_eligible`, `required_approvals`, `estimated_timeline`, `policy_citations`) must be entirely absent — not null, not empty. Null implies the field exists but has no value; absent means the agent correctly declined to produce a determination it had no basis to make. That distinction matters for downstream schema validation.
+
+```json
+{
+  "status": "blocked",
+  "blocked_reason": ["MISSING_IT_SECURITY_OUTPUT"],
+  "blocked_fields": ["fast_track_eligible", "data_classification"]
+}
+```
+
+**`blocked_reason`** — enum array. Lists the specific gate-condition or admissibility failure(s) that caused the block. Multiple values are permitted when multiple inputs are missing simultaneously. Defined enum values for the Procurement Agent:
+
+| Enum Value | Condition |
+|---|---|
+| `MISSING_IT_SECURITY_OUTPUT` | The full IT Security Agent (STEP-02) structured output is absent. The Procurement Agent cannot determine approval path without `fast_track_eligible` and `data_classification` from STEP-02. This is not a missing field — the entire upstream determination is absent, which is categorically different from the IT Security Agent returning AMBIGUOUS. An escalated or ambiguous IT Security output is still an output; a missing one is a blocked condition. |
+| `MISSING_LEGAL_OUTPUT` | The full Legal Agent (STEP-03) structured output is absent. Per CC-001 §8.3, both IT Security and Legal outputs must be present for the Procurement bundle to be admissible. `dpa_blocker` and `nda_blocker` directly affect approval path routing — without them the Procurement Agent cannot determine whether blockers exist that constrain the path it would otherwise assign. |
+| `MISSING_QUESTIONNAIRE_VENDOR_FIELDS` | `vendor_class` and `deal_size` (raw `contract_value_annual`) are absent from the bundle. These are the two questionnaire fields the Procurement Agent uses to look up the correct approval matrix row. Without them no matrix row can be matched. This is a blocked condition rather than an escalation because the evidence base for matrix lookup doesn't exist at all — unlike the escalation case where a matrix row exists but doesn't match. |
+| `MISSING_PAM_001` | The Procurement Approval Matrix index is entirely unavailable. The agent has all upstream inputs but no authoritative source to match against. Per CC-001 §11, a determination without at least one Tier 1 citation is insufficient for complete — and PAM-001 is the primary governing source for the Procurement Agent. No PAM-001 means no determination at all. |
+
+**`blocked_fields`** — string array. Lists the specific canonical field names (per CC-001 §15) that were absent or null in the upstream input, causing the block. This array is what makes the audit log entry useful: it names exactly what the Supervisor needs to surface to the resolution owner.
+
+> This output shape is mandatory whenever `status = blocked`. The agent must not fall back to the standard determination shape with null-valued fields. The blocked output shape is the only valid output when the agent cannot proceed.
+
+### 9.2 Escalated Output Rules
+
+When the agent derives `status = escalated` from §8.5, it emits the same determination shape as §9 — **not** the §9.1 blocked shape. The key rule: every determination field must be present in the output. Fields the agent can resolve carry their derived values. Fields the agent cannot resolve are set to `null`.
+
+**`null` semantics on escalated runs:** `null` means the agent assessed the available evidence and the determination rules in this spec, but could not resolve the field. This is distinct from `absent` on blocked runs (where the agent had no evidentiary basis to begin work at all) and distinct from a populated value on complete runs (where the agent fully resolved the determination). The `null` values tell the Supervisor exactly which fields require human judgment.
+
+**Per-field escalated null rules:**
+
+| Field | When `null` on an escalated run |
+|---|---|
+| `approval_path` | No PAM-001 row matches the vendor/deal combination, or Tier 1 PAM-001 sources conflict on the same approval path question |
+| `fast_track_eligible` | Upstream STEP-02 value was itself `null` (IT Security escalated with unresolved eligibility). If STEP-02 provided a value, the Procurement Agent must pass it through unchanged — it is never `null` due to Procurement's own logic. |
+| `required_approvals` | `approval_path` is `null` — cannot assemble approvals from an undetermined path |
+| `estimated_timeline` | `approval_path` is `null` — cannot derive timeline from an undetermined path |
+| `policy_citations` | All citation-supporting determinations are unresolvable — set to `null`. If some citations are resolvable (e.g., a PAM-001 conflict where both rows can still be cited), include the resolvable citations. When escalation is due to PAM-001 conflict, cite both conflicting rows. |
+
+**Fields that are resolved on escalated runs carry their normal values.** For example, when the upstream STEP-03 output carries `status = escalated` but the Procurement Agent can still determine an approval path from PAM-001, all Procurement-owned fields are populated: `approval_path: "STANDARD"`, `required_approvals` assembled from the matched row, `estimated_timeline` derived from the path, `fast_track_eligible` passed through from STEP-02, `policy_citations` citing the PAM-001 row. No fields are `null` because the agent resolved everything; the escalation is inherited from upstream, not from an unresolvable Procurement determination.
+
+**Escalated output example — no PAM-001 row match, upstream resolved:**
+
+```json
+{
+  "approval_path": null,
+  "fast_track_eligible": false,
+  "required_approvals": null,
+  "estimated_timeline": null,
+  "policy_citations": null,
+  "status": "escalated"
+}
+```
+
+> In this example, the vendor class and deal size combination is not covered by any PAM-001 row. The agent sets `approval_path`, `required_approvals`, `estimated_timeline`, and `policy_citations` to `null` — it cannot make the determination. `fast_track_eligible` is passed through unchanged from STEP-02 (not `null`). The Supervisor reads the `null` fields to identify that the approval path routing itself requires human judgment.
 
 ---
 
@@ -288,9 +355,9 @@ The agent must return a single schema-valid JSON object. No other output format 
 
 The authoritative status derivation logic and precedence ordering live in §8.5. The three terminal states and their top-level conditions are:
 
-- **`blocked`** — required upstream agent output absent or schema-invalid, or required questionnaire fields absent (including absence of raw questionnaire field `contract_value_annual`, which maps to canonical `deal_size`)
-- **`escalated`** — no PAM-001 row matches the vendor/deal combination, Tier 1 PAM-001 sources conflict, or unresolved upstream Legal escalation constrains the run
-- **`complete`** — `approval_path` determined with at least one PAM-001 PRIMARY citation and all required upstream inputs confirmed
+- **`blocked`** — A required context bundle item is missing or inadmissible (e.g., IT Security output absent, Legal output absent, questionnaire vendor fields absent, PAM-001 unavailable). The agent cannot begin its approval-path determination work. **Output shape:** §9.1 — determination fields entirely absent, `blocked_reason` and `blocked_fields` identify the gap.
+- **`escalated`** — The bundle was admissible and the agent began its work, but it could not resolve one or more output contract fields based on the determination rules in this spec (e.g., no PAM-001 row matches, Tier 1 PAM-001 sources conflict, or inherited upstream Legal escalation constrains the run). **Output shape:** §9 with §9.2 rules — all determination fields present, resolved fields carry values, unresolvable fields set to `null`.
+- **`complete`** — `approval_path` determined with at least one PAM-001 PRIMARY citation and all required upstream inputs confirmed. **Output shape:** §9 — all determination fields present and populated.
 
 See §8.5 for the full precedence-ordered derivation table.
 
@@ -312,54 +379,138 @@ Per CC-001 §14:
 
 | Condition | Required Behavior |
 |---|---|
-| Bundle is empty or missing | Emit `status: blocked`. Do not produce a determination. |
-| IT Security Agent output absent or schema-invalid | Bundle is inadmissible. Emit `status: blocked`. Do not proceed. |
-| Legal Agent output absent or schema-invalid | Bundle is inadmissible. Emit `status: blocked`. Do not proceed. |
-| Legal Agent STEP-03 status is `ESCALATED` | Proceed with Procurement approval-path determination using the available Legal output fields. Emit `status: escalated` unless a blocked condition takes precedence. The Procurement Agent does not resolve Legal escalations. |
-| `existing_nda_status`, `existing_msa`, `vendor_class`, or raw `contract_value_annual` (canonical `deal_size`) absent from questionnaire | Flag the specific missing field by canonical name. Emit `status: blocked`. |
-| No PAM-001 row matches the vendor/deal combination | Emit `status: escalated`. Log no-matrix-match condition. Do not assert an `approval_path`. Resolution owner: Procurement Director. |
-| Bundle contains evidence from a prohibited index | Log anomaly. Exclude the prohibited evidence from reasoning and citation. Continue only if the remaining bundle is still admissible; otherwise emit `status: blocked`. |
-| Malformed or schema-invalid bundle | Emit `status: blocked`. Do not attempt to reason over partial input. |
-| Two PAM-001 rows directly conflict on the same approval path question | Emit `status: escalated`. Cite both conflicting rows in `policy_citations`. Full escalation payload written to audit log. Resolution owner: Procurement Director. |
+| Bundle is empty or missing | Emit the §9.1 blocked output shape. Do not produce a determination. Do not emit any determination fields. |
+| IT Security Agent output absent or schema-invalid | Bundle is inadmissible. Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_IT_SECURITY_OUTPUT"]` and `blocked_fields` listing the absent upstream fields (`fast_track_eligible`, `data_classification`, etc.). Do not proceed. Do not emit any determination fields. |
+| Legal Agent output absent or schema-invalid | Bundle is inadmissible. Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_LEGAL_OUTPUT"]` and `blocked_fields` listing the absent upstream fields (`dpa_required`, `dpa_blocker`, etc.). Do not proceed. Do not emit any determination fields. |
+| Legal Agent STEP-03 status is `ESCALATED` | Proceed with Procurement approval-path determination using the available Legal output fields. Emit `status: escalated` unless a blocked condition takes precedence. Populate all determination fields the agent can resolve per §9.2. The Procurement Agent does not resolve Legal escalations. |
+| `vendor_class` or raw `contract_value_annual` (canonical `deal_size`) absent from questionnaire | Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_QUESTIONNAIRE_VENDOR_FIELDS"]` and `blocked_fields` listing the absent fields. Do not produce any determination fields. |
+| `existing_nda_status` or `existing_msa` absent from questionnaire | Flag the specific missing field by canonical name. Emit `status: escalated`. Populate all determination fields the agent can resolve per §9.2. |
+| PAM-001 entirely unavailable | Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_PAM_001"]` and `blocked_fields` listing the expected matrix source. Do not produce any determination fields. |
+| No PAM-001 row matches the vendor/deal combination | Emit `status: escalated`. Set `approval_path`, `required_approvals`, and `estimated_timeline` to `null` per §9.2. Log no-matrix-match condition. Populate all other fields the agent can resolve. Resolution owner: Procurement Director. |
+| Bundle contains evidence from a prohibited index | Log anomaly. Exclude the prohibited evidence from reasoning and citation. Continue only if the remaining bundle is still admissible; otherwise emit the §9.1 blocked output shape. |
+| Malformed or schema-invalid bundle | Emit the §9.1 blocked output shape. Do not attempt to reason over partial input. Do not emit any determination fields. |
+| Two PAM-001 rows directly conflict on the same approval path question | Emit `status: escalated`. Set `approval_path` to `null` per §9.2. Cite both conflicting rows in `policy_citations`. Populate all other fields the agent can resolve. Full escalation payload written to audit log. Resolution owner: Procurement Director. |
 | Slack thread conflicts with PAM-001 determination | Suppress Slack thread per CC-001 §10 authority suppression rules. Log suppression. Proceed on Tier 1 evidence. |
 
 ---
 
 ## 13. Example Behavioral Outcomes
 
-### Example A — Regulated vendor, standard approval path with unresolved Legal blocker (OptiChain scenario)
+### Example A — Regulated vendor, standard approval path with unresolved Legal blocker (escalated, all fields resolved)
 
-`data_classification = REGULATED`, `dpa_blocker = true`, `nda_blocker = true`, upstream `fast_track_eligible = false` (IT Security), Legal output is `status = escalated`, PAM-001 row matches standard path for vendor class and deal size:
+`data_classification = REGULATED`, `dpa_blocker = true`, `nda_blocker = true`, upstream `fast_track_eligible = false` (IT Security), Legal output is `status = escalated`, PAM-001 row matches standard path for vendor class and deal size. All Procurement-owned fields are resolvable — the escalation is inherited from upstream STEP-03:
 
-- preserve `fast_track_eligible = false` exactly as received from STEP-02,
-- determine `approval_path = STANDARD`,
-- assemble `required_approvals[]` from PAM-001 row,
-- cite PAM-001 row as PRIMARY,
-- emit `status = escalated`.
+```json
+{
+  "approval_path": "STANDARD",
+  "fast_track_eligible": false,
+  "required_approvals": [
+    {
+      "approver": "Procurement Director",
+      "domain": "Procurement",
+      "status": "PENDING",
+      "blocker": false,
+      "estimated_completion": "5 business days"
+    },
+    {
+      "approver": "Legal Counsel",
+      "domain": "Legal",
+      "status": "PENDING",
+      "blocker": true,
+      "estimated_completion": "pending DPA execution"
+    }
+  ],
+  "estimated_timeline": "10-15 business days (pending Legal blocker resolution)",
+  "policy_citations": [
+    {
+      "source_id": "PAM-001",
+      "version": "1.0",
+      "row_id": "R-03",
+      "approval_path_condition": "REGULATED vendor, standard review path",
+      "citation_class": "PRIMARY"
+    }
+  ],
+  "status": "escalated"
+}
+```
 
-> The Procurement Agent may still determine the correct approval path while inheriting STEP-03's unresolved Legal escalation constraint. This aligns with CC-001 §12.1: upstream ESCALATED status does not make the bundle inadmissible, but the approval-path result inherits the upstream constraint in downstream status handling.
+> No fields are `null` — the Procurement Agent resolved every determination it owns. The escalation is inherited from STEP-03's unresolved Legal blocker, not from an unresolvable Procurement field. Per §9.2, when all fields are resolvable on an escalated run, all carry their derived values. This aligns with CC-001 §12.1: upstream ESCALATED status does not make the bundle inadmissible, but the approval-path result inherits the upstream constraint in downstream status handling.
 
-### Example B — Clean low-risk vendor, fast-track eligible
+### Example B — Clean low-risk vendor, fast-track eligible (complete)
 
 `data_classification = UNREGULATED`, `dpa_required = false`, `dpa_blocker = false`, `nda_blocker = false`, upstream `fast_track_eligible = true`, PAM-001 row matches fast-track conditions:
 
-- preserve `fast_track_eligible = true` exactly as received from STEP-02,
-- determine `approval_path = FAST_TRACK`,
-- assemble `required_approvals[]` from PAM-001 fast-track row,
-- cite PAM-001 row as PRIMARY,
-- emit `status = complete`.
+```json
+{
+  "approval_path": "FAST_TRACK",
+  "fast_track_eligible": true,
+  "required_approvals": [
+    {
+      "approver": "Procurement Manager",
+      "domain": "Procurement",
+      "status": "PENDING",
+      "blocker": false,
+      "estimated_completion": "2 business days"
+    }
+  ],
+  "estimated_timeline": "3-5 business days",
+  "policy_citations": [
+    {
+      "source_id": "PAM-001",
+      "version": "1.0",
+      "row_id": "R-01",
+      "approval_path_condition": "UNREGULATED vendor, fast-track eligible, low-risk",
+      "citation_class": "PRIMARY"
+    }
+  ],
+  "status": "complete"
+}
+```
 
-### Example C — No matrix row matches vendor/deal profile
+### Example C — No matrix row matches vendor/deal profile (escalated, path unresolvable)
 
-Vendor class and deal size combination is not covered by any PAM-001 row:
+Vendor class and deal size combination is not covered by any PAM-001 row. All upstream inputs are present and valid:
 
-- do not assert an `approval_path`,
-- emit `status = escalated`,
-- log no-matrix-match condition,
-- cite evidence of the unmatched profile in `policy_citations` alongside the retrieval gap,
-- resolution owner: Procurement Director.
+```json
+{
+  "approval_path": null,
+  "fast_track_eligible": false,
+  "required_approvals": null,
+  "estimated_timeline": null,
+  "policy_citations": null,
+  "status": "escalated"
+}
+```
 
-> Asserting an `approval_path` without matrix evidence would be silent failure. The correct behavior is escalation.
+> Asserting an `approval_path` without matrix evidence would be silent failure. The agent sets `approval_path`, `required_approvals`, `estimated_timeline`, and `policy_citations` to `null` per §9.2 — it could not resolve the approval path determination. `fast_track_eligible` is passed through unchanged from STEP-02 (not `null`). The Supervisor reads the `null` fields to identify that approval path routing requires human judgment. Resolution owner: Procurement Director.
+
+### Example D — IT Security output absent (blocked)
+
+Legal output is present, questionnaire vendor fields are present, PAM-001 is available, but the IT Security Agent (STEP-02) output is entirely absent:
+
+```json
+{
+  "status": "blocked",
+  "blocked_reason": ["MISSING_IT_SECURITY_OUTPUT"],
+  "blocked_fields": ["fast_track_eligible", "data_classification"]
+}
+```
+
+> The Procurement Agent cannot determine approval path without `fast_track_eligible` and `data_classification` from STEP-02. An escalated or ambiguous IT Security output is still an output; a missing one is a blocked condition. Determination fields are entirely absent — the agent declined to produce a determination it had no basis to make.
+
+### Example E — Both upstream outputs absent (blocked, multiple reasons)
+
+Both IT Security and Legal Agent outputs are absent. The Procurement Agent's bundle is missing its two upstream dependencies simultaneously:
+
+```json
+{
+  "status": "blocked",
+  "blocked_reason": ["MISSING_IT_SECURITY_OUTPUT", "MISSING_LEGAL_OUTPUT"],
+  "blocked_fields": ["fast_track_eligible", "data_classification", "dpa_required", "dpa_blocker"]
+}
+```
+
+> Multiple `blocked_reason` values are emitted when multiple upstream dependencies are absent simultaneously. The `blocked_fields` array names all canonical fields that were expected from the missing upstream outputs.
 
 ---
 
@@ -373,9 +524,11 @@ These are the must-pass checks for this spec. They belong here as implementation
 | A-02 | STEP-02 ownership of `fast_track_eligible` is preserved | STEP-04 output echoes the authoritative STEP-02 `fast_track_eligible` value unchanged |
 | A-03 | No Tier 3 source cited as PRIMARY | All Slack citations remain SUPPLEMENTARY |
 | A-04 | No `approval_path` asserted when no PAM-001 row matches | Agent emits `escalated` rather than inferring a path from non-matrix evidence |
-| A-05 | All required output fields present and structurally valid | Schema-valid JSON. The following fields must be non-null on every non-blocked run when a path is determined: `approval_path`, `fast_track_eligible`, `estimated_timeline`, `status`. `required_approvals[]` must contain at least one entry on COMPLETE runs. `policy_citations` must contain at least one PRIMARY entry on COMPLETE runs. |
+| A-05 | All required output fields present and structurally valid | Schema-valid JSON. On `complete` runs: all determination fields must be non-null. On `escalated` runs: all determination fields must be present (not absent); resolved fields are non-null, unresolvable fields are `null` per §9.2. `required_approvals[]` must contain at least one entry on COMPLETE runs. `policy_citations` must contain at least one PRIMARY entry on COMPLETE runs. |
 | A-06 | Upstream `data_classification`, `dpa_blocker`, `nda_blocker`, and `fast_track_eligible` not re-derived or overridden | Procurement Agent output reflects upstream determinations without reinterpretation |
 | A-07 | Upstream STEP-03 `escalated` status is inherited in STEP-04 status handling unless blocked takes precedence | Agent may still determine `approval_path`, but it does not emit `complete` while unresolved Legal escalation constraints remain active |
+| A-08 | Blocked output uses §9.1 shape with no determination fields | When `status = blocked`: output contains only `status`, `blocked_reason`, and `blocked_fields`. Determination fields (`approval_path`, `fast_track_eligible`, `required_approvals`, `estimated_timeline`, `policy_citations`) are entirely absent — not null, not empty. `blocked_reason` is a non-empty enum array. `blocked_fields` is a non-empty array of canonical field names. |
+| A-09 | Escalated output has all determination fields present per §9.2 | When `status = escalated`: all determination fields are present (not absent). Resolved fields carry their derived values. Unresolvable fields are `null`. No field is absent. |
 
 A fuller CSR / ISR evaluation matrix may be maintained in a separate evaluation artifact.
 
@@ -410,3 +563,4 @@ A fuller CSR / ISR evaluation matrix may be maintained in a separate evaluation 
 | 0.4 | 2026-04-12 | Engineering / IT Architecture | Six integrity fixes after direct cross-document review against ORCH-PLAN-001 v0.8, Design Doc v0.9, CC-001 v1.4, IT Security Agent Spec v0.7, and Legal Agent Spec v0.6. |
 | 0.5 | 2026-04-12 | Engineering / IT Architecture | Removed `routing_rationale` from the spec. The field appeared in ORCH-PLAN-001 v0.8 STEP-04 output contract but is absent from the Design Doc and was never logged as a deliberate addition. |
 | 0.6 | 2026-04-13 | Engineering / IT Architecture | Demo simplification revision. (1) PROVISIONAL status removed — status field now `complete \| escalated \| blocked`; all `provisional` outcomes replaced with `escalated` or `blocked` as appropriate. (2) `resolved` renamed to `complete` throughout status values, output contract, gate states, and status derivation logic. (3) PVD-001 (Prior Vendor Decisions) removed — bundle item 5 (prior vendor decisions) deleted; `idx_precedents` removed from index access permissions; PVD-001 removed from retrieval boundary; `PVD-001` removed from `policy_citations` `source_id` enum; precedent citation rules removed from §11 provenance. (4) `executive_approval_required` field removed and `EXECUTIVE_APPROVAL` removed from `approval_path` enum — per ORCH-PLAN-001 v0.9; `approval_path` now `STANDARD \| FAST_TRACK` only; §2, §6, §8.3, §9, and §14 A-03 updated accordingly. (5) Tier 4 (Slack/notes) renumbered to Tier 3 throughout — all "Tier 4" references updated; "Tier 3 (precedent)" references removed with PVD-001. (6) Missing questionnaire fields now emit `blocked` rather than `provisional` in §3 and §8.5. (7) §8.5 status table simplified from 9 rows to 7 — PROVISIONAL rows removed. (8) Example C (executive approval) removed and replaced with no-matrix-match escalation scenario; former Example D renumbered to C. (9) A-08 (PROVISIONAL propagation) removed; A-09 (upstream escalation inheritance) renumbered to A-07. Aligned with Design Doc v4.0, CC-001 v1.4 (user-edited), and ORCH-PLAN-001 v0.9. |
+| 0.7 | 2026-04-16 | Engineering / IT Architecture | Blocked and escalated output contracts defined. (1) Added §9.1 defining a mandatory blocked output shape with `blocked_reason` (enum array: `MISSING_IT_SECURITY_OUTPUT`, `MISSING_LEGAL_OUTPUT`, `MISSING_QUESTIONNAIRE_VENDOR_FIELDS`, `MISSING_PAM_001`) and `blocked_fields` (canonical field name array). Determination fields must be entirely absent on blocked runs. The Procurement Agent has the most complex blocked dependency structure of the three domain agents — it depends on two prior agent outputs, not one. (2) Added §9.2 Escalated Output Rules — on escalated runs, all determination fields must be present (not absent); resolved fields carry derived values, unresolvable fields set to `null`. `null` = agent assessed evidence but could not resolve; `absent` = agent had no evidentiary basis to begin (blocked only). (3) §8.5 updated with output shape switching rule covering all three statuses and BLOCKED vs ESCALATED distinction: blocked = missing bundle input (can't begin), escalated = bundle admissible but agent can't resolve specific fields per spec rules. (4) §9 output field constraints updated with per-field blocked (absent) and escalated (null) behavior. Permissive blocked language ("may emit a minimal object") replaced with prohibitive blocked output rule. (5) §3 updated to reference §9.1 for blocked bundles. (6) §10 rewritten with output shape references for each status. (7) §12 exception handling updated to reference §9.1 for all blocked conditions and §9.2 for escalated field behavior; split `existing_nda_status`/`existing_msa` (escalated) from `vendor_class`/`deal_size` (blocked) since vendor lookup fields are harder admissibility gates. (8) Examples A–E rewritten with full JSON outputs: A (escalated, all resolved — inherited Legal escalation), B (complete), C (escalated, path null — no matrix match), D (blocked, IT Security absent), E (blocked, both upstream outputs absent with multiple blocked_reason values). (9) A-05 updated to distinguish complete (all non-null) from escalated (present but nullable per §9.2). A-08 added for blocked output shape validation. A-09 added requiring all determination fields present on escalated runs. |

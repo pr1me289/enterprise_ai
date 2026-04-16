@@ -1,8 +1,8 @@
 # Agent Spec — IT Security Agent
-## SPEC-AGENT-SEC-001 v0.8
+## SPEC-AGENT-SEC-001 v0.9
 
 **Document ID:** SPEC-AGENT-SEC-001  
-**Version:** 0.8
+**Version:** 0.9
 **Owner:** Engineering / IT Architecture  
 **Last Updated:** April 12, 2026  
 
@@ -78,7 +78,7 @@ The Supervisor assembles this bundle before the agent runs. The agent must treat
 - `data_subjects_eu`
 - `existing_nda_status`
 
-If these required intake fields are missing, the bundle is inadmissible. The agent must emit `blocked`.
+If these required intake fields are missing, the bundle is inadmissible. The agent must emit the §9.1 blocked output shape with the appropriate `blocked_reason` and `blocked_fields`. Do not produce any determination fields.
 
 ---
 
@@ -265,30 +265,124 @@ The agent must return a single schema-valid JSON object. No other output format 
 
 > `escalation_reason` is not included in the output contract. Escalation context — including the triggering condition, conflicting sources, and resolution owner — is captured in the append-only audit log per CC-001 §13.1 and the orchestration plan global audit rules. The `policy_citations` array on an `escalated` output must cite both conflicting chunks when the escalation is clause-level. The audit log is the authoritative escalation record.
 
+> **Blocked output rule:** On a `blocked` run, the agent MUST NOT emit determination fields (`integration_type_normalized`, `integration_tier`, `data_classification`, `eu_personal_data_present`, `fast_track_eligible`, `fast_track_rationale`, `security_followup_required`, `nda_status_from_questionnaire`, `required_security_actions`, `policy_citations`). These fields must be entirely absent from the output — not null, not empty, absent. Emitting any determination field on a blocked run is a contract violation because the agent had no evidentiary basis to produce it. See §9.1 for the mandatory blocked output shape.
+
 ### Output field constraints
 
 | Field | Constraint |
 |---|---|
-| `integration_type_normalized` | Must be emitted on every non-blocked run |
-| `integration_tier` | Must be derived from Tier 1 policy evidence, not questionnaire self-report |
-| `data_classification` | Must be derived from Tier 1 policy evidence |
-| `fast_track_eligible` | Must be emitted before STEP-04 may begin |
-| `fast_track_rationale` | Must be non-null whenever `fast_track_eligible = false`, and must contain one of the defined enum values |
-| `policy_citations` | At least one PRIMARY ISP-001 citation required for any nontrivial classification determination |
+| `integration_type_normalized` | Must be present on every non-blocked run. Absent on blocked runs (§9.1). On escalated runs, set to `null` if the agent cannot resolve the integration type (§9.2). |
+| `integration_tier` | Must be present on every non-blocked run. Absent on blocked runs. Must be derived from Tier 1 policy evidence, not questionnaire self-report. On escalated runs, set to `null` if the agent cannot assign a tier (§9.2). |
+| `data_classification` | Must be present on every non-blocked run. Absent on blocked runs. Must be derived from Tier 1 policy evidence. On escalated runs, set to `null` if the agent cannot resolve the classification (§9.2). |
+| `eu_personal_data_present` | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` only if the questionnaire EU fields are ambiguous or unresolvable (§9.2). |
+| `fast_track_eligible` | Must be present on every non-blocked run. Absent on blocked runs. Must be emitted before STEP-04 may begin. On escalated runs, set to `null` if upstream classification fields it depends on are `null` (§9.2). |
+| `fast_track_rationale` | Must be present on every non-blocked run. Absent on blocked runs. Must be non-null whenever `fast_track_eligible = false`, and must contain one of the defined enum values. On escalated runs, set to `null` if `fast_track_eligible` is `null`. |
+| `security_followup_required` | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` if upstream classification fields it depends on are `null` (§9.2). |
+| `nda_status_from_questionnaire` | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` only if the questionnaire NDA field is absent or unrecognizable. |
+| `required_security_actions` | Must be present on every non-blocked run. Absent on blocked runs. May be an empty array only when `security_followup_required = false`. On escalated runs, set to `null` if `security_followup_required` is `null`. |
+| `policy_citations` | Must be present on every non-blocked run. Absent on blocked runs. At least one PRIMARY ISP-001 citation required for any nontrivial classification determination. On escalated runs, include citations for determinations that were resolved; set to `null` only if all citation-supporting determinations are unresolvable. |
 | `fast_track_eligible = true` | Requires at least one PRIMARY ISP-001 citation supporting low-risk / export-only eligibility |
-| `required_security_actions` | May be an empty array only when `security_followup_required = false` |
-| `status = escalated` | `policy_citations` must cite both conflicting chunks when escalation is clause-level. Full escalation payload is captured in the audit log per CC-001 §13.1. |
+| `status = escalated` | All determination fields must be present (not absent). Fields the agent resolved carry their derived values. Fields the agent could not resolve are `null`. See §9.2. When escalation is clause-level, `policy_citations` must cite both conflicting chunks. Full escalation payload is captured in the audit log per CC-001 §13.1. |
 | `status` | Lowercase. One of `complete`, `escalated`, or `blocked`. |
+
+### 9.1 Blocked Output Shape
+
+When the agent derives `status = blocked`, it MUST emit the following output shape instead of the standard determination object. The determination fields defined in §9 (`integration_type_normalized`, `integration_tier`, `data_classification`, `eu_personal_data_present`, `fast_track_eligible`, `fast_track_rationale`, `security_followup_required`, `nda_status_from_questionnaire`, `required_security_actions`, `policy_citations`) must be entirely absent — not null, not empty. Null implies the field exists but has no value; absent means the agent correctly declined to produce a determination it had no basis to make. That distinction matters for downstream schema validation.
+
+```json
+{
+  "status": "blocked",
+  "blocked_reason": ["MISSING_QUESTIONNAIRE_CLASSIFICATION_FIELDS"],
+  "blocked_fields": ["data_classification_self_reported", "regulated_data_types"]
+}
+```
+
+**`blocked_reason`** — enum array. Lists the specific gate-condition or admissibility failure(s) that caused the block. Multiple values are permitted when multiple inputs are missing simultaneously. Defined enum values for the IT Security Agent:
+
+| Enum Value | Condition |
+|---|---|
+| `MISSING_QUESTIONNAIRE_CLASSIFICATION_FIELDS` | Core data classification inputs (`data_classification_self_reported`, `regulated_data_types`) are absent from the bundle. The agent cannot make any classification determination without these. Distinct from STEP-01 blocking on a missing questionnaire entirely — STEP-01 validates existence and completeness, but a bundle assembly failure could still deliver a bundle with these fields stripped or null. |
+| `MISSING_ERP_INTEGRATION_FIELDS` | `integration_details.erp_type` is absent from the bundle. The agent cannot assign an integration tier or determine fast-track eligibility without this. Kept separate from classification fields because ERP fields and classification fields drive different downstream outputs. Given that `integration_tier` and `data_classification` are tightly coupled in ISP-001's classification logic, a full block is cleaner than a partial determination. |
+| `MISSING_ISP_001` | The security policy index is entirely unavailable. The agent has questionnaire fields but no authoritative source to cite for its determination. Per CC-001 §11, a determination without at least one Tier 1 citation is insufficient for complete — and unlike supplementary inputs, ISP-001 is the primary governing source for this agent. No ISP-001 means no determination at all. |
+
+**`blocked_fields`** — string array. Lists the specific canonical field names (per CC-001 §15) that were absent or null in the upstream input, causing the block. This array is what makes the audit log entry useful: it names exactly what the Supervisor needs to surface to the resolution owner.
+
+> This output shape is mandatory whenever `status = blocked`. The agent must not fall back to the standard determination shape with null-valued fields. The blocked output shape is the only valid output when the agent cannot proceed.
+
+### 9.2 Escalated Output Rules
+
+When the agent derives `status = escalated`, it emits the same determination shape as §9 — **not** the §9.1 blocked shape. The key rule: every determination field must be present in the output. Fields the agent can resolve carry their derived values. Fields the agent cannot resolve are set to `null`.
+
+**`null` semantics on escalated runs:** `null` means the agent assessed the available evidence and the classification rules in this spec, but could not resolve the field. This is distinct from `absent` on blocked runs (where the agent had no evidentiary basis to begin work at all) and distinct from a populated value on complete runs (where the agent fully resolved the classification). The `null` values tell the Supervisor exactly which fields require human judgment.
+
+**Per-field escalated null rules:**
+
+| Field | When `null` on an escalated run |
+|---|---|
+| `integration_type_normalized` | Agent cannot normalize the integration type from available evidence |
+| `integration_tier` | Agent cannot assign a tier — e.g., ISP-001 ERP tier table not retrieved for the specific integration pattern, or Tier 1 sources conflict |
+| `data_classification` | Agent cannot determine classification from available evidence and policy rules |
+| `eu_personal_data_present` | Questionnaire EU personal data fields are ambiguous or contradictory — agent cannot normalize to a boolean |
+| `fast_track_eligible` | Upstream `data_classification` or `integration_type_normalized` is `null` — cannot evaluate eligibility from an unresolved classification |
+| `fast_track_rationale` | `fast_track_eligible` is `null` — cannot derive rationale from an unresolved eligibility determination |
+| `security_followup_required` | Upstream `integration_tier` and `data_classification` are both `null` — cannot determine follow-up requirement from unresolved classifications |
+| `nda_status_from_questionnaire` | Questionnaire NDA field is absent or value is unrecognizable — cannot normalize to an enum value |
+| `required_security_actions` | `security_followup_required` is `null` — cannot derive actions from an unresolved follow-up determination |
+| `policy_citations` | All citation-supporting determinations are unresolvable — set to `null`. If some citations are resolvable, include the resolvable citations and omit the unresolvable ones |
+
+**Fields that are resolved on escalated runs carry their normal values.** For example, when `data_classification = REGULATED` and `integration_type_normalized = AMBIGUOUS` produces `escalated`, the resolved fields are populated: `data_classification: "REGULATED"`, `eu_personal_data_present: true`, `fast_track_eligible: false`, etc. Only `integration_tier` (and fields that depend on it) would be `null` if the tier cannot be assigned. The escalation is about the unresolvable field(s), not about the entire determination.
+
+**Escalated output example — integration tier unresolvable, classification resolved:**
+
+```json
+{
+  "integration_type_normalized": "AMBIGUOUS",
+  "integration_tier": null,
+  "data_classification": "REGULATED",
+  "eu_personal_data_present": true,
+  "fast_track_eligible": false,
+  "fast_track_rationale": "DISALLOWED_AMBIGUOUS_SCOPE",
+  "security_followup_required": true,
+  "nda_status_from_questionnaire": "PENDING",
+  "required_security_actions": [
+    {
+      "action_type": "ARCHITECTURE_REVIEW",
+      "reason": "Integration pattern is ambiguous — tier assignment requires human review of vendor architecture documentation",
+      "owner": "IT Security"
+    }
+  ],
+  "policy_citations": [
+    {
+      "source_id": "ISP-001",
+      "version": "4.2",
+      "chunk_id": "ISP-001__section_12",
+      "section_id": "12",
+      "citation_class": "PRIMARY"
+    }
+  ],
+  "status": "escalated"
+}
+```
+
+> In this example, `data_classification = REGULATED` is confident (EU personal data confirmed), but the integration pattern is ambiguous and the tier cannot be assigned. The agent sets `integration_tier` to `null` — it cannot make the determination. `security_followup_required` is `true` because the ambiguous integration type independently triggers follow-up per §8.4. `fast_track_eligible` is `false` (not `null`) because the AMBIGUOUS integration type alone is sufficient to disqualify fast-track per §8.5 — it does not depend on the unresolved tier.
 
 ---
 
 ## 10. Status Determination
 
-| Condition | Emitted `status` |
-|---|---|
-| All required evidence present, Tier 1 citations complete, no ambiguity | `complete` |
-| Tier 1 sources conflict, ERP type is ambiguous, integration tier is unclassifiable, or the case falls outside the governed rule set | `escalated` |
-| Required bundle is entirely absent, OR STEP-01 has not reached a terminal state, OR the bundle is missing required fields with no path to a determination | `blocked` |
+The three terminal states and their top-level conditions are:
+
+- **`blocked`** — A required context bundle item is missing or inadmissible (e.g., core questionnaire classification fields absent, ERP integration fields absent, ISP-001 unavailable). The agent cannot begin its classification work. **Output shape:** §9.1 — determination fields entirely absent, `blocked_reason` and `blocked_fields` identify the gap.
+- **`escalated`** — The bundle was admissible and the agent began its work, but it could not resolve one or more output contract fields based on the classification rules in this spec (e.g., Tier 1 sources conflict, integration tier unclassifiable, or the case falls outside the governed rule set). **Output shape:** §9 with §9.2 rules — all determination fields present, resolved fields carry values, unresolvable fields set to `null`.
+- **`complete`** — All required evidence present, Tier 1 citations complete, all classification determinations fully resolved, no escalation or blocked condition applies. **Output shape:** §9 — all determination fields present and populated.
+
+**Output shape switching rule:** The agent must first derive the terminal status, then emit the output shape corresponding to that status:
+
+- **`complete`** — Emit the standard determination output defined in §9. All determination fields must be present and populated with their derived values. No field may be `null`.
+- **`escalated`** — Emit the standard determination output defined in §9 with the escalated field rules defined in §9.2. All determination fields must be present. Fields the agent can resolve are populated normally. Fields the agent cannot resolve — the specific cause of the escalation — are set to `null`. No field may be absent. See §9.2 for the full escalated output rules.
+- **`blocked`** — Emit the blocked output shape defined in §9.1 instead. Determination fields must be entirely absent from the output, not null. The agent must not attempt to populate any determination field on a blocked run under any circumstances, regardless of what other evidence may be present in the bundle.
+
+**BLOCKED vs ESCALATED distinction:** `blocked` means a required context bundle item is missing or inadmissible — the agent has no evidentiary basis to begin its work, so it declines to produce any determination (all determination fields absent). `escalated` means the bundle was admissible and the agent began its work, but it could not resolve one or more output contract fields based on the classification rules in this spec — it fills every field it can and sets the unresolvable field(s) to `null` so the Supervisor knows exactly where human judgment is needed.
 
 The agent must not emit `complete` if any field it owns is still flagged `AMBIGUOUS` or `UNKNOWN` and that ambiguity affects the determination's substance.
 
@@ -308,58 +402,161 @@ Per CC-001 §14:
 
 | Condition | Required Behavior |
 |---|---|
-| Bundle is empty or missing | Emit `status: blocked`. Do not produce a determination. |
-| Required questionnaire field absent | Flag the specific missing field by canonical name (for example, `integration_details.erp_type`, `data_classification_self_reported`, `regulated_data_types`, `eu_personal_data_flag`, or `existing_nda_status`). Emit `blocked`. |
-| ISP-001 ERP tier table not retrieved | Emit `status: escalated`. Log retrieval failure. |
-| Fast-track policy section not retrieved | `fast_track_eligible = false`, `fast_track_rationale = DISALLOWED_AMBIGUOUS_SCOPE`. Emit `status: escalated`. |
-| Bundle contains evidence from a prohibited index | Log anomaly. Exclude the prohibited evidence from reasoning and citation. Continue only if the remaining bundle is still admissible; otherwise emit `status: blocked`. |
-| Malformed or schema-invalid bundle | Emit `status: blocked`. Do not attempt to reason over partial input. |
-| Two ISP-001 clauses directly conflict on the same question | Emit `status: escalated`. Cite both conflicting chunks in `policy_citations`. Full escalation payload is written to the audit log. |
+| Bundle is empty or missing | Emit the §9.1 blocked output shape. Do not produce a determination. Do not emit any determination fields. |
+| Core classification questionnaire fields absent (`data_classification_self_reported`, `regulated_data_types`) | Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_QUESTIONNAIRE_CLASSIFICATION_FIELDS"]` and `blocked_fields` listing the absent fields. Do not produce any determination fields. |
+| ERP integration field absent (`integration_details.erp_type`) | Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_ERP_INTEGRATION_FIELDS"]` and `blocked_fields: ["integration_type"]`. Do not produce any determination fields. |
+| ISP-001 entirely unavailable | Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_ISP_001"]` and `blocked_fields` listing the policy sections that were expected. Do not produce any determination fields. |
+| ISP-001 ERP tier table not retrieved (ISP-001 partially available) | Emit `status: escalated`. Log retrieval failure. Set `integration_tier` to `null` per §9.2. Populate all other fields the agent can resolve. |
+| Fast-track policy section not retrieved | `fast_track_eligible = false`, `fast_track_rationale = DISALLOWED_AMBIGUOUS_SCOPE`. Emit `status: escalated`. Populate all other fields the agent can resolve. |
+| Bundle contains evidence from a prohibited index | Log anomaly. Exclude the prohibited evidence from reasoning and citation. Continue only if the remaining bundle is still admissible; otherwise emit the §9.1 blocked output shape. |
+| Malformed or schema-invalid bundle | Emit the §9.1 blocked output shape. Do not attempt to reason over partial input. Do not emit any determination fields. |
+| Two ISP-001 clauses directly conflict on the same question | Emit `status: escalated`. Set the conflicting determination field(s) to `null` per §9.2. Cite both conflicting chunks in `policy_citations`. Full escalation payload is written to the audit log. |
 
 ---
 
 ## 13. Example Behavioral Outcomes
 
-### Example A — regulated and ambiguous ERP posture
+### Example A — regulated and ambiguous ERP posture (escalated, all fields resolved)
 
-If EU personal data is present and ERP involvement is in scope, but the integration pattern is ambiguous, the agent should:
+EU personal data is present and ERP involvement is in scope, but the integration pattern is ambiguous. All fields are resolvable — the escalation is about the ambiguous integration pattern requiring human clarification, not about an unresolvable field:
 
-- classify `data_classification = REGULATED`,
-- set `fast_track_eligible = false`,
-- set `integration_tier = UNCLASSIFIED_PENDING_REVIEW`,
-- set `security_followup_required = true`,
-- emit `status = escalated`.
+```json
+{
+  "integration_type_normalized": "AMBIGUOUS",
+  "integration_tier": "UNCLASSIFIED_PENDING_REVIEW",
+  "data_classification": "REGULATED",
+  "eu_personal_data_present": true | false,
+  "fast_track_eligible": true | false,
+  "fast_track_rationale": "DISALLOWED_AMBIGUOUS_SCOPE",
+  "security_followup_required": true | false,
+  "nda_status_from_questionnaire": "PENDING",
+  "required_security_actions": [
+    {
+      "action_type": "ARCHITECTURE_REVIEW",
+      "reason": "Integration pattern is ambiguous — tier assignment requires human review of vendor architecture documentation",
+      "owner": "IT Security"
+    }
+  ],
+  "policy_citations": [
+    {
+      "source_id": "ISP-001",
+      "version": "4.2",
+      "chunk_id": "ISP-001__section_12",
+      "section_id": "12",
+      "citation_class": "PRIMARY"
+    },
+    {
+      "source_id": "ISP-001",
+      "version": "4.2",
+      "chunk_id": "ISP-001__section_17",
+      "section_id": "17",
+      "citation_class": "PRIMARY"
+    }
+  ],
+  "status": "escalated"
+}
+```
 
-> Note: `data_classification = REGULATED` and `status = escalated` are not contradictory. The data classification is confident — EU personal data and ERP involvement are sufficient to establish it. The ESCALATED status reflects that the integration tier cannot be assigned from available evidence and requires human input, not that the regulated classification is in doubt.
+> No fields are `null` — the agent resolved every determination. `data_classification = REGULATED` is confident (EU personal data and ERP involvement are sufficient). `integration_tier = UNCLASSIFIED_PENDING_REVIEW` is a valid tier assignment meaning the agent classified it as requiring human review. The ESCALATED status reflects that the integration pattern requires human input, not that any field is unresolvable. Per §9.2, when all fields are resolvable on an escalated run, all carry their derived values.
 
-### Example B — missing mandatory evidence
+### Example B — missing mandatory evidence (blocked)
 
-If questionnaire evidence needed for classification is entirely absent, the agent should:
+Core questionnaire classification evidence is absent from the bundle — no `data_classification_self_reported` or `regulated_data_types`:
 
-- emit `status = blocked`,
-- identify missing evidence,
-- avoid speculative classification.
+```json
+{
+  "status": "blocked",
+  "blocked_reason": ["MISSING_QUESTIONNAIRE_CLASSIFICATION_FIELDS"],
+  "blocked_fields": ["data_classification_self_reported", "regulated_data_types"]
+}
+```
 
-### Example C — clean low-risk vendor
+> The agent must not attempt any classification despite having other evidence available in the bundle. The core classification inputs are required for an admissible bundle per §3. Determination fields are entirely absent from the output, not null — the agent declined to produce a determination it had no basis to make.
 
-If the questionnaire confirms export-only integration, no regulated data, and no EU personal data, and the retrieved ISP-001 sections support that mapping, the agent should:
+### Example C — clean low-risk vendor (complete)
 
-- set `integration_type_normalized = EXPORT_ONLY`,
-- set `integration_tier = TIER_3`,
-- set `data_classification = UNREGULATED`,
-- set `fast_track_eligible = true`,
-- set `security_followup_required = false`,
-- set `required_security_actions = []`,
-- emit `status = resolved`.
+Questionnaire confirms export-only integration, no regulated data, and no EU personal data. ISP-001 sections support the mapping:
 
-### Example D — ISP-001 policy section not retrieved
+```json
+{
+  "integration_type_normalized": "EXPORT_ONLY",
+  "integration_tier": "TIER_3",
+  "data_classification": "UNREGULATED",
+  "eu_personal_data_present": false,
+  "fast_track_eligible": true,
+  "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+  "security_followup_required": false,
+  "nda_status_from_questionnaire": "EXECUTED",
+  "required_security_actions": [],
+  "policy_citations": [
+    {
+      "source_id": "ISP-001",
+      "version": "4.2",
+      "chunk_id": "ISP-001__section_12",
+      "section_id": "12",
+      "citation_class": "PRIMARY"
+    },
+    {
+      "source_id": "ISP-001",
+      "version": "4.2",
+      "chunk_id": "ISP-001__section_17",
+      "section_id": "17",
+      "citation_class": "PRIMARY"
+    }
+  ],
+  "status": "complete"
+}
+```
 
-If the questionnaire confirms integration type and data scope but the ISP-001 ERP tier table cannot be retrieved from the index, the agent should:
+### Example D — ISP-001 ERP tier table not retrieved (escalated, tier unresolvable)
 
-- still emit `data_classification` if questionnaire evidence alone is sufficient to support it,
-- set `integration_tier = UNCLASSIFIED_PENDING_REVIEW`,
-- set `security_followup_required = true`,
-- emit `status = escalated` and log the retrieval failure.
+Questionnaire confirms integration type and data scope, but the ISP-001 ERP tier table cannot be retrieved from the index. ISP-001 is partially available (classification sections present, tier section absent). Classification is resolvable from available policy; tier is not:
+
+```json
+{
+  "integration_type_normalized": "DIRECT_API",
+  "integration_tier": null,
+  "data_classification": "REGULATED",
+  "eu_personal_data_present": true,
+  "fast_track_eligible": false,
+  "fast_track_rationale": "DISALLOWED_REGULATED_DATA",
+  "security_followup_required": true,
+  "nda_status_from_questionnaire": "PENDING",
+  "required_security_actions": [
+    {
+      "action_type": "FULL_SECURITY_REVIEW",
+      "reason": "REGULATED data classification with unresolved integration tier — full security review required",
+      "owner": "IT Security"
+    }
+  ],
+  "policy_citations": [
+    {
+      "source_id": "ISP-001",
+      "version": "4.2",
+      "chunk_id": "ISP-001__section_17",
+      "section_id": "17",
+      "citation_class": "PRIMARY"
+    }
+  ],
+  "status": "escalated"
+}
+```
+
+> `integration_tier` is `null` — the ISP-001 ERP tier table was not retrieved, so the agent cannot assign a tier. All other fields are resolved from available evidence: `data_classification = REGULATED` from EU personal data, `fast_track_eligible = false` from the regulated classification (does not depend on the missing tier), `security_followup_required = true` from the regulated classification. The Supervisor reads the `null` tier to identify exactly which determination needs human resolution.
+
+### Example E — ISP-001 entirely unavailable (blocked)
+
+Questionnaire fields are present but ISP-001 is entirely unavailable — no authoritative policy source to cite:
+
+```json
+{
+  "status": "blocked",
+  "blocked_reason": ["MISSING_ISP_001"],
+  "blocked_fields": ["idx_security_policy"]
+}
+```
+
+> Per CC-001 §11, a determination without at least one Tier 1 citation is insufficient for complete. ISP-001 is the primary governing source for the IT Security Agent — not a supplementary input. Without it, no determination can be made. Determination fields are entirely absent.
 
 ---
 
@@ -373,7 +570,9 @@ These are the must-pass checks for this spec. They belong here as implementation
 | A-02 | `data_classification` derived from Tier 1 policy | At least one PRIMARY ISP-001 citation supports the classification                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | A-03 | `fast_track_eligible = false` when `data_classification = REGULATED` or `integration_type_normalized = AMBIGUOUS` | Hard rule satisfied with no exceptions                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | A-04 | No Tier 3 (Slack) source cited as PRIMARY | All Tier 3 citations remain SUPPLEMENTARY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| A-06 | All required output fields present and structurally valid | Schema-valid JSON. The following fields must be non-null on every non-blocked run: `integration_type_normalized`, `integration_tier`, `data_classification`, `eu_personal_data_present`, `fast_track_eligible`, `fast_track_rationale`, `security_followup_required`, `nda_status_from_questionnaire`, `status`. `status` must be one of `complete`, `escalated`, or `blocked`. `required_security_actions` may be `[]` only when `security_followup_required = false`. `policy_citations` must contain at least one entry on any non-blocked, non-trivial run. |
+| A-06 | All required output fields present and structurally valid | Schema-valid JSON. On `complete` runs: all determination fields must be non-null. On `escalated` runs: all determination fields must be present (not absent); resolved fields are non-null, unresolvable fields are `null` per §9.2. `status` must be one of `complete`, `escalated`, or `blocked`. `required_security_actions` may be `[]` only when `security_followup_required = false`. `policy_citations` must contain at least one entry on any complete, non-trivial run. |
+| A-07 | Blocked output uses §9.1 shape with no determination fields | When `status = blocked`: output contains only `status`, `blocked_reason`, and `blocked_fields`. Determination fields (`integration_type_normalized`, `integration_tier`, `data_classification`, `eu_personal_data_present`, `fast_track_eligible`, `fast_track_rationale`, `security_followup_required`, `nda_status_from_questionnaire`, `required_security_actions`, `policy_citations`) are entirely absent — not null, not empty. `blocked_reason` is a non-empty enum array. `blocked_fields` is a non-empty array of canonical field names. |
+| A-08 | Escalated output has all determination fields present per §9.2 | When `status = escalated`: all determination fields are present (not absent). Resolved fields carry their derived values. Unresolvable fields are `null`. No field is absent. |
 
 A fuller CSR / ISR evaluation matrix may be maintained in a separate evaluation artifact.
 
@@ -405,3 +604,4 @@ A fuller CSR / ISR evaluation matrix may be maintained in a separate evaluation 
 | 0.5 | 2026-04-10 | Engineering / IT Architecture | Updated §6 naming note to reflect CC-001 §15 now includes `onboarding_path_classification`. Reordered §8.5 onboarding-path precedence to match ORCH-PLAN-001. Made prohibited-source handling exclude-and-continue-if-admissible rather than unconditional halt. Added explicit required questionnaire fields using CC-001 canonical names in §3 and §12. Tightened passthrough treatment of `nda_status_from_questionnaire` as an intake fact, not a STEP-02 adequacy determination. |
 | 0.7 | 2026-04-12 | Engineering / IT Architecture | Minor contract-alignment update after STEP-03 / STEP-04 sequencing changed from parallel to sequential. Clarified downstream dependents, preserved STEP-02 ownership of `fast_track_eligible`, and noted that STEP-04 begins only after STEP-03 reaches a terminal state under the new orchestration model. |
 | 0.8 | 2026-04-12 | Engineering / IT Architecture | Demo simplification revision. (1) PROVISIONAL status removed — status field now `complete | escalated | blocked`; `provisional` replaced with `escalated` throughout. (2) PVD-001 and precedent subquery removed from bundle, index permissions, retrieval boundary, provenance rules, and acceptance checks. (3) `fast_track_rationale` enum: `PROVISIONAL_PENDING_REVIEW` replaced with `DISALLOWED_AMBIGUOUS_SCOPE`. (4) Tier 3/4 references updated — Slack is now Tier 3; precedent tier reference removed. (5) Exception handling updated: ERP tier retrieval failure and fast-track retrieval failure now emit `escalated` instead of `provisional`. (6) Example D replaced — source version unconfirmed scenario removed; ISP-001 retrieval failure scenario added. (7) A-05 acceptance check (provisional in manifest) removed. Aligned with Design Doc v4.0, CC-001 v2.0, and ORCH-PLAN-001 v0.9. |
+| 0.9 | 2026-04-16 | Engineering / IT Architecture | Blocked and escalated output contracts defined. (1) Added §9.1 defining a mandatory blocked output shape with `blocked_reason` (enum array: `MISSING_QUESTIONNAIRE_CLASSIFICATION_FIELDS`, `MISSING_ERP_INTEGRATION_FIELDS`, `MISSING_ISP_001`) and `blocked_fields` (canonical field name array). Determination fields must be entirely absent on blocked runs — absent means the agent declined to produce a determination it had no basis to make. (2) Added §9.2 Escalated Output Rules — on escalated runs, all determination fields must be present (not absent); resolved fields carry derived values, unresolvable fields set to `null`. `null` = agent assessed evidence but could not resolve; `absent` = agent had no evidentiary basis to begin (blocked only). (3) §9 output field constraints updated with per-field blocked (absent) and escalated (null) behavior. (4) §10 rewritten with output shape switching rule covering all three statuses and BLOCKED vs ESCALATED distinction: blocked = missing bundle input (can't begin), escalated = bundle admissible but agent can't resolve specific fields per spec rules. (5) §3 updated to reference §9.1 for blocked bundles. (6) §12 exception handling updated to reference §9.1 for all blocked conditions and §9.2 for escalated field behavior. (7) Examples A–E rewritten with full JSON outputs: A (escalated, all resolved), B (blocked, missing classification fields), C (complete), D (escalated, tier null), E (blocked, ISP-001 absent). (8) A-06 updated to distinguish complete (all non-null) from escalated (present but nullable per §9.2). A-07 added for blocked output shape validation. A-08 added requiring all determination fields present on escalated runs. |
