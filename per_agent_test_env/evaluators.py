@@ -76,6 +76,14 @@ EXPECTED_STATUS: dict[tuple[str, str], str] = {
     # output: all determination fields present, unresolvable fields set to
     # null). NDA is independently resolvable (existing_nda_status=EXECUTED).
     ("legal_agent", "scenario_5"): "escalated",
+    # scenario_6: ISP-001 §12.1.4 NDA clause chunk AND existing_nda_status both
+    # absent from the bundle. DPA determination fully resolved (trigger rows
+    # present, existing_dpa_status=EXECUTED → dpa_blocker=false). §8.5 condition
+    # 5 fires ("nda_clause_chunks absent from bundle" → escalated). NDA
+    # determination unresolvable per §9.2 (both evidence sources absent →
+    # nda_status=null, nda_blocker=null). Tests partial determination: DPA
+    # populated, NDA null.
+    ("legal_agent", "scenario_6"): "escalated",
     ("procurement_agent", "scenario_1"): "complete",
     ("procurement_agent", "scenario_2"): "escalated",
     # Checklist Assembler uses overall_status, not status
@@ -678,6 +686,199 @@ def _evaluate_legal(output: dict[str, Any], scenario: str, report: EvaluationRep
                 f"(value={output['blocked_fields']!r}) but must be absent on "
                 "an escalated run — blocked_fields belongs to the §9.1 blocked "
                 "output shape only"
+            )
+
+    # scenario_6 hard checks — ISP-001 §12.1.4 NDA clause chunk AND
+    # existing_nda_status both absent from the bundle. DPA determination is
+    # fully resolved (trigger rows present, existing_dpa_status=EXECUTED →
+    # dpa_blocker=false per §8.3). The NDA determination is unresolvable per
+    # §9.2: both questionnaire NDA evidence and NDA clause citation evidence
+    # are absent, leaving no basis to assess → nda_status=null,
+    # nda_blocker=null. §8.5 condition 5 fires ("nda_clause_chunks absent
+    # from bundle" → escalated).
+    #
+    # Build prompt pivot: the build prompt expected nda_status="UNKNOWN" per
+    # §8.4 (absent → UNKNOWN normalization). However, §9.2 per-field null
+    # rules explicitly describe the dual-absence case ("questionnaire
+    # existing_nda_status absent AND nda_clause_chunks absent, leaving no
+    # evidence to assess") as producing null. §9.2 is the specific escalated-
+    # output rule and takes precedence over §8.4's general normalization.
+    if scenario == "scenario_6":
+        status_val = output.get("status")
+        if status_val != "escalated":
+            report.failures.append(
+                f"scenario_6: status={status_val!r} but bundle is missing "
+                "nda_clause_chunks (ISP-001 §12.1.4) — must emit 'escalated' "
+                "per §8.5 condition 5 (nda_clause_chunks absent from bundle)"
+            )
+
+        # §9.2 + A-10: all six determination fields must be PRESENT (not
+        # absent) on an escalated run. Absent = blocked shape violation.
+        _escalated_required_fields = (
+            "dpa_required", "dpa_blocker", "nda_status", "nda_blocker",
+            "trigger_rule_cited", "policy_citations",
+        )
+        for det_field in _escalated_required_fields:
+            if det_field not in output:
+                report.failures.append(
+                    f"scenario_6: {det_field} is absent from output but must "
+                    "be present on an escalated run per §9.2 and A-10 — "
+                    "absent fields belong to the §9.1 blocked shape only"
+                )
+
+        # DPA fields must be resolved (not null) — DPA determination is
+        # fully completable. Trigger rows present, existing_dpa_status=EXECUTED.
+        if "dpa_required" in output:
+            if output["dpa_required"] is None:
+                report.failures.append(
+                    "scenario_6: dpa_required is null but DPA determination "
+                    "is fully resolvable — bundle provides DPA-TM-001 trigger "
+                    "rows and EU personal data flags; per §9.2, resolved "
+                    "fields must carry their derived values (A-10 violation: "
+                    "model discarded a completed determination)"
+                )
+            elif output["dpa_required"] is not True:
+                report.failures.append(
+                    f"scenario_6: dpa_required={output['dpa_required']!r} but "
+                    "must be true — bundle contains DPA-TM-001 row A-01 "
+                    "(EU personal data processing → REQUIRED) and EU flags "
+                    "are set"
+                )
+
+        if "dpa_blocker" in output:
+            if output["dpa_blocker"] is None:
+                report.failures.append(
+                    "scenario_6: dpa_blocker is null but dpa_required is "
+                    "resolvable — per §9.2, resolved fields carry their "
+                    "derived values"
+                )
+            elif not isinstance(output["dpa_blocker"], bool):
+                report.failures.append(
+                    f"scenario_6: dpa_blocker must be a boolean, got "
+                    f"{type(output['dpa_blocker']).__name__}="
+                    f"{output['dpa_blocker']!r}"
+                )
+            elif output["dpa_blocker"] is not False:
+                report.failures.append(
+                    "scenario_6: dpa_blocker=true but "
+                    "existing_dpa_status='EXECUTED' in bundle — per §8.3, "
+                    "dpa_blocker must be false when dpa_required=true AND "
+                    "existing_dpa_status='EXECUTED'"
+                )
+
+        # NDA fields must be null — both existing_nda_status AND
+        # nda_clause_chunks are absent from the bundle, leaving no NDA
+        # evidence to assess. Per §9.2 per-field null rules: "questionnaire
+        # existing_nda_status absent AND nda_clause_chunks absent, leaving
+        # no evidence to assess" → nda_status=null. And "nda_status is
+        # null → cannot derive a blocker" → nda_blocker=null.
+        if "nda_status" in output and output["nda_status"] is not None:
+            report.failures.append(
+                f"scenario_6: nda_status={output['nda_status']!r} but must "
+                "be null — both existing_nda_status and nda_clause_chunks "
+                "are absent from the bundle; per §9.2 per-field null rules, "
+                "dual absence leaves no evidence to assess the NDA "
+                "determination"
+            )
+        if "nda_blocker" in output and output["nda_blocker"] is not None:
+            report.failures.append(
+                f"scenario_6: nda_blocker={output['nda_blocker']!r} but must "
+                "be null — cannot derive a blocker from an unresolved "
+                "nda_status per §9.2"
+            )
+
+        # trigger_rule_cited must be non-empty — DPA is resolved, so the
+        # matching trigger rows must be cited.
+        trc_val = output.get("trigger_rule_cited")
+        if "trigger_rule_cited" in output:
+            if trc_val is None:
+                report.failures.append(
+                    "scenario_6: trigger_rule_cited is null but DPA "
+                    "determination is resolved (dpa_required=true) — per §9 "
+                    "output field constraints, must contain at least one "
+                    "PRIMARY DPA-TM-001 entry"
+                )
+            elif isinstance(trc_val, list):
+                if len(trc_val) == 0:
+                    report.failures.append(
+                        "scenario_6: trigger_rule_cited is empty but "
+                        "dpa_required=true — must cite at least one "
+                        "DPA-TM-001 trigger row"
+                    )
+                else:
+                    has_primary_dpa = any(
+                        isinstance(e, dict)
+                        and e.get("source_id") == "DPA-TM-001"
+                        and e.get("citation_class") == "PRIMARY"
+                        and e.get("row_id") not in (None, "")
+                        and e.get("trigger_condition") not in (None, "")
+                        for e in trc_val
+                    )
+                    if not has_primary_dpa:
+                        report.failures.append(
+                            "scenario_6: trigger_rule_cited has no PRIMARY "
+                            "DPA-TM-001 entry with row_id and "
+                            "trigger_condition — required when "
+                            "dpa_required=true per §11"
+                        )
+
+        # policy_citations: must include DPA-TM-001 citation (DPA resolved),
+        # must NOT include ISP-001 §12.1.4 (absent from bundle — including
+        # it would be a hallucination).
+        pc_val = output.get("policy_citations")
+        if "policy_citations" in output:
+            if pc_val is None:
+                report.failures.append(
+                    "scenario_6: policy_citations is null but DPA "
+                    "determination is resolved — per §9.2, include citations "
+                    "for resolved determinations; must contain at least the "
+                    "DPA-TM-001 PRIMARY citation"
+                )
+            elif isinstance(pc_val, list):
+                # DPA-TM-001 citation must be present (DPA resolved)
+                has_dpa_citation = any(
+                    isinstance(e, dict)
+                    and e.get("source_id") == "DPA-TM-001"
+                    for e in pc_val
+                )
+                if not has_dpa_citation:
+                    report.failures.append(
+                        "scenario_6: policy_citations does not contain a "
+                        "DPA-TM-001 citation — DPA determination is resolved "
+                        "and must be cited per §9.2 and §11"
+                    )
+
+                # ISP-001 §12.1.4 must NOT be present — it was absent from
+                # the bundle. Citing it is a hallucination.
+                has_fabricated_nda = any(
+                    isinstance(e, dict)
+                    and e.get("source_id") == "ISP-001"
+                    and str(e.get("section_id", "")).startswith("12.1.4")
+                    for e in pc_val
+                )
+                if has_fabricated_nda:
+                    report.failures.append(
+                        "scenario_6: policy_citations contains an ISP-001 "
+                        "§12.1.4 entry but nda_clause_chunks was absent from "
+                        "the bundle — the model fabricated a citation for a "
+                        "source it was never given (hallucination)"
+                    )
+
+        # blocked_reason and blocked_fields must be ABSENT — those belong to
+        # the §9.1 blocked shape only.
+        if "blocked_reason" in output:
+            report.failures.append(
+                f"scenario_6: blocked_reason is present in output "
+                f"(value={output['blocked_reason']!r}) but must be absent on "
+                "an escalated run — blocked_reason belongs to the §9.1 "
+                "blocked output shape only"
+            )
+        if "blocked_fields" in output:
+            report.failures.append(
+                f"scenario_6: blocked_fields is present in output "
+                f"(value={output['blocked_fields']!r}) but must be absent on "
+                "an escalated run — blocked_fields belongs to the §9.1 "
+                "blocked output shape only"
             )
 
     # nda_blocker must be True when nda_status is not EXECUTED

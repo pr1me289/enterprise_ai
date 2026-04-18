@@ -25,12 +25,11 @@ Two DPA-TM-001 rows both apply to OptiChain's profile but produce contradictory 
 
 ### 1. Build the scenario-5 DPA trigger matrix source
 
-Create `scenario_data/scenario_5/sources/DPA-TM-001_scenario5.json` (or the format parallel to how DPA-TM-001 is stored in production). Copy the full existing DPA-TM-001 v2.1 row set, then add one additional row that:
-- applies to the same vendor profile as the existing EU personal data trigger row (EU employee data, SaaS deployment)
-- produces the **opposite** trigger outcome — DPA **not** required when data is limited to operational scheduling metadata with no persistent storage
-- carries its own unique `row_id` and its own `trigger_condition` text so the conflict is citable
+Create `scenario_data/scenario_5/sources/DPA-TM-001_scenario5.json` (or the format parallel to how DPA-TM-001 is stored in production). Copy the full existing DPA-TM-001 v2.1 row set, then add one additional row.
 
-The existing row and the new row must both plausibly match OptiChain's questionnaire profile. That overlap is what forces the conflict. Mark this file's version as `2.1-scenario5` so it cannot be confused with the production v2.1.
+The new row (`row_id: A-07`) must describe the **same fact pattern** as row A-01 — EU/EEA employee personal data processed by a SaaS vendor for workforce-adjacent analytics — and produce the opposite outcome (`DPA Required?: NOT REQUIRED`). The trigger condition should ground the different outcome in a plausible legal theory (e.g., Art. 6(1)(f) legitimate interest for internal workforce analytics, or a controller-to-controller framing that sidesteps Art. 28). The row must not carve itself out of A-01's scope via anonymization, aggregation, no-persistent-storage, or any other factual limitation. Both rows must fire on OptiChain's exact questionnaire profile with no principled way to pick one over the other — the conflict is in the legal conclusion, not in the factual predicates.
+
+Mark this file's version as `2.1-scenario5` so it cannot be confused with the production v2.1.
 
 ### 2. Build scenario-scoped indices
 

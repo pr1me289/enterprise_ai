@@ -25,7 +25,7 @@ VALID_AGENTS: tuple[str, ...] = (
     "checkoff_agent",
 )
 
-VALID_SCENARIOS: tuple[str, ...] = ("scenario_1", "scenario_2", "scenario_3", "scenario_4", "scenario_5")
+VALID_SCENARIOS: tuple[str, ...] = ("scenario_1", "scenario_2", "scenario_3", "scenario_4", "scenario_5", "scenario_6")
 
 # Per-agent scenario availability. scenario_3 and scenario_4 are
 # Legal-Agent-only fixtures:
@@ -39,7 +39,7 @@ VALID_SCENARIOS: tuple[str, ...] = ("scenario_1", "scenario_2", "scenario_3", "s
 # one will hit BundleError via fixture_path() when the file does not exist.
 SCENARIOS_BY_AGENT: dict[str, tuple[str, ...]] = {
     "it_security_agent": ("scenario_1", "scenario_2"),
-    "legal_agent": ("scenario_1", "scenario_2", "scenario_3", "scenario_4", "scenario_5"),
+    "legal_agent": ("scenario_1", "scenario_2", "scenario_3", "scenario_4", "scenario_5", "scenario_6"),
     "procurement_agent": ("scenario_1", "scenario_2"),
     "checklist_assembler": ("scenario_1", "scenario_2"),
     "checkoff_agent": ("scenario_1", "scenario_2"),
