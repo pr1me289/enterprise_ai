@@ -1,0 +1,624 @@
+{
+  "scenario": "scenario_11",
+  "agent": "checklist_assembler",
+  "bundle": {
+    "source_ids": [
+      "STEP-02",
+      "STEP-03",
+      "STEP-04",
+      "AUDIT_LOG",
+      "PIPELINE_STATE"
+    ],
+    "pipeline_run_id": "run_scenario_11",
+    "vendor_name": "OptiChain",
+    "it_security_agent": {
+      "integration_type_normalized": "DIRECT_API",
+      "integration_tier": "TIER_2_SAAS",
+      "data_classification": "REGULATED",
+      "eu_personal_data_present": "YES",
+      "fast_track_eligible": false,
+      "fast_track_rationale": "DISALLOWED_REGULATED_DATA",
+      "security_followup_required": false,
+      "nda_status_from_questionnaire": "EXECUTED",
+      "required_security_actions": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12.2",
+          "citation_class": "PRIMARY",
+          "retrieval_timestamp": "2026-04-15T17:30:11Z"
+        },
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_4",
+          "section_id": "4",
+          "citation_class": "PRIMARY",
+          "retrieval_timestamp": "2026-04-15T17:30:14Z"
+        }
+      ],
+      "status": "complete"
+    },
+    "legal_agent": {
+      "dpa_required": true,
+      "dpa_blocker": true,
+      "nda_status": "EXECUTED",
+      "nda_blocker": false,
+      "trigger_rule_cited": [
+        {
+          "source_id": "DPA-TM-001",
+          "version": "1.3",
+          "row_id": "A-01",
+          "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen.",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "policy_citations": [
+        {
+          "source_id": "DPA-TM-001",
+          "version": "1.3",
+          "chunk_id": "DPA-TM-001__row_A-01",
+          "row_id": "A-01",
+          "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen.",
+          "citation_class": "PRIMARY",
+          "retrieval_timestamp": "2026-04-15T17:30:42Z"
+        },
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12_1_4",
+          "section_id": "12.1.4",
+          "citation_class": "PRIMARY",
+          "retrieval_timestamp": "2026-04-15T17:30:46Z"
+        }
+      ],
+      "status": "escalated"
+    },
+    "procurement_agent": {
+      "approval_path": "STANDARD",
+      "fast_track_eligible": false,
+      "required_approvals": [
+        {
+          "approver": "Security Lead",
+          "domain": "security",
+          "status": "PENDING",
+          "blocker": false,
+          "estimated_completion": "2026-04-22"
+        },
+        {
+          "approver": "General Counsel",
+          "domain": "legal",
+          "status": "ESCALATED",
+          "blocker": true,
+          "estimated_completion": "Pending DPA execution by Legal / General Counsel"
+        },
+        {
+          "approver": "Procurement Manager",
+          "domain": "procurement",
+          "status": "PENDING",
+          "blocker": false,
+          "estimated_completion": "2026-04-23"
+        }
+      ],
+      "estimated_timeline": "5-7 business days once DPA is executed",
+      "policy_citations": [
+        {
+          "source_id": "PAM-001",
+          "version": "3.0",
+          "chunk_id": "PAM-001__row_B-T2",
+          "row_id": "B-T2",
+          "approval_path_condition": "Class B vendor, Tier 2 SaaS integration, REGULATED data \u2192 STANDARD path",
+          "citation_class": "PRIMARY",
+          "retrieval_timestamp": "2026-04-15T17:31:18Z"
+        }
+      ],
+      "status": "escalated"
+    },
+    "audit_log_entries": [
+      {
+        "entry_id": "audit_s11_init",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "RUN_EVENT",
+        "timestamp": "2026-04-15T17:29:00Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "message": "Pipeline initialized",
+          "manifest_version": "CC-001-v1.4"
+        }
+      },
+      {
+        "entry_id": "audit_s11_step01_open",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T17:29:05Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-01",
+          "from_status": "PENDING",
+          "to_status": "IN_PROGRESS",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s11_step01_vq",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T17:29:08Z",
+        "source_queried": "VQ-OC-001",
+        "chunks_retrieved": [
+          {"field_path": "vendor_name", "value_present": true},
+          {"field_path": "submission_date", "value_present": true},
+          {"field_path": "document_id", "value_present": true}
+        ],
+        "details": {
+          "request_id": "R01-SQ-01",
+          "lane": "direct_structured",
+          "admitted_count": 3,
+          "excluded_count": 0,
+          "output_name": "questionnaire_exists",
+          "missing_fields": [],
+          "search_terms": []
+        }
+      },
+      {
+        "entry_id": "audit_s11_step01_close",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T17:29:30Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-01",
+          "from_status": "IN_PROGRESS",
+          "to_status": "COMPLETE",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s11_step02_open",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T17:30:00Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-02",
+          "from_status": "PENDING",
+          "to_status": "IN_PROGRESS",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s11_step02_isp_tier",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "it_security_agent",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T17:30:11Z",
+        "source_queried": "ISP-001",
+        "chunks_retrieved": [
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_12",
+            "section_id": "12.2",
+            "row_id": null,
+            "thread_id": null,
+            "text": "Tier 2 SaaS integrations require a documented integration design review before activation.",
+            "retrieval_score": 0.94,
+            "rerank_score": 0.92,
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "details": {
+          "request_id": "R02-SQ-01",
+          "lane": "indexed_hybrid",
+          "admitted_count": 1,
+          "excluded_count": 0,
+          "output_name": "tier_chunk",
+          "missing_fields": [],
+          "search_terms": ["tier 2", "SaaS", "ERP integration"]
+        }
+      },
+      {
+        "entry_id": "audit_s11_step02_isp_dataclass",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "it_security_agent",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T17:30:14Z",
+        "source_queried": "ISP-001",
+        "chunks_retrieved": [
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_4",
+            "section_id": "4",
+            "row_id": null,
+            "thread_id": null,
+            "text": "Personal data of EU/EEA data subjects is classified as REGULATED.",
+            "retrieval_score": 0.97,
+            "rerank_score": 0.95,
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "details": {
+          "request_id": "R02-SQ-02",
+          "lane": "indexed_hybrid",
+          "admitted_count": 1,
+          "excluded_count": 0,
+          "output_name": "data_classification_chunk",
+          "missing_fields": [],
+          "search_terms": ["data classification", "EU personal data", "REGULATED"]
+        }
+      },
+      {
+        "entry_id": "audit_s11_step02_determination",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "it_security_agent",
+        "event_type": "DETERMINATION",
+        "timestamp": "2026-04-15T17:30:20Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-02",
+          "output": {
+            "integration_type_normalized": "DIRECT_API",
+            "integration_tier": "TIER_2_SAAS",
+            "data_classification": "REGULATED",
+            "eu_personal_data_present": "YES",
+            "fast_track_eligible": false,
+            "fast_track_rationale": "DISALLOWED_REGULATED_DATA",
+            "security_followup_required": false,
+            "nda_status_from_questionnaire": "EXECUTED",
+            "required_security_actions": [],
+            "status": "complete"
+          }
+        }
+      },
+      {
+        "entry_id": "audit_s11_step02_close",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T17:30:25Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-02",
+          "from_status": "IN_PROGRESS",
+          "to_status": "COMPLETE",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s11_step03_open",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T17:30:35Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-03",
+          "from_status": "PENDING",
+          "to_status": "IN_PROGRESS",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s11_step03_dpa_row",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "legal_agent",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T17:30:42Z",
+        "source_queried": "DPA-TM-001",
+        "chunks_retrieved": [
+          {
+            "source_id": "DPA-TM-001",
+            "version": "1.3",
+            "chunk_id": "DPA-TM-001__row_A-01",
+            "section_id": null,
+            "row_id": "A-01",
+            "thread_id": null,
+            "text": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen.",
+            "retrieval_score": 0.99,
+            "rerank_score": 0.98,
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "details": {
+          "request_id": "R03-SQ-01",
+          "lane": "indexed_hybrid",
+          "admitted_count": 1,
+          "excluded_count": 0,
+          "output_name": "dpa_trigger_rows",
+          "missing_fields": [],
+          "search_terms": ["DPA", "trigger", "EU", "personal data"]
+        }
+      },
+      {
+        "entry_id": "audit_s11_step03_nda_clause",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "legal_agent",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T17:30:46Z",
+        "source_queried": "ISP-001",
+        "chunks_retrieved": [
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_12_1_4",
+            "section_id": "12.1.4",
+            "row_id": null,
+            "thread_id": null,
+            "text": "An NDA must be executed prior to information exchange covering confidential or regulated data.",
+            "retrieval_score": 0.96,
+            "rerank_score": 0.94,
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "details": {
+          "request_id": "R03-SQ-02",
+          "lane": "indexed_hybrid",
+          "admitted_count": 1,
+          "excluded_count": 0,
+          "output_name": "nda_clause_chunks",
+          "missing_fields": [],
+          "search_terms": ["NDA", "12.1.4", "non-disclosure"]
+        }
+      },
+      {
+        "entry_id": "audit_s11_step03_determination",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "legal_agent",
+        "event_type": "DETERMINATION",
+        "timestamp": "2026-04-15T17:30:55Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-03",
+          "output": {
+            "dpa_required": true,
+            "dpa_blocker": true,
+            "nda_status": "EXECUTED",
+            "nda_blocker": false,
+            "trigger_rule_cited": [
+              {
+                "source_id": "DPA-TM-001",
+                "version": "1.3",
+                "row_id": "A-01",
+                "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen.",
+                "citation_class": "PRIMARY"
+              }
+            ],
+            "status": "escalated"
+          }
+        }
+      },
+      {
+        "entry_id": "audit_s11_step03_escalation",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "legal_agent",
+        "event_type": "ESCALATION",
+        "timestamp": "2026-04-15T17:30:57Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-03",
+          "evidence_condition": "legal_agent.dpa_blocker == true (DPA required by DPA-TM-001 row A-01; no executed DPA on file)",
+          "triggering_agent_id": "legal_agent",
+          "triggering_source": "DPA-TM-001",
+          "conflicting_evidence": [],
+          "resolution_owner": "Legal / General Counsel",
+          "minimum_evidence_to_resolve": "Executed DPA between Lichen and OptiChain on file, referenced by document_id and execution_date, before STEP-04 can clear."
+        }
+      },
+      {
+        "entry_id": "audit_s11_step03_close",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T17:31:00Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-03",
+          "from_status": "IN_PROGRESS",
+          "to_status": "ESCALATED",
+          "reason": "dpa_blocker"
+        }
+      },
+      {
+        "entry_id": "audit_s11_step04_open",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T17:31:10Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-04",
+          "from_status": "PENDING",
+          "to_status": "IN_PROGRESS",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s11_step04_pam_row",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "procurement_agent",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T17:31:18Z",
+        "source_queried": "PAM-001",
+        "chunks_retrieved": [
+          {
+            "source_id": "PAM-001",
+            "version": "3.0",
+            "chunk_id": "PAM-001__row_B-T2",
+            "section_id": null,
+            "row_id": "B-T2",
+            "thread_id": null,
+            "text": "Class B vendor, Tier 2 SaaS integration, REGULATED data: STANDARD approval path with Security Lead, General Counsel, and Procurement Manager.",
+            "retrieval_score": 0.99,
+            "rerank_score": 0.98,
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "details": {
+          "request_id": "R04-SQ-01",
+          "lane": "indexed_hybrid",
+          "admitted_count": 1,
+          "excluded_count": 0,
+          "output_name": "approval_matrix_rows",
+          "missing_fields": [],
+          "search_terms": ["approval", "Class B", "Tier 2", "REGULATED"]
+        }
+      },
+      {
+        "entry_id": "audit_s11_step04_determination",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "procurement_agent",
+        "event_type": "DETERMINATION",
+        "timestamp": "2026-04-15T17:31:25Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-04",
+          "output": {
+            "approval_path": "STANDARD",
+            "fast_track_eligible": false,
+            "required_approvals": [
+              {
+                "approver": "Security Lead",
+                "domain": "security",
+                "status": "PENDING",
+                "blocker": false,
+                "estimated_completion": "2026-04-22"
+              },
+              {
+                "approver": "General Counsel",
+                "domain": "legal",
+                "status": "ESCALATED",
+                "blocker": true,
+                "estimated_completion": "Pending DPA execution by Legal / General Counsel"
+              },
+              {
+                "approver": "Procurement Manager",
+                "domain": "procurement",
+                "status": "PENDING",
+                "blocker": false,
+                "estimated_completion": "2026-04-23"
+              }
+            ],
+            "estimated_timeline": "5-7 business days once DPA is executed",
+            "status": "escalated"
+          }
+        }
+      },
+      {
+        "entry_id": "audit_s11_step04_escalation",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "procurement_agent",
+        "event_type": "ESCALATION",
+        "timestamp": "2026-04-15T17:31:27Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-04",
+          "evidence_condition": "Upstream legal_agent.dpa_blocker == true propagates to procurement: General Counsel approver carries blocker:true pending executed DPA.",
+          "triggering_agent_id": "procurement_agent",
+          "triggering_source": "STEP-03",
+          "conflicting_evidence": [],
+          "resolution_owner": "Legal / General Counsel",
+          "minimum_evidence_to_resolve": "STEP-03 clears (executed DPA on file) so the General Counsel approver can move from ESCALATED to PENDING."
+        }
+      },
+      {
+        "entry_id": "audit_s11_step04_close",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T17:31:30Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-04",
+          "from_status": "IN_PROGRESS",
+          "to_status": "ESCALATED",
+          "reason": "upstream_dpa_blocker_propagation"
+        }
+      },
+      {
+        "entry_id": "audit_s11_step05_open",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T17:31:40Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-05",
+          "from_status": "PENDING",
+          "to_status": "IN_PROGRESS",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s11_step05_state_read",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T17:31:42Z",
+        "source_queried": "PIPELINE_STATE",
+        "chunks_retrieved": [
+          {"field_path": "it_security_agent", "value_present": true},
+          {"field_path": "legal_agent", "value_present": true},
+          {"field_path": "procurement_agent", "value_present": true}
+        ],
+        "details": {
+          "request_id": "R05-SQ-00",
+          "lane": "runtime_read",
+          "admitted_count": 3,
+          "excluded_count": 0,
+          "output_name": "all_agent_outputs",
+          "missing_fields": [],
+          "search_terms": []
+        }
+      },
+      {
+        "entry_id": "audit_s11_step05_vq_header",
+        "pipeline_run_id": "run_scenario_11",
+        "agent_id": "supervisor",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T17:31:43Z",
+        "source_queried": "VQ-OC-001",
+        "chunks_retrieved": [
+          {"field_path": "vendor_name", "value_present": true}
+        ],
+        "details": {
+          "request_id": "R05-SQ-01",
+          "lane": "direct_structured",
+          "admitted_count": 1,
+          "excluded_count": 0,
+          "output_name": "checklist_header",
+          "missing_fields": [],
+          "search_terms": []
+        }
+      }
+    ],
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    }
+  },
+  "pipeline_run_id": "run_scenario_11"
+}

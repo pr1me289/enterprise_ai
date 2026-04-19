@@ -106,6 +106,16 @@ EXPECTED_STATUS: dict[tuple[str, str], str] = {
     # Checklist Assembler uses overall_status, not status
     ("checklist_assembler", "scenario_1"): "COMPLETE",
     ("checklist_assembler", "scenario_2"): "ESCALATED",
+    # scenario_11: STEP-02 complete, STEP-03 escalated (dpa_blocker=true, all
+    # determination fields resolved), STEP-04 escalated (downstream propagation
+    # of the upstream DPA gap; approval_path populated). Per
+    # SPEC-AGENT-CLA-001 v0.3 §8.1 precedence: any upstream escalated →
+    # ESCALATED. The checklist must emit the §7 escalated assembly shape
+    # (every assembly field present and non-null because no upstream agent
+    # returned null), with blockers[] containing DPA_REQUIRED plus two
+    # ESCALATION_PENDING entries (one each for STEP-03 and STEP-04) and
+    # citations[] aggregated across all three agents.
+    ("checklist_assembler", "scenario_11"): "ESCALATED",
     # Checkoff only runs when STEP-05 is COMPLETE. In isolation with the
     # scenario_2 bundle we still feed it, but expect no guarantee.
     ("checkoff_agent", "scenario_1"): "complete",
@@ -1928,6 +1938,77 @@ _ASSEMBLER_INHERITED_FIELDS: tuple[str, ...] = (
 )
 
 
+# Domain-owned fields that must NOT appear at the checklist top level per
+# SPEC-AGENT-CLA-001 v0.3 §6.1 and A-02. The assembler's output contract
+# does not include these; they live in the upstream agent outputs and must
+# be referenced via blockers[] / citations[] only. Re-surfacing them is a
+# subtle passthrough-discipline failure.
+_ASSEMBLER_DOMAIN_OWNED_FORBIDDEN: tuple[str, ...] = (
+    "dpa_blocker",
+    "nda_status",
+    "nda_blocker",
+    "trigger_rule_cited",
+    "integration_tier",
+    "integration_type_normalized",
+    "fast_track_rationale",
+    "security_followup_required",
+)
+
+
+# Scenario_11 fixture-anchored expectations. These mirror the bundle in
+# tests/fixtures/bundles/step_05_scenario_11.json; if that fixture changes,
+# update these in lockstep.
+_S11_EXPECTED_PASSTHROUGH: dict[str, Any] = {
+    "data_classification": "REGULATED",
+    "fast_track_eligible": False,
+    "required_security_actions": [],
+    "dpa_required": True,
+    "approval_path": "STANDARD",
+}
+_S11_EXPECTED_REQUIRED_APPROVALS: tuple[dict[str, Any], ...] = (
+    {
+        "approver": "Security Lead",
+        "domain": "security",
+        "status": "PENDING",
+        "blocker": False,
+        "estimated_completion": "2026-04-22",
+    },
+    {
+        "approver": "General Counsel",
+        "domain": "legal",
+        "status": "ESCALATED",
+        "blocker": True,
+        "estimated_completion": "Pending DPA execution by Legal / General Counsel",
+    },
+    {
+        "approver": "Procurement Manager",
+        "domain": "procurement",
+        "status": "PENDING",
+        "blocker": False,
+        "estimated_completion": "2026-04-23",
+    },
+)
+_S11_LEGAL_DETERMINATION_ENTRY_ID = "audit_s11_step03_determination"
+_S11_STEP03_ESCALATION_ENTRY_ID = "audit_s11_step03_escalation"
+_S11_STEP04_ESCALATION_ENTRY_ID = "audit_s11_step04_escalation"
+# Lookup of (source_id_or_source_name, section_or_chunk_id) tuples that
+# every output citation must match. Built from the bundle's upstream
+# policy_citations[] arrays.
+_S11_VALID_CITATIONS: tuple[tuple[str, str, str], ...] = (
+    # (source_id, section/row identifier, originating agent_id)
+    ("ISP-001", "12.2", "it_security_agent"),
+    ("ISP-001", "ISP-001__section_12", "it_security_agent"),
+    ("ISP-001", "4", "it_security_agent"),
+    ("ISP-001", "ISP-001__section_4", "it_security_agent"),
+    ("DPA-TM-001", "A-01", "legal_agent"),
+    ("DPA-TM-001", "DPA-TM-001__row_A-01", "legal_agent"),
+    ("ISP-001", "12.1.4", "legal_agent"),
+    ("ISP-001", "ISP-001__section_12_1_4", "legal_agent"),
+    ("PAM-001", "B-T2", "procurement_agent"),
+    ("PAM-001", "PAM-001__row_B-T2", "procurement_agent"),
+)
+
+
 def _evaluate_checklist_assembler(output: dict[str, Any], scenario: str, report: EvaluationReport) -> None:
     # pipeline_run_id and vendor_name are required; overall_status is already
     # checked in the general block (enum).
@@ -1939,7 +2020,16 @@ def _evaluate_checklist_assembler(output: dict[str, Any], scenario: str, report:
     overall = output.get("overall_status")
 
     # Inherited fields — the checklist lists these as REQUIRED for the assembler.
-    for field_name in _ASSEMBLER_INHERITED_FIELDS:
+    # scenario_11 enforces SPEC-AGENT-CLA-001 v0.3 §6.1 strictly: dpa_blocker is
+    # a domain-owned Legal field, not a checklist field, so the scenario_11
+    # path forbids it at the top level (A-02). Skip it from the inherited-
+    # missing check for scenario_11 only — other scenarios retain the legacy
+    # broader check.
+    inherited = tuple(
+        f for f in _ASSEMBLER_INHERITED_FIELDS
+        if not (scenario == "scenario_11" and f == "dpa_blocker")
+    )
+    for field_name in inherited:
         if field_name not in output:
             report.failures.append(f"inherited field missing: {field_name!r}")
 
@@ -1972,6 +2062,237 @@ def _evaluate_checklist_assembler(output: dict[str, Any], scenario: str, report:
             required_keys=("source_name", "version", "section", "retrieval_timestamp", "agent_id"),
             report=report,
         )
+
+    if scenario == "scenario_11":
+        _evaluate_checklist_assembler_scenario_11(output, report)
+
+
+def _evaluate_checklist_assembler_scenario_11(
+    output: dict[str, Any], report: EvaluationReport
+) -> None:
+    """Scenario 11 — Cross-Agent Escalation Cascade hard checks.
+
+    Per scenario_11__checklist_assembler__build_prompt.md and
+    SPEC-AGENT-CLA-001 v0.3 §6, §7, §7.2, §8.1. Catches the silent
+    COMPLETE-swallow of upstream escalations, shape collapse, missing
+    DPA_REQUIRED blocker, citation aggregation gaps, hallucinated
+    citations, re-derivation of upstream fields, and any index-endpoint
+    query attempt.
+    """
+    overall = output.get("overall_status")
+
+    # Linchpin: §8.1 precedence — any upstream escalated → ESCALATED.
+    if overall != "ESCALATED":
+        report.failures.append(
+            f"scenario_11: overall_status={overall!r} but bundle has STEP-03 and STEP-04 "
+            "both escalated — §8.1 precedence requires ESCALATED. The most likely failure "
+            "mode is silent swallow of upstream escalations into a false COMPLETE; the "
+            "second is shape collapse into BLOCKED."
+        )
+
+    # All assembly fields present and non-null. blocked_reason / blocked_fields
+    # must be absent (this is the §7 escalated shape, not the §7.1 blocked shape).
+    required_present = (
+        "data_classification",
+        "fast_track_eligible",
+        "required_security_actions",
+        "dpa_required",
+        "approval_path",
+        "required_approvals",
+        "blockers",
+        "citations",
+        "vendor_name",
+        "pipeline_run_id",
+    )
+    for field_name in required_present:
+        if field_name not in output:
+            report.failures.append(
+                f"scenario_11: {field_name!r} is absent — escalated runs require all "
+                "assembly fields present per §7.2 / A-08 (the §7.1 blocked shape only "
+                "applies when overall_status=BLOCKED)"
+            )
+        elif output[field_name] is None:
+            report.failures.append(
+                f"scenario_11: {field_name!r} is null but no upstream agent returned "
+                "null in this bundle — §7.2 passthrough does not apply here"
+            )
+
+    for forbidden in ("blocked_reason", "blocked_fields"):
+        if forbidden in output:
+            report.failures.append(
+                f"scenario_11: {forbidden!r} is present but this is an escalated run, "
+                "not blocked — §7.1 blocked-shape fields must not appear"
+            )
+
+    # Passthrough integrity — exact match against upstream.
+    for field_name, expected in _S11_EXPECTED_PASSTHROUGH.items():
+        if field_name in output and output[field_name] is not None:
+            if output[field_name] != expected:
+                report.failures.append(
+                    f"scenario_11: {field_name}={output[field_name]!r} but upstream "
+                    f"value is {expected!r} — passthrough must be exact (A-02)"
+                )
+
+    actual_approvals = output.get("required_approvals")
+    if isinstance(actual_approvals, list):
+        if len(actual_approvals) != len(_S11_EXPECTED_REQUIRED_APPROVALS):
+            report.failures.append(
+                f"scenario_11: required_approvals has {len(actual_approvals)} entries "
+                f"but STEP-04 produced {len(_S11_EXPECTED_REQUIRED_APPROVALS)} — "
+                "passthrough must be exact"
+            )
+        else:
+            for idx, (got, want) in enumerate(zip(actual_approvals, _S11_EXPECTED_REQUIRED_APPROVALS)):
+                if not isinstance(got, dict):
+                    report.failures.append(
+                        f"scenario_11: required_approvals[{idx}] is not an object"
+                    )
+                    continue
+                for key, want_val in want.items():
+                    if got.get(key) != want_val:
+                        report.failures.append(
+                            f"scenario_11: required_approvals[{idx}].{key}="
+                            f"{got.get(key)!r} but upstream value is {want_val!r}"
+                        )
+
+    # blockers[] — exactly one DPA_REQUIRED, at least two ESCALATION_PENDING
+    # entries (one each citing STEP-03 and STEP-04 escalation entries).
+    blockers = output.get("blockers")
+    if isinstance(blockers, list):
+        dpa_entries = [b for b in blockers if isinstance(b, dict) and b.get("blocker_type") == "DPA_REQUIRED"]
+        if len(dpa_entries) != 1:
+            report.failures.append(
+                f"scenario_11: expected exactly one blockers[] entry with "
+                f"blocker_type='DPA_REQUIRED' (derived from legal_agent.dpa_blocker=true "
+                f"per §6.2), got {len(dpa_entries)} — most likely the agent forgot to "
+                "derive a flag-sourced blocker entry alongside the status-sourced ones"
+            )
+        for entry in dpa_entries:
+            owner = entry.get("resolution_owner")
+            if not isinstance(owner, str) or "Legal" not in owner:
+                report.failures.append(
+                    f"scenario_11: DPA_REQUIRED resolution_owner={owner!r} must "
+                    "contain 'Legal' per §6.2"
+                )
+            citation = entry.get("citation")
+            if not isinstance(citation, str) or citation.strip() == "":
+                report.failures.append(
+                    "scenario_11: DPA_REQUIRED citation must be a non-empty string "
+                    "referencing the Legal DETERMINATION audit log entry "
+                    f"({_S11_LEGAL_DETERMINATION_ENTRY_ID})"
+                )
+            elif _S11_LEGAL_DETERMINATION_ENTRY_ID not in citation and "step03" not in citation.lower() and "legal" not in citation.lower():
+                report.failures.append(
+                    f"scenario_11: DPA_REQUIRED citation={citation!r} does not "
+                    f"recognizably reference the Legal DETERMINATION audit entry "
+                    f"({_S11_LEGAL_DETERMINATION_ENTRY_ID})"
+                )
+            description = entry.get("description")
+            if not isinstance(description, str) or description.strip() == "":
+                report.failures.append(
+                    "scenario_11: DPA_REQUIRED description must be a non-empty string"
+                )
+
+        escalation_entries = [
+            b for b in blockers
+            if isinstance(b, dict) and b.get("blocker_type") == "ESCALATION_PENDING"
+        ]
+        if len(escalation_entries) < 2:
+            report.failures.append(
+                f"scenario_11: expected at least two ESCALATION_PENDING blockers "
+                f"(STEP-03 and STEP-04), got {len(escalation_entries)}"
+            )
+        else:
+            citations_text = " | ".join(
+                str(e.get("citation", "")) for e in escalation_entries
+            )
+            if _S11_STEP03_ESCALATION_ENTRY_ID not in citations_text and "step03" not in citations_text.lower() and "step-03" not in citations_text.lower():
+                report.failures.append(
+                    f"scenario_11: no ESCALATION_PENDING entry cites the STEP-03 "
+                    f"escalation audit entry ({_S11_STEP03_ESCALATION_ENTRY_ID})"
+                )
+            if _S11_STEP04_ESCALATION_ENTRY_ID not in citations_text and "step04" not in citations_text.lower() and "step-04" not in citations_text.lower():
+                report.failures.append(
+                    f"scenario_11: no ESCALATION_PENDING entry cites the STEP-04 "
+                    f"escalation audit entry ({_S11_STEP04_ESCALATION_ENTRY_ID})"
+                )
+            for idx, entry in enumerate(escalation_entries):
+                citation = entry.get("citation")
+                if not isinstance(citation, str) or citation.strip() == "":
+                    report.failures.append(
+                        f"scenario_11: ESCALATION_PENDING[{idx}] citation must be a "
+                        "non-empty string pointing to the corresponding ESCALATION audit entry"
+                    )
+
+    # Per-agent citation coverage + no-hallucination cross-check.
+    if isinstance(output.get("citations"), list):
+        seen_agents = {
+            entry.get("agent_id")
+            for entry in output["citations"]
+            if isinstance(entry, dict)
+        }
+        for required_agent in ("it_security_agent", "legal_agent", "procurement_agent"):
+            if required_agent not in seen_agents:
+                report.failures.append(
+                    f"scenario_11: citations[] has no entry tagged "
+                    f"agent_id={required_agent!r} — A-04 requires every domain agent's "
+                    "policy_citations[] to be represented"
+                )
+
+        for idx, entry in enumerate(output["citations"]):
+            if not isinstance(entry, dict):
+                continue
+            agent_id = entry.get("agent_id")
+            source_name = entry.get("source_name")
+            section = entry.get("section")
+            if not isinstance(source_name, str) or not isinstance(section, str) or not isinstance(agent_id, str):
+                continue
+            match = any(
+                source_name == src and section == sec and agent_id == aid
+                for (src, sec, aid) in _S11_VALID_CITATIONS
+            )
+            if not match:
+                report.failures.append(
+                    f"scenario_11: citations[{idx}] (source_name={source_name!r}, "
+                    f"section={section!r}, agent_id={agent_id!r}) does not match any "
+                    "upstream policy_citations[] entry — looks hallucinated"
+                )
+
+    # No domain-owned fields re-surfaced at the checklist level.
+    for forbidden in _ASSEMBLER_DOMAIN_OWNED_FORBIDDEN:
+        if forbidden in output:
+            report.failures.append(
+                f"scenario_11: {forbidden!r} is a domain-owned field and must not "
+                "appear at the checklist top level (A-02 / §6.1) — it lives in the "
+                "upstream agent output and is referenced via blockers[] / citations[]"
+            )
+
+    # Soft checks — vendor_name and pipeline_run_id resolved via vq_direct_access.
+    if output.get("vendor_name") != "OptiChain":
+        report.warnings.append(
+            f"scenario_11: vendor_name={output.get('vendor_name')!r} but the "
+            "vq_direct_access stub returns 'OptiChain' for this run"
+        )
+    if output.get("pipeline_run_id") != "run_scenario_11":
+        report.warnings.append(
+            f"scenario_11: pipeline_run_id={output.get('pipeline_run_id')!r} but "
+            "the pipeline state for this run is 'run_scenario_11'"
+        )
+
+    # Soft check: ESCALATION_PENDING entries should cite distinct audit entries.
+    if isinstance(blockers, list):
+        escalation_citations = [
+            b.get("citation")
+            for b in blockers
+            if isinstance(b, dict) and b.get("blocker_type") == "ESCALATION_PENDING"
+        ]
+        non_empty = [c for c in escalation_citations if isinstance(c, str) and c.strip()]
+        if len(non_empty) >= 2 and len(set(non_empty)) < len(non_empty):
+            report.warnings.append(
+                "scenario_11: ESCALATION_PENDING blockers cite the same audit entry "
+                "more than once — STEP-03 and STEP-04 ESCALATION entries have distinct "
+                "entry_ids and should be cited independently"
+            )
 
 
 # ---------------------------------------------------------------------------

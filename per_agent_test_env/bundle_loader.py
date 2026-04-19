@@ -25,7 +25,7 @@ VALID_AGENTS: tuple[str, ...] = (
     "checkoff_agent",
 )
 
-VALID_SCENARIOS: tuple[str, ...] = ("scenario_1", "scenario_2", "scenario_3", "scenario_4", "scenario_5", "scenario_6", "scenario_7", "scenario_8", "scenario_9", "scenario_10")
+VALID_SCENARIOS: tuple[str, ...] = ("scenario_1", "scenario_2", "scenario_3", "scenario_4", "scenario_5", "scenario_6", "scenario_7", "scenario_8", "scenario_9", "scenario_10", "scenario_11")
 
 # Per-agent scenario availability. scenario_3 and scenario_4 are
 # Legal-Agent-only fixtures:
@@ -35,13 +35,20 @@ VALID_SCENARIOS: tuple[str, ...] = ("scenario_1", "scenario_2", "scenario_3", "s
 #     condition test: agent must emit status=blocked per Legal_Agent_Spec
 #     §8.5 and §12 instead of inferring a determination from the missing
 #     input.
-# Other agents have no scenario_3/scenario_4 bundles — callers requesting
-# one will hit BundleError via fixture_path() when the file does not exist.
+#   * scenario_11 — Checklist-Assembler-only fixture. Cross-agent escalation
+#     cascade: STEP-02 complete, STEP-03 escalated (dpa_blocker=true, all
+#     determination fields resolved), STEP-04 escalated (workflow propagation
+#     of upstream DPA gap, approval_path populated). Stresses §8.1 status
+#     precedence and §6.2 multi-source blocker assembly per
+#     SPEC-AGENT-CLA-001 v0.3.
+# Other agents have no scenario_3/scenario_4/scenario_11 bundles — callers
+# requesting one will hit BundleError via fixture_path() when the file does
+# not exist.
 SCENARIOS_BY_AGENT: dict[str, tuple[str, ...]] = {
     "it_security_agent": ("scenario_1", "scenario_2"),
     "legal_agent": ("scenario_1", "scenario_2", "scenario_3", "scenario_4", "scenario_5", "scenario_6"),
     "procurement_agent": ("scenario_1", "scenario_2", "scenario_7", "scenario_8", "scenario_9", "scenario_10"),
-    "checklist_assembler": ("scenario_1", "scenario_2"),
+    "checklist_assembler": ("scenario_1", "scenario_2", "scenario_11"),
     "checkoff_agent": ("scenario_1", "scenario_2"),
 }
 
