@@ -1,0 +1,60 @@
+{
+  "agent_name": "procurement_agent",
+  "scenario": "scenario_9",
+  "pipeline_run_id": "scenario_9_synthesized",
+  "run_number": 2,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260419T162256Z",
+  "system_prompt_path": "agent_spec_docs/Procurement_Agent_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_04_scenario_9.json",
+  "raw_text": "```json\n{\n  \"approval_path\": \"STANDARD\",\n  \"fast_track_eligible\": false,\n  \"required_approvals\": [\n    {\n      \"approver\": \"Procurement Director\",\n      \"domain\": \"Procurement\",\n      \"status\": \"PENDING\",\n      \"blocker\": false,\n      \"estimated_completion\": \"5 business days\"\n    },\n    {\n      \"approver\": \"Legal Counsel\",\n      \"domain\": \"Legal\",\n      \"status\": \"PENDING\",\n      \"blocker\": false,\n      \"estimated_completion\": \"3 business days\"\n    },\n    {\n      \"approver\": \"Business Owner\",\n      \"domain\": \"Business\",\n      \"status\": \"PENDING\",\n      \"blocker\": false,\n      \"estimated_completion\": \"2 business days\"\n    }\n  ],\n  \"estimated_timeline\": \"7-10 business days (DPA execution required before onboarding)\",\n  \"policy_citations\": [\n    {\n      \"source_id\": \"PAM-001\",\n      \"version\": \"3.0-scenario9\",\n      \"chunk_id\": \"PAM-001__row_D-T2\",\n      \"row_id\": \"D-T2\",\n      \"approval_path_condition\": \"Class D professional-services engagement with T2 integration tier (authenticated API or SaaS integration), $100K-$500K deal size, regulated data in scope\",\n      \"citation_class\": \"PRIMARY\"\n    },\n    {\n      \"source_id\": \"DPA-TM-001\",\n      \"version\": \"2.1\",\n      \"chunk_id\": \"DPA-TM-001__row_TR-04\",\n      \"row_id\": \"TR-04\",\n      \"approval_path_condition\": \"Vendor processes REGULATED personal data on Lichen's behalf\",\n      \"citation_class\": \"PRIMARY\"\n    }\n  ],\n  \"status\": \"complete\"\n}\n```",
+  "parsed_output": {
+    "approval_path": "STANDARD",
+    "fast_track_eligible": false,
+    "required_approvals": [
+      {
+        "approver": "Procurement Director",
+        "domain": "Procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "5 business days"
+      },
+      {
+        "approver": "Legal Counsel",
+        "domain": "Legal",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3 business days"
+      },
+      {
+        "approver": "Business Owner",
+        "domain": "Business",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2 business days"
+      }
+    ],
+    "estimated_timeline": "7-10 business days (DPA execution required before onboarding)",
+    "policy_citations": [
+      {
+        "source_id": "PAM-001",
+        "version": "3.0-scenario9",
+        "chunk_id": "PAM-001__row_D-T2",
+        "row_id": "D-T2",
+        "approval_path_condition": "Class D professional-services engagement with T2 integration tier (authenticated API or SaaS integration), $100K-$500K deal size, regulated data in scope",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "DPA-TM-001",
+        "version": "2.1",
+        "chunk_id": "DPA-TM-001__row_TR-04",
+        "row_id": "TR-04",
+        "approval_path_condition": "Vendor processes REGULATED personal data on Lichen's behalf",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "error": null
+}

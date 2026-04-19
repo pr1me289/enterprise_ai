@@ -1,0 +1,105 @@
+{
+  "scenario": "scenario_8",
+  "agent": "procurement_agent",
+  "bundle": {
+    "source_ids": [
+      "STEP-02",
+      "STEP-03",
+      "VQ-OC-001",
+      "PAM-001",
+      "DPA-TM-001",
+      "ISP-001"
+    ],
+    "it_security_output": {
+      "data_classification": "REGULATED",
+      "fast_track_eligible": false,
+      "integration_tier": "TIER_2_SAAS",
+      "security_followup_required": false,
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12_1_4",
+          "section_id": "12.1.4",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "legal_output": {
+      "dpa_required": true,
+      "dpa_blocker": true,
+      "nda_status": "EXECUTED",
+      "nda_blocker": false,
+      "trigger_rule_cited": [
+        {
+          "source_id": "DPA-TM-001",
+          "version": "2.1",
+          "chunk_id": "DPA-TM-001__row_TR-04",
+          "row_id": "TR-04",
+          "trigger_condition": "Vendor processes REGULATED personal data on Lichen's behalf",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "policy_citations": [
+        {
+          "source_id": "DPA-TM-001",
+          "version": "2.1",
+          "chunk_id": "DPA-TM-001__row_TR-04",
+          "row_id": "TR-04",
+          "citation_class": "PRIMARY"
+        },
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12_1_4",
+          "section_id": "12.1.4",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "escalated"
+    },
+    "questionnaire": {
+      "vendor_class": "TIER_2",
+      "integration_tier": "TIER_2_SAAS",
+      "deal_size": 250000,
+      "existing_nda_status": "EXECUTED",
+      "existing_dpa_status": "NOT_STARTED",
+      "existing_msa": true
+    },
+    "approval_path_matrix_rows": [
+      {
+        "source_id": "PAM-001",
+        "version": "3.0-scenario8",
+        "chunk_id": "PAM-001__row_Q-01",
+        "section_id": null,
+        "row_id": "Q-01",
+        "thread_id": null,
+        "text": "Vendor Class: TIER_2\nIntegration Tier: TIER_2_SAAS\nDeal Size Range: $100,000 – $500,000\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Standard approval regime for Tier 2 SaaS engagements with REGULATED data scope. IT Security + Legal Counsel + Procurement Director + Business Owner Director sign-off required. DPA must be fully executed before onboarding begins; unresolved DPA blocks implementation. Standard 7-10 business day timeline when all blockers clear.",
+        "retrieval_score": 0.82,
+        "rerank_score": 0.79,
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "PAM-001",
+        "version": "3.0-scenario8",
+        "chunk_id": "PAM-001__row_Q-02",
+        "section_id": null,
+        "row_id": "Q-02",
+        "thread_id": null,
+        "text": "Vendor Class: TIER_1\nIntegration Tier: TIER_1_ERP\nDeal Size Range: $500,000+\nApproval Path: STANDARD\nIT Security Review: Required + CISO Sign-off\nLegal / DPA Review: Required + GC Sign-off\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: VP + SVP\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Enhanced approval regime for Tier 1 ERP integrations. CISO and General Counsel must co-sign approval memo. DPA required. ERP integration tier assignment mandatory. Architecture review by IT Security before integration activity begins. 15-20 business day timeline.",
+        "retrieval_score": 0.54,
+        "rerank_score": 0.51,
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "fast_track_routing_rows": [],
+    "slack_procurement_chunks": [],
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    }
+  },
+  "pipeline_run_id": "scenario_8_synthesized"
+}

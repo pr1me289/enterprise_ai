@@ -1,0 +1,81 @@
+{
+  "scenario": "scenario_10",
+  "agent": "procurement_agent",
+  "bundle": {
+    "source_ids": [
+      "STEP-03",
+      "VQ-OC-001",
+      "PAM-001"
+    ],
+    "legal_output": {
+      "dpa_required": false,
+      "dpa_blocker": false,
+      "nda_status": "EXECUTED",
+      "nda_blocker": false,
+      "trigger_rule_cited": [
+        {
+          "source_id": "DPA-TM-001",
+          "version": "2.1",
+          "chunk_id": "DPA-TM-001__row_TR-00",
+          "row_id": "TR-00",
+          "trigger_condition": "No regulated personal data in scope — DPA not triggered",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "policy_citations": [
+        {
+          "source_id": "DPA-TM-001",
+          "version": "2.1",
+          "chunk_id": "DPA-TM-001__row_TR-00",
+          "row_id": "TR-00",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "questionnaire": {
+      "vendor_class": "C",
+      "integration_tier": "T1",
+      "deal_size": 85000,
+      "existing_nda_status": "EXECUTED",
+      "existing_dpa_status": "NOT_STARTED",
+      "existing_msa": true
+    },
+    "approval_path_matrix_rows": [
+      {
+        "source_id": "PAM-001",
+        "version": "3.0-scenario10",
+        "chunk_id": "PAM-001__row_C-T1",
+        "section_id": null,
+        "row_id": "C-T1",
+        "thread_id": null,
+        "text": "Vendor Class: C\nIntegration Tier: T1\nDeal Size Range: $25,000 - $100,000\nApproval Path: FAST_TRACK\nIT Security Review: Required\nLegal / DPA Review: Required (DPA only if regulated data accessed)\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: ELIGIBLE (if no regulated data, no DPA trigger, existing MSA)\nRequired Approvals / Notes: Class C tooling and mid-market SaaS engagements with minimal integration footprint (T1: standalone or file-transfer only, no system-of-record access). Fast-track regime acceptable when no regulated data, no DPA trigger, and existing MSA. Standard 3-5 business day timeline. DPA required only when vendor accesses regulated personal data per DPA-TM-001. Background check requirements per ISP-001 Section 6.3 apply when on-site presence is contemplated.",
+        "retrieval_score": 0.88,
+        "rerank_score": 0.85,
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "PAM-001",
+        "version": "3.0-scenario10",
+        "chunk_id": "PAM-001__row_C-T2",
+        "section_id": null,
+        "row_id": "C-T2",
+        "thread_id": null,
+        "text": "Vendor Class: C\nIntegration Tier: T2\nDeal Size Range: $50,000 - $250,000\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Class C tooling engagements with moderate integration footprint (T2: authenticated API or SaaS integration, scoped system access). Standard approval regime. DPA required if vendor accesses regulated personal data per DPA-TM-001. Background-check requirements per ISP-001 Section 6.3 apply to on-site and privileged-access personnel. IT Security + Legal Counsel + Procurement Director + Business Owner Director sign-off required. Standard 7-10 business day timeline when all blockers clear.",
+        "retrieval_score": 0.67,
+        "rerank_score": 0.61,
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "fast_track_routing_rows": [],
+    "slack_procurement_chunks": [],
+    "bundle_meta": {
+      "admissible": false,
+      "missing_fields": [
+        "it_security_output"
+      ],
+      "prohibited_sources": []
+    }
+  },
+  "pipeline_run_id": "scenario_10_synthesized"
+}

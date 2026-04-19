@@ -1,0 +1,52 @@
+[
+  {
+    "chunk_id": "PAM-001__row_Q-01",
+    "source_id": "PAM-001",
+    "source_name": "Procurement Approval Matrix",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+    "version": "3.0-scenario8",
+    "document_date": "2026-04-19",
+    "freshness_status": "CURRENT",
+    "authority_tier": 1,
+    "retrieval_lane": "INDEXED_HYBRID",
+    "allowed_agents": [
+      "procurement"
+    ],
+    "is_primary_citable": true,
+    "manifest_status": "CONFIRMED",
+    "chunk_type": "ROW",
+    "chunk_order": 1,
+    "citation_label": "PAM-001 row Q-01",
+    "text": "Vendor Class: TIER_2\nIntegration Tier: TIER_2_SAAS\nDeal Size Range: $100,000 – $500,000\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Standard approval regime for Tier 2 SaaS engagements with REGULATED data scope. IT Security + Legal Counsel + Procurement Director + Business Owner Director sign-off required. DPA must be fully executed before onboarding begins; unresolved DPA blocks implementation. Standard 7-10 business day timeline when all blockers clear.",
+    "section_id": null,
+    "row_id": "Q-01",
+    "record_id": null,
+    "thread_id": null,
+    "domain_scope": null
+  },
+  {
+    "chunk_id": "PAM-001__row_Q-02",
+    "source_id": "PAM-001",
+    "source_name": "Procurement Approval Matrix",
+    "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+    "version": "3.0-scenario8",
+    "document_date": "2026-04-19",
+    "freshness_status": "CURRENT",
+    "authority_tier": 1,
+    "retrieval_lane": "INDEXED_HYBRID",
+    "allowed_agents": [
+      "procurement"
+    ],
+    "is_primary_citable": true,
+    "manifest_status": "CONFIRMED",
+    "chunk_type": "ROW",
+    "chunk_order": 2,
+    "citation_label": "PAM-001 row Q-02",
+    "text": "Vendor Class: TIER_1\nIntegration Tier: TIER_1_ERP\nDeal Size Range: $500,000+\nApproval Path: STANDARD\nIT Security Review: Required + CISO Sign-off\nLegal / DPA Review: Required + GC Sign-off\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: VP + SVP\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Enhanced approval regime for Tier 1 ERP integrations. CISO and General Counsel must co-sign approval memo. DPA required. ERP integration tier assignment mandatory. Architecture review by IT Security before integration activity begins. 15-20 business day timeline.",
+    "section_id": null,
+    "row_id": "Q-02",
+    "record_id": null,
+    "thread_id": null,
+    "domain_scope": null
+  }
+]

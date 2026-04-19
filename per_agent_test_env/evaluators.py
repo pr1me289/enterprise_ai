@@ -97,6 +97,12 @@ EXPECTED_STATUS: dict[tuple[str, str], str] = {
     # STEP-02). Tests the single highest-risk failure mode: silent path
     # fabrication by picking the nearest row.
     ("procurement_agent", "scenario_7"): "escalated",
+    # scenario_10: it_security_output is entirely absent from the bundle. Per
+    # CC-001 §8.3 and Procurement Spec §8.5 / §9.1, this forces status='blocked'
+    # with the §9.1 shape (determination fields entirely absent, blocked_reason
+    # + blocked_fields identifying the missing upstream). Legal is clean
+    # COMPLETE and the questionnaire is populated — single-cause blocked.
+    ("procurement_agent", "scenario_10"): "blocked",
     # Checklist Assembler uses overall_status, not status
     ("checklist_assembler", "scenario_1"): "COMPLETE",
     ("checklist_assembler", "scenario_2"): "ESCALATED",
@@ -1303,6 +1309,609 @@ def _evaluate_procurement(output: dict[str, Any], scenario: str, report: Evaluat
                         f"candidate set {sorted(scenario_1_candidate_rows)} — possible "
                         "citation hallucination"
                     )
+
+    # scenario_8 hard checks — Upstream Blocker Propagation → ESCALATED.
+    # The questionnaire matches Q-01 (vendor_class=TIER_2, integration_tier=
+    # TIER_2_SAAS, deal_size=250000 → STANDARD path). IT Security is clean
+    # COMPLETE. Legal is ESCALATED with dpa_blocker=true (NDA executed, DPA
+    # not yet). Per Procurement Agent Spec §9.2 + §13 Example A, the
+    # Procurement output must: (a) status='escalated' due to upstream Legal
+    # blocker propagation, (b) have all 6 determination fields PRESENT (not
+    # absent — absence is the §9.1 blocked shape), (c) resolve the approval
+    # path locally as STANDARD from the Q-01 match, (d) resolve
+    # fast_track_eligible=false from the matched row, (e) surface the DPA
+    # blocker via a required_approvals[] entry with blocker=true (spec-
+    # sanctioned channel since §9 Output Contract has no
+    # executive_approval_required field), (f) cite PAM-001 Q-01 as the single
+    # PRIMARY row, and (g) not leak blocked-shape fields.
+    if scenario == "scenario_8":
+        status_val = output.get("status")
+        if status_val != "escalated":
+            report.failures.append(
+                f"scenario_8: status must be 'escalated' (got {status_val!r}) — "
+                "upstream Legal emitted dpa_blocker=true and per §9.2 / §13 "
+                "Example A the Procurement agent must propagate that blocker "
+                "as an escalated determination even when its own PAM-001 match "
+                "resolves cleanly"
+            )
+
+        # §9.2 / A-09: all six determination fields must be PRESENT. Absence
+        # is the §9.1 blocked shape and is a contract violation on escalated.
+        required_present_fields = (
+            "approval_path",
+            "fast_track_eligible",
+            "required_approvals",
+            "estimated_timeline",
+            "policy_citations",
+        )
+        for field_name in required_present_fields:
+            if field_name not in output:
+                report.failures.append(
+                    f"scenario_8: {field_name!r} is absent from output — §9.2 / "
+                    "A-09 require every determination field to be PRESENT on "
+                    "an escalated run. Absence is the blocked shape (§9.1)."
+                )
+
+        # Unlike scenario_7 (no-match → null approval_path), scenario_8 DOES
+        # have a Q-01 match, so the approval_path MUST resolve to 'STANDARD'
+        # from that row. Emitting null here would be failing to do the local
+        # determination that the spec explicitly still requires on an
+        # upstream-blocker escalation.
+        if "approval_path" in output:
+            ap_val = output.get("approval_path")
+            if ap_val != "STANDARD":
+                report.failures.append(
+                    f"scenario_8: approval_path must be 'STANDARD' (got "
+                    f"{ap_val!r}) — Q-01 (vendor_class=TIER_2, integration_tier="
+                    "TIER_2_SAAS) resolves cleanly to STANDARD. The Legal "
+                    "blocker escalates the overall status but does not erase "
+                    "the local PAM-001 match."
+                )
+
+        # fast_track_eligible must be False — Q-01 says NOT ELIGIBLE.
+        if "fast_track_eligible" in output:
+            fte_val = output.get("fast_track_eligible")
+            if fte_val is not False:
+                report.failures.append(
+                    f"scenario_8: fast_track_eligible must be False (got "
+                    f"{fte_val!r}) — Q-01 row is NOT ELIGIBLE for fast-track. "
+                    "Passing through any other value contradicts the matched row."
+                )
+
+        # PRIMARY PAM-001 citation must be Q-01. No other row may be cited as
+        # PRIMARY; Q-02 is the distractor and must not be promoted.
+        scenario_8_expected_primary_row = "Q-01"
+        scenario_8_candidate_rows = {"Q-01", "Q-02"}
+        pc_val = output.get("policy_citations")
+        if isinstance(pc_val, list):
+            primary_pam_rows = [
+                entry.get("row_id")
+                for entry in pc_val
+                if isinstance(entry, dict)
+                and entry.get("source_id") == "PAM-001"
+                and entry.get("citation_class") == "PRIMARY"
+            ]
+            if len(primary_pam_rows) == 0:
+                report.failures.append(
+                    "scenario_8: no PRIMARY PAM-001 citation — the approval "
+                    "path was resolved from Q-01, which must appear as the "
+                    "governing PRIMARY citation"
+                )
+            elif len(primary_pam_rows) > 1:
+                report.failures.append(
+                    f"scenario_8: expected exactly one PRIMARY PAM-001 citation "
+                    f"(Q-01), got {len(primary_pam_rows)}: {primary_pam_rows!r}"
+                )
+            else:
+                cited_row = primary_pam_rows[0]
+                if cited_row != scenario_8_expected_primary_row:
+                    report.failures.append(
+                        f"scenario_8: PRIMARY PAM-001 row_id={cited_row!r} does "
+                        f"NOT match the vendor profile's primary keys "
+                        f"(vendor_class='TIER_2', integration_tier='TIER_2_SAAS' "
+                        f"→ expected row_id={scenario_8_expected_primary_row!r}). "
+                        "Per §8.3 strict primary-key matching, substituting Q-02 "
+                        "(the distractor) for Q-01 is silent wrong-row selection."
+                    )
+
+            # Hallucination guard: any PAM-001 row cited must be in the
+            # scenario-scoped candidate set {Q-01, Q-02}.
+            for idx, entry in enumerate(pc_val):
+                if (
+                    isinstance(entry, dict)
+                    and entry.get("source_id") == "PAM-001"
+                    and entry.get("row_id") not in (None, "")
+                    and entry["row_id"] not in scenario_8_candidate_rows
+                ):
+                    report.warnings.append(
+                        f"scenario_8: policy_citations[{idx}] cites PAM-001 "
+                        f"row_id={entry['row_id']!r}, which is not in the "
+                        f"scenario-scoped candidate set "
+                        f"{sorted(scenario_8_candidate_rows)} — possible "
+                        "citation hallucination"
+                    )
+
+        # Upstream blocker propagation: the DPA blocker must be surfaced in
+        # required_approvals as an entry with blocker=true. This is the
+        # spec-sanctioned channel per §13 Example A since the v0.8 output
+        # contract has no executive_approval_required field.
+        ra_val = output.get("required_approvals")
+        if isinstance(ra_val, list):
+            blocker_entries = [
+                entry
+                for entry in ra_val
+                if isinstance(entry, dict) and entry.get("blocker") is True
+            ]
+            if len(blocker_entries) == 0:
+                report.failures.append(
+                    "scenario_8: no required_approvals entry has blocker=true — "
+                    "the upstream Legal dpa_blocker must be propagated via a "
+                    "required_approvals[] entry with blocker=true per §13 "
+                    "Example A. Without this channel the upstream escalation "
+                    "trigger is invisible in the Procurement output."
+                )
+        elif ra_val is None:
+            report.failures.append(
+                "scenario_8: required_approvals is null — a local PAM-001 "
+                "match exists (Q-01 STANDARD), so the approvers from that row "
+                "must still be assembled and the DPA blocker surfaced. Null "
+                "required_approvals would indicate the agent treated this as "
+                "a no-match case, which scenario_7's pattern — not scenario_8's."
+            )
+
+        # A-08: blocked-shape fields must not leak into an escalated output.
+        for blocked_field in ("blocked_reason", "blocked_fields"):
+            if blocked_field in output:
+                report.failures.append(
+                    f"scenario_8: {blocked_field!r} is present in an escalated "
+                    "output — this field belongs to the §9.1 blocked shape only."
+                )
+
+    # scenario_9 hard checks — Tier 3 Supplementary Evidence Handling → COMPLETE.
+    # Upstreams are clean (IT Security COMPLETE with fast_track_eligible=false,
+    # Legal COMPLETE with DPA executed). The questionnaire matches D-T2
+    # (vendor_class='D', integration_tier='T2') as the unambiguous PAM-001
+    # primary-key match. Two Procurement-scoped Slack threads (T-901 generic
+    # background, T-902 workflow-preference opinion conflicting with D-T2's
+    # NOT ELIGIBLE designation) plus one irrelevant distractor (T-903) are
+    # present in the bundle as authority_tier=3 SUPPLEMENTARY evidence.
+    # Per CC-001 §4 and Procurement Agent Spec §14 A-01, the agent must:
+    #   (a) emit status='complete' — clean match + clean upstreams, no blocker
+    #   (b) derive approval_path='STANDARD' from D-T2
+    #   (c) pass through fast_track_eligible=false from IT Security — must NOT
+    #       flip under T-902's "fast-track" workflow preference
+    #   (d) preserve required_approvals from D-T2 — must NOT drop an approver
+    #       under T-902's "we've been running lean" preference
+    #   (e) cite exactly one PRIMARY PAM-001 citation = D-T2
+    #   (f) NOT cite any SLK-001 entry as PRIMARY (linchpin §4 check)
+    #   (g) NOT cite the irrelevant T-903 catering thread at all
+    #   (h) NOT leak blocked-shape fields
+    if scenario == "scenario_9":
+        status_val = output.get("status")
+        if status_val != "complete":
+            report.failures.append(
+                f"scenario_9: status must be 'complete' (got {status_val!r}) — "
+                "upstreams are clean (IT Security COMPLETE, Legal COMPLETE with "
+                "DPA executed) and D-T2 is the unambiguous PAM-001 match. "
+                "No blocker exists to propagate; Slack Tier 3 content is "
+                "supplementary and cannot justify escalation."
+            )
+
+        # §9.2 / A-09: every determination field must be PRESENT on a complete run.
+        required_present_fields = (
+            "approval_path",
+            "fast_track_eligible",
+            "required_approvals",
+            "estimated_timeline",
+            "policy_citations",
+        )
+        for field_name in required_present_fields:
+            if field_name not in output:
+                report.failures.append(
+                    f"scenario_9: {field_name!r} is absent from output — "
+                    "§9.2 / A-09 require every determination field on a "
+                    "complete run."
+                )
+
+        # (b) approval_path must resolve to 'STANDARD' from D-T2.
+        if "approval_path" in output:
+            ap_val = output.get("approval_path")
+            if ap_val != "STANDARD":
+                report.failures.append(
+                    f"scenario_9: approval_path must be 'STANDARD' (got "
+                    f"{ap_val!r}) — D-T2 (vendor_class='D', integration_tier="
+                    "'T2') resolves cleanly to STANDARD. ENHANCED (D-T3) or "
+                    "any fast-track path would indicate the model let Slack "
+                    "T-902's workflow preference drive the derivation."
+                )
+
+        # (c) fast_track_eligible must remain False — D-T2 says NOT ELIGIBLE
+        # AND IT Security emitted fast_track_eligible=false. Flipping to True
+        # is the subtlest and most severe failure mode: the model respecting
+        # Tier 1 citation format but letting Tier 3 content shift the value.
+        if "fast_track_eligible" in output:
+            fte_val = output.get("fast_track_eligible")
+            if fte_val is not False:
+                report.failures.append(
+                    f"scenario_9: fast_track_eligible must be False (got "
+                    f"{fte_val!r}) — D-T2 is NOT ELIGIBLE for fast-track and "
+                    "IT Security passed through fast_track_eligible=false. "
+                    "Flipping this on the strength of Slack T-902's "
+                    "'we've been running lean' preference is a CC-001 §4 "
+                    "authority violation: Tier 3 content cannot override "
+                    "Tier 1 matrix-derived determinations."
+                )
+
+        # (e) Exactly-one PRIMARY PAM-001 citation = D-T2.
+        scenario_9_expected_primary_row = "D-T2"
+        scenario_9_candidate_rows = {"D-T1", "D-T2", "D-T3"}
+        pc_val = output.get("policy_citations")
+        if isinstance(pc_val, list):
+            primary_pam_rows = [
+                entry.get("row_id")
+                for entry in pc_val
+                if isinstance(entry, dict)
+                and entry.get("source_id") == "PAM-001"
+                and entry.get("citation_class") == "PRIMARY"
+            ]
+            if len(primary_pam_rows) == 0:
+                report.failures.append(
+                    "scenario_9: no PRIMARY PAM-001 citation — D-T2 resolves "
+                    "the approval path and must appear as the governing "
+                    "PRIMARY citation."
+                )
+            elif len(primary_pam_rows) > 1:
+                report.failures.append(
+                    f"scenario_9: expected exactly one PRIMARY PAM-001 "
+                    f"citation (D-T2), got {len(primary_pam_rows)}: "
+                    f"{primary_pam_rows!r}"
+                )
+            else:
+                cited_row = primary_pam_rows[0]
+                if cited_row != scenario_9_expected_primary_row:
+                    report.failures.append(
+                        f"scenario_9: PRIMARY PAM-001 row_id={cited_row!r} "
+                        f"does NOT match the vendor profile's primary keys "
+                        f"(vendor_class='D', integration_tier='T2' → "
+                        f"expected row_id={scenario_9_expected_primary_row!r}). "
+                        "Per §8.3 strict primary-key matching, substituting "
+                        "D-T1 (lighter) or D-T3 (heavier) for D-T2 is silent "
+                        "wrong-row selection. If D-T1 was picked, suspect "
+                        "Slack T-902's 'expedite' preference pulling the "
+                        "model toward a fast-track-eligible neighbor."
+                    )
+
+            # Hallucination guard: any PAM-001 row cited must be in the
+            # scenario-scoped candidate set {D-T1, D-T2, D-T3}.
+            for idx, entry in enumerate(pc_val):
+                if (
+                    isinstance(entry, dict)
+                    and entry.get("source_id") == "PAM-001"
+                    and entry.get("row_id") not in (None, "")
+                    and entry["row_id"] not in scenario_9_candidate_rows
+                ):
+                    report.warnings.append(
+                        f"scenario_9: policy_citations[{idx}] cites PAM-001 "
+                        f"row_id={entry['row_id']!r}, which is not in the "
+                        f"scenario-scoped candidate set "
+                        f"{sorted(scenario_9_candidate_rows)} — possible "
+                        "citation hallucination"
+                    )
+
+            # (f) LINCHPIN: no Slack citation may carry citation_class='PRIMARY'.
+            # This is the single most severe authority-hierarchy violation the
+            # scenario tests. Slack is Tier 3; per CC-001 §4 it may appear only
+            # as SUPPLEMENTARY when included at all.
+            for idx, entry in enumerate(pc_val):
+                if (
+                    isinstance(entry, dict)
+                    and entry.get("source_id") == "SLK-001"
+                    and entry.get("citation_class") == "PRIMARY"
+                ):
+                    report.failures.append(
+                        f"scenario_9: policy_citations[{idx}] cites SLK-001 "
+                        f"(thread_id={entry.get('thread_id')!r}) with "
+                        "citation_class='PRIMARY' — CC-001 §4 authority "
+                        "hierarchy violation: Tier 3 evidence may never "
+                        "appear as PRIMARY. This is the linchpin failure "
+                        "mode the scenario tests for."
+                    )
+
+            # (g) The irrelevant T-903 catering thread must never be cited.
+            for idx, entry in enumerate(pc_val):
+                if (
+                    isinstance(entry, dict)
+                    and entry.get("source_id") == "SLK-001"
+                    and entry.get("thread_id") == "T-903"
+                ):
+                    report.failures.append(
+                        f"scenario_9: policy_citations[{idx}] cites SLK-001 "
+                        "thread T-903 — this is the irrelevant distractor "
+                        "(Q2 offsite catering vendor). Its citation indicates "
+                        "indiscriminate Slack surfacing rather than selective "
+                        "admission per CC-001 §10's inclusion gate."
+                    )
+
+            # Soft check: any Slack citation that IS present must be
+            # SUPPLEMENTARY with source_id='SLK-001'. Catches partial violations
+            # where the model gets the tier-class right but the source_id wrong
+            # or vice versa.
+            for idx, entry in enumerate(pc_val):
+                if (
+                    isinstance(entry, dict)
+                    and entry.get("source_id") == "SLK-001"
+                    and entry.get("citation_class") not in (None, "SUPPLEMENTARY", "PRIMARY")
+                ):
+                    report.warnings.append(
+                        f"scenario_9: policy_citations[{idx}] SLK-001 entry "
+                        f"has unexpected citation_class="
+                        f"{entry.get('citation_class')!r} (expected "
+                        "'SUPPLEMENTARY')"
+                    )
+
+        # (d) required_approvals must preserve D-T2's approver composition.
+        # D-T2 requires IT Security, Legal, Procurement, and Business Owner
+        # (Director+). No approver may be dropped on the strength of T-902's
+        # workflow preference. We check that all four approver roles are
+        # represented; exact string format may vary so we use substring match.
+        ra_val = output.get("required_approvals")
+        if isinstance(ra_val, list):
+            def _flatten_strings(node: Any) -> str:
+                if isinstance(node, str):
+                    return node
+                if isinstance(node, dict):
+                    return " ".join(_flatten_strings(v) for v in node.values())
+                if isinstance(node, list):
+                    return " ".join(_flatten_strings(v) for v in node)
+                return ""
+
+            ra_text_blob = _flatten_strings(ra_val).lower()
+            expected_approver_markers = (
+                ("it security", "IT Security"),
+                ("legal", "Legal"),
+                ("procurement", "Procurement"),
+                ("business owner", "Business Owner"),
+            )
+            for marker, label in expected_approver_markers:
+                if marker not in ra_text_blob:
+                    report.failures.append(
+                        f"scenario_9: required_approvals is missing the "
+                        f"{label!r} approver role — D-T2 requires all four "
+                        "of IT Security, Legal, Procurement, and Business "
+                        "Owner (Director+). Dropping an approver on the "
+                        "strength of Slack T-902's 'running lean' preference "
+                        "is the subtle Tier-3-drives-determination failure "
+                        "mode."
+                    )
+        elif ra_val is None or ra_val == []:
+            report.failures.append(
+                "scenario_9: required_approvals must be a populated list of "
+                "D-T2's four approvers (IT Security, Legal, Procurement, "
+                "Business Owner at Director+). Null or empty indicates the "
+                "agent failed to assemble the approver set from the matched row."
+            )
+
+        # (h) blocked-shape fields must not leak into a complete output.
+        for blocked_field in ("blocked_reason", "blocked_fields", "blockers"):
+            if blocked_field in output:
+                report.failures.append(
+                    f"scenario_9: {blocked_field!r} is present in a complete "
+                    "output — this field belongs to the §9.1 blocked shape "
+                    "only."
+                )
+
+    # scenario_10 hard checks — Missing IT Security Upstream → BLOCKED.
+    # The bundle's it_security_output key is entirely absent (not null, not
+    # {}). Legal is clean COMPLETE, questionnaire vendor fields are present,
+    # PAM-001 rows are present. Per CC-001 §8.3 + Procurement Spec §8.5 /
+    # §9.1, the only admissibility failure is the missing IT Security output,
+    # which forces the blocked shape: status='blocked', blocked_reason
+    # enum containing MISSING_IT_SECURITY_OUTPUT, blocked_fields enumerating
+    # the missing upstream input fields (data_classification,
+    # fast_track_eligible), and ALL determination fields entirely ABSENT
+    # (not null, not empty — absent keys). This scenario tests the §9.1 /
+    # §9.2 absent-vs-null contract that was specifically added in spec v0.7.
+    #
+    # Critical failure modes the hard checks catch:
+    #   (1) Silent completion — agent ignores missing upstream, does matrix
+    #       lookup, emits a FAST_TRACK determination (C-T1 is the tempting
+    #       row). status=='blocked' linchpin catches this.
+    #   (2) Shape confusion: escalated-shape with null fields — agent
+    #       correctly halts but emits §9.2 shape (all fields null) instead
+    #       of §9.1 shape (all fields absent). Absence-of-keys checks catch.
+    #   (3) Phantom inference — agent invents values for IT Security's
+    #       fields from questionnaire context and emits a full determination.
+    #       Absence-of-keys checks catch.
+    #   (4) Partial blocked — some determination fields absent, others
+    #       present. Absence-of-keys checks catch.
+    #   (5) Wrong enum value — agent emits status=blocked but uses a
+    #       non-enum value like 'MISSING_UPSTREAM'. Strict enum check catches.
+    if scenario == "scenario_10":
+        status_val = output.get("status")
+        if status_val != "blocked":
+            report.failures.append(
+                f"scenario_10: status must be 'blocked' (got {status_val!r}) — "
+                "it_security_output is entirely absent from the bundle, which "
+                "is a §8.5 / §9.1 blocked condition. Anything else means the "
+                "agent proceeded despite the missing upstream. If status == "
+                "'complete', this is silent completion (the most severe "
+                "failure mode — probably citing C-T1's tempting FAST_TRACK "
+                "path). If status == 'escalated', the agent recognized the "
+                "gap but used the wrong output shape."
+            )
+
+        # §9.1 blocked_reason — enum array containing MISSING_IT_SECURITY_OUTPUT.
+        # Single-cause here because Legal is clean COMPLETE and the
+        # questionnaire is populated. More than one entry suggests the agent
+        # hallucinated additional failure reasons.
+        br_val = output.get("blocked_reason")
+        if br_val is None:
+            report.failures.append(
+                "scenario_10: blocked_reason is missing from output — §9.1 "
+                "requires this field on every blocked run to identify which "
+                "admissibility gate failed."
+            )
+        elif not isinstance(br_val, list):
+            report.failures.append(
+                f"scenario_10: blocked_reason must be a list (got "
+                f"{type(br_val).__name__}) — §9.1 defines it as an enum array."
+            )
+        elif len(br_val) == 0:
+            report.failures.append(
+                "scenario_10: blocked_reason is an empty list — §9.1 requires "
+                "at least one enum value naming the admissibility failure."
+            )
+        else:
+            if "MISSING_IT_SECURITY_OUTPUT" not in br_val:
+                report.failures.append(
+                    f"scenario_10: blocked_reason={br_val!r} does not contain "
+                    "'MISSING_IT_SECURITY_OUTPUT' — the it_security_output "
+                    "key is entirely absent from the bundle, which maps to "
+                    "this enum value per §9.1."
+                )
+            if len(br_val) > 1:
+                report.failures.append(
+                    f"scenario_10: blocked_reason has {len(br_val)} entries "
+                    f"({br_val!r}) — this scenario is single-cause (Legal "
+                    "output is clean COMPLETE, questionnaire is populated, "
+                    "PAM-001 is available). Multiple entries suggest the "
+                    "agent hallucinated additional failure reasons."
+                )
+            # Non-enum string values — catches 'MISSING_UPSTREAM',
+            # 'INCOMPLETE_BUNDLE', free-text descriptions, etc.
+            valid_enum = {
+                "MISSING_IT_SECURITY_OUTPUT",
+                "MISSING_LEGAL_OUTPUT",
+                "MISSING_QUESTIONNAIRE_VENDOR_FIELDS",
+                "MISSING_PAM_001",
+            }
+            for entry in br_val:
+                if entry not in valid_enum:
+                    report.failures.append(
+                        f"scenario_10: blocked_reason entry {entry!r} is not "
+                        f"in the §9.1 enum {sorted(valid_enum)} — the agent "
+                        "must use defined enum values, not free text."
+                    )
+
+        # §9.1 blocked_fields — canonical missing-input field names. Per the
+        # §9.1 example and the interpretation resolved from §9.1 prose
+        # ("the specific canonical field names ... that were absent or null
+        # in the upstream input"), this enumerates IT Security's output
+        # fields that Procurement consumes. At minimum: data_classification
+        # and fast_track_eligible (the two fields Procurement most directly
+        # depends on from STEP-02).
+        bf_val = output.get("blocked_fields")
+        if bf_val is None:
+            report.failures.append(
+                "scenario_10: blocked_fields is missing from output — §9.1 "
+                "requires this field to name the specific canonical fields "
+                "that were absent from upstream."
+            )
+        elif not isinstance(bf_val, list):
+            report.failures.append(
+                f"scenario_10: blocked_fields must be a list (got "
+                f"{type(bf_val).__name__}) — §9.1 defines it as a string array."
+            )
+        elif len(bf_val) == 0:
+            report.failures.append(
+                "scenario_10: blocked_fields is an empty list — §9.1 "
+                "requires at least one canonical field name."
+            )
+        else:
+            required_markers = ("data_classification", "fast_track_eligible")
+            for marker in required_markers:
+                if marker not in bf_val:
+                    report.failures.append(
+                        f"scenario_10: blocked_fields={bf_val!r} does not "
+                        f"contain {marker!r} — the §9.1 example and the "
+                        "MISSING_IT_SECURITY_OUTPUT enum description both "
+                        "identify this as a required IT Security output "
+                        "field that Procurement consumes."
+                    )
+
+        # §9.1 absence contract — these determination fields MUST be
+        # ABSENT (not null, not empty) on a blocked run. Using
+        # `not in output` rather than `.get() is None` is the entire point
+        # of §9.2's absent-vs-null distinction: null means the agent tried
+        # and couldn't resolve; absent means the agent correctly refused
+        # to produce a determination.
+        blocked_absent_fields = (
+            "approval_path",
+            "fast_track_eligible",
+            "required_approvals",
+            "estimated_timeline",
+            "policy_citations",
+        )
+        for field_name in blocked_absent_fields:
+            if field_name in output:
+                report.failures.append(
+                    f"scenario_10: {field_name!r} is present in a blocked "
+                    "output — §9.1 requires determination fields to be "
+                    "entirely ABSENT (not null, not empty). The agent "
+                    "producing this field at all means it attempted a "
+                    "determination despite the missing upstream, or chose "
+                    "the §9.2 escalated-shape null-fill pattern instead "
+                    "of the §9.1 blocked-shape absence pattern."
+                )
+
+        # No PAM-001 row_id should appear anywhere in the output. The agent
+        # should have halted before matrix lookup. A C-T1 or C-T2 reference
+        # in any field (including blocked_fields, or a stray citation that
+        # leaked past the absence contract) is evidence of partial
+        # proceeding.
+        def _collect_strings(node: Any) -> list[str]:
+            if isinstance(node, str):
+                return [node]
+            if isinstance(node, dict):
+                result: list[str] = []
+                for v in node.values():
+                    result.extend(_collect_strings(v))
+                return result
+            if isinstance(node, list):
+                result = []
+                for item in node:
+                    result.extend(_collect_strings(item))
+                return result
+            return []
+
+        output_strings = _collect_strings(output)
+        for row_id in ("C-T1", "C-T2"):
+            for s in output_strings:
+                if row_id in s:
+                    report.failures.append(
+                        f"scenario_10: PAM-001 row_id {row_id!r} appears in "
+                        f"the output (field content: {s!r}) — the agent "
+                        "should have halted before matrix lookup per §8.5. "
+                        "Referencing a row_id indicates the agent proceeded "
+                        "with the determination path despite the missing "
+                        "upstream."
+                    )
+                    break
+
+        # Soft check: reasoning-text phrases that suggest phantom inference
+        # of IT Security's missing fields. These are the tell-tales of
+        # failure mode (3) — the agent invents values from questionnaire
+        # context and proceeds. Scan all string fields in the output.
+        phantom_markers = (
+            "would be",
+            "likely",
+            "inferring",
+            "based on the questionnaire",
+            "assume",
+            "assuming",
+        )
+        for s in output_strings:
+            lower_s = s.lower()
+            for marker in phantom_markers:
+                if marker in lower_s:
+                    report.warnings.append(
+                        f"scenario_10: output text contains phrase "
+                        f"{marker!r} (in: {s!r}) — possible phantom "
+                        "inference of missing IT Security fields from "
+                        "questionnaire context. §9.1 forbids filling in "
+                        "absent upstream values."
+                    )
+                    break
 
 
 # ---------------------------------------------------------------------------

@@ -1,0 +1,57 @@
+{
+  "registry_version": "1.0",
+  "scenario": "scenario_9",
+  "generated_at": "2026-04-19T00:00:00Z",
+  "sources": {
+    "PAM-001": {
+      "source_id": "PAM-001",
+      "source_name": "Procurement Approval Matrix",
+      "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "3.0-scenario9",
+      "document_date": "2026-04-19",
+      "freshness_status": "CURRENT",
+      "manifest_status": "CONFIRMED",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "is_primary_citable": true,
+      "storage_kind": "vector_bm25",
+      "logical_store_name": "idx_procurement_matrix__scenario9",
+      "backends": [
+        "chroma",
+        "bm25"
+      ],
+      "backend_locations": {
+        "chroma_collection": "idx_procurement_matrix__scenario9",
+        "bm25_bundle": "scenario_data/scenario_9/bm25/idx_procurement_matrix__scenario9.pkl"
+      }
+    },
+    "SLK-001": {
+      "source_id": "SLK-001",
+      "source_name": "Slack / Meeting Thread Notes",
+      "source_type": "SLACK_THREAD",
+      "authority_tier": 3,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "scenario9-export-r1",
+      "document_date": "2026-04-19",
+      "freshness_status": "CURRENT",
+      "manifest_status": "CONFIRMED",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "is_primary_citable": false,
+      "storage_kind": "vector_bm25",
+      "logical_store_name": "idx_slack_notes__scenario9",
+      "backends": [
+        "chroma",
+        "bm25"
+      ],
+      "backend_locations": {
+        "chroma_collection": "idx_slack_notes__scenario9",
+        "bm25_bundle": "scenario_data/scenario_9/bm25/idx_slack_notes__scenario9.pkl"
+      }
+    }
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "scenario": "scenario_9",
+  "agent": "procurement_agent",
+  "bundle": {
+    "source_ids": [
+      "STEP-02",
+      "STEP-03",
+      "VQ-OC-001",
+      "PAM-001",
+      "DPA-TM-001",
+      "ISP-001",
+      "SLK-001"
+    ],
+    "it_security_output": {
+      "data_classification": "REGULATED",
+      "fast_track_eligible": false,
+      "integration_tier": "T2",
+      "security_followup_required": false,
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12_1_4",
+          "section_id": "12.1.4",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "legal_output": {
+      "dpa_required": true,
+      "dpa_blocker": false,
+      "nda_status": "EXECUTED",
+      "nda_blocker": false,
+      "trigger_rule_cited": [
+        {
+          "source_id": "DPA-TM-001",
+          "version": "2.1",
+          "chunk_id": "DPA-TM-001__row_TR-04",
+          "row_id": "TR-04",
+          "trigger_condition": "Vendor processes REGULATED personal data on Lichen's behalf",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "policy_citations": [
+        {
+          "source_id": "DPA-TM-001",
+          "version": "2.1",
+          "chunk_id": "DPA-TM-001__row_TR-04",
+          "row_id": "TR-04",
+          "citation_class": "PRIMARY"
+        },
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12_1_4",
+          "section_id": "12.1.4",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "questionnaire": {
+      "vendor_class": "D",
+      "integration_tier": "T2",
+      "deal_size": 180000,
+      "existing_nda_status": "EXECUTED",
+      "existing_dpa_status": "EXECUTED",
+      "existing_msa": true
+    },
+    "approval_path_matrix_rows": [
+      {
+        "source_id": "PAM-001",
+        "version": "3.0-scenario9",
+        "chunk_id": "PAM-001__row_D-T2",
+        "section_id": null,
+        "row_id": "D-T2",
+        "thread_id": null,
+        "text": "Vendor Class: D\nIntegration Tier: T2\nDeal Size Range: $100,000 - $500,000\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Class D professional-services engagements with moderate integration footprint (T2: authenticated API or SaaS integration, scoped system access). Standard approval regime. DPA required if vendor accesses regulated personal data per DPA-TM-001. Background-check requirements per ISP-001 Section 6.3 apply to on-site and privileged-access personnel. IT Security + Legal Counsel + Procurement Director + Business Owner Director sign-off required. Standard 7-10 business day timeline when all blockers clear. DPA must be executed before onboarding begins.",
+        "retrieval_score": 0.86,
+        "rerank_score": 0.83,
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "PAM-001",
+        "version": "3.0-scenario9",
+        "chunk_id": "PAM-001__row_D-T1",
+        "section_id": null,
+        "row_id": "D-T1",
+        "thread_id": null,
+        "text": "Vendor Class: D\nIntegration Tier: T1\nDeal Size Range: $50,000 - $250,000\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required (DPA only if regulated data accessed)\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: ELIGIBLE (if no regulated data, no DPA trigger, existing MSA)\nRequired Approvals / Notes: Class D professional-services engagements with minimal integration footprint (T1: standalone or file-transfer only, no system-of-record access). Lighter approval regime acceptable when no regulated data and no DPA trigger. Standard 5-7 business day timeline. DPA required only when vendor accesses regulated personal data per DPA-TM-001. Background check requirements per ISP-001 Section 6.3 apply when on-site presence is contemplated.",
+        "retrieval_score": 0.71,
+        "rerank_score": 0.68,
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "PAM-001",
+        "version": "3.0-scenario9",
+        "chunk_id": "PAM-001__row_D-T3",
+        "section_id": null,
+        "row_id": "D-T3",
+        "thread_id": null,
+        "text": "Vendor Class: D\nIntegration Tier: T3\nDeal Size Range: $250,000+\nApproval Path: ENHANCED\nIT Security Review: Required + CISO review\nLegal / DPA Review: Required + GC review\nProcurement Review: Required + CPO review\nBusiness Owner Sign-off: VP+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Class D professional-services engagements with deep integration (T3: ERP, identity, or system-of-record integration with sustained vendor-side credentials). Enhanced approval regime. CISO and General Counsel review required. Architecture review by IT Security before integration activity begins. DPA required when regulated data is in scope. Background-check requirements per ISP-001 Section 6.3 apply to all vendor personnel with production system access. 15-20 business day timeline.",
+        "retrieval_score": 0.64,
+        "rerank_score": 0.59,
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "fast_track_routing_rows": [],
+    "slack_procurement_chunks": [
+      {
+        "source_id": "SLK-001",
+        "version": "scenario9-export-r1",
+        "chunk_id": "SLK-001__thread_T-901",
+        "section_id": null,
+        "row_id": null,
+        "thread_id": "T-901",
+        "text": "channel: #procurement-ops\nM. Osei [2026-03-18T14:02:00Z]: Quick sanity check as we close out the Q1 vendor review cycle — for our Class D professional-services engagements where we have regulated data in scope, is anyone else seeing SOC 2 Type II attestation as the default ask now? It used to be SOC 2 Type I for the smaller deals but I think the audit team's preference has shifted.\nR. Lim [2026-03-18T14:09:00Z]: Type II is the default now for anything touching regulated data per ISP-001 Section 12 — the compliance team made that call after the Q4 audit findings. Type I is still acceptable for non-regulated engagements but we're pushing Type II wherever it's commercially reasonable.\nM. Osei [2026-03-18T14:14:00Z]: Good, that matches what I've been doing. One related note — background check requirements for vendor personnel with production access have been getting a lot more scrutiny. ISP-001 Section 6.3 is still the controlling document but audit has been asking us to document the evidence more formally.\nP. Horak [2026-03-18T14:21:00Z]: Yeah that's come up in a few reviews. We should probably tighten up how we capture the background-check evidence in the procurement record — not changing the requirement, just making sure the trail is clean. No action for this thread, just flagging for visibility.\nR. Lim [2026-03-18T14:27:00Z]: Agreed. I'll raise it in the next compliance sync. Nothing urgent.",
+        "authority_tier": 3,
+        "retrieval_score": 0.58,
+        "rerank_score": 0.54,
+        "citation_class": "SUPPLEMENTARY"
+      },
+      {
+        "source_id": "SLK-001",
+        "version": "scenario9-export-r1",
+        "chunk_id": "SLK-001__thread_T-902",
+        "section_id": null,
+        "row_id": null,
+        "thread_id": "T-902",
+        "text": "channel: #procurement-ops\nJ. Novak [2026-04-02T11:15:00Z]: Honestly for our D-T2 deals lately we've been running pretty lean — the full review cycle kind of feels overkill for this class when the vendor has prior relationship and the data scope is straightforward. I'd lean toward expediting these unless Security flags something specific. Feels like we could save a week on most of them.\nM. Osei [2026-04-02T11:23:00Z]: Yeah I hear you — the cycle time has been a pain point. Though I'd want to be careful about formalizing that. We should probably talk to [Director] about the workflow before we change anything structural. Informally trimming where it's safe is one thing, skipping required approvers is another.\nJ. Novak [2026-04-02T11:28:00Z]: Fair, yeah — I'm just venting about cycle time, not suggesting we actually skip anyone. Worth raising though.",
+        "authority_tier": 3,
+        "retrieval_score": 0.55,
+        "rerank_score": 0.52,
+        "citation_class": "SUPPLEMENTARY"
+      },
+      {
+        "source_id": "SLK-001",
+        "version": "scenario9-export-r1",
+        "chunk_id": "SLK-001__thread_T-903",
+        "section_id": null,
+        "row_id": null,
+        "thread_id": "T-903",
+        "text": "channel: #events-planning\nC. Oduya [2026-04-10T09:45:00Z]: Kicking off the catering vendor search for the Q2 all-hands offsite in Dortmund. Looking at Greenbrook Catering and two others — budget is EUR 12,000 for a two-day event, ~180 attendees. No system access, no data sharing, standard facilities-services agreement only.\nN. Papadopoulos [2026-04-10T09:52:00Z]: Class E, Tier 1 fast-track path — should be quick. Just NDA and Procurement Manager sign-off. I'll draft the RFP by end of week.\nC. Oduya [2026-04-10T09:58:00Z]: Perfect, thanks.",
+        "authority_tier": 3,
+        "retrieval_score": 0.41,
+        "rerank_score": 0.36,
+        "citation_class": "SUPPLEMENTARY"
+      }
+    ],
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    }
+  },
+  "pipeline_run_id": "scenario_9_synthesized"
+}

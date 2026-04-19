@@ -1,0 +1,52 @@
+{
+  "agent_name": "procurement_agent",
+  "scenario": "scenario_8",
+  "pipeline_run_id": "scenario_8_synthesized",
+  "run_number": 1,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260419T155722Z",
+  "system_prompt_path": "agent_spec_docs/Procurement_Agent_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_04_scenario_8.json",
+  "raw_text": "```json\n{\n  \"approval_path\": \"STANDARD\",\n  \"fast_track_eligible\": false,\n  \"required_approvals\": [\n    {\n      \"approver\": \"Procurement Director\",\n      \"domain\": \"Procurement\",\n      \"status\": \"PENDING\",\n      \"blocker\": false,\n      \"estimated_completion\": \"5 business days\"\n    },\n    {\n      \"approver\": \"Legal Counsel\",\n      \"domain\": \"Legal\",\n      \"status\": \"PENDING\",\n      \"blocker\": true,\n      \"estimated_completion\": \"pending DPA execution\"\n    },\n    {\n      \"approver\": \"Business Owner (Director+)\",\n      \"domain\": \"Business\",\n      \"status\": \"PENDING\",\n      \"blocker\": false,\n      \"estimated_completion\": \"3 business days\"\n    }\n  ],\n  \"estimated_timeline\": \"7-10 business days (pending DPA execution blocker resolution)\",\n  \"policy_citations\": [\n    {\n      \"source_id\": \"PAM-001\",\n      \"version\": \"3.0-scenario8\",\n      \"chunk_id\": \"PAM-001__row_Q-01\",\n      \"row_id\": \"Q-01\",\n      \"approval_path_condition\": \"Vendor Class TIER_2, Integration Tier TIER_2_SAAS, Deal Size $100,000\u2013$500,000, REGULATED data scope\",\n      \"citation_class\": \"PRIMARY\"\n    }\n  ],\n  \"status\": \"escalated\"\n}\n```",
+  "parsed_output": {
+    "approval_path": "STANDARD",
+    "fast_track_eligible": false,
+    "required_approvals": [
+      {
+        "approver": "Procurement Director",
+        "domain": "Procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "5 business days"
+      },
+      {
+        "approver": "Legal Counsel",
+        "domain": "Legal",
+        "status": "PENDING",
+        "blocker": true,
+        "estimated_completion": "pending DPA execution"
+      },
+      {
+        "approver": "Business Owner (Director+)",
+        "domain": "Business",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3 business days"
+      }
+    ],
+    "estimated_timeline": "7-10 business days (pending DPA execution blocker resolution)",
+    "policy_citations": [
+      {
+        "source_id": "PAM-001",
+        "version": "3.0-scenario8",
+        "chunk_id": "PAM-001__row_Q-01",
+        "row_id": "Q-01",
+        "approval_path_condition": "Vendor Class TIER_2, Integration Tier TIER_2_SAAS, Deal Size $100,000\u2013$500,000, REGULATED data scope",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "escalated"
+  },
+  "error": null
+}

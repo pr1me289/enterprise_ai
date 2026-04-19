@@ -1,0 +1,77 @@
+[
+  {
+    "chunk_id": "SLK-001__thread_T-901",
+    "source_id": "SLK-001",
+    "source_name": "Slack / Meeting Thread Notes",
+    "source_type": "SLACK_THREAD",
+    "version": "scenario9-export-r1",
+    "document_date": "2026-04-19",
+    "freshness_status": "CURRENT",
+    "authority_tier": 3,
+    "retrieval_lane": "INDEXED_HYBRID",
+    "allowed_agents": [
+      "procurement"
+    ],
+    "is_primary_citable": false,
+    "manifest_status": "CONFIRMED",
+    "chunk_type": "THREAD",
+    "chunk_order": 1,
+    "citation_label": "SLK-001 thread T-901",
+    "text": "channel: #procurement-ops\nM. Osei [2026-03-18T14:02:00Z]: Quick sanity check as we close out the Q1 vendor review cycle — for our Class D professional-services engagements where we have regulated data in scope, is anyone else seeing SOC 2 Type II attestation as the default ask now? It used to be SOC 2 Type I for the smaller deals but I think the audit team's preference has shifted.\nR. Lim [2026-03-18T14:09:00Z]: Type II is the default now for anything touching regulated data per ISP-001 Section 12 — the compliance team made that call after the Q4 audit findings. Type I is still acceptable for non-regulated engagements but we're pushing Type II wherever it's commercially reasonable.\nM. Osei [2026-03-18T14:14:00Z]: Good, that matches what I've been doing. One related note — background check requirements for vendor personnel with production access have been getting a lot more scrutiny. ISP-001 Section 6.3 is still the controlling document but audit has been asking us to document the evidence more formally.\nP. Horak [2026-03-18T14:21:00Z]: Yeah that's come up in a few reviews. We should probably tighten up how we capture the background-check evidence in the procurement record — not changing the requirement, just making sure the trail is clean. No action for this thread, just flagging for visibility.\nR. Lim [2026-03-18T14:27:00Z]: Agreed. I'll raise it in the next compliance sync. Nothing urgent.",
+    "section_id": null,
+    "row_id": null,
+    "record_id": null,
+    "thread_id": "T-901",
+    "domain_scope": null
+  },
+  {
+    "chunk_id": "SLK-001__thread_T-902",
+    "source_id": "SLK-001",
+    "source_name": "Slack / Meeting Thread Notes",
+    "source_type": "SLACK_THREAD",
+    "version": "scenario9-export-r1",
+    "document_date": "2026-04-19",
+    "freshness_status": "CURRENT",
+    "authority_tier": 3,
+    "retrieval_lane": "INDEXED_HYBRID",
+    "allowed_agents": [
+      "procurement"
+    ],
+    "is_primary_citable": false,
+    "manifest_status": "CONFIRMED",
+    "chunk_type": "THREAD",
+    "chunk_order": 2,
+    "citation_label": "SLK-001 thread T-902",
+    "text": "channel: #procurement-ops\nJ. Novak [2026-04-02T11:15:00Z]: Honestly for our D-T2 deals lately we've been running pretty lean — the full review cycle kind of feels overkill for this class when the vendor has prior relationship and the data scope is straightforward. I'd lean toward expediting these unless Security flags something specific. Feels like we could save a week on most of them.\nM. Osei [2026-04-02T11:23:00Z]: Yeah I hear you — the cycle time has been a pain point. Though I'd want to be careful about formalizing that. We should probably talk to [Director] about the workflow before we change anything structural. Informally trimming where it's safe is one thing, skipping required approvers is another.\nJ. Novak [2026-04-02T11:28:00Z]: Fair, yeah — I'm just venting about cycle time, not suggesting we actually skip anyone. Worth raising though.",
+    "section_id": null,
+    "row_id": null,
+    "record_id": null,
+    "thread_id": "T-902",
+    "domain_scope": null
+  },
+  {
+    "chunk_id": "SLK-001__thread_T-903",
+    "source_id": "SLK-001",
+    "source_name": "Slack / Meeting Thread Notes",
+    "source_type": "SLACK_THREAD",
+    "version": "scenario9-export-r1",
+    "document_date": "2026-04-19",
+    "freshness_status": "CURRENT",
+    "authority_tier": 3,
+    "retrieval_lane": "INDEXED_HYBRID",
+    "allowed_agents": [
+      "procurement"
+    ],
+    "is_primary_citable": false,
+    "manifest_status": "CONFIRMED",
+    "chunk_type": "THREAD",
+    "chunk_order": 3,
+    "citation_label": "SLK-001 thread T-903",
+    "text": "channel: #events-planning\nC. Oduya [2026-04-10T09:45:00Z]: Kicking off the catering vendor search for the Q2 all-hands offsite in Dortmund. Looking at Greenbrook Catering and two others — budget is EUR 12,000 for a two-day event, ~180 attendees. No system access, no data sharing, standard facilities-services agreement only.\nN. Papadopoulos [2026-04-10T09:52:00Z]: Class E, Tier 1 fast-track path — should be quick. Just NDA and Procurement Manager sign-off. I'll draft the RFP by end of week.\nC. Oduya [2026-04-10T09:58:00Z]: Perfect, thanks.",
+    "section_id": null,
+    "row_id": null,
+    "record_id": null,
+    "thread_id": "T-903",
+    "domain_scope": null
+  }
+]

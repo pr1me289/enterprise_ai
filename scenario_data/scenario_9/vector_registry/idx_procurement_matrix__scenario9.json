@@ -1,0 +1,92 @@
+[
+  {
+    "chunk_id": "PAM-001__row_D-T1",
+    "text": "Vendor Class: D\nIntegration Tier: T1\nDeal Size Range: $50,000 - $250,000\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required (DPA only if regulated data accessed)\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: ELIGIBLE (if no regulated data, no DPA trigger, existing MSA)\nRequired Approvals / Notes: Class D professional-services engagements with minimal integration footprint (T1: standalone or file-transfer only, no system-of-record access). Lighter approval regime acceptable when no regulated data and no DPA trigger. Standard 5-7 business day timeline. DPA required only when vendor accesses regulated personal data per DPA-TM-001. Background check requirements per ISP-001 Section 6.3 apply when on-site presence is contemplated.",
+    "metadata": {
+      "chunk_id": "PAM-001__row_D-T1",
+      "source_id": "PAM-001",
+      "source_name": "Procurement Approval Matrix",
+      "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "3.0-scenario9",
+      "document_date": "2026-04-19",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "allowed_agents_str": "|procurement|",
+      "is_primary_citable": true,
+      "manifest_status": "CONFIRMED",
+      "section_id": null,
+      "row_id": "D-T1",
+      "record_id": null,
+      "thread_id": null,
+      "domain_scope": null,
+      "text": "Vendor Class: D\nIntegration Tier: T1\nDeal Size Range: $50,000 - $250,000\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required (DPA only if regulated data accessed)\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: ELIGIBLE (if no regulated data, no DPA trigger, existing MSA)\nRequired Approvals / Notes: Class D professional-services engagements with minimal integration footprint (T1: standalone or file-transfer only, no system-of-record access). Lighter approval regime acceptable when no regulated data and no DPA trigger. Standard 5-7 business day timeline. DPA required only when vendor accesses regulated personal data per DPA-TM-001. Background check requirements per ISP-001 Section 6.3 apply when on-site presence is contemplated.",
+      "citation_label": "PAM-001 row D-T1",
+      "chunk_type": "ROW",
+      "chunk_order": 1
+    }
+  },
+  {
+    "chunk_id": "PAM-001__row_D-T2",
+    "text": "Vendor Class: D\nIntegration Tier: T2\nDeal Size Range: $100,000 - $500,000\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Class D professional-services engagements with moderate integration footprint (T2: authenticated API or SaaS integration, scoped system access). Standard approval regime. DPA required if vendor accesses regulated personal data per DPA-TM-001. Background-check requirements per ISP-001 Section 6.3 apply to on-site and privileged-access personnel. IT Security + Legal Counsel + Procurement Director + Business Owner Director sign-off required. Standard 7-10 business day timeline when all blockers clear. DPA must be executed before onboarding begins.",
+    "metadata": {
+      "chunk_id": "PAM-001__row_D-T2",
+      "source_id": "PAM-001",
+      "source_name": "Procurement Approval Matrix",
+      "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "3.0-scenario9",
+      "document_date": "2026-04-19",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "allowed_agents_str": "|procurement|",
+      "is_primary_citable": true,
+      "manifest_status": "CONFIRMED",
+      "section_id": null,
+      "row_id": "D-T2",
+      "record_id": null,
+      "thread_id": null,
+      "domain_scope": null,
+      "text": "Vendor Class: D\nIntegration Tier: T2\nDeal Size Range: $100,000 - $500,000\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Class D professional-services engagements with moderate integration footprint (T2: authenticated API or SaaS integration, scoped system access). Standard approval regime. DPA required if vendor accesses regulated personal data per DPA-TM-001. Background-check requirements per ISP-001 Section 6.3 apply to on-site and privileged-access personnel. IT Security + Legal Counsel + Procurement Director + Business Owner Director sign-off required. Standard 7-10 business day timeline when all blockers clear. DPA must be executed before onboarding begins.",
+      "citation_label": "PAM-001 row D-T2",
+      "chunk_type": "ROW",
+      "chunk_order": 2
+    }
+  },
+  {
+    "chunk_id": "PAM-001__row_D-T3",
+    "text": "Vendor Class: D\nIntegration Tier: T3\nDeal Size Range: $250,000+\nApproval Path: ENHANCED\nIT Security Review: Required + CISO review\nLegal / DPA Review: Required + GC review\nProcurement Review: Required + CPO review\nBusiness Owner Sign-off: VP+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Class D professional-services engagements with deep integration (T3: ERP, identity, or system-of-record integration with sustained vendor-side credentials). Enhanced approval regime. CISO and General Counsel review required. Architecture review by IT Security before integration activity begins. DPA required when regulated data is in scope. Background-check requirements per ISP-001 Section 6.3 apply to all vendor personnel with production system access. 15-20 business day timeline.",
+    "metadata": {
+      "chunk_id": "PAM-001__row_D-T3",
+      "source_id": "PAM-001",
+      "source_name": "Procurement Approval Matrix",
+      "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "3.0-scenario9",
+      "document_date": "2026-04-19",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "allowed_agents_str": "|procurement|",
+      "is_primary_citable": true,
+      "manifest_status": "CONFIRMED",
+      "section_id": null,
+      "row_id": "D-T3",
+      "record_id": null,
+      "thread_id": null,
+      "domain_scope": null,
+      "text": "Vendor Class: D\nIntegration Tier: T3\nDeal Size Range: $250,000+\nApproval Path: ENHANCED\nIT Security Review: Required + CISO review\nLegal / DPA Review: Required + GC review\nProcurement Review: Required + CPO review\nBusiness Owner Sign-off: VP+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Class D professional-services engagements with deep integration (T3: ERP, identity, or system-of-record integration with sustained vendor-side credentials). Enhanced approval regime. CISO and General Counsel review required. Architecture review by IT Security before integration activity begins. DPA required when regulated data is in scope. Background-check requirements per ISP-001 Section 6.3 apply to all vendor personnel with production system access. 15-20 business day timeline.",
+      "citation_label": "PAM-001 row D-T3",
+      "chunk_type": "ROW",
+      "chunk_order": 3
+    }
+  }
+]
