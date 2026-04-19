@@ -1,0 +1,69 @@
+{
+  "scenario": "scenario_7",
+  "description": "Scenario-scoped index registry for the Procurement Agent no-matching-row escalation test. Points idx_procurement_matrix retrieval at a three-row subset (A-T1, B-T1, C-T1) that leaves Classes D/E and Tiers T2-T4 uncovered so the scenario-7 questionnaire profile (Class D, integration_tier TIER_3) falls into a two-dimensional gap. Production indices are not touched.",
+  "generated_at": null,
+  "indices": [
+    {
+      "source_id": "PAM-001",
+      "source_name": "Procurement Approval Matrix (scenario 7 — no-matching-row subset)",
+      "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "3.0-scenario7",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "manifest_status": "CONFIRMED",
+      "allowed_agents": ["procurement"],
+      "is_primary_citable": true,
+      "storage_kind": "vector_bm25",
+      "logical_store_name": "idx_procurement_matrix__scenario7",
+      "backends": ["chroma", "bm25"],
+      "backend_locations": {
+        "chroma_collection": "idx_procurement_matrix__scenario7",
+        "chroma_persist_dir": "scenario_data/scenario_7/chroma/",
+        "bm25_bundle": "scenario_data/scenario_7/bm25/idx_procurement_matrix__scenario7.pkl"
+      }
+    },
+    {
+      "source_id": "ISP-001",
+      "source_name": "IT Security Policy v4.2",
+      "source_type": "POLICY_DOCUMENT",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "4.2",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "manifest_status": "CONFIRMED",
+      "allowed_agents": ["it_security", "legal", "procurement"],
+      "is_primary_citable": true,
+      "storage_kind": "vector_bm25",
+      "logical_store_name": "idx_security_policy",
+      "backends": ["chroma", "bm25"],
+      "backend_locations": {
+        "chroma_collection": "idx_security_policy",
+        "chroma_persist_dir": "data/indexes/scenario_1/chroma/",
+        "bm25_bundle": "data/bm25/scenario_1/idx_security_policy.pkl"
+      },
+      "note": "ISP-001 uses production indices — no scenario-7 variant needed. Included only so the registry is self-contained for upstream reference if needed."
+    },
+    {
+      "source_id": "VQ-OC-001",
+      "source_name": "OptiChain Vendor Questionnaire",
+      "source_type": "VENDOR_QUESTIONNAIRE",
+      "authority_tier": 2,
+      "retrieval_lane": "DIRECT_STRUCTURED",
+      "version": "Submission rev. 1",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "manifest_status": "CONFIRMED",
+      "allowed_agents": ["it_security", "legal", "procurement", "checklist_assembler", "checkoff_agent"],
+      "is_primary_citable": true,
+      "storage_kind": "structured",
+      "logical_store_name": "vq_direct_access",
+      "backends": ["json"],
+      "backend_locations": {
+        "structured_store": "data/structured/scenario_1/vq_direct_access.json"
+      }
+    }
+  ]
+}

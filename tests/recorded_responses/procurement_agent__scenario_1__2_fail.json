@@ -1,0 +1,38 @@
+{
+  "agent_name": "procurement_agent",
+  "scenario": "scenario_1",
+  "pipeline_run_id": "run_ac50900c01",
+  "run_number": 2,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260419T150955Z",
+  "system_prompt_path": "agent_spec_docs/Procurement_Agent_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_04_scenario_1.json",
+  "raw_text": "```json\n{\n  \"approval_path\": \"FAST_TRACK\",\n  \"fast_track_eligible\": true,\n  \"required_approvals\": [\n    {\n      \"approver\": \"Procurement Manager\",\n      \"domain\": \"Procurement\",\n      \"status\": \"PENDING\",\n      \"blocker\": false,\n      \"estimated_completion\": \"2 business days\"\n    }\n  ],\n  \"estimated_timeline\": \"3-5 business days\",\n  \"policy_citations\": [\n    {\n      \"source_id\": \"PAM-001\",\n      \"version\": \"3.0\",\n      \"chunk_id\": \"PAM-001__row_E-T2\",\n      \"row_id\": \"E-T2\",\n      \"approval_path_condition\": \"Class E, Tier T2, UNREGULATED data, fast-track eligible, no system access, no regulated data in scope\",\n      \"citation_class\": \"PRIMARY\"\n    }\n  ],\n  \"status\": \"complete\"\n}\n```",
+  "parsed_output": {
+    "approval_path": "FAST_TRACK",
+    "fast_track_eligible": true,
+    "required_approvals": [
+      {
+        "approver": "Procurement Manager",
+        "domain": "Procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2 business days"
+      }
+    ],
+    "estimated_timeline": "3-5 business days",
+    "policy_citations": [
+      {
+        "source_id": "PAM-001",
+        "version": "3.0",
+        "chunk_id": "PAM-001__row_E-T2",
+        "row_id": "E-T2",
+        "approval_path_condition": "Class E, Tier T2, UNREGULATED data, fast-track eligible, no system access, no regulated data in scope",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "error": null
+}

@@ -1,0 +1,52 @@
+{
+  "agent_name": "procurement_agent",
+  "scenario": "scenario_1",
+  "pipeline_run_id": "run_ac50900c01",
+  "run_number": 3,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260419T152451Z",
+  "system_prompt_path": "agent_spec_docs/Procurement_Agent_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_04_scenario_1.json",
+  "raw_text": "```json\n{\n  \"approval_path\": \"STANDARD\",\n  \"fast_track_eligible\": true,\n  \"required_approvals\": [\n    {\n      \"approver\": \"CISO\",\n      \"domain\": \"IT Security\",\n      \"status\": \"PENDING\",\n      \"blocker\": false,\n      \"estimated_completion\": \"2 business days\"\n    },\n    {\n      \"approver\": \"Director+ (Business Owner)\",\n      \"domain\": \"Business\",\n      \"status\": \"PENDING\",\n      \"blocker\": false,\n      \"estimated_completion\": \"3 business days\"\n    },\n    {\n      \"approver\": \"Procurement Manager\",\n      \"domain\": \"Procurement\",\n      \"status\": \"PENDING\",\n      \"blocker\": false,\n      \"estimated_completion\": \"2 business days\"\n    }\n  ],\n  \"estimated_timeline\": \"5-7 business days\",\n  \"policy_citations\": [\n    {\n      \"source_id\": \"PAM-001\",\n      \"version\": \"3.0\",\n      \"chunk_id\": \"PAM-001__row_A-T1\",\n      \"row_id\": \"A-T1\",\n      \"approval_path_condition\": \"Class A vendor, Tier T1 integration, STANDARD approval path\",\n      \"citation_class\": \"PRIMARY\"\n    }\n  ],\n  \"status\": \"complete\"\n}\n```",
+  "parsed_output": {
+    "approval_path": "STANDARD",
+    "fast_track_eligible": true,
+    "required_approvals": [
+      {
+        "approver": "CISO",
+        "domain": "IT Security",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2 business days"
+      },
+      {
+        "approver": "Director+ (Business Owner)",
+        "domain": "Business",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3 business days"
+      },
+      {
+        "approver": "Procurement Manager",
+        "domain": "Procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2 business days"
+      }
+    ],
+    "estimated_timeline": "5-7 business days",
+    "policy_citations": [
+      {
+        "source_id": "PAM-001",
+        "version": "3.0",
+        "chunk_id": "PAM-001__row_A-T1",
+        "row_id": "A-T1",
+        "approval_path_condition": "Class A vendor, Tier T1 integration, STANDARD approval path",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "error": null
+}

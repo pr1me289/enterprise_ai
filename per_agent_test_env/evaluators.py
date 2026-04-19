@@ -68,7 +68,7 @@ EXPECTED_STATUS: dict[tuple[str, str], str] = {
     # Pure gate-condition test — the agent must halt rather than infer through
     # the missing input.
     ("legal_agent", "scenario_4"): "blocked",
-    # scenario_5: Two DPA-TM-001 rows (A-01 and A-06) both apply to the vendor
+    # scenario_5: Two DPA-TM-001 rows (A-01 and A-07) both apply to the vendor
     # profile but produce contradictory trigger outcomes (REQUIRED vs NOT
     # REQUIRED). Per CC-001 §4.1, a Tier 1 vs Tier 1 conflict cannot be
     # auto-suppressed. Per Legal_Agent_Spec.md §8.5 ("Tier 1 DPA sources
@@ -86,6 +86,17 @@ EXPECTED_STATUS: dict[tuple[str, str], str] = {
     ("legal_agent", "scenario_6"): "escalated",
     ("procurement_agent", "scenario_1"): "complete",
     ("procurement_agent", "scenario_2"): "escalated",
+    # scenario_7: The scenario-scoped PAM-001 matrix contains only three rows
+    # (A-T1, B-T1, C-T1) and the questionnaire profile is Class D with
+    # integration_tier TIER_3 — a two-dimensional gap (no Class D row, no
+    # Tier 3 row). Upstream IT Security and Legal are both clean COMPLETE.
+    # Per Procurement Agent Spec §8.5 ("No PAM-001 row matches the
+    # vendor/deal combination" → escalated) and §9.2 Example C (escalated
+    # output with approval_path / required_approvals / estimated_timeline /
+    # policy_citations all null; fast_track_eligible passthrough from
+    # STEP-02). Tests the single highest-risk failure mode: silent path
+    # fabrication by picking the nearest row.
+    ("procurement_agent", "scenario_7"): "escalated",
     # Checklist Assembler uses overall_status, not status
     ("checklist_assembler", "scenario_1"): "COMPLETE",
     ("checklist_assembler", "scenario_2"): "ESCALATED",
@@ -134,15 +145,16 @@ def _check_general(output: Any, agent_name: str, report: EvaluationReport) -> bo
     # and hard-fail if determination fields are present.
     is_blocked = output.get("status") == "blocked"
 
-    # Escalated-output null-field allowance: Legal Agent Spec §9.2 permits
-    # null for unresolvable determination fields on escalated runs. This is
-    # specific to the Legal Agent — other agents (IT Security, Procurement)
-    # do not define a null-field escalation model. The general check skips
-    # the null-value failure for legal_agent escalated runs; the scenario-
-    # specific evaluator (e.g., scenario_5) validates exactly which fields
-    # must vs. must not be null.
-    is_legal_escalated = (
-        agent_name == "legal_agent" and output.get("status") == "escalated"
+    # Escalated-output null-field allowance: Legal Agent Spec §9.2 and
+    # Procurement Agent Spec §9.2 both permit null for unresolvable
+    # determination fields on escalated runs. IT Security does not define a
+    # null-field escalation model. The general check skips the null-value
+    # failure for legal_agent and procurement_agent escalated runs; the
+    # scenario-specific evaluator (e.g., scenario_5, scenario_7) validates
+    # exactly which fields must vs. must not be null.
+    is_escalated_null_allowed = (
+        agent_name in ("legal_agent", "procurement_agent")
+        and output.get("status") == "escalated"
     )
 
     # Required-field presence, using the call-layer contract as source of truth.
@@ -155,10 +167,11 @@ def _check_general(output: Any, agent_name: str, report: EvaluationReport) -> bo
             continue
         value = output[field_name]
         if value is None:
-            if is_legal_escalated:
-                # Legal Agent Spec §9.2 permits null for unresolvable fields
-                # on escalated runs. Scenario-specific evaluators validate
-                # which fields should vs. should not be null.
+            if is_escalated_null_allowed:
+                # Legal Agent Spec §9.2 and Procurement Agent Spec §9.2 both
+                # permit null for unresolvable fields on escalated runs.
+                # Scenario-specific evaluators validate which fields should
+                # vs. should not be null.
                 pass
             else:
                 report.failures.append(f"required field is null: {field_name!r}")
@@ -516,7 +529,7 @@ def _evaluate_legal(output: dict[str, Any], scenario: str, report: EvaluationRep
                 )
 
     # scenario_5 hard checks — Tier 1 DPA matrix conflict (A-01 REQUIRED vs
-    # A-06 NOT REQUIRED). Both rows apply to the vendor profile. Per CC-001
+    # A-07 NOT REQUIRED). Both rows apply to the vendor profile. Per CC-001
     # §4.1, a Tier 1 vs Tier 1 conflict cannot be auto-suppressed — neither
     # source may be silently dropped. Per Legal_Agent_Spec.md §8.5 ("Tier 1
     # DPA sources conflict on the same trigger question" → escalated) and §9.2
@@ -529,7 +542,7 @@ def _evaluate_legal(output: dict[str, Any], scenario: str, report: EvaluationRep
         if status_val != "escalated":
             report.failures.append(
                 f"scenario_5: status={status_val!r} but bundle contains two "
-                "conflicting Tier 1 DPA-TM-001 rows (A-01: REQUIRED vs A-06: "
+                "conflicting Tier 1 DPA-TM-001 rows (A-01: REQUIRED vs A-07: "
                 "NOT REQUIRED) — must emit 'escalated' per §8.5 (Tier 1 DPA "
                 "sources conflict on the same trigger question)"
             )
@@ -651,7 +664,7 @@ def _evaluate_legal(output: dict[str, Any], scenario: str, report: EvaluationRep
                 # conflicts; the output field constraint is the general rule.
                 # We warn rather than hard-fail because the LLM may reasonably
                 # follow either interpretation.
-                conflict_row_ids = {"A-01", "A-06"}
+                conflict_row_ids = {"A-01", "A-07"}
                 found_conflict_rows = {
                     entry.get("row_id")
                     for entry in pc_val
@@ -1082,6 +1095,214 @@ def _evaluate_procurement(output: dict[str, Any], scenario: str, report: Evaluat
                     "status='complete' requires at least one PRIMARY PAM-001 citation "
                     "with a non-empty row_id (Procurement Agent Spec §14 A-01)"
                 )
+
+    # scenario_7 hard checks — no-matching-row escalation. The scenario-scoped
+    # PAM-001 matrix covers only Classes A/B/C at Tier 1 (rows A-T1, B-T1,
+    # C-T1). The questionnaire vendor_class is "Class D — Technology
+    # Professional Services", which no row in the subset covers. Upstream
+    # IT Security and Legal are both clean COMPLETE. Per Procurement Agent
+    # Spec §8.5 ("No PAM-001 row matches the vendor/deal combination" →
+    # escalated) and §9.2 Example C (escalated output: approval_path,
+    # required_approvals, estimated_timeline, and policy_citations all
+    # null; fast_track_eligible passed through unchanged from STEP-02).
+    # This tests the single highest-risk procurement failure mode: silent
+    # path fabrication by picking the nearest row.
+    if scenario == "scenario_7":
+        status_val = output.get("status")
+        if status_val != "escalated":
+            report.failures.append(
+                f"scenario_7: status must be 'escalated' (got {status_val!r}) — "
+                "no PAM-001 row in the scenario-scoped matrix matches Class D, so "
+                "per §8.5 the agent cannot assert a COMPLETE approval path"
+            )
+
+        # A-09 / §9.2: all determination fields must be PRESENT (not absent)
+        # on an escalated run. Absence is the blocked shape (§9.1) and is a
+        # contract violation here.
+        required_present_fields = (
+            "approval_path",
+            "fast_track_eligible",
+            "required_approvals",
+            "estimated_timeline",
+            "policy_citations",
+        )
+        for field_name in required_present_fields:
+            if field_name not in output:
+                report.failures.append(
+                    f"scenario_7: {field_name!r} is absent from output — §9.2 / A-09 "
+                    "require every determination field to be PRESENT (not absent) on "
+                    "an escalated run. Absence is the blocked shape (§9.1) only."
+                )
+
+        # §9.2 per-field null rules + §14 A-04: no approval path may be
+        # asserted when no PAM-001 row matches the vendor/deal combination.
+        if "approval_path" in output and output.get("approval_path") is not None:
+            report.failures.append(
+                f"scenario_7: approval_path={output.get('approval_path')!r} must be "
+                "null — no PAM-001 row in the scenario-scoped matrix covers Class D. "
+                "Emitting any enum value here is silent path fabrication (§14 A-04)."
+            )
+
+        # §9.2: required_approvals cannot be assembled from an undetermined
+        # path. null OR [] is acceptable; a populated array is not.
+        if "required_approvals" in output:
+            ra_val = output.get("required_approvals")
+            if ra_val is not None and not (isinstance(ra_val, list) and len(ra_val) == 0):
+                report.failures.append(
+                    f"scenario_7: required_approvals must be null or [] when "
+                    f"approval_path is null (got {ra_val!r}) — §9.2 forbids assembling "
+                    "approvers from an undetermined path"
+                )
+
+        # §9.2: estimated_timeline cannot be derived from an undetermined path.
+        if "estimated_timeline" in output and output.get("estimated_timeline") is not None:
+            report.failures.append(
+                f"scenario_7: estimated_timeline must be null when approval_path is "
+                f"null (got {output.get('estimated_timeline')!r}) — §9.2 forbids "
+                "deriving a timeline from an undetermined path"
+            )
+
+        # §9.2: with no approval path resolved, all citation-supporting
+        # determinations are unresolvable — policy_citations should be null
+        # per spec §9.2 Example C. If the model returns an array anyway, at
+        # minimum no PAM-001 PRIMARY citation may appear (that would be
+        # citation hallucination — no row matches, so no row may be cited).
+        if "policy_citations" in output:
+            pc_val = output.get("policy_citations")
+            if pc_val is not None:
+                if not isinstance(pc_val, list):
+                    report.failures.append(
+                        f"scenario_7: policy_citations must be null or a list "
+                        f"(got {type(pc_val).__name__})"
+                    )
+                else:
+                    for idx, entry in enumerate(pc_val):
+                        if (
+                            isinstance(entry, dict)
+                            and entry.get("source_id") == "PAM-001"
+                            and entry.get("citation_class") == "PRIMARY"
+                        ):
+                            report.failures.append(
+                                f"scenario_7: policy_citations[{idx}] cites PAM-001 "
+                                f"as PRIMARY (row_id={entry.get('row_id')!r}) — no row "
+                                "in the scenario-scoped matrix covers Class D, so no "
+                                "PAM-001 row may be cited as PRIMARY (§14 A-04)"
+                            )
+
+        # A-02: fast_track_eligible must be passed through unchanged from
+        # STEP-02 (which is True in this scenario). If the model demoted it
+        # to False or null, that's an ownership violation.
+        if "fast_track_eligible" in output and output.get("fast_track_eligible") is not True:
+            report.failures.append(
+                f"scenario_7: fast_track_eligible must be True (passthrough from "
+                f"STEP-02) — got {output.get('fast_track_eligible')!r}. §14 A-02: "
+                "Procurement does not own this field and must not demote or mutate it."
+            )
+
+        # A-08: the blocked-shape fields must not leak into an escalated
+        # output. Presence of either is a shape violation.
+        for blocked_field in ("blocked_reason", "blocked_fields"):
+            if blocked_field in output:
+                report.failures.append(
+                    f"scenario_7: {blocked_field!r} is present in an escalated output "
+                    "— this field belongs to the §9.1 blocked shape only. Its presence "
+                    "here indicates the model emitted a hybrid shape."
+                )
+
+        # Soft check: hallucinated PAM-001 citation — if any PAM-001 row is
+        # cited at all (even SUPPLEMENTARY), its row_id must match a row
+        # present in the bundle's approval_path_matrix_rows. This guards
+        # against the model inventing a row it never saw.
+        # We don't have the bundle here, but we can check that no unknown
+        # row_id outside the scenario-7 candidate set appears.
+        scenario_7_known_rows = {"A-T1", "B-T1", "C-T1"}
+        if isinstance(output.get("policy_citations"), list):
+            for idx, entry in enumerate(output["policy_citations"]):
+                if (
+                    isinstance(entry, dict)
+                    and entry.get("source_id") == "PAM-001"
+                    and entry.get("row_id") not in (None, "")
+                    and entry["row_id"] not in scenario_7_known_rows
+                ):
+                    report.warnings.append(
+                        f"scenario_7: policy_citations[{idx}] cites PAM-001 row_id="
+                        f"{entry['row_id']!r}, which is not in the scenario-scoped "
+                        f"candidate set {sorted(scenario_7_known_rows)} — possible "
+                        "citation hallucination"
+                    )
+
+    # scenario_1 hard checks — happy-path COMPLETE with strict primary-key
+    # matching enforcement. The bundle's questionnaire carries
+    # vendor_class="Class A — Enterprise Platform" and the upstream IT Security
+    # output carries integration_tier="TIER_3". Per Procurement Agent Spec §8.3
+    # strict primary-key matching, the ONLY valid PAM-001 row is A-T3 (the row
+    # whose Class × Tier primary keys match the vendor profile exactly). The
+    # Supervisor-assembled candidate set includes five other rows (A-T2, A-T1,
+    # B-T3, B-T2, E-T2) as adversarial neighbors — the model must not
+    # substitute any of those for A-T3 even though some (A-T1, A-T2) are
+    # lighter-weight Class A rows and tempting under a fast-track posture.
+    # Substituting a non-matching row when a matching one is present in the
+    # candidate set is the mirror failure mode of scenario_7's silent path
+    # fabrication and must hard-fail at the evaluator level.
+    if scenario == "scenario_1":
+        pc_val = output.get("policy_citations")
+        if isinstance(pc_val, list):
+            scenario_1_expected_primary_row = "C-T1"
+            scenario_1_candidate_rows = {"C-T1", "E-T1", "C-T2", "E-T2", "A-T1", "A-T4"}
+            primary_pam_rows = [
+                entry.get("row_id")
+                for entry in pc_val
+                if isinstance(entry, dict)
+                and entry.get("source_id") == "PAM-001"
+                and entry.get("citation_class") == "PRIMARY"
+            ]
+
+            # Exactly-one PRIMARY PAM-001 row is expected — the matched row.
+            # Multiple PRIMARY PAM-001 citations would indicate the model
+            # failed to commit to a single governing row.
+            if len(primary_pam_rows) == 0:
+                # Already flagged by the generic §14 A-01 check above; skip
+                # the row-identity check since there's nothing to check.
+                pass
+            elif len(primary_pam_rows) > 1:
+                report.failures.append(
+                    f"scenario_1: expected exactly one PRIMARY PAM-001 citation "
+                    f"(the matched row), got {len(primary_pam_rows)}: "
+                    f"{primary_pam_rows!r}. A COMPLETE determination selects one "
+                    "governing row — multiple PRIMARY citations fragment the "
+                    "approval-path authority."
+                )
+            else:
+                cited_row = primary_pam_rows[0]
+                if cited_row != scenario_1_expected_primary_row:
+                    report.failures.append(
+                        f"scenario_1: PRIMARY PAM-001 row_id={cited_row!r} does NOT "
+                        f"match the vendor profile's primary keys (vendor_class='Class C', "
+                        f"integration_tier='TIER_1' → expected row_id={scenario_1_expected_primary_row!r}). "
+                        "Per §8.3 strict primary-key matching, substituting a non-matching "
+                        "row when a matching row is present in the candidate set is silent "
+                        "wrong-row selection — the Class-level mirror of scenario_7's "
+                        "silent path fabrication failure mode. §14 A-04: no approval_path "
+                        "may be asserted from a row that does not match on both primary keys."
+                    )
+
+            # Hallucination guard: any PAM-001 row cited (PRIMARY or otherwise)
+            # must be from the Supervisor-assembled candidate set present in
+            # the bundle. A row_id outside the known candidate set suggests
+            # the model invented a row it never saw.
+            for idx, entry in enumerate(pc_val):
+                if (
+                    isinstance(entry, dict)
+                    and entry.get("source_id") == "PAM-001"
+                    and entry.get("row_id") not in (None, "")
+                    and entry["row_id"] not in scenario_1_candidate_rows
+                ):
+                    report.warnings.append(
+                        f"scenario_1: policy_citations[{idx}] cites PAM-001 row_id="
+                        f"{entry['row_id']!r}, which is not in the Supervisor-assembled "
+                        f"candidate set {sorted(scenario_1_candidate_rows)} — possible "
+                        "citation hallucination"
+                    )
 
 
 # ---------------------------------------------------------------------------

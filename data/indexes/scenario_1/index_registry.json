@@ -33,7 +33,7 @@
       "source_type": "PROCUREMENT_APPROVAL_MATRIX",
       "authority_tier": 1,
       "retrieval_lane": "INDEXED_HYBRID",
-      "version": "3.0",
+      "version": "2.0",
       "document_date": "2026-04-04",
       "freshness_status": "CURRENT",
       "manifest_status": "CONFIRMED",

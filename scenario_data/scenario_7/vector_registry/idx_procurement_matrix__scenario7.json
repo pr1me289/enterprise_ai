@@ -1,0 +1,92 @@
+[
+  {
+    "chunk_id": "PAM-001__row_A-T1",
+    "text": "Class: A\nTier: T1\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: CISO awareness notification required. DPA executed before implementation begins.",
+    "metadata": {
+      "chunk_id": "PAM-001__row_A-T1",
+      "source_id": "PAM-001",
+      "source_name": "Procurement Approval Matrix",
+      "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "3.0-scenario7",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "allowed_agents_str": "|procurement|",
+      "is_primary_citable": true,
+      "manifest_status": "CONFIRMED",
+      "section_id": null,
+      "row_id": "A-T1",
+      "record_id": null,
+      "thread_id": null,
+      "domain_scope": null,
+      "text": "Class: A\nTier: T1\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: CISO awareness notification required. DPA executed before implementation begins.",
+      "citation_label": "PAM-001 row A-T1",
+      "chunk_type": "ROW",
+      "chunk_order": 1
+    }
+  },
+  {
+    "chunk_id": "PAM-001__row_B-T1",
+    "text": "Class: B\nTier: T1\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: CONDITIONAL\nRequired Approvals / Notes: DPA required if personal data in scope. Confirm data subject categories and legal basis before execution.",
+    "metadata": {
+      "chunk_id": "PAM-001__row_B-T1",
+      "source_id": "PAM-001",
+      "source_name": "Procurement Approval Matrix",
+      "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "3.0-scenario7",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "allowed_agents_str": "|procurement|",
+      "is_primary_citable": true,
+      "manifest_status": "CONFIRMED",
+      "section_id": null,
+      "row_id": "B-T1",
+      "record_id": null,
+      "thread_id": null,
+      "domain_scope": null,
+      "text": "Class: B\nTier: T1\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: CONDITIONAL\nRequired Approvals / Notes: DPA required if personal data in scope. Confirm data subject categories and legal basis before execution.",
+      "citation_label": "PAM-001 row B-T1",
+      "chunk_type": "ROW",
+      "chunk_order": 5
+    }
+  },
+  {
+    "chunk_id": "PAM-001__row_C-T1",
+    "text": "Class: C\nTier: T1\nApproval Path: FAST_TRACK\nIT Security Review: Notification only\nLegal / DPA Review: Not required\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: ELIGIBLE\nRequired Approvals / Notes: No DPA required. Standard NDA / confidentiality provisions apply. IT Security notification for any system integration, even if non-regulated.",
+    "metadata": {
+      "chunk_id": "PAM-001__row_C-T1",
+      "source_id": "PAM-001",
+      "source_name": "Procurement Approval Matrix",
+      "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "3.0-scenario7",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "allowed_agents_str": "|procurement|",
+      "is_primary_citable": true,
+      "manifest_status": "CONFIRMED",
+      "section_id": null,
+      "row_id": "C-T1",
+      "record_id": null,
+      "thread_id": null,
+      "domain_scope": null,
+      "text": "Class: C\nTier: T1\nApproval Path: FAST_TRACK\nIT Security Review: Notification only\nLegal / DPA Review: Not required\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: ELIGIBLE\nRequired Approvals / Notes: No DPA required. Standard NDA / confidentiality provisions apply. IT Security notification for any system integration, even if non-regulated.",
+      "citation_label": "PAM-001 row C-T1",
+      "chunk_type": "ROW",
+      "chunk_order": 9
+    }
+  }
+]

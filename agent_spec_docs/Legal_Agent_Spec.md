@@ -1,5 +1,5 @@
 # Agent Spec — Legal Agent
-## SPEC-AGENT-LEG-001 v0.10
+## SPEC-AGENT-LEG-001 v0.11
 
 **Document ID:** SPEC-AGENT-LEG-001
 **Version:** 0.7
@@ -225,6 +225,8 @@ The blocker derivation consumes the questionnaire `existing_dpa_status` field (c
 
 `nda_blocker = true` is a valid, complete determination — the NDA status has been assessed from questionnaire evidence and the blocker is a workflow consequence requiring human action, not an evidence gap. `nda_blocker = false` requires a confirmed `EXECUTED` status from questionnaire evidence. When the ISP-001 §12.1.4 clause is present in the bundle it must be cited; if absent, emit `escalated`.
 
+> **Precedence on escalated runs (dual absence).** The §8.4 normalization above — including the "absent or unrecognized → `UNKNOWN` / `true`" row — applies when at least one NDA evidence source is available to the agent: either the questionnaire `existing_nda_status` field, or the ISP-001 §12.1.4 clause in `nda_clause_chunks`, or both. When **both** are absent from the bundle, the agent has no NDA evidence of any kind and §9.2's per-field null rules take precedence: emit `nda_status: null` and `nda_blocker: null` instead of normalizing to `UNKNOWN` / `true`. §9.2 is the specific escalated-output rule for dual-absence; §8.4 is the general normalization rule for the single-source-absent case. The dual-absence case is the §8.5 condition 5 escalation path (`nda_clause_chunks` absent from bundle) combined with a questionnaire that also omits `existing_nda_status` — both evidence sources missing leaves nothing to normalize, so the field is `null` rather than `UNKNOWN`.
+
 ### 8.5 Step Status Derivation
 
 The Legal Agent's terminal step status is derived from the combination of DPA and NDA determination outcomes. Apply these conditions in the order shown:
@@ -355,6 +357,8 @@ When the agent derives `status = escalated` from §8.5, it emits the same determ
 
 **Fields that are resolved on escalated runs carry their normal values.** For example, when `dpa_required = true` and `dpa_blocker = true` produces `escalated` (human legal execution required), all fields are populated — `dpa_required: true`, `dpa_blocker: true`, `nda_status` from questionnaire, `nda_blocker` derived, `trigger_rule_cited` with the matching rows, `policy_citations` with the supporting citations. No fields are `null` because the agent resolved everything; the escalation is a workflow consequence, not an evidence gap.
 
+**Precedence over §8.4 NDA normalization on dual-absence escalated runs.** The per-field null rules in the table above override §8.4's general NDA normalization whenever the escalation is caused by dually-absent NDA evidence. Concretely: when the questionnaire omits `existing_nda_status` AND the bundle omits `nda_clause_chunks`, the agent must emit `nda_status: null` and `nda_blocker: null` on the escalated output — it must **not** fall back to §8.4's "absent or unrecognized → `UNKNOWN` / `true`" normalization. §8.4 normalization presumes at least one NDA evidence source is present; §9.2 governs the case where no evidence is available to normalize. This precedence applies only on escalated runs; §8.4 continues to govern `complete` runs and escalated runs where at least one NDA evidence source is present (e.g., questionnaire has `existing_nda_status` but `nda_clause_chunks` is absent — normalize from the questionnaire per §8.4 and escalate per §8.5 condition 5 for the missing clause citation).
+
 **Escalated output example — DPA unresolvable, NDA resolved:**
 
 ```json
@@ -378,6 +382,38 @@ When the agent derives `status = escalated` from §8.5, it emits the same determ
 ```
 
 > In this example, the data profile warrants DPA review but no trigger matrix row covers the pattern. The agent sets `dpa_required`, `dpa_blocker`, and `trigger_rule_cited` to `null` — it cannot make the determination. The NDA determination is fully resolved from questionnaire evidence and cited to ISP-001 §12.1.4. The Supervisor reads the `null` fields to identify exactly which determinations need human resolution.
+
+**Escalated output example — DPA resolved, NDA dually absent:**
+
+```json
+{
+  "dpa_required": true,
+  "dpa_blocker": false,
+  "nda_status": null,
+  "nda_blocker": null,
+  "trigger_rule_cited": [
+    {
+      "source_id": "DPA-TM-001",
+      "version": "2.1",
+      "row_id": "A-01",
+      "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen",
+      "citation_class": "PRIMARY"
+    }
+  ],
+  "policy_citations": [
+    {
+      "source_id": "DPA-TM-001",
+      "version": "2.1",
+      "row_id": "A-01",
+      "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen",
+      "citation_class": "PRIMARY"
+    }
+  ],
+  "status": "escalated"
+}
+```
+
+> In this example, the bundle contains the DPA-TM-001 A-01 trigger row, `eu_personal_data_flag = true`, and `existing_dpa_status = "EXECUTED"` — the DPA determination is fully resolved (`dpa_required: true`, `dpa_blocker: false` per §8.3 row 2) and cited. But the bundle has **both** `existing_nda_status` absent from the questionnaire AND `nda_clause_chunks` absent entirely — no NDA evidence of any kind. Per the §9.2 precedence rule above, the agent sets `nda_status: null` and `nda_blocker: null` rather than normalizing to `UNKNOWN` / `true` per §8.4. §8.5 condition 5 drives the escalation (`nda_clause_chunks` absent from bundle). The agent must not fabricate an ISP-001 §12.1.4 citation for evidence it was never given — `policy_citations` contains only the resolvable DPA-TM-001 citation. The Supervisor reads the `nda_status: null` / `nda_blocker: null` pair to identify that NDA evidence must be sourced before the step can advance.
 
 ---
 
@@ -586,4 +622,5 @@ A fuller CSR / ISR evaluation matrix may be maintained in a separate evaluation 
 | 0.8 | 2026-04-16 | Engineering / IT Architecture | Blocked output shape hardened. (1) Added §9.1 defining a mandatory blocked output shape with `blocked_reason` (enum array) and `blocked_fields` (canonical field name array) — replaces the prior permissive "may emit a minimal object" language. (2) Determination fields (`dpa_required`, `dpa_blocker`, `nda_status`, `nda_blocker`, `trigger_rule_cited`, `policy_citations`) must now be entirely absent on blocked runs, not null — absent means the agent declined to produce a determination it had no basis to make. (3) §8.5 updated with explicit output-shape switching rule: derive status first, then emit the standard shape or §9.1 shape accordingly. (4) §9 output field constraints updated to require absence on blocked runs. (5) §12 exception handling updated to reference §9.1 for all blocked conditions. (6) Example E added showing the blocked output for a missing upstream STEP-02 scenario. (7) A-09 added to acceptance checks requiring blocked output shape validation. Motivated by scenario_4 per-agent test failure where the model correctly emitted `status: blocked` but also populated all determination fields — the prior spec language was insufficiently prohibitive. |
 | 0.9 | 2026-04-16 | Engineering / IT Architecture | Escalated output contract defined. (1) Added §9.2 Escalated Output Rules — on escalated runs, all determination fields must be present (not absent); resolved fields carry derived values, unresolvable fields set to `null`. (2) §8.5 output shape switching rule expanded to cover all three statuses with distinct output behaviors and includes BLOCKED vs ESCALATED distinction: blocked = missing bundle input (no evidence to begin), escalated = bundle admissible but agent cannot resolve specific fields per spec rules. (3) §9 output field constraints updated with per-field escalated null rules. (4) §10 rewritten with output shape references for each status. (5) Examples A, B, D updated with full JSON outputs showing escalated field behavior — Example A (all resolved, no nulls), Example B (NDA resolved from questionnaire, citation gap), Example D (DPA unresolvable → null, NDA resolved). (6) A-06 updated to distinguish complete (all non-null) from escalated (present but nullable per §9.2). (7) A-10 added requiring all determination fields present on escalated runs. |
 | 0.10 | 2026-04-18 | Engineering / IT Architecture | §8.5 Tier 1 conflict clarification. Added a note beneath the status-derivation table defining "conflict on the same trigger question" as two or more Tier 1 rows whose trigger conditions both evaluate to true on the same confirmed fact pattern and disagree on outcome — complementary rules covering disjoint fact patterns are not conflicts. Motivated by scenario_5 per-agent test where the model reasoned substantively past a narrowly-worded row instead of triggering the conflict-escalation path; clarification removes the ambiguity between mechanical parity and interpretive reconciliation. |
+| 0.11 | 2026-04-18 | Engineering / IT Architecture | §8.4 / §9.2 precedence clarification for dual-absence NDA evidence on escalated runs. (1) Added a precedence blockquote to §8.4 stating that §8.4 normalization (absent → UNKNOWN / blocker = true) applies only when at least one NDA evidence source is available; when both `existing_nda_status` and `nda_clause_chunks` are absent on an escalated run, §9.2 per-field null rules govern and `nda_status` / `nda_blocker` must be `null`. (2) Added a matching precedence paragraph to §9.2 making the override explicit in the opposite direction. (3) Added a new §9.2 worked example ("DPA resolved, NDA dually absent") showing the full escalated JSON with `nda_status: null`, `nda_blocker: null`, resolved DPA fields, and `policy_citations` containing only the DPA-TM-001 PRIMARY citation (no hallucinated ISP-001 §12.1.4). Motivated by scenario_6 per-agent test where the model applied §8.4 normalization on dual-absence evidence and emitted `nda_status: "UNKNOWN"` / `nda_blocker: true` instead of the §9.2-required nulls. |
 
