@@ -1,0 +1,56 @@
+{
+  "agent_name": "checklist_assembler",
+  "scenario": "scenario_12",
+  "pipeline_run_id": "run_scenario_12",
+  "run_number": 1,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260419T234944Z",
+  "system_prompt_path": "agent_spec_docs/Checklist_Assembler_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_05_scenario_12.json",
+  "raw_text": "```json\n{\n  \"pipeline_run_id\": \"run_scenario_12\",\n  \"vendor_name\": \"OptiChain\",\n  \"overall_status\": \"COMPLETE\",\n  \"data_classification\": \"UNREGULATED\",\n  \"dpa_required\": false,\n  \"fast_track_eligible\": true,\n  \"required_security_actions\": [],\n  \"approval_path\": \"FAST_TRACK\",\n  \"required_approvals\": [\n    {\n      \"approver\": \"Procurement Manager\",\n      \"domain\": \"procurement\",\n      \"status\": \"PENDING\",\n      \"blocker\": false,\n      \"estimated_completion\": \"2026-04-21\"\n    }\n  ],\n  \"blockers\": [],\n  \"citations\": [\n    {\n      \"source_name\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"section\": \"12.2\",\n      \"retrieval_timestamp\": \"2026-04-15T18:00:11Z\",\n      \"agent_id\": \"it_security_agent\"\n    },\n    {\n      \"source_name\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"section\": \"12.1.4\",\n      \"retrieval_timestamp\": \"2026-04-15T18:00:42Z\",\n      \"agent_id\": \"legal_agent\"\n    },\n    {\n      \"source_name\": \"PAM-001\",\n      \"version\": \"3.0\",\n      \"section\": \"C-T3\",\n      \"retrieval_timestamp\": \"2026-04-15T18:01:18Z\",\n      \"agent_id\": \"procurement_agent\"\n    }\n  ]\n}\n```",
+  "parsed_output": {
+    "pipeline_run_id": "run_scenario_12",
+    "vendor_name": "OptiChain",
+    "overall_status": "COMPLETE",
+    "data_classification": "UNREGULATED",
+    "dpa_required": false,
+    "fast_track_eligible": true,
+    "required_security_actions": [],
+    "approval_path": "FAST_TRACK",
+    "required_approvals": [
+      {
+        "approver": "Procurement Manager",
+        "domain": "procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2026-04-21"
+      }
+    ],
+    "blockers": [],
+    "citations": [
+      {
+        "source_name": "ISP-001",
+        "version": "4.2",
+        "section": "12.2",
+        "retrieval_timestamp": "2026-04-15T18:00:11Z",
+        "agent_id": "it_security_agent"
+      },
+      {
+        "source_name": "ISP-001",
+        "version": "4.2",
+        "section": "12.1.4",
+        "retrieval_timestamp": "2026-04-15T18:00:42Z",
+        "agent_id": "legal_agent"
+      },
+      {
+        "source_name": "PAM-001",
+        "version": "3.0",
+        "section": "C-T3",
+        "retrieval_timestamp": "2026-04-15T18:01:18Z",
+        "agent_id": "procurement_agent"
+      }
+    ]
+  },
+  "error": null
+}

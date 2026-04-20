@@ -1,0 +1,93 @@
+{
+  "scenario": "scenario_13",
+  "agent": "procurement_agent",
+  "bundle": {
+    "source_ids": [
+      "STEP-02",
+      "STEP-03",
+      "VQ-OC-001",
+      "PAM-001",
+      "ISP-001"
+    ],
+    "it_security_output": {
+      "integration_type_normalized": "EXPORT_ONLY",
+      "integration_tier": "TIER_3",
+      "data_classification": "UNREGULATED",
+      "eu_personal_data_present": "NO",
+      "fast_track_eligible": true,
+      "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+      "security_followup_required": false,
+      "nda_status_from_questionnaire": "EXECUTED",
+      "required_security_actions": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12.2",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "legal_output": {
+      "dpa_required": false,
+      "dpa_blocker": false,
+      "nda_status": "EXECUTED",
+      "nda_blocker": false,
+      "trigger_rule_cited": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12_1_4",
+          "section_id": "12.1.4",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "questionnaire": {
+      "vendor_class": "TIER_2",
+      "integration_tier": "TIER_3",
+      "deal_size": 150000,
+      "existing_nda_status": "EXECUTED",
+      "existing_dpa_status": "NOT_APPLICABLE",
+      "existing_msa": true
+    },
+    "approval_path_matrix_rows": [
+      {
+        "source_id": "PAM-001",
+        "version": "3.0-scenario13",
+        "chunk_id": "PAM-001__row_Q-01-FASTTRACK",
+        "section_id": null,
+        "row_id": "Q-01-FASTTRACK",
+        "thread_id": null,
+        "text": "Vendor Class: TIER_2\nIntegration Tier: TIER_3\nData Classification: UNREGULATED\nDeal Size Range: $50,000 - $250,000\nFast-Track Eligible Required: true\nApproval Path: FAST_TRACK\nRequired Approvers: Procurement Manager, IT Security Manager\nEstimated Timeline: 2-3 business days\nRequired Approvals / Notes: Fast-track approval regime for Tier 2 vendor engagements with Tier 3 export-only integration footprint and UNREGULATED data scope. Two approvers required, both non-blocking: Procurement Manager (procurement domain) and IT Security Manager (security domain). No Legal sign-off required when no DPA is triggered. No Business Owner sign-off required at this deal-size band. Timeline: 2-3 business days when both approvers respond promptly. This row applies only when fast_track_eligible is true upstream from STEP-02 and no DPA blocker is active from STEP-03.",
+        "retrieval_score": 0.88,
+        "rerank_score": 0.85,
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "PAM-001",
+        "version": "3.0-scenario13",
+        "chunk_id": "PAM-001__row_Q-02-STANDARD",
+        "section_id": null,
+        "row_id": "Q-02-STANDARD",
+        "thread_id": null,
+        "text": "Vendor Class: TIER_2\nIntegration Tier: TIER_2_SAAS\nData Classification: REGULATED\nDeal Size Range: $100,000 - $500,000\nFast-Track Eligible Required: false\nApproval Path: STANDARD\nRequired Approvers: Procurement Director, IT Security Manager, Legal Counsel, Business Owner (Director+)\nEstimated Timeline: 10-15 business days\nRequired Approvals / Notes: Standard approval regime for Tier 2 SaaS engagements with REGULATED data scope. Four approvers required: Procurement Director, IT Security Manager, Legal Counsel, Business Owner (Director+). Legal sign-off required because REGULATED data triggers DPA review per DPA-TM-001. IT Security sign-off required for any SaaS integration carrying production credentials. Business Owner (Director+) signs off on commercial terms. Timeline: 10-15 business days when all approvers respond promptly and DPA is fully executed.",
+        "retrieval_score": 0.61,
+        "rerank_score": 0.57,
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "fast_track_routing_rows": [],
+    "slack_procurement_chunks": [],
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    }
+  },
+  "pipeline_run_id": "scenario_13_synthesized"
+}

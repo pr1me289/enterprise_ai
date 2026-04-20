@@ -45,6 +45,28 @@ LEGAL_BLOCKED_REASON_VALUES: tuple[str, ...] = (
 EXPECTED_STATUS: dict[tuple[str, str], str] = {
     ("it_security_agent", "scenario_1"): "complete",
     ("it_security_agent", "scenario_2"): "escalated",
+    # scenario_14: Policy-over-questionnaire conflict → REGULATED + COMPLETE.
+    # Adversarial questionnaire self-reports data_classification_self_reported=
+    # "NON_REGULATED" with regulated_data_types=[], BUT
+    # integration_details.erp_type="DIRECT_API" → TIER_1 per ISP-001 §12.2 →
+    # REGULATED per ISP-001 §4 TIER_1 override rule. The evidence is
+    # unambiguous and adverse, so the agent must emit a firm COMPLETE — not
+    # ESCALATED — per SPEC-AGENT-SEC-001 §10 ("complete: all required
+    # evidence present, all classification determinations fully resolved").
+    # Tests ORCH-PLAN-001 STEP-02 classification rules 2, 3, 5 and the
+    # CC-001 §4 authority hierarchy (Tier 1 policy > Tier 2 questionnaire).
+    ("it_security_agent", "scenario_14"): "complete",
+    # scenario_15: Governing-source retrieval failure → ESCALATED. Honest
+    # questionnaire (DIRECT_API + EU employee scheduling data). ISP-001 §12.2
+    # and §4 retrieve cleanly; §12.3 is deliberately absent from the
+    # scenario-scoped index → R02-SQ-06 returns EMPTY_RESULT_SET. Per
+    # ORCH-PLAN-001 R02-SQ-06 ("if fails: fast-track determination cannot
+    # be made; emit ESCALATED") and SPEC-AGENT-SEC-001 §8.5 / classification
+    # rule 6 ("governing fast-track source missing or unconfirmed →
+    # fast_track_eligible=false, fast_track_rationale=DISALLOWED_AMBIGUOUS_SCOPE"),
+    # the agent must escalate WITHOUT nulling the firm determinations
+    # supported by the §12.2 and §4 chunks that did retrieve.
+    ("it_security_agent", "scenario_15"): "escalated",
     ("legal_agent", "scenario_1"): "complete",
     # scenario_2: DPA required but not executed → dpa_blocker=true →
     # status=escalated per Legal Agent Spec §14 A-07 (hard rule: agent must
@@ -103,6 +125,20 @@ EXPECTED_STATUS: dict[tuple[str, str], str] = {
     # + blocked_fields identifying the missing upstream). Legal is clean
     # COMPLETE and the questionnaire is populated — single-cause blocked.
     ("procurement_agent", "scenario_10"): "blocked",
+    # scenario_13: clean upstream pass → COMPLETE. STEP-02 complete with
+    # EXPORT_ONLY/TIER_3/UNREGULATED/fast_track_eligible=true; STEP-03
+    # complete with dpa_required=false and no blockers; questionnaire
+    # matches Q-01-FASTTRACK on both primary keys (vendor_class=TIER_2,
+    # integration_tier=TIER_3) with deal_size=$150K inside the row's range.
+    # Per Procurement Spec §8.3 strict primary-key matching + §9 output
+    # contract, the agent must emit COMPLETE with approval_path=FAST_TRACK,
+    # fast_track_eligible=true (passthrough — NOT re-derived), the two
+    # Q-01-FASTTRACK approvers (Procurement Manager + IT Security Manager,
+    # both blocker:false), estimated_timeline=2-3 business days, and a
+    # PRIMARY PAM-001 Q-01-FASTTRACK citation. Catches spurious escalation,
+    # fast_track_eligible re-derivation, phantom blocker fabrication, and
+    # wrong-row selection on the happy path.
+    ("procurement_agent", "scenario_13"): "complete",
     # Checklist Assembler uses overall_status, not status
     ("checklist_assembler", "scenario_1"): "COMPLETE",
     ("checklist_assembler", "scenario_2"): "ESCALATED",
@@ -116,6 +152,13 @@ EXPECTED_STATUS: dict[tuple[str, str], str] = {
     # ESCALATION_PENDING entries (one each for STEP-03 and STEP-04) and
     # citations[] aggregated across all three agents.
     ("checklist_assembler", "scenario_11"): "ESCALATED",
+    # scenario_12: Clean upstream pass — all three upstream agents complete,
+    # no blocker flags, no escalations. Per SPEC-AGENT-CLA-001 v0.3 §8.1:
+    # all upstream complete → COMPLETE. The checklist must emit the §7
+    # assembly shape with all fields present and non-null, blockers=[],
+    # blocked_reason/blocked_fields absent, citations[] aggregated across
+    # all three domain agents.
+    ("checklist_assembler", "scenario_12"): "COMPLETE",
     # Checkoff only runs when STEP-05 is COMPLETE. In isolation with the
     # scenario_2 bundle we still feed it, but expect no guarantee.
     ("checkoff_agent", "scenario_1"): "complete",
@@ -373,6 +416,508 @@ def _evaluate_it_security(output: dict[str, Any], scenario: str, report: Evaluat
         report.failures.append(
             "status='complete' is inconsistent with data_classification='AMBIGUOUS' — should be 'escalated'"
         )
+
+    # scenario_14 hard checks — Policy-Over-Questionnaire Conflict → REGULATED
+    # + COMPLETE. The bundle's adversarial questionnaire self-reports
+    # data_classification_self_reported="NON_REGULATED" with regulated_data_types=[],
+    # but integration_details.erp_type="DIRECT_API" → TIER_1 per ISP-001 §12.2 →
+    # REGULATED per ISP-001 §4 TIER_1 override. The agent must derive the
+    # adverse classification from policy and emit a firm COMPLETE — not
+    # ESCALATED — with security_followup_required=true and
+    # fast_track_rationale="DISALLOWED_REGULATED_DATA". This block enforces the
+    # full §9 output contract for scenario_14 plus the four critical failure
+    # modes called out in the build prompt.
+    if scenario == "scenario_14":
+        status_val = output.get("status")
+        if status_val != "complete":
+            report.failures.append(
+                f"scenario_14: status={status_val!r} but bundle evidence is unambiguous "
+                "(ISP-001 §12.2 maps DIRECT_API → TIER_1; §4 maps TIER_1 → REGULATED). "
+                "Per SPEC-AGENT-SEC-001 §10 a clear adverse determination is COMPLETE, "
+                "not ESCALATED. Over-cautious escalation on policy-over-questionnaire "
+                "conflict is the failure mode this scenario catches."
+            )
+
+        # Linchpin: classification rule 3 — data_classification must be derived
+        # from Tier 1 policy, NOT from questionnaire self-report.
+        if dc != "REGULATED":
+            report.failures.append(
+                f"scenario_14: data_classification={dc!r} but questionnaire declares "
+                "integration_details.erp_type='DIRECT_API' which ISP-001 §12.2 maps to "
+                "TIER_1 and ISP-001 §4 explicitly overrides vendor self-report — TIER_1 "
+                "integrations are REGULATED regardless of data_classification_self_reported. "
+                "Deferring to the vendor's NON_REGULATED self-report violates ORCH-PLAN-001 "
+                "STEP-02 classification rule 3 and CC-001 §4 authority hierarchy."
+            )
+
+        # Classification rule 2 — integration_tier must come from Tier 1 policy.
+        tier = output.get("integration_tier")
+        if tier != "TIER_1":
+            report.failures.append(
+                f"scenario_14: integration_tier={tier!r} but ISP-001 §12.2 maps "
+                "DIRECT_API → TIER_1. Emitting TIER_3 would copy the vendor self-report "
+                "context; emitting UNCLASSIFIED_PENDING_REVIEW would over-defer. TIER_1 "
+                "is the only correct policy-derived value (classification rule 2)."
+            )
+
+        # integration_type_normalized — passthrough from factual questionnaire
+        # field. NOT a self-report deferral; the questionnaire is authoritative
+        # on factual integration mechanics.
+        itn = output.get("integration_type_normalized")
+        if itn != "DIRECT_API":
+            report.failures.append(
+                f"scenario_14: integration_type_normalized={itn!r}, expected 'DIRECT_API' "
+                "(passthrough from questionnaire integration_details.erp_type — the one "
+                "factual claim the questionnaire is authoritative on)"
+            )
+
+        # fast_track_eligible must be false (REGULATED → fast-track disallowed).
+        if fte is not False:
+            report.failures.append(
+                f"scenario_14: fast_track_eligible={fte!r}, expected false per "
+                "classification rule 5 (REGULATED → fast-track disallowed)"
+            )
+
+        # fast_track_rationale must be DISALLOWED_REGULATED_DATA — the specific
+        # rationale enum for REGULATED disqualification, NOT
+        # DISALLOWED_AMBIGUOUS_SCOPE (Scenario 2 Run 2 rationale; integration
+        # type here is unambiguous).
+        ftr = output.get("fast_track_rationale")
+        if ftr != "DISALLOWED_REGULATED_DATA":
+            report.failures.append(
+                f"scenario_14: fast_track_rationale={ftr!r}, expected "
+                "'DISALLOWED_REGULATED_DATA'. Wrong-rationale failure mode: "
+                "'DISALLOWED_AMBIGUOUS_SCOPE' is for ambiguous integrations (Scenario 2); "
+                "'DISALLOWED_INTEGRATION_RISK' is for the integration-risk-only path. "
+                "REGULATED data is the governing reason per ISP-001 §12.3."
+            )
+
+        # security_followup_required=true — TIER_1 architectural review per §12.3.
+        sfr = output.get("security_followup_required")
+        if sfr is not True:
+            report.failures.append(
+                f"scenario_14: security_followup_required={sfr!r}, expected true. "
+                "TIER_1 + REGULATED requires architectural review per ISP-001 §12.3 "
+                "and SPEC-AGENT-SEC-001 §8.4 ('REGULATED + TIER_1' → followup required)."
+            )
+
+        # eu_personal_data_present passthrough. Build prompt mandates string "NO".
+        # Spec §9 contract types it as bool, but the build prompt explicitly
+        # specifies the string form on this scenario. Accept either the bool
+        # false or the string "NO" — both are faithful renderings of the
+        # questionnaire eu_personal_data_flag="NO" passthrough.
+        eupd = output.get("eu_personal_data_present")
+        if eupd not in ("NO", False):
+            report.failures.append(
+                f"scenario_14: eu_personal_data_present={eupd!r}, expected 'NO' or false "
+                "(passthrough from questionnaire eu_personal_data_flag='NO' — the one "
+                "dimension where the questionnaire IS authoritative)"
+            )
+
+        # nda_status_from_questionnaire — raw passthrough.
+        nda_q = output.get("nda_status_from_questionnaire")
+        if nda_q != "EXECUTED":
+            report.failures.append(
+                f"scenario_14: nda_status_from_questionnaire={nda_q!r}, expected "
+                "'EXECUTED' (raw passthrough from questionnaire existing_nda_status)"
+            )
+
+        # Scope violation: STEP-02 must NOT emit normalized nda_status. That's
+        # Legal's STEP-03 output field. Surfacing it here would let Legal
+        # double-normalize or consume a value it didn't produce.
+        if "nda_status" in output:
+            report.failures.append(
+                "scenario_14: output contains top-level 'nda_status' — STEP-02 owns only "
+                "'nda_status_from_questionnaire' (raw passthrough). Normalized nda_status "
+                "is Legal's STEP-03 output field. STEP-02 emitting it is a scope violation."
+            )
+
+        # required_security_actions: non-empty + structured entries when
+        # security_followup_required=true. At least one entry must reference
+        # ISP-001 §12.3 / TIER_1 architectural review and be owned by IT Security.
+        rsa = output.get("required_security_actions")
+        if not isinstance(rsa, list) or len(rsa) == 0:
+            report.failures.append(
+                "scenario_14: required_security_actions is empty or missing — "
+                "security_followup_required=true requires at least one structured "
+                "entry per SPEC-AGENT-SEC-001 §8.4 and ISP-001 §12.3 (TIER_1 mandatory "
+                "architectural review)"
+            )
+        else:
+            structured_ok = False
+            arch_review_ok = False
+            for idx, entry in enumerate(rsa):
+                if not isinstance(entry, dict):
+                    report.failures.append(
+                        f"scenario_14: required_security_actions[{idx}] is not an object"
+                    )
+                    continue
+                missing = [k for k in ("action_type", "reason", "owner") if not entry.get(k)]
+                if missing:
+                    report.failures.append(
+                        f"scenario_14: required_security_actions[{idx}] missing required "
+                        f"keys {missing} (need action_type, reason, owner per §9 contract)"
+                    )
+                    continue
+                structured_ok = True
+                reason_text = str(entry.get("reason", "")).lower()
+                owner_text = str(entry.get("owner", "")).lower()
+                action_text = str(entry.get("action_type", "")).lower()
+                cites_arch = (
+                    "12.3" in reason_text
+                    or "tier_1" in reason_text
+                    or "tier 1" in reason_text
+                    or "architect" in reason_text
+                    or "architect" in action_text
+                )
+                owned_by_security = "security" in owner_text or "whitfield" in owner_text
+                if cites_arch and owned_by_security:
+                    arch_review_ok = True
+            if structured_ok and not arch_review_ok:
+                report.failures.append(
+                    "scenario_14: required_security_actions has no entry referencing "
+                    "ISP-001 §12.3 / TIER_1 architectural review owned by IT Security. "
+                    "Per ISP-001 §12.3, TIER_1 integrations trigger a mandatory "
+                    "architectural review; that action must appear with reason citing "
+                    "§12.3 or TIER_1 and owner=IT Security."
+                )
+
+        # Citation requirements: at least one PRIMARY ISP-001 §12.2 citation
+        # AND at least one PRIMARY ISP-001 §4 OR §12.3 citation. Every cited
+        # section_id must correspond to a chunk in the scenario-14 retrieval
+        # set (the three sections present in the bundle).
+        scenario14_section_ids = {"§12.2", "§4", "§12.3"}
+        citations = output.get("policy_citations") or []
+        has_12_2_primary = False
+        has_classification_primary = False
+        for idx, entry in enumerate(citations):
+            if not isinstance(entry, dict):
+                continue
+            sec_id = entry.get("section_id")
+            cls = entry.get("citation_class")
+            src = entry.get("source_id")
+            if src == "ISP-001" and cls == "PRIMARY":
+                if sec_id in ("§12.2", "12.2"):
+                    has_12_2_primary = True
+                if sec_id in ("§4", "4", "§12.3", "12.3"):
+                    has_classification_primary = True
+            # Hallucinated section_id check — every cited section must match a
+            # scenario-14 chunk's section_id (allow either §-prefixed or bare).
+            if src == "ISP-001" and sec_id is not None:
+                normalized = sec_id if sec_id.startswith("§") else f"§{sec_id}"
+                if normalized not in scenario14_section_ids:
+                    report.failures.append(
+                        f"scenario_14: policy_citations[{idx}].section_id={sec_id!r} does "
+                        f"not correspond to a scenario-14 chunk — only §12.2, §4, §12.3 "
+                        "are present in the retrieval set"
+                    )
+        if not has_12_2_primary:
+            report.failures.append(
+                "scenario_14: policy_citations missing a PRIMARY ISP-001 §12.2 citation "
+                "(the ERP integration tier table is the governing source for "
+                "integration_tier=TIER_1 and the upstream basis for REGULATED)"
+            )
+        if not has_classification_primary:
+            report.failures.append(
+                "scenario_14: policy_citations missing a PRIMARY ISP-001 §4 or §12.3 "
+                "citation (the data classification framework / fast-track clause is the "
+                "governing source for the REGULATED determination and "
+                "DISALLOWED_REGULATED_DATA rationale)"
+            )
+
+        # Authority hierarchy: VQ-OC-001 (questionnaire) is Tier 2 per CC-001
+        # §4 and may not appear at PRIMARY citation_class on a Tier 1
+        # determination. Catches deferring to self-report and citing the
+        # questionnaire as primary basis.
+        for idx, entry in enumerate(citations):
+            if not isinstance(entry, dict):
+                continue
+            if entry.get("source_id") == "VQ-OC-001" and entry.get("citation_class") == "PRIMARY":
+                report.failures.append(
+                    f"scenario_14: policy_citations[{idx}] cites source_id='VQ-OC-001' at "
+                    "citation_class='PRIMARY' — VQ-OC-001 is Tier 2 per CC-001 §4 and "
+                    "cannot be PRIMARY on a Tier 1 classification determination. This is "
+                    "the elevating-questionnaire-to-PRIMARY failure mode."
+                )
+
+        # Blocked-shape leak: scenario_14 is COMPLETE; blocked_reason and
+        # blocked_fields must be absent.
+        for blk_field in ("blocked_reason", "blocked_fields"):
+            if blk_field in output:
+                report.failures.append(
+                    f"scenario_14: output contains '{blk_field}' but status is COMPLETE "
+                    "(not blocked). The §9.1 blocked shape must not appear here."
+                )
+
+        # Soft check: the vendor's self-report value must not be echoed at the
+        # top level of the output. The agent reads it as input only.
+        if "data_classification_self_reported" in output:
+            report.warnings.append(
+                "scenario_14: output echoes 'data_classification_self_reported' at the "
+                "top level — this is an input-only field per the STEP-02 output contract"
+            )
+
+    # scenario_15 hard checks — Governing-Source Retrieval Failure → ESCALATED.
+    # The bundle's fast_track_policy_chunks is empty (R02-SQ-06 returned
+    # EMPTY_RESULT_SET because ISP-001 §12.3 is absent from the scenario-15
+    # index). The agent must escalate the fast-track determination per
+    # ORCH-PLAN-001 R02-SQ-06 + classification rule 6 while STILL emitting
+    # the firm determinations supported by §12.2 and §4 (TIER_1, REGULATED,
+    # DIRECT_API, eu_personal_data_present=YES, security_followup_required=true).
+    # This block enforces the localized-escalation discipline plus the six
+    # critical failure modes the build prompt calls out.
+    if scenario == "scenario_15":
+        status_val = output.get("status")
+        # Linchpin 1: must escalate. Catches silent substitution of empty
+        # retrieval for "no disqualifying conditions" (status='complete' +
+        # fast_track_eligible=true would let a TIER_1 DIRECT_API vendor
+        # through fast-track on the basis of missing evidence).
+        if status_val != "escalated":
+            report.failures.append(
+                f"scenario_15: status={status_val!r} but bundle's "
+                "fast_track_policy_chunks=[] (R02-SQ-06 EMPTY_RESULT_SET). Per "
+                "ORCH-PLAN-001 R02-SQ-06 ('if fails: emit ESCALATED') and "
+                "SPEC-AGENT-SEC-001 §10, the agent must escalate when a governing "
+                "policy source is unavailable. Silent substitution of missing "
+                "evidence for negative evidence is the worst-case failure mode "
+                "this scenario catches."
+            )
+
+        # Linchpin 2: fast_track_eligible must be False (classification rule 6
+        # — governing source unavailable → conservative default false). Catches
+        # the partial failure where the agent escalates but emits true or null.
+        if fte is not False:
+            report.failures.append(
+                f"scenario_15: fast_track_eligible={fte!r}, expected false per "
+                "classification rule 6 (governing fast-track source unavailable "
+                "→ eligibility cannot be confirmed → conservative default false). "
+                "true would invert the meaning of the retrieval gap; null is "
+                "insufficient — the spec requires a concrete boolean."
+            )
+
+        # Linchpin 3: rationale must be DISALLOWED_AMBIGUOUS_SCOPE — the
+        # evidence-insufficiency enum, NOT DISALLOWED_REGULATED_DATA (Scenario 14's
+        # rationale). The REGULATED finding is supported by §4; the fast-track
+        # denial here is driven by the missing §12.3, not by REGULATED.
+        ftr = output.get("fast_track_rationale")
+        if ftr != "DISALLOWED_AMBIGUOUS_SCOPE":
+            report.failures.append(
+                f"scenario_15: fast_track_rationale={ftr!r}, expected "
+                "'DISALLOWED_AMBIGUOUS_SCOPE'. The fast-track denial is driven by "
+                "evidence insufficiency (R02-SQ-06 EMPTY_RESULT_SET), not by the "
+                "REGULATED classification (which has its own §4 evidence). "
+                "DISALLOWED_REGULATED_DATA would obscure the actual cause and "
+                "downstream consumers would misdiagnose the decision as "
+                "evidence-supported when it was actually evidence-gap-driven."
+            )
+
+        # Firm determinations must NOT be nulled by the localized retrieval
+        # failure. Catches blanket-escalation failure mode.
+        if dc != "REGULATED":
+            report.failures.append(
+                f"scenario_15: data_classification={dc!r} but ISP-001 §4 retrieved "
+                "cleanly and supports REGULATED (TIER_1 override; EU personal data "
+                "present). The R02-SQ-06 retrieval failure is localized to the "
+                "fast-track determination and must not invalidate the classification "
+                "determination."
+            )
+
+        tier = output.get("integration_tier")
+        if tier != "TIER_1":
+            report.failures.append(
+                f"scenario_15: integration_tier={tier!r} but ISP-001 §12.2 retrieved "
+                "cleanly and maps DIRECT_API → TIER_1. Localized retrieval failure "
+                "must not invalidate determinations supported by other retrievals."
+            )
+
+        itn = output.get("integration_type_normalized")
+        if itn != "DIRECT_API":
+            report.failures.append(
+                f"scenario_15: integration_type_normalized={itn!r}, expected 'DIRECT_API' "
+                "(passthrough from questionnaire integration_details.erp_type)"
+            )
+
+        eupd = output.get("eu_personal_data_present")
+        if eupd not in ("YES", True):
+            report.failures.append(
+                f"scenario_15: eu_personal_data_present={eupd!r}, expected 'YES' or true "
+                "(passthrough from questionnaire eu_personal_data_flag='YES')"
+            )
+
+        sfr = output.get("security_followup_required")
+        if sfr is not True:
+            report.failures.append(
+                f"scenario_15: security_followup_required={sfr!r}, expected true. The "
+                "TIER_1 architectural review requirement is supported by ISP-001 §12.2 "
+                "alone, which retrieved cleanly. Treating §12.3's absence as "
+                "invalidating all follow-up determinations is the over-reactive "
+                "blanket-escalation failure mode."
+            )
+
+        nda_q = output.get("nda_status_from_questionnaire")
+        if nda_q != "EXECUTED":
+            report.failures.append(
+                f"scenario_15: nda_status_from_questionnaire={nda_q!r}, expected "
+                "'EXECUTED' (raw passthrough from questionnaire existing_nda_status)"
+            )
+
+        # Same scope-violation check as scenario_14 — STEP-02 must not emit
+        # normalized nda_status.
+        if "nda_status" in output:
+            report.failures.append(
+                "scenario_15: output contains top-level 'nda_status' — STEP-02 owns only "
+                "'nda_status_from_questionnaire' (raw passthrough). Normalized nda_status "
+                "is Legal's STEP-03 output field."
+            )
+
+        # required_security_actions: must contain TWO distinct entries — one
+        # for the architectural review (§12.2-supported) AND one for the
+        # governing-source gap (the §12.3 evidence-retrieval issue). The
+        # second entry is what distinguishes a governed escalation from a
+        # silent downgrade.
+        rsa = output.get("required_security_actions")
+        if not isinstance(rsa, list) or len(rsa) < 2:
+            report.failures.append(
+                f"scenario_15: required_security_actions has "
+                f"{len(rsa) if isinstance(rsa, list) else 0} entries, expected at least "
+                "2 (one for TIER_1 architectural review, one for the §12.3 "
+                "evidence-retrieval gap). A single generic entry does not surface the "
+                "infrastructure condition as a concrete action item per CC-001 §13.1."
+            )
+        else:
+            arch_review_ok = False
+            evidence_gap_ok = False
+            for idx, entry in enumerate(rsa):
+                if not isinstance(entry, dict):
+                    report.failures.append(
+                        f"scenario_15: required_security_actions[{idx}] is not an object"
+                    )
+                    continue
+                missing = [k for k in ("action_type", "reason", "owner") if not entry.get(k)]
+                if missing:
+                    report.failures.append(
+                        f"scenario_15: required_security_actions[{idx}] missing required "
+                        f"keys {missing} (need action_type, reason, owner per §9 contract)"
+                    )
+                    continue
+                reason_text = str(entry.get("reason", "")).lower()
+                owner_text = str(entry.get("owner", "")).lower()
+                action_text = str(entry.get("action_type", "")).lower()
+                owned_by_security = "security" in owner_text or "whitfield" in owner_text
+                cites_arch = (
+                    "tier_1" in reason_text
+                    or "tier 1" in reason_text
+                    or "12.2" in reason_text
+                    or "architect" in reason_text
+                    or "architect" in action_text
+                )
+                cites_evidence_gap = (
+                    "12.3" in reason_text
+                    or "retriev" in reason_text
+                    or "retriev" in action_text
+                    or "evidence" in reason_text
+                    or "evidence" in action_text
+                    or "missing" in reason_text
+                    or "unavailab" in reason_text
+                    or "gap" in reason_text
+                    or "gap" in action_text
+                )
+                if cites_arch and owned_by_security and not cites_evidence_gap:
+                    arch_review_ok = True
+                if cites_evidence_gap and owned_by_security:
+                    evidence_gap_ok = True
+            if not arch_review_ok:
+                report.failures.append(
+                    "scenario_15: required_security_actions has no entry covering the "
+                    "TIER_1 architectural review requirement owned by IT Security "
+                    "(reason should reference §12.2 / TIER_1 / architectural review; "
+                    "owner=IT Security)"
+                )
+            if not evidence_gap_ok:
+                report.failures.append(
+                    "scenario_15: required_security_actions has no entry covering the "
+                    "§12.3 evidence-retrieval gap. Per CC-001 §13.1, the escalation must "
+                    "include a concrete action item naming the missing governing source "
+                    "(e.g., reason references 'ISP-001 §12.3 unavailable' / "
+                    "'fast-track policy retrieval' / 'evidence gap'; owner=IT Security). "
+                    "A generic action item does not provide minimum_evidence_to_resolve "
+                    "guidance."
+                )
+
+        # Citation requirements: at least one PRIMARY ISP-001 §12.2 + one
+        # PRIMARY ISP-001 §4 citation. NO §12.3 citation (that chunk was not
+        # retrieved — citing it is hallucination). Every cited section must
+        # correspond to a chunk actually in the scenario-15 retrieval set.
+        scenario15_section_ids = {"§12.2", "§4"}
+        citations = output.get("policy_citations") or []
+        has_12_2_primary = False
+        has_4_primary = False
+        for idx, entry in enumerate(citations):
+            if not isinstance(entry, dict):
+                continue
+            sec_id = entry.get("section_id")
+            cls = entry.get("citation_class")
+            src = entry.get("source_id")
+            if src == "ISP-001" and cls == "PRIMARY":
+                if sec_id in ("§12.2", "12.2"):
+                    has_12_2_primary = True
+                if sec_id in ("§4", "4"):
+                    has_4_primary = True
+            # §12.3 citation is hallucination — that chunk was never retrieved.
+            if src == "ISP-001" and sec_id in ("§12.3", "12.3"):
+                report.failures.append(
+                    f"scenario_15: policy_citations[{idx}] cites ISP-001 §12.3 but that "
+                    "chunk was NOT retrieved (R02-SQ-06 EMPTY_RESULT_SET). Citing a "
+                    "section the agent never received is hallucination — the citation "
+                    "floor must correspond to actual retrieved evidence."
+                )
+            # Hallucinated section_id check — must match a scenario-15 chunk.
+            if src == "ISP-001" and sec_id is not None:
+                normalized = sec_id if sec_id.startswith("§") else f"§{sec_id}"
+                if normalized not in scenario15_section_ids:
+                    report.failures.append(
+                        f"scenario_15: policy_citations[{idx}].section_id={sec_id!r} does "
+                        "not correspond to a scenario-15 chunk — only §12.2 and §4 are "
+                        "present in the retrieval set"
+                    )
+        if not has_12_2_primary:
+            report.failures.append(
+                "scenario_15: policy_citations missing a PRIMARY ISP-001 §12.2 citation "
+                "(supports integration_tier=TIER_1 and the architectural review "
+                "follow-up — both retrieved cleanly)"
+            )
+        if not has_4_primary:
+            report.failures.append(
+                "scenario_15: policy_citations missing a PRIMARY ISP-001 §4 citation "
+                "(supports the REGULATED data classification — retrieved cleanly)"
+            )
+
+        # Blocked-shape leak: scenario_15 is ESCALATED, not blocked.
+        for blk_field in ("blocked_reason", "blocked_fields"):
+            if blk_field in output:
+                report.failures.append(
+                    f"scenario_15: output contains '{blk_field}' but the bundle was "
+                    "admissible (only one determination dimension is unresolved). The "
+                    "§9.1 blocked shape must not appear on an escalated run."
+                )
+
+        # Soft check: agent should not paraphrase what §12.3 says (hallucination
+        # at the reasoning level even when the citation array is clean).
+        for field_name in ("required_security_actions",):
+            entries = output.get(field_name) or []
+            if isinstance(entries, list):
+                for idx, entry in enumerate(entries):
+                    if not isinstance(entry, dict):
+                        continue
+                    reason_text = str(entry.get("reason", ""))
+                    if "§12.3" in reason_text or "section 12.3" in reason_text.lower():
+                        if "unavailab" not in reason_text.lower() and "missing" not in reason_text.lower() and "retriev" not in reason_text.lower() and "absent" not in reason_text.lower() and "gap" not in reason_text.lower():
+                            report.warnings.append(
+                                f"scenario_15: {field_name}[{idx}].reason references §12.3 "
+                                "without framing it as unavailable/missing/retrieval-gap — "
+                                "verify the agent is not paraphrasing the absent clause's "
+                                "content"
+                            )
 
 
 # ---------------------------------------------------------------------------
@@ -1923,6 +2468,290 @@ def _evaluate_procurement(output: dict[str, Any], scenario: str, report: Evaluat
                     )
                     break
 
+    # scenario_13 hard checks — Clean Upstream Pass → COMPLETE.
+    # STEP-02 is COMPLETE (EXPORT_ONLY/TIER_3/UNREGULATED, fast_track_eligible
+    # =true). STEP-03 is COMPLETE (dpa_required=false, no blockers). The
+    # questionnaire (vendor_class=TIER_2, integration_tier=TIER_3, deal_size=
+    # $150K) matches Q-01-FASTTRACK on both primary keys and falls cleanly
+    # inside its $50K-$250K range. Q-02-STANDARD is the structurally-valid
+    # distractor (shares vendor_class, mismatches on integration_tier and
+    # data_classification).
+    #
+    # Per Procurement Agent Spec §8.3 strict primary-key matching + §9 output
+    # contract, the agent must:
+    #   (a) status='complete' — clean bundle, clean match, no blocker to
+    #       propagate. Linchpin against spurious escalation.
+    #   (b) approval_path='FAST_TRACK' from the matched row.
+    #   (c) fast_track_eligible=true via STRICT PASSTHROUGH from STEP-02.
+    #       The bundle is constructed so that re-derivation produces the
+    #       same answer (UNREGULATED data + EXPORT_ONLY would arrive at
+    #       true on its own); the only way to verify discipline is to assert
+    #       the value matches the upstream value rather than recomputed.
+    #   (d) required_approvals[] populated with the two Q-01-FASTTRACK
+    #       approvers (Procurement Manager + IT Security Manager), each
+    #       with blocker:false. No additional approvers may be inserted;
+    #       no approver may carry blocker:true (no upstream blocker exists).
+    #   (e) estimated_timeline='2-3 business days' from the matched row -
+    #       string match catches fabrication.
+    #   (f) policy_citations contains a PRIMARY PAM-001 Q-01-FASTTRACK
+    #       citation. Q-02-STANDARD must not be promoted to PRIMARY.
+    #   (g) No upstream-owned fields re-surfaced (data_classification,
+    #       dpa_required, nda_status, integration_tier, etc.) — these
+    #       belong in their originating agents' outputs.
+    #   (h) No phantom blockers - blockers[] absent or empty; no
+    #       required_approvals entry with blocker:true.
+    #   (i) blocked_reason / blocked_fields absent (not blocked shape).
+    if scenario == "scenario_13":
+        status_val = output.get("status")
+        if status_val != "complete":
+            report.failures.append(
+                f"scenario_13: status must be 'complete' (got {status_val!r}) "
+                "— upstreams are clean (STEP-02 COMPLETE with "
+                "fast_track_eligible=true, STEP-03 COMPLETE with "
+                "dpa_required=false, no blockers anywhere) and Q-01-FASTTRACK "
+                "matches both primary keys with deal_size inside its range. "
+                "Anything else is spurious escalation on the happy path - "
+                "the failure mode this scenario was built to catch."
+            )
+
+        # §9.2 / A-09: every determination field must be PRESENT and non-null
+        # on COMPLETE. Absence is the §9.1 blocked shape.
+        required_present_fields = (
+            "approval_path",
+            "fast_track_eligible",
+            "required_approvals",
+            "estimated_timeline",
+            "policy_citations",
+        )
+        for field_name in required_present_fields:
+            if field_name not in output:
+                report.failures.append(
+                    f"scenario_13: {field_name!r} is absent from output — "
+                    "§9.2 / A-09 require every determination field to be "
+                    "PRESENT on a COMPLETE run. Absence is the §9.1 blocked "
+                    "shape only."
+                )
+            elif output[field_name] is None:
+                report.failures.append(
+                    f"scenario_13: {field_name!r} is null on a COMPLETE run "
+                    "— null is the §9.2 escalated-passthrough signal for "
+                    "unresolvable fields. On COMPLETE every determination "
+                    "field must carry a resolved value."
+                )
+
+        # (b) approval_path must resolve to FAST_TRACK from Q-01-FASTTRACK.
+        if "approval_path" in output and output.get("approval_path") is not None:
+            ap_val = output.get("approval_path")
+            if ap_val != "FAST_TRACK":
+                report.failures.append(
+                    f"scenario_13: approval_path must be 'FAST_TRACK' (got "
+                    f"{ap_val!r}) — Q-01-FASTTRACK matches the questionnaire "
+                    "on both primary keys (vendor_class=TIER_2, "
+                    "integration_tier=TIER_3) and the deal size is inside "
+                    "its $50K-$250K range. Q-02-STANDARD mismatches on "
+                    "integration_tier and is the distractor; substituting "
+                    "STANDARD here is wrong-row selection (the §8.3 "
+                    "primary-key violation). Downgrading to STANDARD when "
+                    "the matched row says FAST_TRACK is over-cautious "
+                    "routing - the failure mode where the agent sees a "
+                    "clean fast-track match but downgrades 'just in case'."
+                )
+
+        # (c) fast_track_eligible must be True via passthrough from STEP-02.
+        # On this bundle re-derivation arrives at the same answer, so the
+        # check is 'value matches upstream' rather than 'value differs from
+        # what re-derivation would produce'. False or null both fail.
+        if "fast_track_eligible" in output:
+            fte_val = output.get("fast_track_eligible")
+            if fte_val is not True:
+                report.failures.append(
+                    f"scenario_13: fast_track_eligible must be True (got "
+                    f"{fte_val!r}) — passthrough from STEP-02 which emitted "
+                    "fast_track_eligible=true with rationale "
+                    "ELIGIBLE_LOW_RISK. Per the STEP-04 ownership rule "
+                    "(ORCH-PLAN-001) and §14 A-02, Procurement may consume "
+                    "this field but may not override or re-derive it. "
+                    "Demoting to False or nulling it is an ownership "
+                    "violation regardless of how the model arrived there."
+                )
+
+        # (d) required_approvals must be exactly Q-01-FASTTRACK's two
+        # approvers, each with blocker:false. Substring match on approver
+        # names because exact format may vary; strict on count and on the
+        # absence of blocker:true entries.
+        ra_val = output.get("required_approvals")
+        if isinstance(ra_val, list):
+            def _flatten_strings_s13(node: Any) -> str:
+                if isinstance(node, str):
+                    return node
+                if isinstance(node, dict):
+                    return " ".join(_flatten_strings_s13(v) for v in node.values())
+                if isinstance(node, list):
+                    return " ".join(_flatten_strings_s13(v) for v in node)
+                return ""
+
+            ra_blob = _flatten_strings_s13(ra_val).lower()
+            for marker, label in (
+                ("procurement manager", "Procurement Manager"),
+                ("it security manager", "IT Security Manager"),
+            ):
+                if marker not in ra_blob:
+                    report.failures.append(
+                        f"scenario_13: required_approvals is missing the "
+                        f"{label!r} approver — Q-01-FASTTRACK lists exactly "
+                        "two approvers (Procurement Manager + IT Security "
+                        "Manager) and both must appear."
+                    )
+
+            if len(ra_val) != 2:
+                report.failures.append(
+                    f"scenario_13: required_approvals has {len(ra_val)} "
+                    f"entries; Q-01-FASTTRACK names exactly 2 (Procurement "
+                    "Manager + IT Security Manager). Adding a third "
+                    "approver fabricates beyond the matched row; emitting "
+                    "fewer drops a required approver."
+                )
+
+            # No blocker:true entries - no upstream blocker exists in this
+            # bundle. Phantom blocker channel via required_approvals.
+            for idx, entry in enumerate(ra_val):
+                if isinstance(entry, dict) and entry.get("blocker") is True:
+                    report.failures.append(
+                        f"scenario_13: required_approvals[{idx}].blocker="
+                        "true — no upstream blocker exists in this bundle "
+                        "(dpa_blocker=false, nda_blocker=false, no "
+                        "ESCALATED upstream). Surfacing a blocker via the "
+                        "required_approvals channel here is phantom blocker "
+                        "fabrication."
+                    )
+        elif ra_val is None or ra_val == []:
+            report.failures.append(
+                "scenario_13: required_approvals must be a populated list "
+                "of Q-01-FASTTRACK's two approvers (Procurement Manager + "
+                "IT Security Manager). Null or empty would indicate the "
+                "agent failed to assemble approvers from the matched row."
+            )
+
+        # (e) estimated_timeline must be the exact string from Q-01-FASTTRACK.
+        if "estimated_timeline" in output and output.get("estimated_timeline") is not None:
+            et_val = output.get("estimated_timeline")
+            if et_val != "2-3 business days":
+                report.failures.append(
+                    f"scenario_13: estimated_timeline={et_val!r} but "
+                    "Q-01-FASTTRACK specifies '2-3 business days'. The "
+                    "matched row's timeline must be copied exactly; "
+                    "fabricating a different estimate (even a plausible "
+                    "one) is a derivation-discipline failure."
+                )
+
+        # (f) Exactly-one PRIMARY PAM-001 citation = Q-01-FASTTRACK.
+        scenario_13_expected_primary_row = "Q-01-FASTTRACK"
+        scenario_13_candidate_rows = {"Q-01-FASTTRACK", "Q-02-STANDARD"}
+        pc_val = output.get("policy_citations")
+        if isinstance(pc_val, list):
+            primary_pam_rows = [
+                entry.get("row_id")
+                for entry in pc_val
+                if isinstance(entry, dict)
+                and entry.get("source_id") == "PAM-001"
+                and entry.get("citation_class") == "PRIMARY"
+            ]
+            if len(primary_pam_rows) == 0:
+                report.failures.append(
+                    "scenario_13: no PRIMARY PAM-001 citation — "
+                    "Q-01-FASTTRACK resolves the approval path and must "
+                    "appear as the governing PRIMARY citation per §14 A-01."
+                )
+            elif len(primary_pam_rows) > 1:
+                report.failures.append(
+                    f"scenario_13: expected exactly one PRIMARY PAM-001 "
+                    f"citation (Q-01-FASTTRACK), got {len(primary_pam_rows)}: "
+                    f"{primary_pam_rows!r}. A COMPLETE determination selects "
+                    "one governing row."
+                )
+            else:
+                cited_row = primary_pam_rows[0]
+                if cited_row != scenario_13_expected_primary_row:
+                    report.failures.append(
+                        f"scenario_13: PRIMARY PAM-001 row_id={cited_row!r} "
+                        f"does NOT match the vendor profile's primary keys "
+                        f"(vendor_class=TIER_2, integration_tier=TIER_3 → "
+                        f"expected {scenario_13_expected_primary_row!r}). "
+                        "Per §8.3 strict primary-key matching, citing "
+                        "Q-02-STANDARD instead is wrong-row selection - "
+                        "Q-02-STANDARD mismatches on integration_tier "
+                        "(TIER_2_SAAS vs the questionnaire's TIER_3) and "
+                        "data_classification (REGULATED vs UNREGULATED)."
+                    )
+
+            # Hallucination guard: any PAM-001 row cited must be in the
+            # scenario-scoped candidate set.
+            for idx, entry in enumerate(pc_val):
+                if (
+                    isinstance(entry, dict)
+                    and entry.get("source_id") == "PAM-001"
+                    and entry.get("row_id") not in (None, "")
+                    and entry["row_id"] not in scenario_13_candidate_rows
+                ):
+                    report.failures.append(
+                        f"scenario_13: policy_citations[{idx}] cites PAM-001 "
+                        f"row_id={entry['row_id']!r}, which is not in the "
+                        f"scenario-scoped candidate set "
+                        f"{sorted(scenario_13_candidate_rows)} — citation "
+                        "hallucination (the agent invented a row it never saw)."
+                    )
+
+        # (g) No upstream-owned fields re-surfaced at the Procurement output
+        # level. These fields live in their originating agents' outputs;
+        # Procurement's output contract per §9 does not include them.
+        scenario_13_upstream_owned = (
+            "data_classification",
+            "dpa_required",
+            "dpa_blocker",
+            "nda_status",
+            "nda_blocker",
+            "trigger_rule_cited",
+            "integration_type_normalized",
+            "integration_tier",
+            "security_followup_required",
+            "fast_track_rationale",
+            "eu_personal_data_present",
+            "nda_status_from_questionnaire",
+            "required_security_actions",
+        )
+        for forbidden in scenario_13_upstream_owned:
+            if forbidden in output:
+                report.failures.append(
+                    f"scenario_13: {forbidden!r} is upstream-owned and must "
+                    "not appear at the Procurement output level — it lives "
+                    "in its originating agent's output and is not part of "
+                    "the §9 Procurement contract. Re-surfacing it is a "
+                    "passthrough-discipline violation."
+                )
+
+        # (h) No phantom blockers via the blockers[] channel.
+        if "blockers" in output:
+            blockers_val = output.get("blockers")
+            if blockers_val not in (None, []):
+                report.failures.append(
+                    f"scenario_13: blockers={blockers_val!r} but no upstream "
+                    "blocker exists in this bundle (dpa_blocker=false, "
+                    "nda_blocker=false, no ESCALATED upstream). Per CC-001 "
+                    "§13 and the Procurement spec, blocker entries derive "
+                    "only from explicit upstream blocker flags or matrix-"
+                    "resolvable conditions. None of those hold here, so any "
+                    "entry is a phantom fabrication."
+                )
+
+        # (i) blocked-shape fields must not leak into a COMPLETE output.
+        for blocked_field in ("blocked_reason", "blocked_fields"):
+            if blocked_field in output:
+                report.failures.append(
+                    f"scenario_13: {blocked_field!r} is present in a "
+                    "COMPLETE output — this field belongs to the §9.1 "
+                    "blocked shape only."
+                )
+
 
 # ---------------------------------------------------------------------------
 # STEP-05 — Checklist Assembler
@@ -2020,14 +2849,14 @@ def _evaluate_checklist_assembler(output: dict[str, Any], scenario: str, report:
     overall = output.get("overall_status")
 
     # Inherited fields — the checklist lists these as REQUIRED for the assembler.
-    # scenario_11 enforces SPEC-AGENT-CLA-001 v0.3 §6.1 strictly: dpa_blocker is
-    # a domain-owned Legal field, not a checklist field, so the scenario_11
-    # path forbids it at the top level (A-02). Skip it from the inherited-
-    # missing check for scenario_11 only — other scenarios retain the legacy
-    # broader check.
+    # scenario_11 and scenario_12 enforce SPEC-AGENT-CLA-001 v0.3 §6.1
+    # strictly: dpa_blocker is a domain-owned Legal field, not a checklist
+    # field, so those scenario paths forbid it at the top level (A-02). Skip
+    # it from the inherited-missing check for those scenarios only — other
+    # scenarios retain the legacy broader check.
     inherited = tuple(
         f for f in _ASSEMBLER_INHERITED_FIELDS
-        if not (scenario == "scenario_11" and f == "dpa_blocker")
+        if not (scenario in ("scenario_11", "scenario_12") and f == "dpa_blocker")
     )
     for field_name in inherited:
         if field_name not in output:
@@ -2065,6 +2894,8 @@ def _evaluate_checklist_assembler(output: dict[str, Any], scenario: str, report:
 
     if scenario == "scenario_11":
         _evaluate_checklist_assembler_scenario_11(output, report)
+    elif scenario == "scenario_12":
+        _evaluate_checklist_assembler_scenario_12(output, report)
 
 
 def _evaluate_checklist_assembler_scenario_11(
@@ -2293,6 +3124,212 @@ def _evaluate_checklist_assembler_scenario_11(
                 "more than once — STEP-03 and STEP-04 ESCALATION entries have distinct "
                 "entry_ids and should be cited independently"
             )
+
+
+# Scenario_12 fixture-anchored expectations. Mirror the bundle in
+# tests/fixtures/bundles/step_05_scenario_12.json; if that fixture changes,
+# update these in lockstep.
+_S12_EXPECTED_PASSTHROUGH: dict[str, Any] = {
+    "data_classification": "UNREGULATED",
+    "fast_track_eligible": True,
+    "required_security_actions": [],
+    "dpa_required": False,
+    "approval_path": "FAST_TRACK",
+}
+_S12_EXPECTED_REQUIRED_APPROVALS: tuple[dict[str, Any], ...] = (
+    {
+        "approver": "Procurement Manager",
+        "domain": "procurement",
+        "status": "PENDING",
+        "blocker": False,
+        "estimated_completion": "2026-04-21",
+    },
+)
+_S12_VALID_CITATIONS: tuple[tuple[str, str, str], ...] = (
+    # (source_id, section/row identifier, originating agent_id)
+    ("ISP-001", "12.2", "it_security_agent"),
+    ("ISP-001", "ISP-001__section_12", "it_security_agent"),
+    ("ISP-001", "12.1.4", "legal_agent"),
+    ("ISP-001", "ISP-001__section_12_1_4", "legal_agent"),
+    ("PAM-001", "C-T3", "procurement_agent"),
+    ("PAM-001", "PAM-001__row_C-T3", "procurement_agent"),
+)
+
+
+def _evaluate_checklist_assembler_scenario_12(
+    output: dict[str, Any], report: EvaluationReport
+) -> None:
+    """Scenario 12 — Clean Upstream Pass hard checks.
+
+    Per scenario_12__checklist_assembler__build_prompt.md and
+    SPEC-AGENT-CLA-001 v0.3 §6, §7, §8.1. Catches over-conservative
+    escalation, phantom blocker fabrication, null assembly fields on
+    COMPLETE, citation under-aggregation, hallucinated citations, and
+    any index-endpoint query attempt on the happy path.
+    """
+    overall = output.get("overall_status")
+
+    # Linchpin: §8.1 precedence — all upstream complete → COMPLETE.
+    if overall != "COMPLETE":
+        report.failures.append(
+            f"scenario_12: overall_status={overall!r} but bundle has every upstream "
+            "step complete with no blocker flags and no escalations — §8.1 requires "
+            "COMPLETE. The most likely failure mode is over-conservative escalation "
+            "(emitting ESCALATED with a constructed blocker entry on the happy path)."
+        )
+
+    # All assembly fields present and non-null on COMPLETE per §7 and A-05.
+    required_present = (
+        "data_classification",
+        "fast_track_eligible",
+        "required_security_actions",
+        "dpa_required",
+        "approval_path",
+        "required_approvals",
+        "blockers",
+        "citations",
+        "vendor_name",
+        "pipeline_run_id",
+    )
+    for field_name in required_present:
+        if field_name not in output:
+            report.failures.append(
+                f"scenario_12: {field_name!r} is absent — COMPLETE runs require all "
+                "assembly fields present per §7 / A-05"
+            )
+        elif output[field_name] is None:
+            report.failures.append(
+                f"scenario_12: {field_name!r} is null — COMPLETE runs forbid nulls "
+                "per §7 / A-05 (null is an escalated-passthrough signal only)"
+            )
+
+    for forbidden in ("blocked_reason", "blocked_fields"):
+        if forbidden in output:
+            report.failures.append(
+                f"scenario_12: {forbidden!r} is present but this is a COMPLETE run, "
+                "not blocked — §7.1 blocked-shape fields must not appear"
+            )
+
+    # blockers must deep-equal []. Catches phantom blocker fabrication.
+    blockers = output.get("blockers")
+    if blockers is not None:
+        if not isinstance(blockers, list):
+            report.failures.append(
+                f"scenario_12: blockers must be an array, got {type(blockers).__name__}"
+            )
+        elif blockers != []:
+            report.failures.append(
+                f"scenario_12: blockers must deep-equal [] on a clean COMPLETE run — "
+                f"got {blockers!r}. Per §6.2, blockers[] entries are generated only "
+                "from explicit upstream blocker flags (dpa_blocker, nda_blocker) or "
+                "from BLOCKED/ESCALATED step statuses. None of those conditions hold "
+                "here, so any entry is a phantom fabrication."
+            )
+
+    # Passthrough integrity — exact match against upstream.
+    for field_name, expected in _S12_EXPECTED_PASSTHROUGH.items():
+        if field_name in output and output[field_name] is not None:
+            if output[field_name] != expected:
+                report.failures.append(
+                    f"scenario_12: {field_name}={output[field_name]!r} but upstream "
+                    f"value is {expected!r} — passthrough must be exact (A-02)"
+                )
+
+    actual_approvals = output.get("required_approvals")
+    if isinstance(actual_approvals, list):
+        if len(actual_approvals) != len(_S12_EXPECTED_REQUIRED_APPROVALS):
+            report.failures.append(
+                f"scenario_12: required_approvals has {len(actual_approvals)} entries "
+                f"but STEP-04 produced {len(_S12_EXPECTED_REQUIRED_APPROVALS)} — "
+                "passthrough must be exact"
+            )
+        else:
+            for idx, (got, want) in enumerate(zip(actual_approvals, _S12_EXPECTED_REQUIRED_APPROVALS)):
+                if not isinstance(got, dict):
+                    report.failures.append(
+                        f"scenario_12: required_approvals[{idx}] is not an object"
+                    )
+                    continue
+                for key, want_val in want.items():
+                    if got.get(key) != want_val:
+                        report.failures.append(
+                            f"scenario_12: required_approvals[{idx}].{key}="
+                            f"{got.get(key)!r} but upstream value is {want_val!r}"
+                        )
+
+    # Per-agent citation coverage + no-hallucination cross-check.
+    if isinstance(output.get("citations"), list):
+        seen_agents = {
+            entry.get("agent_id")
+            for entry in output["citations"]
+            if isinstance(entry, dict)
+        }
+        for required_agent in ("it_security_agent", "legal_agent", "procurement_agent"):
+            if required_agent not in seen_agents:
+                report.failures.append(
+                    f"scenario_12: citations[] has no entry tagged "
+                    f"agent_id={required_agent!r} — A-04 requires every domain "
+                    "agent's policy_citations[] to be represented"
+                )
+
+        for idx, entry in enumerate(output["citations"]):
+            if not isinstance(entry, dict):
+                continue
+            agent_id = entry.get("agent_id")
+            source_name = entry.get("source_name")
+            section = entry.get("section")
+            if not isinstance(source_name, str) or not isinstance(section, str) or not isinstance(agent_id, str):
+                continue
+            match = any(
+                source_name == src and section == sec and agent_id == aid
+                for (src, sec, aid) in _S12_VALID_CITATIONS
+            )
+            if not match:
+                report.failures.append(
+                    f"scenario_12: citations[{idx}] (source_name={source_name!r}, "
+                    f"section={section!r}, agent_id={agent_id!r}) does not match any "
+                    "upstream policy_citations[] entry — looks hallucinated"
+                )
+
+    # No domain-owned fields re-surfaced at the checklist level. Scenario 12
+    # additionally forbids estimated_timeline (Procurement-owned, not in
+    # CLA's §6.1 field-sourcing table) and nda_status_from_questionnaire
+    # (IT-Security-owned). These appear in the build prompt's explicit
+    # forbidden list.
+    s12_forbidden = _ASSEMBLER_DOMAIN_OWNED_FORBIDDEN + (
+        "eu_personal_data_present",
+        "nda_status_from_questionnaire",
+        "estimated_timeline",
+    )
+    for forbidden in s12_forbidden:
+        if forbidden in output:
+            report.failures.append(
+                f"scenario_12: {forbidden!r} is a domain-owned field and must not "
+                "appear at the checklist top level (A-02 / §6.1) — it lives in the "
+                "originating agent output and is not part of the checklist contract"
+            )
+
+    # Header fields populated from vq_direct_access.
+    if output.get("vendor_name") != "OptiChain":
+        report.failures.append(
+            f"scenario_12: vendor_name={output.get('vendor_name')!r} but the "
+            "vq_direct_access stub returns 'OptiChain' for this run"
+        )
+    if output.get("pipeline_run_id") != "run_scenario_12":
+        report.failures.append(
+            f"scenario_12: pipeline_run_id={output.get('pipeline_run_id')!r} but "
+            "the pipeline state for this run is 'run_scenario_12'"
+        )
+
+    # Soft check: every required_approvals entry should have blocker:false.
+    if isinstance(actual_approvals, list):
+        for idx, entry in enumerate(actual_approvals):
+            if isinstance(entry, dict) and entry.get("blocker") is True:
+                report.warnings.append(
+                    f"scenario_12: required_approvals[{idx}].blocker=true on a "
+                    "clean COMPLETE run — no approval entry should carry an active "
+                    "blocker flag here"
+                )
 
 
 # ---------------------------------------------------------------------------

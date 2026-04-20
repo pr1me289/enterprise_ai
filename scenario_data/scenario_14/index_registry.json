@@ -1,0 +1,34 @@
+{
+  "registry_version": "1.0",
+  "scenario": "scenario_14",
+  "generated_at": "2026-04-19T00:00:00Z",
+  "sources": {
+    "ISP-001": {
+      "source_id": "ISP-001",
+      "source_name": "IT Security Policy",
+      "source_type": "POLICY_DOCUMENT",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "4.2-scenario14",
+      "document_date": "2026-04-19",
+      "freshness_status": "CURRENT",
+      "manifest_status": "CONFIRMED",
+      "allowed_agents": [
+        "it_security",
+        "legal",
+        "procurement"
+      ],
+      "is_primary_citable": true,
+      "storage_kind": "vector_bm25",
+      "logical_store_name": "idx_security_policy__scenario14",
+      "backends": [
+        "chroma",
+        "bm25"
+      ],
+      "backend_locations": {
+        "chroma_collection": "idx_security_policy__scenario14",
+        "bm25_bundle": "scenario_data/scenario_14/bm25/idx_security_policy__scenario14.pkl"
+      }
+    }
+  }
+}

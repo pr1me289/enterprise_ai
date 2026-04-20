@@ -1,0 +1,7 @@
+{
+  "registry_version": "1.0",
+  "scenario": "scenario_12",
+  "generated_at": "2026-04-19T00:00:00Z",
+  "notes": "Checklist Assembler isolated run \u2014 clean COMPLETE happy path. Per SPEC-AGENT-CLA-001 v0.3 \u00a74, CLA has no index access; idx_security_policy, idx_dpa_matrix, idx_procurement_matrix, and idx_slack_notes are all prohibited. No chunks, no vector or bm25 backends, no index builds. The CLA bundle for this scenario is composed entirely from upstream domain agent outputs and synthetic audit log entries at tests/fixtures/bundles/step_05_scenario_12.json. vq_direct_access is satisfied directly from the bundle's top-level vendor_name and pipeline_run_id.",
+  "sources": {}
+}

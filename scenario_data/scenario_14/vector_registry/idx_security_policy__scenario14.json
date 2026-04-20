@@ -1,0 +1,98 @@
+[
+  {
+    "chunk_id": "ISP-001__section_12_2",
+    "text": "12.2 ERP Integration Tier Classification\n\nVendors that integrate with Lichen ERP systems are assigned an integration tier based on the integration mechanism declared in the vendor questionnaire and verified during onboarding. The integration tier is derived from the integration architecture itself, not from the vendor's self-reported data classification.\n\nTIER_1 \u2014 Direct API Integration:\nAny vendor that establishes a DIRECT_API connection to a Lichen ERP system (SAP, Oracle, NetSuite, or other production ERP) is classified as TIER_1. Direct API integrations include service-account-authenticated connections, persistent ERP sessions, and any architecture that grants the vendor programmatic read or write access to ERP records. TIER_1 integrations are presumed to handle regulated data by default because direct ERP access exposes the vendor to inventory, financial, customer, and supplier records that fall within Lichen's regulated data perimeter.\n\nTIER_2 \u2014 Mediated Middleware Integration:\nVendors that integrate via a Lichen-managed iPaaS, ESB, or other middleware layer (MuleSoft, Boomi, SnapLogic, custom broker) are classified as TIER_2. The middleware enforces field-level access controls and data masking. TIER_2 vendors do not hold ERP credentials directly.\n\nTIER_3 \u2014 Export-Only / File-Based Integration:\nVendors that receive scheduled data exports via SFTP, S3 drop, or equivalent file-based mechanisms are classified as TIER_3. TIER_3 corresponds to EXPORT_ONLY integration patterns. There is no service account, no persistent ERP session, and no programmatic access. The vendor receives only the data records that Lichen explicitly chooses to push.\n\nMapping table (vendor questionnaire `integration_details.erp_type` \u2192 tier):\n- DIRECT_API \u2192 TIER_1\n- MIDDLEWARE \u2192 TIER_2\n- EXPORT_ONLY \u2192 TIER_3\n- AMBIGUOUS or unrecognized \u2192 UNCLASSIFIED_PENDING_REVIEW\n\nThe tier assignment is mandatory and must be derived from the questionnaire's concrete `erp_type` value combined with this table. Vendor self-reported data classification has no bearing on tier assignment. A vendor that self-reports NON_REGULATED data while declaring DIRECT_API integration is still TIER_1.",
+    "metadata": {
+      "chunk_id": "ISP-001__section_12_2",
+      "source_id": "ISP-001",
+      "source_name": "IT Security Policy",
+      "source_type": "POLICY_DOCUMENT",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "4.2-scenario14",
+      "document_date": "2026-04-19",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "it_security",
+        "legal",
+        "procurement"
+      ],
+      "allowed_agents_str": "|it_security|legal|procurement|",
+      "is_primary_citable": true,
+      "manifest_status": "CONFIRMED",
+      "section_id": "\u00a712.2",
+      "row_id": null,
+      "record_id": null,
+      "thread_id": null,
+      "domain_scope": null,
+      "text": "12.2 ERP Integration Tier Classification\n\nVendors that integrate with Lichen ERP systems are assigned an integration tier based on the integration mechanism declared in the vendor questionnaire and verified during onboarding. The integration tier is derived from the integration architecture itself, not from the vendor's self-reported data classification.\n\nTIER_1 \u2014 Direct API Integration:\nAny vendor that establishes a DIRECT_API connection to a Lichen ERP system (SAP, Oracle, NetSuite, or other production ERP) is classified as TIER_1. Direct API integrations include service-account-authenticated connections, persistent ERP sessions, and any architecture that grants the vendor programmatic read or write access to ERP records. TIER_1 integrations are presumed to handle regulated data by default because direct ERP access exposes the vendor to inventory, financial, customer, and supplier records that fall within Lichen's regulated data perimeter.\n\nTIER_2 \u2014 Mediated Middleware Integration:\nVendors that integrate via a Lichen-managed iPaaS, ESB, or other middleware layer (MuleSoft, Boomi, SnapLogic, custom broker) are classified as TIER_2. The middleware enforces field-level access controls and data masking. TIER_2 vendors do not hold ERP credentials directly.\n\nTIER_3 \u2014 Export-Only / File-Based Integration:\nVendors that receive scheduled data exports via SFTP, S3 drop, or equivalent file-based mechanisms are classified as TIER_3. TIER_3 corresponds to EXPORT_ONLY integration patterns. There is no service account, no persistent ERP session, and no programmatic access. The vendor receives only the data records that Lichen explicitly chooses to push.\n\nMapping table (vendor questionnaire `integration_details.erp_type` \u2192 tier):\n- DIRECT_API \u2192 TIER_1\n- MIDDLEWARE \u2192 TIER_2\n- EXPORT_ONLY \u2192 TIER_3\n- AMBIGUOUS or unrecognized \u2192 UNCLASSIFIED_PENDING_REVIEW\n\nThe tier assignment is mandatory and must be derived from the questionnaire's concrete `erp_type` value combined with this table. Vendor self-reported data classification has no bearing on tier assignment. A vendor that self-reports NON_REGULATED data while declaring DIRECT_API integration is still TIER_1.",
+      "citation_label": "ISP-001 \u00a712.2",
+      "chunk_type": "SECTION",
+      "chunk_order": 1
+    }
+  },
+  {
+    "chunk_id": "ISP-001__section_4",
+    "text": "4 Data Classification Framework\n\nLichen classifies all third-party vendor engagements into one of two data classifications for the purposes of this Policy: REGULATED or UNREGULATED. The classification governs every downstream control \u2014 DPA requirement, NDA scope, fast-track eligibility, approval path routing, and architectural review.\n\nREGULATED:\nA vendor engagement is classified as REGULATED when any of the following conditions hold:\n- The vendor processes personal data of EU data subjects (triggers DPA per DPA-TM-001).\n- The vendor processes financial, customer PII, supplier PII, or other data falling within Lichen's regulated data perimeter.\n- The vendor's integration architecture grants access to systems holding regulated data, regardless of the data types the vendor self-identifies as processing. Specifically: any TIER_1 integration (per \u00a712.2) is classified as REGULATED by default because TIER_1 integration capability includes programmatic access to ERP data streams that may expose regulated records. The TIER_1 classification overrides the vendor's self-reported `data_classification_self_reported` value and overrides an empty `regulated_data_types` array. Vendor self-report is treated as supporting input only; it does not override the policy-derived classification.\n- The vendor falls within scope of any other regulatory framework Lichen is subject to (HIPAA, SOX, PCI-DSS, etc.).\n\nUNREGULATED:\nA vendor engagement is classified as UNREGULATED only when ALL of the following hold:\n- No EU personal data is processed.\n- No regulated data types are processed.\n- The integration tier is TIER_3 (export-only) or the integration does not touch regulated data systems.\n- The vendor self-report and the policy-derived classification both align on non-regulated treatment.\n\nAuthority hierarchy:\nPer CC-001 \u00a74, ISP-001 (this Policy) is Tier 1 and the vendor questionnaire (VQ-OC-001) is Tier 2. When the vendor questionnaire's `data_classification_self_reported` value conflicts with the policy-derived classification, the policy classification controls. The questionnaire self-report is recorded as supporting context but does not override Tier 1 policy. A vendor that self-reports NON_REGULATED data while declaring a DIRECT_API ERP integration is REGULATED \u2014 the TIER_1 classification rule applies and the self-report is overridden.",
+    "metadata": {
+      "chunk_id": "ISP-001__section_4",
+      "source_id": "ISP-001",
+      "source_name": "IT Security Policy",
+      "source_type": "POLICY_DOCUMENT",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "4.2-scenario14",
+      "document_date": "2026-04-19",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "it_security",
+        "legal",
+        "procurement"
+      ],
+      "allowed_agents_str": "|it_security|legal|procurement|",
+      "is_primary_citable": true,
+      "manifest_status": "CONFIRMED",
+      "section_id": "\u00a74",
+      "row_id": null,
+      "record_id": null,
+      "thread_id": null,
+      "domain_scope": null,
+      "text": "4 Data Classification Framework\n\nLichen classifies all third-party vendor engagements into one of two data classifications for the purposes of this Policy: REGULATED or UNREGULATED. The classification governs every downstream control \u2014 DPA requirement, NDA scope, fast-track eligibility, approval path routing, and architectural review.\n\nREGULATED:\nA vendor engagement is classified as REGULATED when any of the following conditions hold:\n- The vendor processes personal data of EU data subjects (triggers DPA per DPA-TM-001).\n- The vendor processes financial, customer PII, supplier PII, or other data falling within Lichen's regulated data perimeter.\n- The vendor's integration architecture grants access to systems holding regulated data, regardless of the data types the vendor self-identifies as processing. Specifically: any TIER_1 integration (per \u00a712.2) is classified as REGULATED by default because TIER_1 integration capability includes programmatic access to ERP data streams that may expose regulated records. The TIER_1 classification overrides the vendor's self-reported `data_classification_self_reported` value and overrides an empty `regulated_data_types` array. Vendor self-report is treated as supporting input only; it does not override the policy-derived classification.\n- The vendor falls within scope of any other regulatory framework Lichen is subject to (HIPAA, SOX, PCI-DSS, etc.).\n\nUNREGULATED:\nA vendor engagement is classified as UNREGULATED only when ALL of the following hold:\n- No EU personal data is processed.\n- No regulated data types are processed.\n- The integration tier is TIER_3 (export-only) or the integration does not touch regulated data systems.\n- The vendor self-report and the policy-derived classification both align on non-regulated treatment.\n\nAuthority hierarchy:\nPer CC-001 \u00a74, ISP-001 (this Policy) is Tier 1 and the vendor questionnaire (VQ-OC-001) is Tier 2. When the vendor questionnaire's `data_classification_self_reported` value conflicts with the policy-derived classification, the policy classification controls. The questionnaire self-report is recorded as supporting context but does not override Tier 1 policy. A vendor that self-reports NON_REGULATED data while declaring a DIRECT_API ERP integration is REGULATED \u2014 the TIER_1 classification rule applies and the self-report is overridden.",
+      "citation_label": "ISP-001 \u00a74",
+      "chunk_type": "SECTION",
+      "chunk_order": 2
+    }
+  },
+  {
+    "chunk_id": "ISP-001__section_12_3",
+    "text": "12.3 Fast-Track Eligibility and Required Security Actions\n\nFast-track onboarding is reserved for low-risk vendor engagements and is categorically disallowed for any engagement that meets a disqualification condition below. Fast-track determinations are emitted as `fast_track_eligible` with a paired `fast_track_rationale` enum.\n\nFast-track disqualification conditions:\n- REGULATED data classification \u2014 any vendor classified as REGULATED per \u00a74 is ineligible for fast-track. Emit `fast_track_eligible: false` with `fast_track_rationale: \"DISALLOWED_REGULATED_DATA\"`.\n- AMBIGUOUS integration type \u2014 when the integration architecture cannot be normalized to one of the \u00a712.2 tier categories. Emit `fast_track_eligible: false` with `fast_track_rationale: \"DISALLOWED_AMBIGUOUS_SCOPE\"`.\n- TIER_1 or TIER_2 integrations carry independent integration risk and are also fast-track ineligible. Where the disqualification is driven by integration risk rather than data classification, use `fast_track_rationale: \"DISALLOWED_INTEGRATION_RISK\"`. When BOTH REGULATED data and TIER_1 integration apply, the data-classification rationale takes precedence: emit `fast_track_rationale: \"DISALLOWED_REGULATED_DATA\"`.\n- Missing or unconfirmed governing fast-track policy citation \u2014 emit `fast_track_eligible: false` with `fast_track_rationale: \"DISALLOWED_AMBIGUOUS_SCOPE\"`.\n\nEligibility requirement (positive case):\nFast-track ELIGIBLE_LOW_RISK is reserved for engagements where data classification is UNREGULATED, integration tier is TIER_3 (export-only), no EU personal data is processed, and a confirmed PRIMARY ISP-001 citation supports the low-risk treatment.\n\nRequired security actions for non-eligible engagements:\nWhenever `security_followup_required = true`, the agent must populate `required_security_actions` with at least one structured entry. Each entry contains `action_type`, `reason`, and `owner` fields.\n\nTIER_1 architectural review (mandatory):\nEvery TIER_1 integration triggers a mandatory architectural review by the IT Security team prior to onboarding. The review covers service-account scoping, credential rotation policy, ERP role assignment, network egress controls, and audit log instrumentation. The action_type for this review is ARCHITECTURE_REVIEW; the owner is IT Security (K. Whitfield or delegate); the reason cites this \u00a712.3 clause and the \u00a712.2 TIER_1 classification. An empty `required_security_actions` array is invalid when `security_followup_required = true`.\n\nTIER_1 + REGULATED engagements additionally require: data flow mapping, DPA execution verification (handled by Legal at STEP-03), and a security review sign-off from the IT Security Manager before the engagement may proceed past the procurement approval gate.",
+    "metadata": {
+      "chunk_id": "ISP-001__section_12_3",
+      "source_id": "ISP-001",
+      "source_name": "IT Security Policy",
+      "source_type": "POLICY_DOCUMENT",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "4.2-scenario14",
+      "document_date": "2026-04-19",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "it_security",
+        "legal",
+        "procurement"
+      ],
+      "allowed_agents_str": "|it_security|legal|procurement|",
+      "is_primary_citable": true,
+      "manifest_status": "CONFIRMED",
+      "section_id": "\u00a712.3",
+      "row_id": null,
+      "record_id": null,
+      "thread_id": null,
+      "domain_scope": null,
+      "text": "12.3 Fast-Track Eligibility and Required Security Actions\n\nFast-track onboarding is reserved for low-risk vendor engagements and is categorically disallowed for any engagement that meets a disqualification condition below. Fast-track determinations are emitted as `fast_track_eligible` with a paired `fast_track_rationale` enum.\n\nFast-track disqualification conditions:\n- REGULATED data classification \u2014 any vendor classified as REGULATED per \u00a74 is ineligible for fast-track. Emit `fast_track_eligible: false` with `fast_track_rationale: \"DISALLOWED_REGULATED_DATA\"`.\n- AMBIGUOUS integration type \u2014 when the integration architecture cannot be normalized to one of the \u00a712.2 tier categories. Emit `fast_track_eligible: false` with `fast_track_rationale: \"DISALLOWED_AMBIGUOUS_SCOPE\"`.\n- TIER_1 or TIER_2 integrations carry independent integration risk and are also fast-track ineligible. Where the disqualification is driven by integration risk rather than data classification, use `fast_track_rationale: \"DISALLOWED_INTEGRATION_RISK\"`. When BOTH REGULATED data and TIER_1 integration apply, the data-classification rationale takes precedence: emit `fast_track_rationale: \"DISALLOWED_REGULATED_DATA\"`.\n- Missing or unconfirmed governing fast-track policy citation \u2014 emit `fast_track_eligible: false` with `fast_track_rationale: \"DISALLOWED_AMBIGUOUS_SCOPE\"`.\n\nEligibility requirement (positive case):\nFast-track ELIGIBLE_LOW_RISK is reserved for engagements where data classification is UNREGULATED, integration tier is TIER_3 (export-only), no EU personal data is processed, and a confirmed PRIMARY ISP-001 citation supports the low-risk treatment.\n\nRequired security actions for non-eligible engagements:\nWhenever `security_followup_required = true`, the agent must populate `required_security_actions` with at least one structured entry. Each entry contains `action_type`, `reason`, and `owner` fields.\n\nTIER_1 architectural review (mandatory):\nEvery TIER_1 integration triggers a mandatory architectural review by the IT Security team prior to onboarding. The review covers service-account scoping, credential rotation policy, ERP role assignment, network egress controls, and audit log instrumentation. The action_type for this review is ARCHITECTURE_REVIEW; the owner is IT Security (K. Whitfield or delegate); the reason cites this \u00a712.3 clause and the \u00a712.2 TIER_1 classification. An empty `required_security_actions` array is invalid when `security_followup_required = true`.\n\nTIER_1 + REGULATED engagements additionally require: data flow mapping, DPA execution verification (handled by Legal at STEP-03), and a security review sign-off from the IT Security Manager before the engagement may proceed past the procurement approval gate.",
+      "citation_label": "ISP-001 \u00a712.3",
+      "chunk_type": "SECTION",
+      "chunk_order": 3
+    }
+  }
+]

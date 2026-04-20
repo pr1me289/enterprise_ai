@@ -1,0 +1,62 @@
+[
+  {
+    "chunk_id": "PAM-001__row_Q-01-FASTTRACK",
+    "text": "Vendor Class: TIER_2\nIntegration Tier: TIER_3\nData Classification: UNREGULATED\nDeal Size Range: $50,000 - $250,000\nFast-Track Eligible Required: true\nApproval Path: FAST_TRACK\nRequired Approvers: Procurement Manager, IT Security Manager\nEstimated Timeline: 2-3 business days\nRequired Approvals / Notes: Fast-track approval regime for Tier 2 vendor engagements with Tier 3 export-only integration footprint and UNREGULATED data scope. Two approvers required, both non-blocking: Procurement Manager (procurement domain) and IT Security Manager (security domain). No Legal sign-off required when no DPA is triggered. No Business Owner sign-off required at this deal-size band. Timeline: 2-3 business days when both approvers respond promptly. This row applies only when fast_track_eligible is true upstream from STEP-02 and no DPA blocker is active from STEP-03.",
+    "metadata": {
+      "chunk_id": "PAM-001__row_Q-01-FASTTRACK",
+      "source_id": "PAM-001",
+      "source_name": "Procurement Approval Matrix",
+      "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "3.0-scenario13",
+      "document_date": "2026-04-19",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "allowed_agents_str": "|procurement|",
+      "is_primary_citable": true,
+      "manifest_status": "CONFIRMED",
+      "section_id": null,
+      "row_id": "Q-01-FASTTRACK",
+      "record_id": null,
+      "thread_id": null,
+      "domain_scope": null,
+      "text": "Vendor Class: TIER_2\nIntegration Tier: TIER_3\nData Classification: UNREGULATED\nDeal Size Range: $50,000 - $250,000\nFast-Track Eligible Required: true\nApproval Path: FAST_TRACK\nRequired Approvers: Procurement Manager, IT Security Manager\nEstimated Timeline: 2-3 business days\nRequired Approvals / Notes: Fast-track approval regime for Tier 2 vendor engagements with Tier 3 export-only integration footprint and UNREGULATED data scope. Two approvers required, both non-blocking: Procurement Manager (procurement domain) and IT Security Manager (security domain). No Legal sign-off required when no DPA is triggered. No Business Owner sign-off required at this deal-size band. Timeline: 2-3 business days when both approvers respond promptly. This row applies only when fast_track_eligible is true upstream from STEP-02 and no DPA blocker is active from STEP-03.",
+      "citation_label": "PAM-001 row Q-01-FASTTRACK",
+      "chunk_type": "ROW",
+      "chunk_order": 1
+    }
+  },
+  {
+    "chunk_id": "PAM-001__row_Q-02-STANDARD",
+    "text": "Vendor Class: TIER_2\nIntegration Tier: TIER_2_SAAS\nData Classification: REGULATED\nDeal Size Range: $100,000 - $500,000\nFast-Track Eligible Required: false\nApproval Path: STANDARD\nRequired Approvers: Procurement Director, IT Security Manager, Legal Counsel, Business Owner (Director+)\nEstimated Timeline: 10-15 business days\nRequired Approvals / Notes: Standard approval regime for Tier 2 SaaS engagements with REGULATED data scope. Four approvers required: Procurement Director, IT Security Manager, Legal Counsel, Business Owner (Director+). Legal sign-off required because REGULATED data triggers DPA review per DPA-TM-001. IT Security sign-off required for any SaaS integration carrying production credentials. Business Owner (Director+) signs off on commercial terms. Timeline: 10-15 business days when all approvers respond promptly and DPA is fully executed.",
+    "metadata": {
+      "chunk_id": "PAM-001__row_Q-02-STANDARD",
+      "source_id": "PAM-001",
+      "source_name": "Procurement Approval Matrix",
+      "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+      "authority_tier": 1,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "3.0-scenario13",
+      "document_date": "2026-04-19",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "allowed_agents_str": "|procurement|",
+      "is_primary_citable": true,
+      "manifest_status": "CONFIRMED",
+      "section_id": null,
+      "row_id": "Q-02-STANDARD",
+      "record_id": null,
+      "thread_id": null,
+      "domain_scope": null,
+      "text": "Vendor Class: TIER_2\nIntegration Tier: TIER_2_SAAS\nData Classification: REGULATED\nDeal Size Range: $100,000 - $500,000\nFast-Track Eligible Required: false\nApproval Path: STANDARD\nRequired Approvers: Procurement Director, IT Security Manager, Legal Counsel, Business Owner (Director+)\nEstimated Timeline: 10-15 business days\nRequired Approvals / Notes: Standard approval regime for Tier 2 SaaS engagements with REGULATED data scope. Four approvers required: Procurement Director, IT Security Manager, Legal Counsel, Business Owner (Director+). Legal sign-off required because REGULATED data triggers DPA review per DPA-TM-001. IT Security sign-off required for any SaaS integration carrying production credentials. Business Owner (Director+) signs off on commercial terms. Timeline: 10-15 business days when all approvers respond promptly and DPA is fully executed.",
+      "citation_label": "PAM-001 row Q-02-STANDARD",
+      "chunk_type": "ROW",
+      "chunk_order": 2
+    }
+  }
+]

@@ -25,7 +25,7 @@ VALID_AGENTS: tuple[str, ...] = (
     "checkoff_agent",
 )
 
-VALID_SCENARIOS: tuple[str, ...] = ("scenario_1", "scenario_2", "scenario_3", "scenario_4", "scenario_5", "scenario_6", "scenario_7", "scenario_8", "scenario_9", "scenario_10", "scenario_11")
+VALID_SCENARIOS: tuple[str, ...] = ("scenario_1", "scenario_2", "scenario_3", "scenario_4", "scenario_5", "scenario_6", "scenario_7", "scenario_8", "scenario_9", "scenario_10", "scenario_11", "scenario_12", "scenario_13", "scenario_14", "scenario_15")
 
 # Per-agent scenario availability. scenario_3 and scenario_4 are
 # Legal-Agent-only fixtures:
@@ -41,14 +41,55 @@ VALID_SCENARIOS: tuple[str, ...] = ("scenario_1", "scenario_2", "scenario_3", "s
 #     of upstream DPA gap, approval_path populated). Stresses §8.1 status
 #     precedence and §6.2 multi-source blocker assembly per
 #     SPEC-AGENT-CLA-001 v0.3.
-# Other agents have no scenario_3/scenario_4/scenario_11 bundles — callers
-# requesting one will hit BundleError via fixture_path() when the file does
-# not exist.
+#   * scenario_12 — Checklist-Assembler-only fixture. Clean COMPLETE happy
+#     path: all three upstream agents complete, no blocker flags, no
+#     escalations. The reference baseline against which scenario_11's
+#     escalated path is compared. Catches over-conservative escalation
+#     and phantom blocker fabrication on the happy path.
+#   * scenario_13 — Procurement-Agent-only fixture. Clean upstream pass →
+#     COMPLETE happy path: STEP-02 complete (EXPORT_ONLY/TIER_3/UNREGULATED,
+#     fast_track_eligible=true), STEP-03 complete (dpa_required=false, no
+#     blockers), questionnaire matches Q-01-FASTTRACK on both primary keys
+#     (vendor_class=TIER_2, integration_tier=TIER_3). Counterpart to
+#     scenario_8 — same agent, opposite upstream state. Catches spurious
+#     escalation, fast_track_eligible re-derivation, and phantom blocker
+#     fabrication on the procurement happy path.
+#   * scenario_14 — IT-Security-Agent-only fixture. Policy-over-questionnaire
+#     conflict → REGULATED + COMPLETE. Adversarial questionnaire self-reports
+#     data_classification_self_reported="NON_REGULATED" with regulated_data_types=[],
+#     BUT integration_details.erp_type="DIRECT_API" → TIER_1 → REGULATED per
+#     ISP-001 §12.2 + §4. The agent must derive REGULATED from policy and
+#     emit a firm COMPLETE (not escalated) with fast_track_rationale=
+#     "DISALLOWED_REGULATED_DATA" and security_followup_required=true. Tests
+#     ORCH-PLAN-001 STEP-02 classification rules 2, 3, 5 and CC-001 §4
+#     authority hierarchy. Catches deferring to vendor self-report on
+#     classification, split verdict (correct classification, wrong tier),
+#     over-escalation, wrong rationale enum, normalizing nda_status at
+#     STEP-02, elevating VQ-OC-001 citations to PRIMARY, empty
+#     required_security_actions on followup-required.
+#   * scenario_15 — IT-Security-Agent-only fixture. Governing-source
+#     retrieval failure → ESCALATED. Honest questionnaire (DIRECT_API / SAP,
+#     self-report=LIMITED_OPERATIONAL_DATA, eu_personal_data_flag=YES). ISP-001
+#     §12.2 and §4 retrieve cleanly; §12.3 is deliberately ABSENT from the
+#     scenario-scoped index so R02-SQ-06 returns EMPTY_RESULT_SET. The agent
+#     must escalate (classification rule 6: governing source unavailable →
+#     fast_track_eligible=false with fast_track_rationale="DISALLOWED_AMBIGUOUS_SCOPE")
+#     while still emitting firm determinations (TIER_1, REGULATED, DIRECT_API,
+#     eu_personal_data_present=YES) supported by the chunks that did retrieve.
+#     Tests ORCH-PLAN-001 R02-SQ-06 retrieval-failure discipline and CC-001
+#     §13.1 escalation payload rules. Catches silent substitution of missing
+#     evidence for negative evidence, blanket escalation nulling firm
+#     determinations, wrong rationale enum (DISALLOWED_REGULATED_DATA misused
+#     when evidence-insufficiency is the actual driver), §12.3 citation
+#     hallucination, missing governing-source gap in required_security_actions.
+# Other agents have no scenario_3/scenario_4/scenario_11/scenario_12/scenario_13/scenario_14/scenario_15
+# bundles — callers requesting one will hit BundleError via fixture_path()
+# when the file does not exist.
 SCENARIOS_BY_AGENT: dict[str, tuple[str, ...]] = {
-    "it_security_agent": ("scenario_1", "scenario_2"),
+    "it_security_agent": ("scenario_1", "scenario_2", "scenario_14", "scenario_15"),
     "legal_agent": ("scenario_1", "scenario_2", "scenario_3", "scenario_4", "scenario_5", "scenario_6"),
-    "procurement_agent": ("scenario_1", "scenario_2", "scenario_7", "scenario_8", "scenario_9", "scenario_10"),
-    "checklist_assembler": ("scenario_1", "scenario_2", "scenario_11"),
+    "procurement_agent": ("scenario_1", "scenario_2", "scenario_7", "scenario_8", "scenario_9", "scenario_10", "scenario_13"),
+    "checklist_assembler": ("scenario_1", "scenario_2", "scenario_11", "scenario_12"),
     "checkoff_agent": ("scenario_1", "scenario_2"),
 }
 

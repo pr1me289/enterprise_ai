@@ -1,0 +1,465 @@
+{
+  "scenario": "scenario_12",
+  "agent": "checklist_assembler",
+  "bundle": {
+    "source_ids": [
+      "STEP-02",
+      "STEP-03",
+      "STEP-04",
+      "AUDIT_LOG",
+      "PIPELINE_STATE"
+    ],
+    "pipeline_run_id": "run_scenario_12",
+    "vendor_name": "OptiChain",
+    "it_security_agent": {
+      "integration_type_normalized": "EXPORT_ONLY",
+      "integration_tier": "TIER_3",
+      "data_classification": "UNREGULATED",
+      "eu_personal_data_present": "NO",
+      "fast_track_eligible": true,
+      "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+      "security_followup_required": false,
+      "nda_status_from_questionnaire": "EXECUTED",
+      "required_security_actions": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12.2",
+          "citation_class": "PRIMARY",
+          "retrieval_timestamp": "2026-04-15T18:00:11Z"
+        }
+      ],
+      "status": "complete"
+    },
+    "legal_agent": {
+      "dpa_required": false,
+      "dpa_blocker": false,
+      "nda_status": "EXECUTED",
+      "nda_blocker": false,
+      "trigger_rule_cited": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12_1_4",
+          "section_id": "12.1.4",
+          "citation_class": "PRIMARY",
+          "retrieval_timestamp": "2026-04-15T18:00:42Z"
+        }
+      ],
+      "status": "complete"
+    },
+    "procurement_agent": {
+      "approval_path": "FAST_TRACK",
+      "fast_track_eligible": true,
+      "required_approvals": [
+        {
+          "approver": "Procurement Manager",
+          "domain": "procurement",
+          "status": "PENDING",
+          "blocker": false,
+          "estimated_completion": "2026-04-21"
+        }
+      ],
+      "estimated_timeline": "2-3 business days",
+      "policy_citations": [
+        {
+          "source_id": "PAM-001",
+          "version": "3.0",
+          "chunk_id": "PAM-001__row_C-T3",
+          "row_id": "C-T3",
+          "approval_path_condition": "Class C vendor, Tier 3 export-only integration, UNREGULATED data \u2192 FAST_TRACK path",
+          "citation_class": "PRIMARY",
+          "retrieval_timestamp": "2026-04-15T18:01:18Z"
+        }
+      ],
+      "status": "complete"
+    },
+    "audit_log_entries": [
+      {
+        "entry_id": "audit_s12_init",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "RUN_EVENT",
+        "timestamp": "2026-04-15T17:59:00Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "message": "Pipeline initialized",
+          "manifest_version": "CC-001-v1.4"
+        }
+      },
+      {
+        "entry_id": "audit_s12_step01_open",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T17:59:05Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-01",
+          "from_status": "PENDING",
+          "to_status": "IN_PROGRESS",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s12_step01_vq",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T17:59:08Z",
+        "source_queried": "VQ-OC-001",
+        "chunks_retrieved": [
+          {"field_path": "vendor_name", "value_present": true},
+          {"field_path": "submission_date", "value_present": true},
+          {"field_path": "document_id", "value_present": true}
+        ],
+        "details": {
+          "request_id": "R01-SQ-01",
+          "lane": "direct_structured",
+          "admitted_count": 3,
+          "excluded_count": 0,
+          "output_name": "questionnaire_exists",
+          "missing_fields": [],
+          "search_terms": []
+        }
+      },
+      {
+        "entry_id": "audit_s12_step01_close",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T17:59:30Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-01",
+          "from_status": "IN_PROGRESS",
+          "to_status": "COMPLETE",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s12_step02_open",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T18:00:00Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-02",
+          "from_status": "PENDING",
+          "to_status": "IN_PROGRESS",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s12_step02_isp",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "it_security_agent",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T18:00:11Z",
+        "source_queried": "ISP-001",
+        "chunks_retrieved": [
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_12",
+            "section_id": "12.2",
+            "row_id": null,
+            "thread_id": null,
+            "text": "Tier 3 export-only integrations with no EU personal data are eligible for the fast-track onboarding path.",
+            "retrieval_score": 0.96,
+            "rerank_score": 0.94,
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "details": {
+          "request_id": "R02-SQ-01",
+          "lane": "indexed_hybrid",
+          "admitted_count": 1,
+          "excluded_count": 0,
+          "output_name": "tier_chunk",
+          "missing_fields": [],
+          "search_terms": ["tier 3", "export only", "fast track"]
+        }
+      },
+      {
+        "entry_id": "audit_s12_step02_determination",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "it_security_agent",
+        "event_type": "DETERMINATION",
+        "timestamp": "2026-04-15T18:00:20Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-02",
+          "output": {
+            "integration_type_normalized": "EXPORT_ONLY",
+            "integration_tier": "TIER_3",
+            "data_classification": "UNREGULATED",
+            "eu_personal_data_present": "NO",
+            "fast_track_eligible": true,
+            "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+            "security_followup_required": false,
+            "nda_status_from_questionnaire": "EXECUTED",
+            "required_security_actions": [],
+            "status": "complete"
+          }
+        }
+      },
+      {
+        "entry_id": "audit_s12_step02_close",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T18:00:25Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-02",
+          "from_status": "IN_PROGRESS",
+          "to_status": "COMPLETE",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s12_step03_open",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T18:00:35Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-03",
+          "from_status": "PENDING",
+          "to_status": "IN_PROGRESS",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s12_step03_nda_clause",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "legal_agent",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T18:00:42Z",
+        "source_queried": "ISP-001",
+        "chunks_retrieved": [
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_12_1_4",
+            "section_id": "12.1.4",
+            "row_id": null,
+            "thread_id": null,
+            "text": "An NDA must be executed prior to information exchange covering confidential or regulated data.",
+            "retrieval_score": 0.95,
+            "rerank_score": 0.93,
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "details": {
+          "request_id": "R03-SQ-01",
+          "lane": "indexed_hybrid",
+          "admitted_count": 1,
+          "excluded_count": 0,
+          "output_name": "nda_clause_chunks",
+          "missing_fields": [],
+          "search_terms": ["NDA", "12.1.4", "non-disclosure"]
+        }
+      },
+      {
+        "entry_id": "audit_s12_step03_determination",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "legal_agent",
+        "event_type": "DETERMINATION",
+        "timestamp": "2026-04-15T18:00:55Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-03",
+          "output": {
+            "dpa_required": false,
+            "dpa_blocker": false,
+            "nda_status": "EXECUTED",
+            "nda_blocker": false,
+            "trigger_rule_cited": [],
+            "status": "complete"
+          }
+        }
+      },
+      {
+        "entry_id": "audit_s12_step03_close",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T18:01:00Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-03",
+          "from_status": "IN_PROGRESS",
+          "to_status": "COMPLETE",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s12_step04_open",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T18:01:10Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-04",
+          "from_status": "PENDING",
+          "to_status": "IN_PROGRESS",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s12_step04_pam",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "procurement_agent",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T18:01:18Z",
+        "source_queried": "PAM-001",
+        "chunks_retrieved": [
+          {
+            "source_id": "PAM-001",
+            "version": "3.0",
+            "chunk_id": "PAM-001__row_C-T3",
+            "section_id": null,
+            "row_id": "C-T3",
+            "thread_id": null,
+            "text": "Class C vendor, Tier 3 export-only integration, UNREGULATED data: FAST_TRACK approval path with Procurement Manager sign-off only.",
+            "retrieval_score": 0.99,
+            "rerank_score": 0.98,
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "details": {
+          "request_id": "R04-SQ-01",
+          "lane": "indexed_hybrid",
+          "admitted_count": 1,
+          "excluded_count": 0,
+          "output_name": "approval_matrix_rows",
+          "missing_fields": [],
+          "search_terms": ["approval", "Class C", "Tier 3", "fast track"]
+        }
+      },
+      {
+        "entry_id": "audit_s12_step04_determination",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "procurement_agent",
+        "event_type": "DETERMINATION",
+        "timestamp": "2026-04-15T18:01:25Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-04",
+          "output": {
+            "approval_path": "FAST_TRACK",
+            "fast_track_eligible": true,
+            "required_approvals": [
+              {
+                "approver": "Procurement Manager",
+                "domain": "procurement",
+                "status": "PENDING",
+                "blocker": false,
+                "estimated_completion": "2026-04-21"
+              }
+            ],
+            "estimated_timeline": "2-3 business days",
+            "status": "complete"
+          }
+        }
+      },
+      {
+        "entry_id": "audit_s12_step04_close",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T18:01:30Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-04",
+          "from_status": "IN_PROGRESS",
+          "to_status": "COMPLETE",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s12_step05_open",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "STATUS_CHANGE",
+        "timestamp": "2026-04-15T18:01:40Z",
+        "source_queried": null,
+        "chunks_retrieved": [],
+        "details": {
+          "step_id": "STEP-05",
+          "from_status": "PENDING",
+          "to_status": "IN_PROGRESS",
+          "reason": null
+        }
+      },
+      {
+        "entry_id": "audit_s12_step05_state_read",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T18:01:42Z",
+        "source_queried": "PIPELINE_STATE",
+        "chunks_retrieved": [
+          {"field_path": "it_security_agent", "value_present": true},
+          {"field_path": "legal_agent", "value_present": true},
+          {"field_path": "procurement_agent", "value_present": true}
+        ],
+        "details": {
+          "request_id": "R05-SQ-00",
+          "lane": "runtime_read",
+          "admitted_count": 3,
+          "excluded_count": 0,
+          "output_name": "all_agent_outputs",
+          "missing_fields": [],
+          "search_terms": []
+        }
+      },
+      {
+        "entry_id": "audit_s12_step05_vq_header",
+        "pipeline_run_id": "run_scenario_12",
+        "agent_id": "supervisor",
+        "event_type": "RETRIEVAL",
+        "timestamp": "2026-04-15T18:01:43Z",
+        "source_queried": "VQ-OC-001",
+        "chunks_retrieved": [
+          {"field_path": "vendor_name", "value_present": true}
+        ],
+        "details": {
+          "request_id": "R05-SQ-01",
+          "lane": "direct_structured",
+          "admitted_count": 1,
+          "excluded_count": 0,
+          "output_name": "checklist_header",
+          "missing_fields": [],
+          "search_terms": []
+        }
+      }
+    ],
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    }
+  },
+  "pipeline_run_id": "run_scenario_12"
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "chunk_id": "ISP-001__section_12_2",
+    "source_id": "ISP-001",
+    "source_name": "IT Security Policy",
+    "source_type": "POLICY_DOCUMENT",
+    "version": "4.2-scenario15",
+    "document_date": "2026-04-19",
+    "freshness_status": "CURRENT",
+    "authority_tier": 1,
+    "retrieval_lane": "INDEXED_HYBRID",
+    "allowed_agents": [
+      "it_security",
+      "legal",
+      "procurement"
+    ],
+    "is_primary_citable": true,
+    "manifest_status": "CONFIRMED",
+    "chunk_type": "SECTION",
+    "chunk_order": 1,
+    "citation_label": "ISP-001 §12.2",
+    "text": "12.2 ERP Integration Tier Classification\n\nVendors that integrate with Lichen ERP systems are assigned an integration tier based on the integration mechanism declared in the vendor questionnaire and verified during onboarding. The integration tier is derived from the integration architecture itself, not from the vendor's self-reported data classification.\n\nTIER_1 — Direct API Integration:\nAny vendor that establishes a DIRECT_API connection to a Lichen ERP system (SAP, Oracle, NetSuite, or other production ERP) is classified as TIER_1. Direct API integrations include service-account-authenticated connections, persistent ERP sessions, and any architecture that grants the vendor programmatic read or write access to ERP records. TIER_1 integrations are presumed to handle regulated data by default because direct ERP access exposes the vendor to inventory, financial, customer, and supplier records that fall within Lichen's regulated data perimeter. Every TIER_1 integration triggers a mandatory architectural review by the IT Security team prior to onboarding, regardless of the data classification outcome. The architectural review covers service-account scoping, credential rotation policy, ERP role assignment, network egress controls, and audit log instrumentation.\n\nTIER_2 — Mediated Middleware Integration:\nVendors that integrate via a Lichen-managed iPaaS, ESB, or other middleware layer (MuleSoft, Boomi, SnapLogic, custom broker) are classified as TIER_2. The middleware enforces field-level access controls and data masking. TIER_2 vendors do not hold ERP credentials directly.\n\nTIER_3 — Export-Only / File-Based Integration:\nVendors that receive scheduled data exports via SFTP, S3 drop, or equivalent file-based mechanisms are classified as TIER_3. TIER_3 corresponds to EXPORT_ONLY integration patterns. There is no service account, no persistent ERP session, and no programmatic access. The vendor receives only the data records that Lichen explicitly chooses to push.\n\nMapping table (vendor questionnaire `integration_details.erp_type` → tier):\n- DIRECT_API → TIER_1\n- MIDDLEWARE → TIER_2\n- EXPORT_ONLY → TIER_3\n- AMBIGUOUS or unrecognized → UNCLASSIFIED_PENDING_REVIEW\n\nThe tier assignment is mandatory and must be derived from the questionnaire's concrete `erp_type` value combined with this table. Vendor self-reported data classification has no bearing on tier assignment.",
+    "section_id": "§12.2",
+    "row_id": null,
+    "record_id": null,
+    "thread_id": null,
+    "domain_scope": null
+  },
+  {
+    "chunk_id": "ISP-001__section_4",
+    "source_id": "ISP-001",
+    "source_name": "IT Security Policy",
+    "source_type": "POLICY_DOCUMENT",
+    "version": "4.2-scenario15",
+    "document_date": "2026-04-19",
+    "freshness_status": "CURRENT",
+    "authority_tier": 1,
+    "retrieval_lane": "INDEXED_HYBRID",
+    "allowed_agents": [
+      "it_security",
+      "legal",
+      "procurement"
+    ],
+    "is_primary_citable": true,
+    "manifest_status": "CONFIRMED",
+    "chunk_type": "SECTION",
+    "chunk_order": 2,
+    "citation_label": "ISP-001 §4",
+    "text": "4 Data Classification Framework\n\nLichen classifies all third-party vendor engagements into one of two data classifications for the purposes of this Policy: REGULATED or UNREGULATED. The classification governs every downstream control — DPA requirement, NDA scope, approval-path routing, and architectural review obligations.\n\nREGULATED:\nA vendor engagement is classified as REGULATED when any of the following conditions hold:\n- The vendor processes personal data of EU data subjects (triggers DPA per DPA-TM-001).\n- The vendor processes financial, customer PII, supplier PII, employee PII, or other data falling within Lichen's regulated data perimeter.\n- The vendor's integration architecture grants access to systems holding regulated data, regardless of the data types the vendor self-identifies as processing. Specifically: any TIER_1 integration (per §12.2) is classified as REGULATED by default because TIER_1 integration capability includes programmatic access to ERP data streams that may expose regulated records. The TIER_1 classification overrides the vendor's self-reported `data_classification_self_reported` value and overrides the contents of the `regulated_data_types` array. Vendor self-report is treated as supporting input only; it does not override the policy-derived classification.\n- The vendor falls within scope of any other regulatory framework Lichen is subject to (HIPAA, SOX, PCI-DSS, GDPR, etc.).\n\nUNREGULATED:\nA vendor engagement is classified as UNREGULATED only when ALL of the following hold:\n- No EU personal data is processed.\n- No regulated data types are processed.\n- The integration tier is TIER_3 (export-only) or the integration does not touch regulated data systems.\n- The vendor self-report and the policy-derived classification both align on non-regulated treatment.\n\nAuthority hierarchy:\nPer CC-001 §4, ISP-001 (this Policy) is Tier 1 and the vendor questionnaire (VQ-OC-001) is Tier 2. When the vendor questionnaire's `data_classification_self_reported` value conflicts with the policy-derived classification, the policy classification controls. The questionnaire self-report is recorded as supporting context but does not override Tier 1 policy.",
+    "section_id": "§4",
+    "row_id": null,
+    "record_id": null,
+    "thread_id": null,
+    "domain_scope": null
+  }
+]

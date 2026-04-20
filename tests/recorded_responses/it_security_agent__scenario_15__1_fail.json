@@ -1,0 +1,52 @@
+{
+  "agent_name": "it_security_agent",
+  "scenario": "scenario_15",
+  "pipeline_run_id": "scenario_15_synthesized",
+  "run_number": 1,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260420T002757Z",
+  "system_prompt_path": "agent_spec_docs/IT_Security_Agent_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_02_scenario_15.json",
+  "raw_text": "```json\n{\n  \"integration_type_normalized\": \"DIRECT_API\",\n  \"integration_tier\": \"TIER_1\",\n  \"data_classification\": \"REGULATED\",\n  \"eu_personal_data_present\": true,\n  \"fast_track_eligible\": false,\n  \"fast_track_rationale\": \"DISALLOWED_REGULATED_DATA\",\n  \"security_followup_required\": true,\n  \"nda_status_from_questionnaire\": \"EXECUTED\",\n  \"required_security_actions\": [\n    {\n      \"action_type\": \"FULL_SECURITY_REVIEW\",\n      \"reason\": \"TIER_1 direct API integration with REGULATED data classification. Mandatory architectural review required per ISP-001 \u00a712.2: service-account scoping, credential rotation policy, ERP role assignment, network egress controls, and audit log instrumentation.\",\n      \"owner\": \"IT Security\"\n    },\n    {\n      \"action_type\": \"EU_PERSONAL_DATA_HANDLING_REVIEW\",\n      \"reason\": \"EU employee personal data (scheduling) confirmed present. TIER_1 integration to SAP with persistent ERP session requires data handling and GDPR compliance review.\",\n      \"owner\": \"IT Security\"\n    }\n  ],\n  \"policy_citations\": [\n    {\n      \"source_id\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"chunk_id\": \"ISP-001__section_12_2\",\n      \"section_id\": \"\u00a712.2\",\n      \"citation_class\": \"PRIMARY\"\n    },\n    {\n      \"source_id\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"chunk_id\": \"ISP-001__section_4\",\n      \"section_id\": \"\u00a74\",\n      \"citation_class\": \"PRIMARY\"\n    }\n  ],\n  \"status\": \"escalated\"\n}\n```",
+  "parsed_output": {
+    "integration_type_normalized": "DIRECT_API",
+    "integration_tier": "TIER_1",
+    "data_classification": "REGULATED",
+    "eu_personal_data_present": true,
+    "fast_track_eligible": false,
+    "fast_track_rationale": "DISALLOWED_REGULATED_DATA",
+    "security_followup_required": true,
+    "nda_status_from_questionnaire": "EXECUTED",
+    "required_security_actions": [
+      {
+        "action_type": "FULL_SECURITY_REVIEW",
+        "reason": "TIER_1 direct API integration with REGULATED data classification. Mandatory architectural review required per ISP-001 \u00a712.2: service-account scoping, credential rotation policy, ERP role assignment, network egress controls, and audit log instrumentation.",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "EU_PERSONAL_DATA_HANDLING_REVIEW",
+        "reason": "EU employee personal data (scheduling) confirmed present. TIER_1 integration to SAP with persistent ERP session requires data handling and GDPR compliance review.",
+        "owner": "IT Security"
+      }
+    ],
+    "policy_citations": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12_2",
+        "section_id": "\u00a712.2",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_4",
+        "section_id": "\u00a74",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "escalated"
+  },
+  "error": null
+}

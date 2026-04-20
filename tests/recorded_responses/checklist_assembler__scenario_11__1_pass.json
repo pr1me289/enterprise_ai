@@ -1,0 +1,103 @@
+{
+  "agent_name": "checklist_assembler",
+  "scenario": "scenario_11",
+  "pipeline_run_id": "run_scenario_11",
+  "run_number": 1,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260419T233810Z",
+  "system_prompt_path": "agent_spec_docs/Checklist_Assembler_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_05_scenario_11.json",
+  "raw_text": "```json\n{\n  \"pipeline_run_id\": \"run_scenario_11\",\n  \"vendor_name\": \"OptiChain\",\n  \"overall_status\": \"ESCALATED\",\n  \"data_classification\": \"REGULATED\",\n  \"fast_track_eligible\": false,\n  \"required_security_actions\": [],\n  \"dpa_required\": true,\n  \"approval_path\": \"STANDARD\",\n  \"required_approvals\": [\n    {\n      \"approver\": \"Security Lead\",\n      \"blocker\": false,\n      \"domain\": \"security\",\n      \"estimated_completion\": \"2026-04-22\",\n      \"status\": \"PENDING\"\n    },\n    {\n      \"approver\": \"General Counsel\",\n      \"blocker\": true,\n      \"domain\": \"legal\",\n      \"estimated_completion\": \"Pending DPA execution by Legal / General Counsel\",\n      \"status\": \"ESCALATED\"\n    },\n    {\n      \"approver\": \"Procurement Manager\",\n      \"blocker\": false,\n      \"domain\": \"procurement\",\n      \"estimated_completion\": \"2026-04-23\",\n      \"status\": \"PENDING\"\n    }\n  ],\n  \"blockers\": [\n    {\n      \"blocker_type\": \"DPA_REQUIRED\",\n      \"description\": \"Vendor will process personal data of EU/EEA data subjects on behalf of Lichen. DPA required by DPA-TM-001 row A-01; no executed DPA on file.\",\n      \"resolution_owner\": \"Legal / General Counsel\",\n      \"citation\": \"audit_s11_step03_escalation\"\n    },\n    {\n      \"blocker_type\": \"ESCALATION_PENDING\",\n      \"description\": \"STEP-03 (Legal Agent) escalated due to DPA blocker condition.\",\n      \"resolution_owner\": \"Legal / General Counsel\",\n      \"citation\": \"audit_s11_step03_close\"\n    },\n    {\n      \"blocker_type\": \"ESCALATION_PENDING\",\n      \"description\": \"STEP-04 (Procurement Agent) escalated due to upstream DPA blocker propagation.\",\n      \"resolution_owner\": \"Legal / General Counsel\",\n      \"citation\": \"audit_s11_step04_close\"\n    }\n  ],\n  \"citations\": [\n    {\n      \"source_name\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"section\": \"12.2\",\n      \"retrieval_timestamp\": \"2026-04-15T17:30:11Z\",\n      \"agent_id\": \"it_security_agent\"\n    },\n    {\n      \"source_name\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"section\": \"4\",\n      \"retrieval_timestamp\": \"2026-04-15T17:30:14Z\",\n      \"agent_id\": \"it_security_agent\"\n    },\n    {\n      \"source_name\": \"DPA-TM-001\",\n      \"version\": \"1.3\",\n      \"section\": \"A-01\",\n      \"retrieval_timestamp\": \"2026-04-15T17:30:42Z\",\n      \"agent_id\": \"legal_agent\"\n    },\n    {\n      \"source_name\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"section\": \"12.1.4\",\n      \"retrieval_timestamp\": \"2026-04-15T17:30:46Z\",\n      \"agent_id\": \"legal_agent\"\n    },\n    {\n      \"source_name\": \"PAM-001\",\n      \"version\": \"3.0\",\n      \"section\": \"B-T2\",\n      \"retrieval_timestamp\": \"2026-04-15T17:31:18Z\",\n      \"agent_id\": \"procurement_agent\"\n    }\n  ]\n}\n```",
+  "parsed_output": {
+    "pipeline_run_id": "run_scenario_11",
+    "vendor_name": "OptiChain",
+    "overall_status": "ESCALATED",
+    "data_classification": "REGULATED",
+    "fast_track_eligible": false,
+    "required_security_actions": [],
+    "dpa_required": true,
+    "approval_path": "STANDARD",
+    "required_approvals": [
+      {
+        "approver": "Security Lead",
+        "blocker": false,
+        "domain": "security",
+        "estimated_completion": "2026-04-22",
+        "status": "PENDING"
+      },
+      {
+        "approver": "General Counsel",
+        "blocker": true,
+        "domain": "legal",
+        "estimated_completion": "Pending DPA execution by Legal / General Counsel",
+        "status": "ESCALATED"
+      },
+      {
+        "approver": "Procurement Manager",
+        "blocker": false,
+        "domain": "procurement",
+        "estimated_completion": "2026-04-23",
+        "status": "PENDING"
+      }
+    ],
+    "blockers": [
+      {
+        "blocker_type": "DPA_REQUIRED",
+        "description": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen. DPA required by DPA-TM-001 row A-01; no executed DPA on file.",
+        "resolution_owner": "Legal / General Counsel",
+        "citation": "audit_s11_step03_escalation"
+      },
+      {
+        "blocker_type": "ESCALATION_PENDING",
+        "description": "STEP-03 (Legal Agent) escalated due to DPA blocker condition.",
+        "resolution_owner": "Legal / General Counsel",
+        "citation": "audit_s11_step03_close"
+      },
+      {
+        "blocker_type": "ESCALATION_PENDING",
+        "description": "STEP-04 (Procurement Agent) escalated due to upstream DPA blocker propagation.",
+        "resolution_owner": "Legal / General Counsel",
+        "citation": "audit_s11_step04_close"
+      }
+    ],
+    "citations": [
+      {
+        "source_name": "ISP-001",
+        "version": "4.2",
+        "section": "12.2",
+        "retrieval_timestamp": "2026-04-15T17:30:11Z",
+        "agent_id": "it_security_agent"
+      },
+      {
+        "source_name": "ISP-001",
+        "version": "4.2",
+        "section": "4",
+        "retrieval_timestamp": "2026-04-15T17:30:14Z",
+        "agent_id": "it_security_agent"
+      },
+      {
+        "source_name": "DPA-TM-001",
+        "version": "1.3",
+        "section": "A-01",
+        "retrieval_timestamp": "2026-04-15T17:30:42Z",
+        "agent_id": "legal_agent"
+      },
+      {
+        "source_name": "ISP-001",
+        "version": "4.2",
+        "section": "12.1.4",
+        "retrieval_timestamp": "2026-04-15T17:30:46Z",
+        "agent_id": "legal_agent"
+      },
+      {
+        "source_name": "PAM-001",
+        "version": "3.0",
+        "section": "B-T2",
+        "retrieval_timestamp": "2026-04-15T17:31:18Z",
+        "agent_id": "procurement_agent"
+      }
+    ]
+  },
+  "error": null
+}

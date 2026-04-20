@@ -1,10 +1,10 @@
 # Agent Spec — Legal Agent
-## SPEC-AGENT-LEG-001 v0.11
+## SPEC-AGENT-LEG-001 v0.12
 
 **Document ID:** SPEC-AGENT-LEG-001
-**Version:** 0.7
+**Version:** 0.12
 **Owner:** Engineering / IT Architecture
-**Last Updated:** April 12, 2026
+**Last Updated:** April 19, 2026
 
 **Document Hierarchy:** PRD → Design Doc → Context Contract → **► Agent Spec ◄**
 
@@ -359,6 +359,8 @@ When the agent derives `status = escalated` from §8.5, it emits the same determ
 
 **Precedence over §8.4 NDA normalization on dual-absence escalated runs.** The per-field null rules in the table above override §8.4's general NDA normalization whenever the escalation is caused by dually-absent NDA evidence. Concretely: when the questionnaire omits `existing_nda_status` AND the bundle omits `nda_clause_chunks`, the agent must emit `nda_status: null` and `nda_blocker: null` on the escalated output — it must **not** fall back to §8.4's "absent or unrecognized → `UNKNOWN` / `true`" normalization. §8.4 normalization presumes at least one NDA evidence source is present; §9.2 governs the case where no evidence is available to normalize. This precedence applies only on escalated runs; §8.4 continues to govern `complete` runs and escalated runs where at least one NDA evidence source is present (e.g., questionnaire has `existing_nda_status` but `nda_clause_chunks` is absent — normalize from the questionnaire per §8.4 and escalate per §8.5 condition 5 for the missing clause citation).
 
+**Precedence over §9.2 null rule on Tier 1 conflict escalated runs.** The per-field null rule for `trigger_rule_cited` in the table above ("`dpa_required` is `null` — no citation can be made for an unresolved determination") applies when there is genuinely nothing to cite — for example, when no trigger matrix row covered the data profile at all (Example D). It does not apply when Tier 1 DPA sources conflict on the same trigger question (§8.5 condition 2). In the conflict case, citations CAN be made — specifically, citations of the conflicting rules — and they must be preserved in the structured output per §12's specific conflict rule. Concretely: when §8.5 condition 2 fires, the agent must emit `dpa_required: null` and `dpa_blocker: null` per the table above, but `trigger_rule_cited` must contain both conflicting rows and `policy_citations` must include them, even though `dpa_required` is `null`. §12's specific conflict rule governs citation preservation on conflict escalations; the general null rule for `trigger_rule_cited` applies only when there is no citation material to preserve. See Example F for the full output shape.
+
 **Escalated output example — DPA unresolvable, NDA resolved:**
 
 ```json
@@ -569,6 +571,102 @@ Bundle contains questionnaire fields, DPA trigger matrix rows, and NDA clause ch
 
 > The agent must not attempt any DPA or NDA determination despite having other evidence available in the bundle. The upstream security classification is a required gate input — without it, the bundle is inadmissible per §3 and §8.5. Determination fields (`dpa_required`, `dpa_blocker`, `nda_status`, `nda_blocker`, `trigger_rule_cited`, `policy_citations`) are entirely absent from the output, not null. This is the correct behavior: the agent declined to produce a determination it had no basis to make.
 
+### Example F — Tier 1 conflict on the same trigger question
+
+`data_classification = REGULATED`, `eu_personal_data_confirmed = YES`. The data profile is: vendor processes EU employee shift data in raw form AND retains anonymized scheduling analytics derived from that data for 60 days for internal operational use. Two DPA-TM-001 rows both fire on this fact pattern and disagree on the DPA outcome: row A-01 fires on the raw EU personal data processing and asserts `dpa_required = true`; row A-04 fires on the anonymized short-retention operational-analytics carve-out and asserts `dpa_required = false`. Per the §8.5 conflict-definition note, these rules are not complementary — their triggers both evaluate to true on the same confirmed evidence and they cannot be reconciled by reading them as mutually exclusive. NDA status is EXECUTED and ISP-001 §12.1.4 is present:
+
+```json
+{
+  "dpa_required": null,
+  "dpa_blocker": null,
+  "nda_status": "EXECUTED",
+  "nda_blocker": false,
+  "trigger_rule_cited": [
+    {
+      "source_id": "DPA-TM-001",
+      "version": "2.1",
+      "row_id": "A-01",
+      "trigger_condition": "Vendor processes personal data of EU/EEA data subjects on behalf of Lichen",
+      "citation_class": "PRIMARY"
+    },
+    {
+      "source_id": "DPA-TM-001",
+      "version": "2.1",
+      "row_id": "A-04",
+      "trigger_condition": "Anonymized operational-analytics derived from employee data, retained ≤90 days for internal use only",
+      "citation_class": "PRIMARY"
+    }
+  ],
+  "policy_citations": [
+    {
+      "source_id": "DPA-TM-001",
+      "version": "2.1",
+      "row_id": "A-01",
+      "trigger_condition": "Vendor processes personal data of EU/EEA data subjects on behalf of Lichen",
+      "citation_class": "PRIMARY"
+    },
+    {
+      "source_id": "DPA-TM-001",
+      "version": "2.1",
+      "row_id": "A-04",
+      "trigger_condition": "Anonymized operational-analytics derived from employee data, retained ≤90 days for internal use only",
+      "citation_class": "PRIMARY"
+    },
+    {
+      "source_id": "ISP-001",
+      "version": "4.2",
+      "chunk_id": "ISP-001__section_12",
+      "section_id": "12.1.4",
+      "citation_class": "PRIMARY"
+    }
+  ],
+  "status": "escalated"
+}
+```
+
+> The agent identified two Tier 1 DPA-TM-001 rows whose trigger conditions both evaluate to true on the same confirmed fact pattern and disagree on `dpa_required`. Per §8.5 condition 2, this is a conflict escalation, not a no-match escalation. `dpa_required` and `dpa_blocker` are `null` because the agent cannot resolve the DPA determination without human judgment on which rule governs. Per §12's specific rule for conflicts and the §9.2 precedence note, both conflicting rows are cited in `trigger_rule_cited` and in `policy_citations` — the general §9.2 rule setting `trigger_rule_cited` to `null` when `dpa_required` is `null` does not apply here because there ARE citations to make (of the conflicting evidence), even though those citations do not support a resolved determination. Preserving the conflicting evidence in the structured output lets the Supervisor and downstream humans see exactly which rules disagree. The NDA determination is fully resolved from questionnaire evidence and ISP-001 §12.1.4. The full escalation payload, including the triggering condition, both conflicting sources with their `row_id` and `trigger_condition` values, and the resolution owner, is written to the audit log per CC-001 §13.1. A model that reasoned substantively past the narrower carve-out row to pick a single outcome would be substituting its own interpretive judgment for the conflict-escalation path the spec requires — the §8.5 conflict-definition note exists specifically to close off that failure mode.
+
+### Example G — Upstream AMBIGUOUS classification, DPA trigger resolvable via questionnaire evidence
+
+STEP-02 emits `data_classification = AMBIGUOUS`. Questionnaire confirms `eu_personal_data_flag = true`, `data_subjects_eu = "EMPLOYEES"`. Trigger row A-01 matches on the EU evidence. `existing_dpa_status = NOT_STARTED`. NDA is EXECUTED and ISP-001 §12.1.4 is present:
+
+```json
+{
+  "dpa_required": true,
+  "dpa_blocker": true,
+  "nda_status": "EXECUTED",
+  "nda_blocker": false,
+  "trigger_rule_cited": [
+    {
+      "source_id": "DPA-TM-001",
+      "version": "2.1",
+      "row_id": "A-01",
+      "trigger_condition": "Vendor processes personal data of EU/EEA data subjects on behalf of Lichen",
+      "citation_class": "PRIMARY"
+    }
+  ],
+  "policy_citations": [
+    {
+      "source_id": "DPA-TM-001",
+      "version": "2.1",
+      "row_id": "A-01",
+      "trigger_condition": "Vendor processes personal data of EU/EEA data subjects on behalf of Lichen",
+      "citation_class": "PRIMARY"
+    },
+    {
+      "source_id": "ISP-001",
+      "version": "4.2",
+      "chunk_id": "ISP-001__section_12",
+      "section_id": "12.1.4",
+      "citation_class": "PRIMARY"
+    }
+  ],
+  "status": "escalated"
+}
+```
+
+> Upstream `data_classification = AMBIGUOUS` does not itself block or escalate the Legal Agent. Per §12, the DPA check must proceed using available questionnaire EU personal data evidence when upstream classification is AMBIGUOUS — the §8.2 trigger evaluation table does not require a resolved `data_classification` when EU personal data is independently confirmed by questionnaire fields. The agent finds trigger row A-01 matching on `data_subjects_eu = "EMPLOYEES"`, which is sufficient to resolve `dpa_required = true` without relying on the ambiguous upstream classification. All determination fields are resolvable — no nulls. The escalation is driven by `dpa_blocker = true` per §8.5 condition 4 (workflow-consequence escalation: `existing_dpa_status = NOT_STARTED` and `dpa_required = true`), not by the AMBIGUOUS upstream. The AMBIGUOUS classification is flagged in the audit log for traceability but does not prevent the agent from completing its work where questionnaire evidence is sufficient. A model that blanket-escalated on AMBIGUOUS upstream — emitting `dpa_required: null` and `dpa_blocker: null` — would fail to resolve a DPA determination that questionnaire evidence fully supports, and would force a human to do work the rule system already covers. The inverse failure mode would be treating AMBIGUOUS as equivalent to REGULATED and asserting `dpa_required = true` without a supporting trigger row; that is covered by the §12 no-matrix-match rule and would produce an Example D-style unresolvable-DPA escalation rather than a resolved determination.
+
 ---
 
 ## 14. Critical Acceptance Checks
@@ -623,4 +721,4 @@ A fuller CSR / ISR evaluation matrix may be maintained in a separate evaluation 
 | 0.9 | 2026-04-16 | Engineering / IT Architecture | Escalated output contract defined. (1) Added §9.2 Escalated Output Rules — on escalated runs, all determination fields must be present (not absent); resolved fields carry derived values, unresolvable fields set to `null`. (2) §8.5 output shape switching rule expanded to cover all three statuses with distinct output behaviors and includes BLOCKED vs ESCALATED distinction: blocked = missing bundle input (no evidence to begin), escalated = bundle admissible but agent cannot resolve specific fields per spec rules. (3) §9 output field constraints updated with per-field escalated null rules. (4) §10 rewritten with output shape references for each status. (5) Examples A, B, D updated with full JSON outputs showing escalated field behavior — Example A (all resolved, no nulls), Example B (NDA resolved from questionnaire, citation gap), Example D (DPA unresolvable → null, NDA resolved). (6) A-06 updated to distinguish complete (all non-null) from escalated (present but nullable per §9.2). (7) A-10 added requiring all determination fields present on escalated runs. |
 | 0.10 | 2026-04-18 | Engineering / IT Architecture | §8.5 Tier 1 conflict clarification. Added a note beneath the status-derivation table defining "conflict on the same trigger question" as two or more Tier 1 rows whose trigger conditions both evaluate to true on the same confirmed fact pattern and disagree on outcome — complementary rules covering disjoint fact patterns are not conflicts. Motivated by scenario_5 per-agent test where the model reasoned substantively past a narrowly-worded row instead of triggering the conflict-escalation path; clarification removes the ambiguity between mechanical parity and interpretive reconciliation. |
 | 0.11 | 2026-04-18 | Engineering / IT Architecture | §8.4 / §9.2 precedence clarification for dual-absence NDA evidence on escalated runs. (1) Added a precedence blockquote to §8.4 stating that §8.4 normalization (absent → UNKNOWN / blocker = true) applies only when at least one NDA evidence source is available; when both `existing_nda_status` and `nda_clause_chunks` are absent on an escalated run, §9.2 per-field null rules govern and `nda_status` / `nda_blocker` must be `null`. (2) Added a matching precedence paragraph to §9.2 making the override explicit in the opposite direction. (3) Added a new §9.2 worked example ("DPA resolved, NDA dually absent") showing the full escalated JSON with `nda_status: null`, `nda_blocker: null`, resolved DPA fields, and `policy_citations` containing only the DPA-TM-001 PRIMARY citation (no hallucinated ISP-001 §12.1.4). Motivated by scenario_6 per-agent test where the model applied §8.4 normalization on dual-absence evidence and emitted `nda_status: "UNKNOWN"` / `nda_blocker: true` instead of the §9.2-required nulls. |
-
+| 0.12 | 2026-04-19 | Engineering / IT Architecture | Two §13 examples added to close demonstration gaps for rules added in v0.10 and clarified in §12. §9.2 precedence for Tier 1 conflict cases made explicit. (1) Example F (Tier 1 conflict on the same trigger question) demonstrates the §8.5 condition 2 path and the v0.10 conflict-definition note — `dpa_required` and `dpa_blocker` are `null` per §9.2, and both conflicting rows are cited in `trigger_rule_cited` and `policy_citations` per §12's specific conflict rule. (2) Example G (upstream AMBIGUOUS classification with DPA resolvable via questionnaire) demonstrates that AMBIGUOUS upstream does not itself block or escalate per §12 — the agent proceeds using questionnaire EU personal data evidence and resolves the DPA determination. The example's specific path (trigger row A-01 matches on EU evidence alone → `dpa_required = true`, `dpa_blocker = true` from `existing_dpa_status = NOT_STARTED` → escalated) demonstrates both the AMBIGUOUS-upstream resilience and standard workflow-consequence escalation. (3) Added a precedence paragraph to §9.2 explicitly governing the Tier 1 conflict case — §9.2's general null rule for `trigger_rule_cited` does not apply when §8.5 condition 2 fires; §12's specific conflict rule preserves both conflicting rows in the structured output. Same specific-over-general pattern as the v0.11 §8.4 / §9.2 precedence clarification. No behavioral rule changes beyond the explicit articulation of a precedence already implied by §12. |
