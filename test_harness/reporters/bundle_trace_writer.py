@@ -9,6 +9,15 @@ from typing import Any
 from orchestration.models.context_bundle import ContextBundle
 
 
+def _is_empty_value(value: Any) -> bool:
+    """True if a structured_fields value carries no content for downstream use."""
+    if value is None:
+        return True
+    if isinstance(value, (dict, list, tuple, set, str)) and len(value) == 0:
+        return True
+    return False
+
+
 class BundleTraceWriter:
     """Accumulates per-step bundle summaries and writes bundle_trace.json."""
 
@@ -44,6 +53,9 @@ class BundleTraceWriter:
                 for e in bundle.excluded_evidence
             ],
             "structured_fields_keys": list(bundle.structured_fields.keys()),
+            "empty_structured_field_keys": sorted(
+                k for k, v in bundle.structured_fields.items() if _is_empty_value(v)
+            ),
             "source_provenance": bundle.source_provenance,
         }
         self._traces.append(trace)

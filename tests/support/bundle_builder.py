@@ -254,9 +254,14 @@ def _scenario_1_captured() -> dict[str, dict[str, Any]]:
 # ---------------------------------------------------------------------------
 
 
-def _scenario_2_step02_bundle() -> dict[str, Any]:
-    """Run the mock pipeline with scenario_2 questionnaire to capture a real STEP-02 bundle."""
-    overrides = {
+def scenario_2_questionnaire_overrides() -> dict[str, Any]:
+    """Questionnaire deltas that convert the root questionnaire into scenario_2.
+
+    Used by both the mock STEP-02 bundle capture below and the live
+    full-pipeline e2e test, which needs to drive the Supervisor off the
+    same scenario_2 inputs.
+    """
+    return {
         "product_and_integration": {
             "erp_integration": {
                 "erp_type": "AMBIGUOUS",
@@ -283,9 +288,13 @@ def _scenario_2_step02_bundle() -> dict[str, Any]:
             "dpa_required": True,
         },
     }
+
+
+def _scenario_2_step02_bundle() -> dict[str, Any]:
+    """Run the mock pipeline with scenario_2 questionnaire to capture a real STEP-02 bundle."""
     captured = _run_mock_and_capture(
         questionnaire_path=_root_questionnaire(),
-        overrides=overrides,
+        overrides=scenario_2_questionnaire_overrides(),
         agent_outputs=complete_demo_scenario().agent_outputs,
     )
     return captured["it_security_agent"]
@@ -372,8 +381,49 @@ def build_bundles(scenario: str) -> dict[str, dict[str, Any]]:
     if scenario == "scenario_1":
         return deepcopy(_scenario_1_captured())
     if scenario == "scenario_2":
+        validate_scenario_2_literals_against_spec()
         return deepcopy(_scenario_2_bundles())
     raise ValueError(f"unknown scenario: {scenario!r}")
+
+
+# ---------------------------------------------------------------------------
+# Drift validator — scenario_2 literals vs current agent output contracts
+# ---------------------------------------------------------------------------
+
+
+def validate_scenario_2_literals_against_spec() -> None:
+    """Fail fast if a scenario_2 literal output drifted from the spec.
+
+    The scenario_2 synthesis hardcodes upstream outputs as literal dicts so
+    downstream agents can be tested in isolation of the halt condition.
+    If the spec's required fields change and nobody updates these literals,
+    downstream bundles silently carry a stale shape and the e2e test
+    exercises something that diverges from the per-agent contract.
+
+    This function runs ``find_missing_fields`` against each literal and
+    raises ``RuntimeError`` on any divergence — that points the maintainer
+    directly at the drifted agent rather than a confusing downstream
+    evaluator failure.
+    """
+    from agents._validator import find_missing_fields
+
+    literals: list[tuple[str, dict[str, Any]]] = [
+        ("it_security_agent", _scenario_2_security_output()),
+        ("legal_agent", _scenario_2_legal_output()),
+        ("procurement_agent", _scenario_2_procurement_output()),
+        ("checklist_assembler", _scenario_2_checklist_output()),
+    ]
+    drift: list[str] = []
+    for agent, output in literals:
+        missing = find_missing_fields(agent, output)
+        if missing:
+            drift.append(f"{agent}: missing={missing!r}")
+    if drift:
+        raise RuntimeError(
+            "scenario_2 literal outputs in tests/support/bundle_builder.py "
+            "drifted from current agent contracts — update the _scenario_2_* "
+            "functions to match:\n  " + "\n  ".join(drift)
+        )
 
 
 def build_bundle_for(scenario: str, agent: str) -> dict[str, Any]:

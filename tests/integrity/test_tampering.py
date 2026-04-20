@@ -1,29 +1,27 @@
-"""Tampering tests: each test injects a known integrity violation into a
-mock pipeline artifact (bundle trace or audit-entry list) and confirms the
-corresponding assertion raises.
+"""Tampering tests: verify the harness assertions actually fire on violations.
+
+Each test injects a known integrity violation into a mock pipeline artifact
+(bundle trace or audit-entry list) and confirms the corresponding assertion
+raises ``HarnessAssertionError`` with the expected message fragment.
 
 These tests do NOT run the full pipeline; they construct the minimal inputs
-required by each assertion function.  They exist to prove that the integrity
+required by each assertion function. They exist to prove the integrity
 checks are not silently passing when violations are present.
 
-Run via:
-    uv run python test_harness/test_tampering.py
+Moved here from ``test_harness/test_tampering.py`` so pytest discovers them
+natively. The original file used a ``SystemExit``-based harness; this
+version uses ``pytest.raises``.
 """
 
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
-_REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(_REPO_ROOT / "src"))
-sys.path.insert(0, str(_REPO_ROOT))
+import pytest
 
 from orchestration.audit.schemas import AuditEntry
 from orchestration.models.enums import AuditEventType
 
 from test_harness.result_assertions import (
-    AssertionError as HarnessAssertionError,
+    HarnessAssertionError,
     assert_bundles,
     assert_no_retrieval_in_forbidden_steps,
     assert_retrieval_lanes,
@@ -47,21 +45,6 @@ def _scoped_fixture(step_id: str, scenario: str = "scenario_1_complete") -> Harn
         agent_signals=base.agent_signals,
         forbidden_retrieval_steps=base.forbidden_retrieval_steps,
     )
-
-
-def _expect_fail(label: str, fn, *, contains: str) -> None:
-    try:
-        fn()
-    except HarnessAssertionError as exc:
-        msg = str(exc)
-        if contains not in msg:
-            raise SystemExit(
-                f"[FAIL] {label}: assertion fired but message missing substring "
-                f"{contains!r}; got {msg!r}"
-            ) from None
-        print(f"[OK]   {label}: caught -> {msg}")
-        return
-    raise SystemExit(f"[FAIL] {label}: expected assertion did not fire")
 
 
 def _base_step03_trace() -> dict:
@@ -90,8 +73,6 @@ def _base_step03_trace() -> dict:
     }
 
 
-
-
 def _retrieval_audit_entry(
     *,
     request_id: str,
@@ -115,59 +96,35 @@ def _retrieval_audit_entry(
     )
 
 
-# --------------------------------------------------------------------------
-# Tampering scenario 1: prohibited source appears in STEP-03 provenance
-# --------------------------------------------------------------------------
 def test_forbidden_source_in_step03_fires() -> None:
     trace = _base_step03_trace()
-    # STEP-03 forbids PAM-001 and SLK-001 — inject PAM-001.
     trace["source_provenance"].append(
         {"source_id": "PAM-001", "lane": "direct_structured", "chunk_count": 1}
     )
     fixture = _scoped_fixture("STEP-03")
-    _expect_fail(
-        "forbidden_source_in_step03",
-        lambda: assert_bundles([trace], fixture),
-        contains="forbidden source 'PAM-001'",
-    )
+    with pytest.raises(HarnessAssertionError, match="forbidden source 'PAM-001'"):
+        assert_bundles([trace], fixture)
 
 
-# --------------------------------------------------------------------------
-# Tampering scenario 2: required source missing from STEP-03
-# --------------------------------------------------------------------------
 def test_missing_required_source_in_step03_fires() -> None:
     trace = _base_step03_trace()
-    # Remove the DPA-TM-001 required source.
     trace["source_provenance"] = [
         p for p in trace["source_provenance"] if p["source_id"] != "DPA-TM-001"
     ]
     fixture = _scoped_fixture("STEP-03")
-    _expect_fail(
-        "missing_required_source_in_step03",
-        lambda: assert_bundles([trace], fixture),
-        contains="required source 'DPA-TM-001'",
-    )
+    with pytest.raises(HarnessAssertionError, match="required source 'DPA-TM-001'"):
+        assert_bundles([trace], fixture)
 
 
-# --------------------------------------------------------------------------
-# Tampering scenario 3: required structured field missing from STEP-03
-# --------------------------------------------------------------------------
 def test_missing_structured_field_fires() -> None:
     trace = _base_step03_trace()
     trace["structured_fields_keys"].remove("dpa_trigger_rows")
     fixture = _scoped_fixture("STEP-03")
-    _expect_fail(
-        "missing_structured_field_in_step03",
-        lambda: assert_bundles([trace], fixture),
-        contains="'dpa_trigger_rows' missing",
-    )
+    with pytest.raises(HarnessAssertionError, match="'dpa_trigger_rows' missing"):
+        assert_bundles([trace], fixture)
 
 
-# --------------------------------------------------------------------------
-# Tampering scenario 4: Slack admitted as primary evidence
-# --------------------------------------------------------------------------
 def test_slack_primary_citable_fires() -> None:
-    # Use STEP-04, where SLK-001 is allowed but must never be primary-citable.
     trace = {
         "step_id": "STEP-04",
         "admissibility_status": "ADMISSIBLE",
@@ -202,21 +159,14 @@ def test_slack_primary_citable_fires() -> None:
         ],
     }
     fixture = _scoped_fixture("STEP-04")
-    _expect_fail(
-        "slack_primary_citable",
-        lambda: assert_bundles([trace], fixture),
-        contains="Slack chunk admitted as primary",
-    )
+    with pytest.raises(HarnessAssertionError, match="Slack chunk admitted as primary"):
+        assert_bundles([trace], fixture)
 
 
-# --------------------------------------------------------------------------
-# Tampering scenario 5: Thread 4 admitted in a bundle where SLK is allowed
-# --------------------------------------------------------------------------
 def test_thread4_admitted_fires() -> None:
     # STEP-04 permits SLK-001, but T4 (Greenbrook Catering) must still be
-    # excluded from OptiChain bundles.  Build a focused fixture whose only
-    # invariant tests the thread4 rule so we reach that check rather than
-    # a forbidden-source check.
+    # excluded from OptiChain bundles. Isolate the thread4 rule so the
+    # forbidden-source check does not fire first.
     custom_invariant = BundleInvariant(
         step_id="STEP-04",
         required_source_ids=(),
@@ -264,16 +214,10 @@ def test_thread4_admitted_fires() -> None:
             {"source_id": "SLK-001", "lane": "indexed_hybrid", "chunk_count": 1},
         ],
     }
-    _expect_fail(
-        "thread4_admitted_in_step04",
-        lambda: assert_bundles([trace], fixture),
-        contains="Thread 4 chunk was admitted",
-    )
+    with pytest.raises(HarnessAssertionError, match="Thread 4 chunk was admitted"):
+        assert_bundles([trace], fixture)
 
 
-# --------------------------------------------------------------------------
-# Tampering scenario 6: retrieval lane divergence from source contract
-# --------------------------------------------------------------------------
 def test_retrieval_lane_divergence_fires() -> None:
     entries = [
         _retrieval_audit_entry(
@@ -283,16 +227,10 @@ def test_retrieval_lane_divergence_fires() -> None:
         )
     ]
     fixture = _scoped_fixture("STEP-03")
-    _expect_fail(
-        "retrieval_lane_divergence",
-        lambda: assert_retrieval_lanes(entries, fixture),
-        contains="expected 'indexed_hybrid'",
-    )
+    with pytest.raises(HarnessAssertionError, match="expected 'indexed_hybrid'"):
+        assert_retrieval_lanes(entries, fixture)
 
 
-# --------------------------------------------------------------------------
-# Tampering scenario 7: STEP-05 issues a forbidden raw retrieval
-# --------------------------------------------------------------------------
 def test_forbidden_retrieval_in_step05_fires() -> None:
     entries = [
         _retrieval_audit_entry(
@@ -302,44 +240,13 @@ def test_forbidden_retrieval_in_step05_fires() -> None:
         )
     ]
     fixture = _scoped_fixture("STEP-03")
-    _expect_fail(
-        "forbidden_retrieval_in_step05",
-        lambda: assert_no_retrieval_in_forbidden_steps(entries, fixture),
-        contains="STEP-05 performed forbidden retrieval",
-    )
+    with pytest.raises(HarnessAssertionError, match="STEP-05 performed forbidden retrieval"):
+        assert_no_retrieval_in_forbidden_steps(entries, fixture)
 
 
-# --------------------------------------------------------------------------
-# Tampering scenario 8: bundle admissibility_status = ESCALATION_REQUIRED
-# --------------------------------------------------------------------------
 def test_escalation_required_admissibility_fires() -> None:
     trace = _base_step03_trace()
     trace["admissibility_status"] = "ESCALATION_REQUIRED"
     fixture = _scoped_fixture("STEP-03")
-    _expect_fail(
-        "escalation_required_admissibility",
-        lambda: assert_bundles([trace], fixture),
-        contains="ESCALATION_REQUIRED",
-    )
-
-
-def main() -> int:
-    tests = [
-        test_forbidden_source_in_step03_fires,
-        test_missing_required_source_in_step03_fires,
-        test_missing_structured_field_fires,
-        test_slack_primary_citable_fires,
-        test_thread4_admitted_fires,
-        test_retrieval_lane_divergence_fires,
-        test_forbidden_retrieval_in_step05_fires,
-        test_escalation_required_admissibility_fires,
-    ]
-    print(f"Running {len(tests)} tampering tests...")
-    for t in tests:
-        t()
-    print(f"\nAll {len(tests)} tampering tests fired their expected assertions.")
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+    with pytest.raises(HarnessAssertionError, match="ESCALATION_REQUIRED"):
+        assert_bundles([trace], fixture)

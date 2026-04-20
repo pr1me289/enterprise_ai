@@ -25,6 +25,7 @@ import json
 import logging
 import os
 import re
+import time
 from pathlib import Path
 from typing import Any
 
@@ -132,9 +133,27 @@ def _call_agent(
     client: Any = None,
     repo_root: Path | str | None = None,
     model: str | None = None,
+    raise_on_error: bool = False,
+    call_records: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Shared call pipeline used by every public per-agent function."""
+    """Shared call pipeline used by every public per-agent function.
+
+    When ``raise_on_error`` is True, exceptions propagate instead of being
+    swallowed into a blocked payload. Tests use this so that prompt/parse
+    failures surface as real pytest failures. Production callers (the
+    Supervisor via ``AnthropicLLMAdapter``) leave it False.
+
+    When ``call_records`` is provided, a summary dict is appended for every
+    invocation (agent, pipeline_run_id, model, missing, outcome) so test
+    harnesses can inspect per-call metadata.
+    """
     model_name = model or os.environ.get("ANTHROPIC_MODEL") or DEFAULT_MODEL
+    record: dict[str, Any] = {
+        "agent_name": agent_name,
+        "pipeline_run_id": pipeline_run_id,
+        "model": model_name,
+        "outcome": "ok",
+    }
     try:
         if spec_text is None:
             system_prompt = load_system_prompt(
@@ -145,12 +164,17 @@ def _call_agent(
             system_prompt = spec_text + "\n\n" + OUTPUT_INSTRUCTION
         user_message = _user_message_from_bundle(bundle, step_metadata)
         anthropic_client = client or _build_client()
+        _t0 = time.monotonic()
         response = anthropic_client.messages.create(
             model=model_name,
             max_tokens=DEFAULT_MAX_TOKENS,
             system=system_prompt,
             messages=[{"role": "user", "content": user_message}],
         )
+        record["elapsed_seconds"] = time.monotonic() - _t0
+        usage = getattr(response, "usage", None)
+        record["input_tokens"] = getattr(usage, "input_tokens", None)
+        record["output_tokens"] = getattr(usage, "output_tokens", None)
         text = _extract_text(response)
         output = _parse_json_response(text)
     except Exception as exc:  # noqa: BLE001 — per spec, never leak to state machine
@@ -159,6 +183,12 @@ def _call_agent(
             agent_name,
             pipeline_run_id,
         )
+        record["outcome"] = "error"
+        record["error"] = f"{type(exc).__name__}: {exc}"
+        if call_records is not None:
+            call_records.append(record)
+        if raise_on_error:
+            raise
         return _blocked_output(
             agent_name,
             f"{type(exc).__name__}: {exc}",
@@ -174,6 +204,10 @@ def _call_agent(
             pipeline_run_id,
             missing,
         )
+    record["missing_fields"] = missing
+    record["status"] = output.get("status") or output.get("overall_status")
+    if call_records is not None:
+        call_records.append(record)
     return output
 
 
@@ -255,11 +289,14 @@ class AnthropicLLMAdapter:
         model: str | None = None,
         client: Any = None,
         pipeline_run_id: str | None = None,
+        raise_on_error: bool = False,
     ) -> None:
         self.repo_root = Path(repo_root) if repo_root else _DEFAULT_REPO_ROOT
         self.model = model or os.environ.get("ANTHROPIC_MODEL") or DEFAULT_MODEL
         self._client = client  # constructed lazily on first call if None
         self._pipeline_run_id = pipeline_run_id or ""
+        self.raise_on_error = raise_on_error
+        self.call_records: list[dict[str, Any]] = []
 
     def _get_client(self) -> Any:
         if self._client is None:
@@ -291,4 +328,6 @@ class AnthropicLLMAdapter:
             client=self._get_client(),
             repo_root=self.repo_root,
             model=self.model,
+            raise_on_error=self.raise_on_error,
+            call_records=self.call_records,
         )

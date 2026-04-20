@@ -114,6 +114,31 @@ def live_monitor(pytestconfig: pytest.Config):
     return pytestconfig._live_monitor  # type: ignore[attr-defined]
 
 
+_ALLOWED_LIVE_MODEL_PREFIXES: tuple[str, ...] = ("claude-haiku",)
+_DEFAULT_MAX_LIVE_CALLS = 50
+
+
+def _enforce_cost_guard() -> None:
+    """Reject non-Haiku live-API runs unless ``ALLOW_NON_HAIKU=1`` is set.
+
+    The full-pipeline tests fan out into five domain-agent calls per
+    scenario. Accidentally running that on Sonnet or Opus would burn
+    through budget quickly, so we pin to Haiku by default and require an
+    explicit env opt-in to override.
+    """
+    override = os.environ.get("ALLOW_NON_HAIKU") in ("1", "true", "TRUE")
+    model = os.environ.get("ANTHROPIC_MODEL", "").strip()
+    if not model or override:
+        return
+    if any(model.startswith(prefix) for prefix in _ALLOWED_LIVE_MODEL_PREFIXES):
+        return
+    pytest.exit(
+        f"Refusing to run @pytest.mark.api tests with ANTHROPIC_MODEL={model!r}. "
+        f"Default is Haiku; set ALLOW_NON_HAIKU=1 to override.",
+        returncode=2,
+    )
+
+
 @pytest.fixture(scope="session")
 def anthropic_client(live_monitor):
     """A single Anthropic SDK client wrapped with the live-monitor interceptor.
@@ -121,13 +146,58 @@ def anthropic_client(live_monitor):
     Every ``messages.create`` call is timed and token counts are recorded
     into the shared monitor. Tests never touch the client directly — they
     use ``run_llm_agent`` which threads it through the call layer.
+
+    The session also enforces a Haiku-only default and a max-calls cap
+    (override via ``ALLOW_NON_HAIKU=1`` / ``ANTHROPIC_MAX_CALLS=<N>``).
     """
     _load_dotenv_if_available()
+    _enforce_cost_guard()
     from anthropic import Anthropic
 
     from tests.support.live_monitor import InstrumentedAnthropic
 
-    return InstrumentedAnthropic(Anthropic(), live_monitor)
+    cap_raw = os.environ.get("ANTHROPIC_MAX_CALLS")
+    try:
+        cap = int(cap_raw) if cap_raw else _DEFAULT_MAX_LIVE_CALLS
+    except ValueError:
+        cap = _DEFAULT_MAX_LIVE_CALLS
+
+    instrumented = InstrumentedAnthropic(Anthropic(), live_monitor)
+    return _CapCheckedClient(instrumented, cap)
+
+
+class _CapCheckedClient:
+    """Thin wrapper that raises once the per-session call cap is reached."""
+
+    def __init__(self, inner: Any, cap: int) -> None:
+        self._inner = inner
+        self._cap = cap
+        self._count = 0
+        self.messages = _CapCheckedMessages(self, inner.messages)
+
+    def _tick(self) -> None:
+        self._count += 1
+        if self._count > self._cap:
+            raise RuntimeError(
+                f"live-API call cap reached ({self._cap}); "
+                f"set ANTHROPIC_MAX_CALLS to a higher value to proceed."
+            )
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._inner, name)
+
+
+class _CapCheckedMessages:
+    def __init__(self, parent: _CapCheckedClient, inner: Any) -> None:
+        self._parent = parent
+        self._inner = inner
+
+    def create(self, *args: Any, **kwargs: Any) -> Any:
+        self._parent._tick()
+        return self._inner.create(*args, **kwargs)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._inner, name)
 
 
 @pytest.fixture

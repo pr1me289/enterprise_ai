@@ -16,7 +16,7 @@ from preprocessing.source_contract import SOURCE_CONTRACTS_BY_ID
 from test_harness.scenario_fixtures import HarnessFixture
 
 
-class AssertionError(Exception):  # noqa: A001
+class HarnessAssertionError(Exception):
     """Raised when a harness assertion fails."""
 
 
@@ -49,7 +49,7 @@ def assert_global(state: PipelineState, fixture: HarnessFixture) -> None:
         expected_next = STEP_ORDER[STEP_ORDER.index(step_id) + 1]
         actual_next = executed_steps[i + 1]
         if STEP_ORDER.index(actual_next) < STEP_ORDER.index(expected_next):
-            raise AssertionError(
+            raise HarnessAssertionError(
                 f"assert_global: step order violated — {actual_next.value} executed "
                 f"before {expected_next.value}"
             )
@@ -63,14 +63,14 @@ def assert_global(state: PipelineState, fixture: HarnessFixture) -> None:
         for step_id in STEP_ORDER[terminal_idx + 1:]:
             s = state.step_statuses[step_id]
             if s != StepStatus.PENDING:
-                raise AssertionError(
+                raise HarnessAssertionError(
                     f"assert_global: step {step_id.value} executed after terminal "
                     f"halt at {expected_terminal_step.value} — status={s.value}"
                 )
 
     # Audit entries must be non-empty
     if not state.audit_refs:
-        raise AssertionError("assert_global: no audit entries were emitted.")
+        raise HarnessAssertionError("assert_global: no audit entries were emitted.")
 
 
 # ---------------------------------------------------------------------------
@@ -90,7 +90,7 @@ def assert_retrieval(state: PipelineState, fixture: HarnessFixture) -> None:
         if step_status in (StepStatus.COMPLETE, StepStatus.ESCALATED):
             det_key = _determination_key(step_id)
             if det_key is not None and state.determinations.get(det_key) is None:
-                raise AssertionError(
+                raise HarnessAssertionError(
                     f"assert_retrieval: {step_id.value} is {step_status.value} but "
                     f"determination '{det_key}' is None in state."
                 )
@@ -125,7 +125,7 @@ def assert_bundles(
             # Only assert for steps that were expected to execute
             expected_status = fixture.expected_step_statuses.get(step_id, "PENDING")
             if expected_status != "PENDING":
-                raise AssertionError(
+                raise HarnessAssertionError(
                     f"assert_bundles: no bundle trace recorded for {step_id} "
                     f"(expected status={expected_status})."
                 )
@@ -135,7 +135,7 @@ def assert_bundles(
 
         # Check admissibility is not ESCALATION_REQUIRED
         if trace["admissibility_status"] == "ESCALATION_REQUIRED":
-            raise AssertionError(
+            raise HarnessAssertionError(
                 f"assert_bundles: {step_id} bundle has ESCALATION_REQUIRED "
                 f"admissibility — prohibited sources were admitted."
             )
@@ -146,7 +146,7 @@ def assert_bundles(
         available_source_ids = provenance_source_ids | admitted_source_ids
         for sid in invariant.required_source_ids:
             if sid not in available_source_ids:
-                raise AssertionError(
+                raise HarnessAssertionError(
                     f"assert_bundles: {step_id} — required source {sid!r} "
                     f"not found in provenance or admitted chunks. "
                     f"provenance={sorted(provenance_source_ids)!r}"
@@ -155,7 +155,7 @@ def assert_bundles(
         # Forbidden source IDs: must not appear in provenance or admitted chunks
         for sid in invariant.forbidden_source_ids:
             if sid in available_source_ids:
-                raise AssertionError(
+                raise HarnessAssertionError(
                     f"assert_bundles: {step_id} — forbidden source {sid!r} "
                     f"appeared in bundle "
                     f"(provenance={sorted(provenance_source_ids)!r}, "
@@ -164,18 +164,31 @@ def assert_bundles(
 
         # Required structured fields: must appear as top-level keys
         present_keys = set(trace.get("structured_fields_keys", []))
+        empty_keys = set(trace.get("empty_structured_field_keys", []))
         for field_key in invariant.required_structured_fields:
             if field_key not in present_keys:
-                raise AssertionError(
+                raise HarnessAssertionError(
                     f"assert_bundles: {step_id} — required structured field "
                     f"{field_key!r} missing. Present keys: {sorted(present_keys)!r}"
+                )
+            # STEP-05 reads upstream determinations via runtime_read. A key
+            # with an empty value signals the upstream determination never
+            # materialised, which would let the assembler silently produce
+            # a hollow roll-up. STEP-05 is the only step today that reads
+            # upstream determinations as its sole evidence, so enforce the
+            # non-empty invariant here.
+            if step_id == "STEP-05" and field_key in empty_keys:
+                raise HarnessAssertionError(
+                    f"assert_bundles: {step_id} — required upstream field "
+                    f"{field_key!r} is present but empty. "
+                    f"Empty keys: {sorted(empty_keys)!r}"
                 )
 
         # Check Slack not primary evidence
         if invariant.slack_must_not_be_primary:
             for chunk in trace["admitted_chunks"]:
                 if chunk["source_id"] == "SLK-001" and chunk.get("is_primary_citable"):
-                    raise AssertionError(
+                    raise HarnessAssertionError(
                         f"assert_bundles: {step_id} — Slack chunk admitted as "
                         f"primary evidence: {chunk['chunk_id']!r}"
                     )
@@ -185,7 +198,7 @@ def assert_bundles(
             for chunk in trace["admitted_chunks"]:
                 extra = chunk.get("extra_metadata") or {}
                 if extra.get("thread_id") in ("T4", "4", "thread_4"):
-                    raise AssertionError(
+                    raise HarnessAssertionError(
                         f"assert_bundles: {step_id} — Thread 4 chunk was admitted: "
                         f"{chunk['chunk_id']!r}"
                     )
@@ -200,7 +213,7 @@ def assert_status(state: PipelineState, fixture: HarnessFixture) -> None:
     actual_overall = state.overall_status.value
     expected_overall = fixture.expected_terminal_status
     if actual_overall != expected_overall:
-        raise AssertionError(
+        raise HarnessAssertionError(
             f"assert_status: overall_status={actual_overall!r} != "
             f"expected={expected_overall!r}"
         )
@@ -209,7 +222,7 @@ def assert_status(state: PipelineState, fixture: HarnessFixture) -> None:
         step_id = _step_id(step_str)
         actual_status = state.step_statuses[step_id].value
         if actual_status != expected_status:
-            raise AssertionError(
+            raise HarnessAssertionError(
                 f"assert_status: {step_str} status={actual_status!r} != "
                 f"expected={expected_status!r}"
             )
@@ -267,7 +280,7 @@ def assert_retrieval_lanes(
         actual_lane = (entry.details or {}).get("lane", "")
         if source_id in _RUNTIME_READ_STAND_INS:
             if actual_lane != "runtime_read":
-                raise AssertionError(
+                raise HarnessAssertionError(
                     f"assert_retrieval_lanes: stand-in source {source_id!r} "
                     f"queried via lane={actual_lane!r}; expected 'runtime_read'."
                 )
@@ -280,7 +293,7 @@ def assert_retrieval_lanes(
         # uppercase values while orchestration.RetrievalLane uses lowercase.
         expected_lane = contract.retrieval_lane.value.lower()
         if actual_lane.lower() != expected_lane:
-            raise AssertionError(
+            raise HarnessAssertionError(
                 f"assert_retrieval_lanes: {source_id!r} queried via "
                 f"lane={actual_lane!r}; expected {expected_lane!r} per "
                 f"source_contract.py."
@@ -323,7 +336,7 @@ def assert_no_retrieval_in_forbidden_steps(
             )
 
     if offenders:
-        raise AssertionError(
+        raise HarnessAssertionError(
             "assert_no_retrieval_in_forbidden_steps: "
             + "; ".join(offenders)
         )
@@ -357,7 +370,7 @@ def run_all_assertions(
     ]:
         try:
             fn(*args)
-        except AssertionError as exc:
+        except HarnessAssertionError as exc:
             failures.append(f"{name}: {exc}")
 
     return failures
