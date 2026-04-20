@@ -112,8 +112,9 @@ def build_results_block(
     notes: str | None = None,
 ) -> str:
     """Build one markdown block for a completed pipeline run."""
+    adapter = getattr(getattr(supervisor, "agent_runner", None), "adapter", None)
     call_records: list[dict[str, Any]] = (
-        getattr(supervisor.llm_adapter, "call_records", []) or []
+        getattr(adapter, "call_records", []) or []
     )
     call_by_agent: dict[str, dict[str, Any]] = {}
     for rec in call_records:

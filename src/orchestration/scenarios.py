@@ -185,6 +185,9 @@ def complete_demo_scenario() -> ScenarioFixture:
         name="complete_demo",
         description="Happy-path scenario proving full sequential completion through STEP-06.",
         questionnaire_overrides={
+            "contract_details": {
+                "vendor_class_assigned": "Class C — Non-regulated Software",
+            },
             "product_and_integration": {
                 "erp_integration": {
                     "erp_type": "EXPORT_ONLY",

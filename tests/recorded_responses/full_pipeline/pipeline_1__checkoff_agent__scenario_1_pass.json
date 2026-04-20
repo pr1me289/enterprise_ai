@@ -1,0 +1,99 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 1,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_43b7c962a7",
+  "timestamp_utc": "20260420T210726Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "CISO",
+        "domain": "security",
+        "instructions": "The vendor onboarding assessment is COMPLETE. Your approval is required to authorize this IT Security Tier 3 integration (EXPORT_ONLY). The vendor presents unregulated data classification with no personal data processing. Security policy compliance has been confirmed per IT Security Policy sections 5 and 12.2. Your approval is the first gate in the standard approval path (estimated 3 business days). No security followup is required. Please review and approve to unblock procurement and business owner approvals.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review and approve vendor onboarding for IT Security Tier 3 integration per IT Security Policy section 12.2",
+          "Confirm no additional security controls or followup required",
+          "Return approval to pipeline to unblock Procurement Director and VP+ approvals"
+        ],
+        "citations": [
+          {
+            "source_name": "IT Security Policy",
+            "version": "4.2",
+            "section": "12.2",
+            "retrieval_timestamp": "2026-04-20T21:06:05Z",
+            "agent_id": "it_security_agent"
+          },
+          {
+            "source_name": "IT Security Policy",
+            "version": "4.2",
+            "section": "5",
+            "retrieval_timestamp": "2026-04-20T21:06:05Z",
+            "agent_id": "it_security_agent"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Procurement Director",
+        "domain": "procurement",
+        "instructions": "The vendor onboarding assessment is COMPLETE. Your approval is required as the second gate in the standard approval path (estimated 5 business days). The vendor is classified as Class A, Tier T2 integration; STANDARD approval pathway applies per Procurement Approval Matrix row A-T2. NDA has been confirmed as EXECUTED. No DPA is required (data classification is UNREGULATED, no EU personal data). Please review and approve to unblock the VP+ (Business Owner) final approval.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review vendor classification (Class A, Tier T2) and standard approval path per Procurement Approval Matrix section A-T2",
+          "Confirm NDA execution status (currently EXECUTED)",
+          "Approve vendor onboarding to enable VP+ business owner sign-off",
+          "Return approval to pipeline"
+        ],
+        "citations": [
+          {
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0",
+            "section": "A-T2",
+            "retrieval_timestamp": "2026-04-20T21:06:10Z",
+            "agent_id": "procurement_agent"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "VP+ (Business Owner)",
+        "domain": "business",
+        "instructions": "The vendor onboarding assessment is COMPLETE. Your approval is the final gate in the standard approval path (estimated 5 business days). All upstream domain reviews are clear: IT Security has confirmed Tier 3 integration compliance, Legal has confirmed NDA execution (no DPA required), and Procurement has cleared the Class A, Tier T2 vendor. Please review and provide final business owner sign-off to complete onboarding authorization.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review completed IT Security, Legal, and Procurement approvals",
+          "Confirm business case and integration timeline alignment",
+          "Provide final business owner approval for vendor onboarding",
+          "Return approval to complete pipeline"
+        ],
+        "citations": [
+          {
+            "source_name": "IT Security Policy",
+            "version": "4.2",
+            "section": "12.1.4",
+            "retrieval_timestamp": "2026-04-20T21:06:08Z",
+            "agent_id": "legal_agent"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 30.95403707100195,
+    "input_tokens": 7688,
+    "output_tokens": 1040,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

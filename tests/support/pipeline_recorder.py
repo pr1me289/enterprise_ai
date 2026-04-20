@@ -120,7 +120,8 @@ def record_pipeline_run(
     if pipeline_run_number is None:
         pipeline_run_number = next_pipeline_run_number(record_dir)
 
-    call_records = getattr(supervisor.llm_adapter, "call_records", []) or []
+    adapter = getattr(getattr(supervisor, "agent_runner", None), "adapter", None)
+    call_records = getattr(adapter, "call_records", []) or []
     pipeline_run_id = getattr(supervisor.state, "pipeline_run_id", "") or ""
     timestamp = _utc_timestamp()
 

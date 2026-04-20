@@ -1,0 +1,86 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 2,
+  "scenario": "scenario_1",
+  "step_id": "STEP-05",
+  "determination_key": "step_05_checklist",
+  "agent_name": "checklist_assembler",
+  "pipeline_run_id": "run_889cd34708",
+  "timestamp_utc": "20260420T212247Z",
+  "parsed_output": {
+    "pipeline_run_id": "run_889cd34708",
+    "vendor_name": "OptiChain, Inc.",
+    "overall_status": "COMPLETE",
+    "data_classification": "UNREGULATED",
+    "fast_track_eligible": true,
+    "required_security_actions": [],
+    "dpa_required": false,
+    "approval_path": "STANDARD",
+    "required_approvals": [
+      {
+        "approver": "CISO",
+        "blocker": false,
+        "domain": "IT Security",
+        "estimated_completion": "3 business days",
+        "status": "PENDING"
+      },
+      {
+        "approver": "General Counsel",
+        "blocker": false,
+        "domain": "Legal",
+        "estimated_completion": "2 business days",
+        "status": "PENDING"
+      },
+      {
+        "approver": "Chief Procurement Officer",
+        "blocker": false,
+        "domain": "Procurement",
+        "estimated_completion": "2 business days",
+        "status": "PENDING"
+      },
+      {
+        "approver": "VP or above",
+        "blocker": false,
+        "domain": "Business",
+        "estimated_completion": "3 business days",
+        "status": "PENDING"
+      }
+    ],
+    "blockers": [],
+    "citations": [
+      {
+        "source_name": "IT Security Policy",
+        "version": "4.2",
+        "section": "12.2",
+        "retrieval_timestamp": "2026-04-20T21:21:33Z",
+        "agent_id": "it_security_agent"
+      },
+      {
+        "source_name": "IT Security Policy",
+        "version": "4.2",
+        "section": "12.1.4",
+        "retrieval_timestamp": "2026-04-20T21:21:35Z",
+        "agent_id": "legal_agent"
+      },
+      {
+        "source_name": "Procurement Approval Matrix",
+        "version": "2.0",
+        "section": "A-T2",
+        "retrieval_timestamp": "2026-04-20T21:21:37Z",
+        "agent_id": "procurement_agent"
+      }
+    ]
+  },
+  "call_record": {
+    "agent_name": "checklist_assembler",
+    "pipeline_run_id": "run_889cd34708",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 35.054790679998405,
+    "input_tokens": 39192,
+    "output_tokens": 586,
+    "missing_fields": [],
+    "status": "COMPLETE"
+  },
+  "step_status": "COMPLETE"
+}

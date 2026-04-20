@@ -133,6 +133,18 @@ def test_pipeline_end_to_end(case: ScenarioCase, anthropic_client, live_monitor)
     )
     supervisor.run()
 
+    # Dump the live ContextBundle for every step that ran, so the input
+    # the domain agent actually saw can be diffed against the per-agent
+    # fixture bundles. STEP-01 is skipped (no LLM, no bundle of interest).
+    import json as _json
+    bundle_dir = REPO_ROOT / "tests" / "recorded_responses" / "full_pipeline" / "bundles"
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+    for _step_id, _bundle in supervisor.last_bundle_by_step.items():
+        if _bundle is None:
+            continue
+        _path = bundle_dir / f"{case.name}__{_step_id.value}__bundle.json"
+        _path.write_text(_json.dumps(_bundle.to_dict(), indent=2, default=str))
+
     # Emit PIPELINE_STEP events for every step so the live monitor matches
     # the shape produced by the mock-harness console monitor.
     step_keys = (

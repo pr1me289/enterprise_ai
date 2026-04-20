@@ -2761,10 +2761,16 @@ def _evaluate_procurement(output: dict[str, Any], scenario: str, report: Evaluat
 _ASSEMBLER_INHERITED_FIELDS: tuple[str, ...] = (
     "data_classification",
     "dpa_required",
-    "dpa_blocker",
     "fast_track_eligible",
     "approval_path",
 )
+# Per SPEC-AGENT-CLA-001 v0.3 §3 (Input-vs-output asymmetry) and §6.1,
+# `dpa_blocker` and `nda_blocker` are required *inputs* from STEP-03 but
+# are NOT top-level checklist output fields. Their truth values are
+# consumed into `blockers[]` via the §6.2 mapping (dpa_blocker=true →
+# DPA_REQUIRED entry; nda_blocker=true → NDA_UNCONFIRMED entry). They are
+# also listed in `_ASSEMBLER_DOMAIN_OWNED_FORBIDDEN` — an output that
+# emits them at top level is non-conforming.
 
 
 # Domain-owned fields that must NOT appear at the checklist top level per
@@ -2848,17 +2854,12 @@ def _evaluate_checklist_assembler(output: dict[str, Any], scenario: str, report:
 
     overall = output.get("overall_status")
 
-    # Inherited fields — the checklist lists these as REQUIRED for the assembler.
-    # scenario_11 and scenario_12 enforce SPEC-AGENT-CLA-001 v0.3 §6.1
-    # strictly: dpa_blocker is a domain-owned Legal field, not a checklist
-    # field, so those scenario paths forbid it at the top level (A-02). Skip
-    # it from the inherited-missing check for those scenarios only — other
-    # scenarios retain the legacy broader check.
-    inherited = tuple(
-        f for f in _ASSEMBLER_INHERITED_FIELDS
-        if not (scenario in ("scenario_11", "scenario_12") and f == "dpa_blocker")
-    )
-    for field_name in inherited:
+    # Inherited fields — the checklist lists these as REQUIRED top-level
+    # assembly fields. `dpa_blocker` / `nda_blocker` are intentionally NOT in
+    # this list: per SPEC-AGENT-CLA-001 v0.3 §3 and §6.1, they are required
+    # inputs consumed into `blockers[]` per §6.2, not top-level output fields
+    # (see also `_ASSEMBLER_DOMAIN_OWNED_FORBIDDEN`).
+    for field_name in _ASSEMBLER_INHERITED_FIELDS:
         if field_name not in output:
             report.failures.append(f"inherited field missing: {field_name!r}")
 

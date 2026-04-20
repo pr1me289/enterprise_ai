@@ -1,0 +1,115 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 2,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_889cd34708",
+  "timestamp_utc": "20260420T212247Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "IT Security",
+        "domain": "security",
+        "instructions": "The vendor integration assessment is COMPLETE. Your approval is required to proceed with implementation. This is a TIER_3 export-only integration with UNREGULATED data classification and no EU personal data present. Security review indicates fast-track eligibility with low risk profile. No security blockers or follow-up actions are required from your domain. Please review the finalized assessment and provide your approval within the estimated 3 business day window to maintain the standard approval timeline.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review the finalized integration assessment (TIER_3, UNREGULATED, export-only)",
+          "Confirm fast-track eligibility determination (LOW_RISK profile)",
+          "Approve vendor onboarding to proceed with implementation",
+          "Expected completion: 3 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-20T21:21:33Z",
+            "section": "12.2",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Legal (General Counsel)",
+        "domain": "legal",
+        "instructions": "The vendor integration assessment is COMPLETE. Your approval is required to proceed with implementation. Legal review indicates the NDA is EXECUTED and no DPA is required for this UNREGULATED, non-EU-personal-data integration. No legal blockers exist. Please review the finalized legal determination and provide your approval within the estimated 2 business day window to maintain the standard approval timeline.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review the finalized legal assessment (NDA EXECUTED, DPA not required)",
+          "Confirm no legal blockers remain",
+          "Approve vendor onboarding to proceed with implementation",
+          "Expected completion: 2 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "legal_agent",
+            "retrieval_timestamp": "2026-04-20T21:21:35Z",
+            "section": "12.1.4",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Procurement Director",
+        "domain": "procurement",
+        "instructions": "The vendor integration assessment is COMPLETE. Your approval is required to proceed with implementation. This integration follows the STANDARD approval path (Class A, TIER_3). Procurement review has determined fast-track eligibility. No procurement blockers exist. Please review the finalized procurement determination and provide your approval within the estimated 2 business day window to maintain the standard approval timeline.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review the finalized procurement assessment (STANDARD approval path, fast-track eligible)",
+          "Confirm no procurement blockers remain",
+          "Approve vendor onboarding to proceed with implementation",
+          "Expected completion: 2 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-20T21:21:37Z",
+            "section": "A-T2",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "VP or above",
+        "domain": "business",
+        "instructions": "The vendor integration assessment is COMPLETE and requires executive approval to proceed with implementation. This is a TIER_3, UNREGULATED integration on the STANDARD approval path with fast-track eligibility and estimated timeline of 8-10 business days. All technical, legal, and procurement reviews are complete with no blockers identified. Please provide your executive approval within the estimated 3 business day window.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review the complete integration assessment summary",
+          "Confirm all upstream approvals (IT Security, Legal, Procurement) are on track",
+          "Provide executive approval for vendor onboarding",
+          "Expected completion: 3 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-20T21:21:37Z",
+            "section": "A-T2",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 30.722416727003292,
+    "input_tokens": 7665,
+    "output_tokens": 1200,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

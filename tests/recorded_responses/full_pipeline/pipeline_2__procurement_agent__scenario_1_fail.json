@@ -1,0 +1,68 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 2,
+  "scenario": "scenario_1",
+  "step_id": "STEP-04",
+  "determination_key": "step_04_procurement",
+  "agent_name": "procurement_agent",
+  "pipeline_run_id": "run_889cd34708",
+  "timestamp_utc": "20260420T212247Z",
+  "parsed_output": {
+    "approval_path": "STANDARD",
+    "fast_track_eligible": true,
+    "required_approvals": [
+      {
+        "approver": "CISO",
+        "domain": "IT Security",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3 business days"
+      },
+      {
+        "approver": "General Counsel",
+        "domain": "Legal",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2 business days"
+      },
+      {
+        "approver": "Chief Procurement Officer",
+        "domain": "Procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2 business days"
+      },
+      {
+        "approver": "VP or above",
+        "domain": "Business",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3 business days"
+      }
+    ],
+    "estimated_timeline": "8-10 business days",
+    "policy_citations": [
+      {
+        "source_id": "PAM-001",
+        "version": "2.0",
+        "chunk_id": "PAM-001__row_A-T2",
+        "row_id": "A-T2",
+        "approval_path_condition": "Class A, TIER_3 integration, standard review path with CISO awareness and DPA execution before implementation",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "procurement_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 4.038155774993356,
+    "input_tokens": 20637,
+    "output_tokens": 409,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

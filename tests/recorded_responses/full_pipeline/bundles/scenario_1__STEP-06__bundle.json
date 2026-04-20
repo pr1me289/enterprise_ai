@@ -1,0 +1,221 @@
+{
+  "step_id": "STEP-06",
+  "admitted_evidence": [],
+  "excluded_evidence": [],
+  "structured_fields": {
+    "source_ids": [
+      "STEP-05",
+      "PIPELINE_CONFIG",
+      "STEP-02",
+      "STEP-03",
+      "STEP-04"
+    ],
+    "finalized_checklist": {
+      "overall_status": "COMPLETE",
+      "blockers": [],
+      "required_approvals": [
+        {
+          "approver": "CISO",
+          "blocker": false,
+          "domain": "IT Security",
+          "estimated_completion": "3 business days",
+          "status": "PENDING"
+        },
+        {
+          "approver": "General Counsel",
+          "blocker": false,
+          "domain": "Legal",
+          "estimated_completion": "2 business days",
+          "status": "PENDING"
+        },
+        {
+          "approver": "Chief Procurement Officer",
+          "blocker": false,
+          "domain": "Procurement",
+          "estimated_completion": "2 business days",
+          "status": "PENDING"
+        },
+        {
+          "approver": "VP or above",
+          "blocker": false,
+          "domain": "Business",
+          "estimated_completion": "3 business days",
+          "status": "PENDING"
+        }
+      ],
+      "required_security_actions": [],
+      "citations": [
+        {
+          "source_name": "IT Security Policy",
+          "version": "4.2",
+          "section": "12.2",
+          "retrieval_timestamp": "2026-04-20T21:21:33Z",
+          "agent_id": "it_security_agent"
+        },
+        {
+          "source_name": "IT Security Policy",
+          "version": "4.2",
+          "section": "12.1.4",
+          "retrieval_timestamp": "2026-04-20T21:21:35Z",
+          "agent_id": "legal_agent"
+        },
+        {
+          "source_name": "Procurement Approval Matrix",
+          "version": "2.0",
+          "section": "A-T2",
+          "retrieval_timestamp": "2026-04-20T21:21:37Z",
+          "agent_id": "procurement_agent"
+        }
+      ],
+      "data_classification": "UNREGULATED",
+      "approval_path": "STANDARD"
+    },
+    "stakeholder_map": {
+      "stakeholder_map": {
+        "IT Security": {
+          "domain": "security",
+          "contact": "K. Whitfield"
+        },
+        "Legal (General Counsel)": {
+          "domain": "legal",
+          "contact": "General Counsel"
+        },
+        "Procurement": {
+          "domain": "procurement",
+          "contact": "Procurement Manager"
+        },
+        "Procurement Director": {
+          "domain": "procurement",
+          "contact": "Procurement Director"
+        },
+        "Procurement / Legal": {
+          "domain": "procurement",
+          "contact": "Procurement + Legal"
+        }
+      },
+      "approver_contacts": {
+        "security": "K. Whitfield",
+        "legal": "General Counsel",
+        "procurement": "Procurement Director"
+      },
+      "escalation_owners": {
+        "ERP integration tier unclassified": "IT Security",
+        "GDPR Art. 28 DPA not yet executed": "Legal (General Counsel)",
+        "NDA execution unconfirmed": "Procurement / Legal"
+      }
+    },
+    "domain_outputs": {
+      "step_02": {
+        "integration_type_normalized": "EXPORT_ONLY",
+        "integration_tier": "TIER_3",
+        "data_classification": "UNREGULATED",
+        "eu_personal_data_present": false,
+        "fast_track_eligible": true,
+        "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+        "security_followup_required": false,
+        "nda_status_from_questionnaire": "EXECUTED",
+        "required_security_actions": [],
+        "policy_citations": [
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_12_2",
+            "section_id": "12.2",
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "status": "complete"
+      },
+      "step_03": {
+        "dpa_required": false,
+        "dpa_blocker": false,
+        "nda_status": "EXECUTED",
+        "nda_blocker": false,
+        "trigger_rule_cited": [],
+        "policy_citations": [
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_12_1_4",
+            "section_id": "12.1.4",
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "status": "complete"
+      },
+      "step_04": {
+        "approval_path": "STANDARD",
+        "fast_track_eligible": true,
+        "required_approvals": [
+          {
+            "approver": "CISO",
+            "domain": "IT Security",
+            "status": "PENDING",
+            "blocker": false,
+            "estimated_completion": "3 business days"
+          },
+          {
+            "approver": "General Counsel",
+            "domain": "Legal",
+            "status": "PENDING",
+            "blocker": false,
+            "estimated_completion": "2 business days"
+          },
+          {
+            "approver": "Chief Procurement Officer",
+            "domain": "Procurement",
+            "status": "PENDING",
+            "blocker": false,
+            "estimated_completion": "2 business days"
+          },
+          {
+            "approver": "VP or above",
+            "domain": "Business",
+            "status": "PENDING",
+            "blocker": false,
+            "estimated_completion": "3 business days"
+          }
+        ],
+        "estimated_timeline": "8-10 business days",
+        "policy_citations": [
+          {
+            "source_id": "PAM-001",
+            "version": "2.0",
+            "chunk_id": "PAM-001__row_A-T2",
+            "row_id": "A-T2",
+            "approval_path_condition": "Class A, TIER_3 integration, standard review path with CISO awareness and DPA execution before implementation",
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "status": "complete"
+      }
+    },
+    "escalations": [],
+    "bundle_meta": {
+      "admissible": true,
+      "missing_fields": [],
+      "prohibited_sources": []
+    }
+  },
+  "source_provenance": [
+    {
+      "source_id": "STEP-05",
+      "output_name": "finalized_checklist",
+      "lane": "runtime_read",
+      "chunk_count": 0
+    },
+    {
+      "source_id": "PIPELINE_CONFIG",
+      "output_name": "stakeholder_map",
+      "lane": "runtime_read",
+      "chunk_count": 0
+    },
+    {
+      "source_id": "PIPELINE_STATE",
+      "output_name": "domain_outputs",
+      "lane": "runtime_read",
+      "chunk_count": 0
+    }
+  ],
+  "admissibility_status": "ADMISSIBLE"
+}

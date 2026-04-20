@@ -74,9 +74,9 @@ From STEP-02 (IT Security Agent):
 
 From STEP-03 (Legal Agent):
 - `dpa_required`
-- `dpa_blocker`
+- `dpa_blocker` *(required input — consumed into `blockers[]` per §6.2; not a top-level output field; see §6.1)*
 - `nda_status`
-- `nda_blocker`
+- `nda_blocker` *(required input — consumed into `blockers[]` per §6.2; not a top-level output field; see §6.1)*
 - `trigger_rule_cited`
 - `policy_citations`
 - `status`
@@ -90,6 +90,8 @@ From audit log:
 - `entry_id`, `event_type`, `agent_id`, `source_queried`, `chunks_retrieved`, `timestamp`
 
 If any domain agent output is absent or schema-invalid, the bundle is inadmissible and the agent must emit the §7.1 blocked output shape with the appropriate `blocked_reason` and `blocked_fields`. Do not produce any assembly fields. If audit log entries are absent or empty, the agent must emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_AUDIT_LOG"]` — a checklist with no citations violates the pipeline's auditability guarantee per CC-001 §8.4.
+
+**Input-vs-output asymmetry for blocker flags.** `dpa_blocker` and `nda_blocker` are **required inputs** for an admissible STEP-05 bundle (a missing or schema-invalid value is a `MISSING_LEGAL_OUTPUT` condition — see §7.1 blocked reasons), but they are **not top-level output fields**. Their value is consumed into `blockers[]` per the mapping in §6.2 (`dpa_blocker = true → DPA_REQUIRED entry`, `nda_blocker = true → NDA_UNCONFIRMED entry`). The output contract in §7 therefore does not — and must not — include top-level `dpa_blocker` or `nda_blocker` fields. Tests and validators MUST assert on `blockers[]` contents for these flags, not on top-level presence.
 
 The Checklist Assembler does not receive raw source documents. It does not receive any content from index endpoints. Its entire input base is processed agent outputs and the run audit log.
 
@@ -157,6 +159,8 @@ Every checklist field has an authoritative source. The Checklist Assembler must 
 | `required_approvals[]`           | Procurement Agent (STEP-04) output — passthrough                        |
 | `blockers[]`                     | Assembled per §6.2                                                      |
 | `citations[]`                    | Assembled per §6.3                                                      |
+
+> **Consumed into `blockers[]`, not emitted at top level:** `dpa_blocker` and `nda_blocker` are required inputs from STEP-03 (see §3) but do **not** appear as top-level checklist fields. Their truth values flow into `blockers[]` via the §6.2 mapping. The output contract in §7 deliberately omits them at top level to avoid duplicating signal across two places. An output that emits top-level `dpa_blocker` or `nda_blocker` is non-conforming.
 
 ### 6.2 Blockers Assembly
 

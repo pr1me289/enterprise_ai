@@ -52,7 +52,8 @@ def evaluate_pipeline_run(
     ran. The caller derives the aggregate pass/fail.
     """
     reports: dict[StepId, EvaluationReport] = {}
-    call_records = getattr(supervisor.llm_adapter, "call_records", []) or []
+    adapter = getattr(getattr(supervisor, "agent_runner", None), "adapter", None)
+    call_records = getattr(adapter, "call_records", []) or []
     error_by_agent: dict[str, str] = {}
     for rec in call_records:
         if rec.get("outcome") == "error" and rec.get("agent_name"):
