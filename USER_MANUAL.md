@@ -99,7 +99,7 @@ artifacts/test_runs/              # test_harness mock-pipeline run captures (aud
 results/                          # full_pipeline_test_results.md + test_results.md (append-only logs)
 ```
 
-Root docs: `README.md`, `CLAUDE.md`, `AGENTS.md`, `llm_agent_output_evaluation_checklist.md`, `USER_MANUAL.md` (this file).
+Root docs: `README.md`, `llm_agent_output_evaluation_checklist.md`, `USER_MANUAL.md` (this file).
 
 ## Pipeline architecture
 

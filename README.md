@@ -163,7 +163,6 @@ No web framework, no UI in this repo. The companion web-app project consumes the
 | **[core_documents/design_doc.md](core_documents/design_doc.md)** | Engineers | Pipeline topology, agent orchestration model, retrieval strategy, security model, output contracts |
 | **[core_documents/supervisor_orchestration_plan.md](core_documents/supervisor_orchestration_plan.md)** | Engineers | Runtime contract for supervisor execution, per-step gate conditions, subqueries, output contracts (ORCH-PLAN-001) |
 | **[agent_spec_docs/](agent_spec_docs/)** | Engineers + LLM | Per-agent behavioural specs — these files are loaded as system prompts at runtime |
-| **[CLAUDE.md](CLAUDE.md), [AGENTS.md](AGENTS.md)** | Contributors | Engineering workflow guidelines for AI-assisted development |
 | **[tests/full_pipeline/README.md](tests/full_pipeline/README.md)** | Operators | Live-API test harness: cost guards, fixtures, expected behaviour per scenario |
 
 If `core_documents/context_contract.md` and `core_documents/design_doc.md` conflict, the Context Contract wins for retrieval and source-governance decisions; the Design Doc wins for orchestration mechanics.
