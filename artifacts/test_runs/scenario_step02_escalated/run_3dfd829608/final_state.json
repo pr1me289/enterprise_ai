@@ -1,0 +1,93 @@
+{
+  "pipeline_run_id": "run_3dfd829608",
+  "vendor_name": "OptiChain, Inc.",
+  "manifest_version": "CC-001-v1.4",
+  "initialized_at": "2026-04-30T04:25:31Z",
+  "overall_status": "ESCALATED",
+  "current_step": "STEP-02",
+  "step_statuses": {
+    "STEP-01": "COMPLETE",
+    "STEP-02": "ESCALATED",
+    "STEP-03": "PENDING",
+    "STEP-04": "PENDING",
+    "STEP-05": "PENDING",
+    "STEP-06": "PENDING"
+  },
+  "determinations": {
+    "step_01_intake": {
+      "questionnaire_valid": true,
+      "vendor_name": "OptiChain, Inc.",
+      "status": "COMPLETE",
+      "notes": []
+    },
+    "step_02_security_classification": {
+      "integration_type_normalized": "AMBIGUOUS",
+      "integration_tier": "UNCLASSIFIED_PENDING_REVIEW",
+      "data_classification": "REGULATED",
+      "eu_personal_data_present": "UNKNOWN",
+      "fast_track_eligible": false,
+      "fast_track_rationale": "DISALLOWED_AMBIGUOUS_SCOPE",
+      "security_followup_required": true,
+      "nda_status_from_questionnaire": "EXECUTED",
+      "required_security_actions": [
+        {
+          "action_type": "SECURITY_REVIEW",
+          "reason": "Integration scope ambiguous; manual review required.",
+          "owner": "IT Security"
+        }
+      ],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "escalated"
+    },
+    "step_03_legal": null,
+    "step_04_procurement": null,
+    "step_05_checklist": null,
+    "step_06_guidance": null
+  },
+  "escalations": [
+    {
+      "entry_id": "audit_827c2f6d11",
+      "pipeline_run_id": "run_3dfd829608",
+      "agent_id": "it_security_agent",
+      "event_type": "ESCALATION",
+      "timestamp": "2026-04-30T04:25:31Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-02",
+        "evidence_condition": "Security classification requires review before downstream execution.",
+        "resolution_owner": "IT Security"
+      }
+    }
+  ],
+  "audit_refs": [
+    "audit_583523c5c4",
+    "audit_6386f1f196",
+    "audit_29b4c7db5e",
+    "audit_90a2dd3752",
+    "audit_05250b6f4f",
+    "audit_ff473e029a",
+    "audit_3665d170ff",
+    "audit_3c67c35fb7",
+    "audit_8972faf88e",
+    "audit_909b2b2fe4",
+    "audit_10819d2984",
+    "audit_184733f5d7",
+    "audit_071e04b740",
+    "audit_6b9b5bb908",
+    "audit_07c5fdf6b0",
+    "audit_7da5f1f7fa",
+    "audit_04442babee",
+    "audit_84c930ba1f",
+    "audit_827c2f6d11"
+  ],
+  "next_step_queue": []
+}

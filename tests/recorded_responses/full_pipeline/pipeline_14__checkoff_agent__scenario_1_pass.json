@@ -1,0 +1,110 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 14,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_2c4c5a9d28",
+  "timestamp_utc": "20260430T043229Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "Procurement Manager",
+        "domain": "procurement",
+        "instructions": "The vendor onboarding assessment is COMPLETE. Your approval is required to proceed with integration. This vendor has been classified as Class C with Tier 3 (export-only) integration, handling UNREGULATED data. No DPA is required and the NDA is executed. The fast-track approval path applies. Please review the checklist summary and confirm procurement readiness. Your estimated completion timeline is 2 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review vendor onboarding checklist and confirm procurement readiness",
+          "Provide approval sign-off for fast-track pathway (estimated 2 business days)",
+          "Coordinate with Business Owner on parallel approval requirements"
+        ],
+        "citations": [
+          {
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0",
+            "section": "C-T1",
+            "retrieval_timestamp": "2026-04-30T04:30:54Z",
+            "agent_id": "procurement_agent"
+          },
+          {
+            "source_name": "Slack / Meeting Thread Notes",
+            "version": "Export at init.",
+            "section": "T3",
+            "retrieval_timestamp": "2026-04-30T04:30:54Z",
+            "agent_id": "procurement_agent"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Business Owner",
+        "domain": "operations",
+        "instructions": "The vendor onboarding assessment is COMPLETE. Your approval is required to proceed with integration. This vendor has been classified as Class C with Tier 3 (export-only) integration, handling UNREGULATED data. All security, legal, and procurement prerequisites have been satisfied. The fast-track approval path applies. Please review the checklist summary and confirm business readiness. Your estimated completion timeline is 3 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review vendor onboarding checklist and confirm business readiness",
+          "Provide approval sign-off for fast-track pathway (estimated 3 business days)",
+          "Coordinate with Procurement Manager on parallel approval requirements"
+        ],
+        "citations": [
+          {
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0",
+            "section": "C-T1",
+            "retrieval_timestamp": "2026-04-30T04:30:54Z",
+            "agent_id": "procurement_agent"
+          },
+          {
+            "source_name": "Slack / Meeting Thread Notes",
+            "version": "Export at init.",
+            "section": "T3",
+            "retrieval_timestamp": "2026-04-30T04:30:54Z",
+            "agent_id": "procurement_agent"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Procurement Director",
+        "domain": "procurement",
+        "instructions": "The vendor onboarding assessment is COMPLETE and routed through the fast-track approval pathway. This Class C vendor with Tier 3 (export-only) integration handling UNREGULATED data has satisfied all prerequisites: NDA is executed, no DPA is required, and security classification is confirmed. Manager-level approval is sufficient for this integration. The Procurement Manager and Business Owner approvals are in progress (estimated 2-3 business days). No escalation or waiver authority is required.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Monitor fast-track approval progress through Procurement Manager and Business Owner",
+          "Be prepared to support escalation if approvals do not complete within estimated 5-7 business day timeline"
+        ],
+        "citations": [
+          {
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0",
+            "section": "C-T1",
+            "retrieval_timestamp": "2026-04-30T04:30:54Z",
+            "agent_id": "procurement_agent"
+          },
+          {
+            "source_name": "Slack / Meeting Thread Notes",
+            "version": "Export at init.",
+            "section": "T3",
+            "retrieval_timestamp": "2026-04-30T04:30:54Z",
+            "agent_id": "procurement_agent"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 29.887900153000373,
+    "input_tokens": 7646,
+    "output_tokens": 1130,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

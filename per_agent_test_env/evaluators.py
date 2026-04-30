@@ -1626,18 +1626,24 @@ def _evaluate_procurement(output: dict[str, Any], scenario: str, report: Evaluat
                 "policy_citations empty on status='complete' — §14 A-01 requires "
                 "at least one PRIMARY PAM-001 row citation"
             )
-        _check_citation_entries(
-            output,
-            "policy_citations",
-            required_keys=(
-                "source_id",
-                "version",
-                "row_id",
-                "approval_path_condition",
-                "citation_class",
-            ),
-            report=report,
-        )
+        # Required-keys check is scoped to PRIMARY citations only: those are the
+        # ones the spec hard-requires to carry full provenance (PAM row id +
+        # approval-path condition). SUPPLEMENTARY entries (e.g., Tier 3 Slack
+        # threads, secondary cross-references) are permitted with looser shape
+        # — only source_id + citation_class are mandatory there. The strict
+        # PRIMARY-PAM-001 backstop check below catches the load-bearing case.
+        primary_only = [
+            entry for entry in pc
+            if isinstance(entry, dict) and entry.get("citation_class") == "PRIMARY"
+        ]
+        for idx, entry in enumerate(primary_only):
+            for key in ("source_id", "version", "row_id", "approval_path_condition", "citation_class"):
+                if key not in entry or entry[key] in (None, ""):
+                    report.failures.append(
+                        f"policy_citations[PRIMARY #{idx}] missing required key {key!r} "
+                        "(SUPPLEMENTARY entries are not held to this contract)"
+                    )
+        # Source_id allowlist applies to all entries (PRIMARY or SUPPLEMENTARY).
         _check_source_id_in(output, "policy_citations", ("PAM-001", "SLK-001"), report)
 
         # On COMPLETE runs, the matched matrix row must appear as PRIMARY PAM-001

@@ -1,0 +1,36 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 16,
+  "scenario": "scenario_escalated_step4_demo",
+  "step_id": "STEP-04",
+  "determination_key": "step_04_procurement",
+  "agent_name": "procurement_agent",
+  "pipeline_run_id": "run_4182519d45",
+  "timestamp_utc": "20260430T043545Z",
+  "parsed_output": {
+    "status": "blocked",
+    "errors": [
+      "fast_track_eligible",
+      "policy_citations",
+      "required_approvals",
+      "estimated_timeline"
+    ]
+  },
+  "call_record": {
+    "agent_name": "procurement_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 23.613542954990407,
+    "input_tokens": 18978,
+    "output_tokens": 64,
+    "missing_fields": [
+      "fast_track_eligible",
+      "required_approvals",
+      "estimated_timeline",
+      "policy_citations"
+    ],
+    "status": "blocked"
+  },
+  "step_status": "BLOCKED"
+}

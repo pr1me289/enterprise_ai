@@ -1,0 +1,888 @@
+[
+  {
+    "entry_id": "audit_5d903ffce4",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RUN_EVENT",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "message": "Pipeline initialized",
+      "manifest_version": "CC-001-v1.4"
+    }
+  },
+  {
+    "entry_id": "audit_040bd4131b",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "STATUS_CHANGE",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-01",
+      "from_status": "PENDING",
+      "to_status": "IN_PROGRESS",
+      "reason": null
+    }
+  },
+  {
+    "entry_id": "audit_76d19f61c0",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "document_id",
+        "value_present": true
+      },
+      {
+        "field_path": "submission_date",
+        "value_present": true
+      },
+      {
+        "field_path": "vendor_name",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R01-SQ-01",
+      "lane": "direct_structured",
+      "admitted_count": 3,
+      "excluded_count": 0,
+      "output_name": "questionnaire_exists",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_652ff9737b",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "vendor_name",
+        "value_present": true
+      },
+      {
+        "field_path": "integration_details.erp_type",
+        "value_present": true
+      },
+      {
+        "field_path": "data_classification_self_reported",
+        "value_present": true
+      },
+      {
+        "field_path": "regulated_data_types",
+        "value_present": true
+      },
+      {
+        "field_path": "eu_personal_data_flag",
+        "value_present": true
+      },
+      {
+        "field_path": "data_subjects_eu",
+        "value_present": true
+      },
+      {
+        "field_path": "existing_nda_status",
+        "value_present": true
+      },
+      {
+        "field_path": "existing_msa",
+        "value_present": true
+      },
+      {
+        "field_path": "vendor_class",
+        "value_present": true
+      },
+      {
+        "field_path": "contract_value_annual",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R01-SQ-02",
+      "lane": "direct_structured",
+      "admitted_count": 10,
+      "excluded_count": 0,
+      "output_name": "questionnaire_complete",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_ac0f39a8b1",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "document_id",
+        "value_present": true
+      },
+      {
+        "field_path": "submission_version",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R01-SQ-03",
+      "lane": "direct_structured",
+      "admitted_count": 2,
+      "excluded_count": 0,
+      "output_name": "version_conflict_detected",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_15e5562d79",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "DETERMINATION",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-01",
+      "output": {
+        "questionnaire_valid": true,
+        "vendor_name": "OptiChain, Inc.",
+        "status": "COMPLETE",
+        "notes": []
+      }
+    }
+  },
+  {
+    "entry_id": "audit_45505982b2",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "STATUS_CHANGE",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-01",
+      "from_status": "IN_PROGRESS",
+      "to_status": "COMPLETE",
+      "reason": null
+    }
+  },
+  {
+    "entry_id": "audit_be26e023c0",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "STATUS_CHANGE",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-02",
+      "from_status": "PENDING",
+      "to_status": "IN_PROGRESS",
+      "reason": null
+    }
+  },
+  {
+    "entry_id": "audit_7e9f2ed836",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "integration_details.erp_type",
+        "value_present": true
+      },
+      {
+        "field_path": "integration_details.erp_system",
+        "value_present": true
+      },
+      {
+        "field_path": "integration_details.integration_description",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R02-SQ-01",
+      "lane": "direct_structured",
+      "admitted_count": 3,
+      "excluded_count": 0,
+      "output_name": "integration_inputs",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_9480843f67",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "data_classification_self_reported",
+        "value_present": true
+      },
+      {
+        "field_path": "regulated_data_types",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R02-SQ-02",
+      "lane": "direct_structured",
+      "admitted_count": 2,
+      "excluded_count": 0,
+      "output_name": "classification_inputs",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_8323bf05eb",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "eu_personal_data_flag",
+        "value_present": true
+      },
+      {
+        "field_path": "data_subjects_eu",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R02-SQ-03",
+      "lane": "direct_structured",
+      "admitted_count": 2,
+      "excluded_count": 0,
+      "output_name": "eu_inputs",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_670d83b73c",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "ISP-001",
+    "chunks_retrieved": [],
+    "details": {
+      "request_id": "R02-SQ-04",
+      "lane": "indexed_hybrid",
+      "admitted_count": 0,
+      "excluded_count": 0,
+      "output_name": "erp_tier_policy_chunks",
+      "missing_fields": [],
+      "search_terms": [
+        "ERP integration tier",
+        "12.2",
+        "integration classification",
+        "tier"
+      ]
+    }
+  },
+  {
+    "entry_id": "audit_c56617d651",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "ISP-001",
+    "chunks_retrieved": [],
+    "details": {
+      "request_id": "R02-SQ-05",
+      "lane": "indexed_hybrid",
+      "admitted_count": 0,
+      "excluded_count": 0,
+      "output_name": "classification_policy_chunks",
+      "missing_fields": [],
+      "search_terms": [
+        "regulated data",
+        "data classification",
+        "third-party access",
+        "12"
+      ]
+    }
+  },
+  {
+    "entry_id": "audit_d00241cb01",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "ISP-001",
+    "chunks_retrieved": [],
+    "details": {
+      "request_id": "R02-SQ-06",
+      "lane": "indexed_hybrid",
+      "admitted_count": 0,
+      "excluded_count": 0,
+      "output_name": "fast_track_policy_chunks",
+      "missing_fields": [],
+      "search_terms": [
+        "fast track",
+        "manual review",
+        "regulated data",
+        "third-party risk"
+      ]
+    }
+  },
+  {
+    "entry_id": "audit_616b54692d",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "existing_nda_status",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R02-SQ-07A",
+      "lane": "direct_structured",
+      "admitted_count": 1,
+      "excluded_count": 0,
+      "output_name": "nda_inputs",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_995fcadcfd",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "ISP-001",
+    "chunks_retrieved": [],
+    "details": {
+      "request_id": "R02-SQ-07",
+      "lane": "indexed_hybrid",
+      "admitted_count": 0,
+      "excluded_count": 0,
+      "output_name": "nda_policy_chunks",
+      "missing_fields": [],
+      "search_terms": [
+        "NDA",
+        "12.1.4",
+        "information exchange",
+        "non-disclosure"
+      ]
+    }
+  },
+  {
+    "entry_id": "audit_6ae1b33999",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "it_security_agent",
+    "event_type": "DETERMINATION",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-02",
+      "output": {
+        "integration_type_normalized": "EXPORT_ONLY",
+        "integration_tier": "TIER_3",
+        "data_classification": "UNREGULATED",
+        "eu_personal_data_present": "NO",
+        "fast_track_eligible": true,
+        "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+        "security_followup_required": false,
+        "nda_status_from_questionnaire": "EXECUTED",
+        "required_security_actions": [],
+        "policy_citations": [
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_12",
+            "section_id": "12",
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "status": "complete"
+      }
+    }
+  },
+  {
+    "entry_id": "audit_6cb1c984b2",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "STATUS_CHANGE",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-02",
+      "from_status": "IN_PROGRESS",
+      "to_status": "COMPLETE",
+      "reason": null
+    }
+  },
+  {
+    "entry_id": "audit_3379c1d0a2",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "STATUS_CHANGE",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-03",
+      "from_status": "PENDING",
+      "to_status": "IN_PROGRESS",
+      "reason": null
+    }
+  },
+  {
+    "entry_id": "audit_6b5f2356fc",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "STEP-02",
+    "chunks_retrieved": [
+      {
+        "field_path": "upstream_data_classification",
+        "value_present": true
+      },
+      {
+        "field_path": "status",
+        "value_present": true
+      },
+      {
+        "field_path": "policy_citations",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R03-SQ-01",
+      "lane": "runtime_read",
+      "admitted_count": 3,
+      "excluded_count": 0,
+      "output_name": "upstream_security",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_08d11ebeb9",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "eu_personal_data_flag",
+        "value_present": true
+      },
+      {
+        "field_path": "data_subjects_eu",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R03-SQ-02",
+      "lane": "direct_structured",
+      "admitted_count": 2,
+      "excluded_count": 0,
+      "output_name": "eu_inputs",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_2c49f3ce95",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "existing_nda_status",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R03-SQ-03",
+      "lane": "direct_structured",
+      "admitted_count": 1,
+      "excluded_count": 0,
+      "output_name": "nda_inputs",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_ed88723835",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "DPA-TM-001",
+    "chunks_retrieved": [],
+    "details": {
+      "request_id": "R03-SQ-04",
+      "lane": "indexed_hybrid",
+      "admitted_count": 0,
+      "excluded_count": 0,
+      "output_name": "dpa_trigger_rows",
+      "missing_fields": [],
+      "search_terms": [
+        "DPA",
+        "trigger",
+        "EU",
+        "personal data",
+        "controller"
+      ]
+    }
+  },
+  {
+    "entry_id": "audit_05501e8151",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "ISP-001",
+    "chunks_retrieved": [],
+    "details": {
+      "request_id": "R03-SQ-06",
+      "lane": "indexed_hybrid",
+      "admitted_count": 0,
+      "excluded_count": 0,
+      "output_name": "nda_clause_chunks",
+      "missing_fields": [],
+      "search_terms": [
+        "NDA",
+        "12.1.4",
+        "information exchange",
+        "non-disclosure"
+      ]
+    }
+  },
+  {
+    "entry_id": "audit_cf5ec21b05",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "legal_agent",
+    "event_type": "DETERMINATION",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-03",
+      "output": {
+        "dpa_required": false,
+        "dpa_blocker": false,
+        "nda_status": "EXECUTED",
+        "nda_blocker": false,
+        "trigger_rule_cited": [],
+        "policy_citations": [
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_12",
+            "section_id": "12",
+            "citation_class": "PRIMARY"
+          }
+        ],
+        "status": "complete"
+      }
+    }
+  },
+  {
+    "entry_id": "audit_6533891783",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "STATUS_CHANGE",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-03",
+      "from_status": "IN_PROGRESS",
+      "to_status": "COMPLETE",
+      "reason": null
+    }
+  },
+  {
+    "entry_id": "audit_2d8115167b",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "STATUS_CHANGE",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-04",
+      "from_status": "PENDING",
+      "to_status": "IN_PROGRESS",
+      "reason": null
+    }
+  },
+  {
+    "entry_id": "audit_93401e87b0",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "STEP-02",
+    "chunks_retrieved": [
+      {
+        "field_path": "data_classification",
+        "value_present": true
+      },
+      {
+        "field_path": "fast_track_eligible",
+        "value_present": true
+      },
+      {
+        "field_path": "integration_tier",
+        "value_present": true
+      },
+      {
+        "field_path": "security_followup_required",
+        "value_present": true
+      },
+      {
+        "field_path": "policy_citations",
+        "value_present": true
+      },
+      {
+        "field_path": "status",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R04-SQ-01",
+      "lane": "runtime_read",
+      "admitted_count": 6,
+      "excluded_count": 0,
+      "output_name": "it_security_output",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_7d8b9c7ba5",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "STEP-03",
+    "chunks_retrieved": [
+      {
+        "field_path": "dpa_required",
+        "value_present": true
+      },
+      {
+        "field_path": "dpa_blocker",
+        "value_present": true
+      },
+      {
+        "field_path": "nda_status",
+        "value_present": true
+      },
+      {
+        "field_path": "nda_blocker",
+        "value_present": true
+      },
+      {
+        "field_path": "trigger_rule_cited",
+        "value_present": true
+      },
+      {
+        "field_path": "policy_citations",
+        "value_present": true
+      },
+      {
+        "field_path": "status",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R04-SQ-02",
+      "lane": "runtime_read",
+      "admitted_count": 7,
+      "excluded_count": 0,
+      "output_name": "legal_output",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_a12f4f3cf4",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "VQ-OC-001",
+    "chunks_retrieved": [
+      {
+        "field_path": "vendor_class",
+        "value_present": true
+      },
+      {
+        "field_path": "deal_size",
+        "value_present": true
+      },
+      {
+        "field_path": "existing_nda_status",
+        "value_present": true
+      },
+      {
+        "field_path": "existing_msa",
+        "value_present": true
+      }
+    ],
+    "details": {
+      "request_id": "R04-SQ-03",
+      "lane": "direct_structured",
+      "admitted_count": 4,
+      "excluded_count": 0,
+      "output_name": "vendor_relationship",
+      "missing_fields": [],
+      "search_terms": []
+    }
+  },
+  {
+    "entry_id": "audit_2d2662bff8",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "PAM-001",
+    "chunks_retrieved": [],
+    "details": {
+      "request_id": "R04-SQ-04",
+      "lane": "indexed_hybrid",
+      "admitted_count": 0,
+      "excluded_count": 0,
+      "output_name": "approval_matrix_rows",
+      "missing_fields": [],
+      "search_terms": [
+        "approval",
+        "authority",
+        "vendor class",
+        "integration tier"
+      ]
+    }
+  },
+  {
+    "entry_id": "audit_48f40faa87",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "PAM-001",
+    "chunks_retrieved": [],
+    "details": {
+      "request_id": "R04-SQ-05",
+      "lane": "indexed_hybrid",
+      "admitted_count": 0,
+      "excluded_count": 0,
+      "output_name": "fast_track_rows",
+      "missing_fields": [],
+      "search_terms": [
+        "fast track",
+        "routing",
+        "eligible",
+        "unregulated"
+      ]
+    }
+  },
+  {
+    "entry_id": "audit_a17df2cdb3",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "RETRIEVAL",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": "SLK-001",
+    "chunks_retrieved": [],
+    "details": {
+      "request_id": "R04-SQ-07",
+      "lane": "indexed_hybrid",
+      "admitted_count": 0,
+      "excluded_count": 0,
+      "output_name": "slack_procurement",
+      "missing_fields": [],
+      "search_terms": [
+        "OptiChain",
+        "vendor approval",
+        "procurement",
+        "onboarding"
+      ]
+    }
+  },
+  {
+    "entry_id": "audit_8a3ec81f3f",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "procurement_agent",
+    "event_type": "DETERMINATION",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-04",
+      "output": {
+        "approval_path": "STANDARD",
+        "fast_track_eligible": false,
+        "required_approvals": [],
+        "estimated_timeline": "",
+        "policy_citations": [],
+        "status": "escalated"
+      }
+    }
+  },
+  {
+    "entry_id": "audit_d400d3258c",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "supervisor",
+    "event_type": "STATUS_CHANGE",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-04",
+      "from_status": "IN_PROGRESS",
+      "to_status": "ESCALATED",
+      "reason": null
+    }
+  },
+  {
+    "entry_id": "audit_a3ae40abb3",
+    "pipeline_run_id": "run_7fa8f94984",
+    "agent_id": "procurement_agent",
+    "event_type": "ESCALATION",
+    "timestamp": "2026-04-30T04:25:32Z",
+    "source_queried": null,
+    "chunks_retrieved": [],
+    "details": {
+      "step_id": "STEP-04",
+      "evidence_condition": "Procurement routing inherited an unresolved constraint or lacked a matrix match.",
+      "resolution_owner": "Procurement Director"
+    }
+  }
+]

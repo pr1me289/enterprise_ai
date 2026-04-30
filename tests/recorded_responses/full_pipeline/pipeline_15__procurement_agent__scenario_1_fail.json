@@ -1,0 +1,62 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 15,
+  "scenario": "scenario_1",
+  "step_id": "STEP-04",
+  "determination_key": "step_04_procurement",
+  "agent_name": "procurement_agent",
+  "pipeline_run_id": "run_1e7b45d7d9",
+  "timestamp_utc": "20260430T043438Z",
+  "parsed_output": {
+    "approval_path": "FAST_TRACK",
+    "fast_track_eligible": true,
+    "required_approvals": [
+      {
+        "approver": "Procurement Manager",
+        "domain": "Procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2 business days"
+      },
+      {
+        "approver": "Business Owner",
+        "domain": "Operations",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3 business days"
+      }
+    ],
+    "estimated_timeline": "3-5 business days",
+    "policy_citations": [
+      {
+        "source_id": "PAM-001",
+        "version": "2.0",
+        "chunk_id": "PAM-001__row_C-T1",
+        "row_id": "C-T1",
+        "approval_path_condition": "Class C, Tier T1, UNREGULATED vendor, fast-track eligible, no DPA required, no legal blockers",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "SLK-001",
+        "version": "Export at init.",
+        "chunk_id": "SLK-001__thread_T3",
+        "row_id": null,
+        "approval_path_condition": "OptiChain review confirmation: Tier 3 integration, UNREGULATED data classification, NDA executed, no DPA required, no blocking items identified, fast-track path clear",
+        "citation_class": "SUPPLEMENTARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "procurement_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 4.899718728993321,
+    "input_tokens": 20705,
+    "output_tokens": 424,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

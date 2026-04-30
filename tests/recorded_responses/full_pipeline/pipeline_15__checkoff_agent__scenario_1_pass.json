@@ -1,0 +1,102 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 15,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_1e7b45d7d9",
+  "timestamp_utc": "20260430T043438Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "Procurement Manager",
+        "domain": "procurement",
+        "instructions": "The vendor onboarding assessment is COMPLETE. Your approval is required to proceed with integration. The vendor has been classified as UNREGULATED with no DPA requirement and an executed NDA. This is a fast-track eligible case with Tier 3 integration type (EXPORT_ONLY). Your approval is the first step in the fast-track path and is estimated to take 2 business days. Once you approve, the Business Owner must also approve before the onboarding can be finalized.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review and approve the vendor onboarding for Procurement domain per the fast-track approval path (Procurement Approval Matrix row C-T1)",
+          "Confirm Tier 3 integration classification and EXPORT_ONLY integration type",
+          "Verify NDA execution status (currently EXECUTED)",
+          "Provide approval within estimated 2 business day timeline"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T04:33:12Z",
+            "section": "C-T1",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          },
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T04:33:12Z",
+            "section": "T3",
+            "source_name": "Slack / Meeting Thread Notes",
+            "version": "Export at init."
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Business Owner",
+        "domain": "operations",
+        "instructions": "The vendor onboarding assessment is COMPLETE and has received initial approval routing through Procurement. Your approval is required as the second step in the fast-track path. The vendor is classified as UNREGULATED with no DPA requirement, an executed NDA, and Tier 3 integration (EXPORT_ONLY). Your estimated completion timeline is 3 business days. Once you approve, onboarding can be finalized.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review the completed vendor onboarding assessment",
+          "Confirm operational readiness for Tier 3 (EXPORT_ONLY) integration",
+          "Provide approval within estimated 3 business day timeline",
+          "Coordinate with Procurement Manager if parallel approval is beneficial"
+        ],
+        "citations": [
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-30T04:33:07Z",
+            "section": "12.2",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          },
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-30T04:33:07Z",
+            "section": "5",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Procurement Director",
+        "domain": "procurement",
+        "instructions": "The vendor onboarding assessment is COMPLETE and has been routed through the fast-track approval path. The Procurement Manager and Business Owner approvals are currently pending. No blockers or escalation items require your direct action at this stage. The vendor meets all fast-track eligibility criteria: UNREGULATED classification, no DPA requirement, executed NDA, and Tier 3 integration type. Your role in this case is notification of completion; stakeholder approvals are being routed to the Procurement Manager.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T04:33:12Z",
+            "section": "C-T1",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 30.93662413698621,
+    "input_tokens": 7784,
+    "output_tokens": 1072,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

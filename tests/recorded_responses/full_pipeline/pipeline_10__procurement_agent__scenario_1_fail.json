@@ -1,0 +1,62 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 10,
+  "scenario": "scenario_1",
+  "step_id": "STEP-04",
+  "determination_key": "step_04_procurement",
+  "agent_name": "procurement_agent",
+  "pipeline_run_id": "run_2324a872ac",
+  "timestamp_utc": "20260430T042654Z",
+  "parsed_output": {
+    "approval_path": "FAST_TRACK",
+    "fast_track_eligible": true,
+    "required_approvals": [
+      {
+        "approver": "Procurement Manager",
+        "domain": "Procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2 business days"
+      },
+      {
+        "approver": "Business Owner / Manager",
+        "domain": "Business",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3 business days"
+      }
+    ],
+    "estimated_timeline": "3-5 business days",
+    "policy_citations": [
+      {
+        "source_id": "PAM-001",
+        "version": "2.0",
+        "chunk_id": "PAM-001__row_C-T1",
+        "row_id": "C-T1",
+        "approval_path_condition": "Class C vendor, Tier T1 integration, UNREGULATED data classification, fast-track eligible, no DPA required, no NDA blocker",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "SLK-001",
+        "version": "Export at init.",
+        "chunk_id": "SLK-001__thread_T3",
+        "row_id": null,
+        "approval_path_condition": "Procurement review confirmation: no blocking items identified, fast-track path clear, manager-level sign-off required",
+        "citation_class": "SUPPLEMENTARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "procurement_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 4.005498586979229,
+    "input_tokens": 20639,
+    "output_tokens": 414,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

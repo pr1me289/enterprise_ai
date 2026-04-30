@@ -1,0 +1,83 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 17,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_58e1d599e9",
+  "timestamp_utc": "20260430T043807Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "Procurement Manager",
+        "domain": "procurement",
+        "instructions": "The vendor onboarding assessment is COMPLETE with no blockers or escalations. You are required to approve this fast-track procurement. The vendor has been classified as UNREGULATED with no DPA required, no NDA issues, and no security concerns. The fast-track approval path applies per Procurement Approval Matrix Class C, Tier T1. Your approval is the first step in closing out this onboarding. Expected timeline: 2 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review and approve the fast-track procurement request for this vendor",
+          "Confirm no blocking items exist on your side (per Slack thread T3, prior relationship PRQ-2023-0031 was closed cleanly in Q3 2023)",
+          "Route approval to Business Owner / Manager for their sign-off (estimated 3 business days after your approval)"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T04:36:31Z",
+            "section": "C-T1",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          },
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T04:36:31Z",
+            "section": "T3",
+            "source_name": "Slack / Meeting Thread Notes",
+            "version": "Export at init."
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Business Owner / Manager",
+        "domain": "operations",
+        "instructions": "The vendor onboarding assessment is COMPLETE with no blockers or escalations. You are required to provide operational sign-off for this fast-track vendor integration. The vendor has been classified as UNREGULATED, integration tier TIER_3 (export-only), with no security or compliance concerns. Your approval completes the onboarding workflow. Expected timeline: 3 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review the fast-track onboarding summary for this vendor integration (export-only, TIER_3)",
+          "Confirm operational readiness and no business blockers on your side",
+          "Provide final approval to close out the onboarding process"
+        ],
+        "citations": [
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-30T04:36:13Z",
+            "section": "12.2",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          },
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-30T04:36:13Z",
+            "section": "5",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 28.565245603007497,
+    "input_tokens": 7785,
+    "output_tokens": 798,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

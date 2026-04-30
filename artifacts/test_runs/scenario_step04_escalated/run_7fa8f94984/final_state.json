@@ -1,0 +1,129 @@
+{
+  "pipeline_run_id": "run_7fa8f94984",
+  "vendor_name": "OptiChain, Inc.",
+  "manifest_version": "CC-001-v1.4",
+  "initialized_at": "2026-04-30T04:25:32Z",
+  "overall_status": "ESCALATED",
+  "current_step": "STEP-04",
+  "step_statuses": {
+    "STEP-01": "COMPLETE",
+    "STEP-02": "COMPLETE",
+    "STEP-03": "COMPLETE",
+    "STEP-04": "ESCALATED",
+    "STEP-05": "PENDING",
+    "STEP-06": "PENDING"
+  },
+  "determinations": {
+    "step_01_intake": {
+      "questionnaire_valid": true,
+      "vendor_name": "OptiChain, Inc.",
+      "status": "COMPLETE",
+      "notes": []
+    },
+    "step_02_security_classification": {
+      "integration_type_normalized": "EXPORT_ONLY",
+      "integration_tier": "TIER_3",
+      "data_classification": "UNREGULATED",
+      "eu_personal_data_present": "NO",
+      "fast_track_eligible": true,
+      "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+      "security_followup_required": false,
+      "nda_status_from_questionnaire": "EXECUTED",
+      "required_security_actions": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "step_03_legal": {
+      "dpa_required": false,
+      "dpa_blocker": false,
+      "nda_status": "EXECUTED",
+      "nda_blocker": false,
+      "trigger_rule_cited": [],
+      "policy_citations": [
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_12",
+          "section_id": "12",
+          "citation_class": "PRIMARY"
+        }
+      ],
+      "status": "complete"
+    },
+    "step_04_procurement": {
+      "approval_path": "STANDARD",
+      "fast_track_eligible": false,
+      "required_approvals": [],
+      "estimated_timeline": "",
+      "policy_citations": [],
+      "status": "escalated"
+    },
+    "step_05_checklist": null,
+    "step_06_guidance": null
+  },
+  "escalations": [
+    {
+      "entry_id": "audit_a3ae40abb3",
+      "pipeline_run_id": "run_7fa8f94984",
+      "agent_id": "procurement_agent",
+      "event_type": "ESCALATION",
+      "timestamp": "2026-04-30T04:25:32Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-04",
+        "evidence_condition": "Procurement routing inherited an unresolved constraint or lacked a matrix match.",
+        "resolution_owner": "Procurement Director"
+      }
+    }
+  ],
+  "audit_refs": [
+    "audit_5d903ffce4",
+    "audit_040bd4131b",
+    "audit_76d19f61c0",
+    "audit_652ff9737b",
+    "audit_ac0f39a8b1",
+    "audit_15e5562d79",
+    "audit_45505982b2",
+    "audit_be26e023c0",
+    "audit_7e9f2ed836",
+    "audit_9480843f67",
+    "audit_8323bf05eb",
+    "audit_670d83b73c",
+    "audit_c56617d651",
+    "audit_d00241cb01",
+    "audit_616b54692d",
+    "audit_995fcadcfd",
+    "audit_6ae1b33999",
+    "audit_6cb1c984b2",
+    "audit_3379c1d0a2",
+    "audit_6b5f2356fc",
+    "audit_08d11ebeb9",
+    "audit_2c49f3ce95",
+    "audit_ed88723835",
+    "audit_05501e8151",
+    "audit_cf5ec21b05",
+    "audit_6533891783",
+    "audit_2d8115167b",
+    "audit_93401e87b0",
+    "audit_7d8b9c7ba5",
+    "audit_a12f4f3cf4",
+    "audit_2d2662bff8",
+    "audit_48f40faa87",
+    "audit_a17df2cdb3",
+    "audit_8a3ec81f3f",
+    "audit_d400d3258c",
+    "audit_a3ae40abb3"
+  ],
+  "next_step_queue": [
+    "STEP-05"
+  ]
+}

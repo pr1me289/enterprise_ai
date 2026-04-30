@@ -314,18 +314,33 @@ When the agent derives `status = blocked` from §8.5, it MUST emit the following
 }
 ```
 
-**`blocked_reason`** — enum array. Lists the specific gate-condition or admissibility failure(s) that caused the block. Multiple values are permitted when multiple inputs are missing simultaneously. Defined enum values for the Procurement Agent:
+**Permitted reasons to emit `status: blocked` are exhaustive.** The four `blocked_reason` enum values below are the **only** permitted reasons. If the run does not match one of these four conditions exactly, `status` MUST NOT be `blocked` — emit `escalated` or `complete` per §8.5 instead.
+
+**`blocked_reason`** — enum array. Lists the specific gate-condition or admissibility failure(s) that caused the block. Multiple values are permitted when multiple inputs are missing simultaneously. The four defined enum values for the Procurement Agent are exhaustive:
 
 | Enum Value | Condition |
 |---|---|
 | `MISSING_IT_SECURITY_OUTPUT` | The full IT Security Agent (STEP-02) structured output is absent. The Procurement Agent cannot determine approval path without `fast_track_eligible` and `data_classification` from STEP-02. This is not a missing field — the entire upstream determination is absent, which is categorically different from the IT Security Agent returning AMBIGUOUS. An escalated or ambiguous IT Security output is still an output; a missing one is a blocked condition. |
 | `MISSING_LEGAL_OUTPUT` | The full Legal Agent (STEP-03) structured output is absent. Per CC-001 §8.3, both IT Security and Legal outputs must be present for the Procurement bundle to be admissible. `dpa_blocker` and `nda_blocker` directly affect approval path routing — without them the Procurement Agent cannot determine whether blockers exist that constrain the path it would otherwise assign. |
 | `MISSING_QUESTIONNAIRE_VENDOR_FIELDS` | `vendor_class` and `deal_size` (raw `contract_value_annual`) are absent from the bundle. These are the two questionnaire fields the Procurement Agent uses to look up the correct approval matrix row. Without them no matrix row can be matched. This is a blocked condition rather than an escalation because the evidence base for matrix lookup doesn't exist at all — unlike the escalation case where a matrix row exists but doesn't match. |
-| `MISSING_PAM_001` | The Procurement Approval Matrix index is entirely unavailable. The agent has all upstream inputs but no authoritative source to match against. Per CC-001 §11, a determination without at least one Tier 1 citation is insufficient for complete — and PAM-001 is the primary governing source for the Procurement Agent. No PAM-001 means no determination at all. |
+| `MISSING_PAM_001` | The Procurement Approval Matrix index is entirely unavailable — `approval_path_matrix_rows` is empty (zero retrieved rows) AND the registry-level retrieval excluded PAM-001 entirely. The agent has all upstream inputs but no authoritative source to match against. Per CC-001 §11, a determination without at least one Tier 1 citation is insufficient for complete — and PAM-001 is the primary governing source for the Procurement Agent. No PAM-001 retrieval at all means no determination at all. **This is distinct from "PAM-001 rows were retrieved but none match the vendor profile" — that is ESCALATED, not BLOCKED. See §9.1.1.** |
 
 **`blocked_fields`** — string array. Lists the specific canonical field names (per CC-001 §15) that were absent or null in the upstream input, causing the block. This array is what makes the audit log entry useful: it names exactly what the Supervisor needs to surface to the resolution owner.
 
 > This output shape is mandatory whenever `status = blocked`. The agent must not fall back to the standard determination shape with null-valued fields. The blocked output shape is the only valid output when the agent cannot proceed.
+
+#### 9.1.1 Conditions that are NOT blocked (common confusions)
+
+The following conditions superficially resemble BLOCKED but are explicitly **not** blocked — they MUST emit `escalated` per §9.2 instead:
+
+| Apparent condition | Why it is NOT blocked | Correct status |
+|---|---|---|
+| **`approval_path_matrix_rows` is non-empty but no row matches the vendor's `vendor_class` + `integration_tier`** | The bundle is admissible (PAM-001 retrieval succeeded; rows are present in the bundle). The agent has the evidentiary basis to begin matrix lookup work. The lookup itself returned no match. This is "evidence present but unresolvable" — the §9.2 escalated condition. The bundle's `bundle_meta.primary_key_match_count: 0` (when present) is the explicit signal: rows were retrieved (`bundle_meta.approval_path_matrix_rows_count > 0`) but none match (`primary_key_match_count == 0`). | `escalated` per §9.2 |
+| Two PAM-001 rows match on primary keys but conflict on `Approval Path` value | Bundle is admissible; matrix rows are present; the agent began work. The conflict between Tier 1 sources cannot be auto-resolved per CC-001 §4.1 — emit `escalated` and cite both rows. | `escalated` per §9.2 |
+| Upstream STEP-03 (Legal) returned `status: escalated` with an admissible output (e.g., DPA blocker present) | Legal's escalated output is still an output. The Procurement Agent has all the fields it needs from STEP-03. It performs its matrix lookup and inherits the escalated status. | `escalated` (inherited) per §8.5 |
+| One required `policy_citations` cross-reference cannot be assembled, but `approval_path` itself was determined | Bundle was admissible; the agent resolved the determination. Set the unresolvable citation field to `null` per §9.2. | `escalated` (partial) per §9.2 |
+
+**Diagnostic rule of thumb:** if `bundle_meta.admissible: true` and the agent was able to inspect any retrieved rows or upstream fields, the status is **never** `blocked`. The agent began its work; if it cannot finish, that is `escalated`. Emitting `blocked` when the bundle was admissible is a §9.1 contract violation — it conflates "no evidence base" with "evidence present but unresolvable."
 
 ### 9.2 Escalated Output Rules
 
@@ -481,7 +496,17 @@ Per CC-001 §14 and §7.3:
 
 ### Example C — No matrix row matches vendor/deal profile (escalated, path unresolvable)
 
-Vendor class and deal size combination is not covered by any PAM-001 row. All upstream inputs are present and valid:
+Vendor class and deal size combination is not covered by any PAM-001 row. All upstream inputs are present and valid. Inputs the agent saw:
+
+- `bundle_meta.admissible: true`
+- `bundle_meta.approval_path_matrix_rows_count: 3`
+- `bundle_meta.primary_key_match_count: 0`  ← **the load-bearing signal: rows were retrieved, none matched**
+- IT Security: `status=complete`, `data_classification=REGULATED`, `integration_tier=TIER_1`, `fast_track_eligible=false`
+- Legal: `status=complete`, `dpa_required=false`, `nda_status=EXECUTED`, `nda_blocker=false`
+- Questionnaire: `vendor_class="Class D — Technology Professional Services"`, `deal_size=150000`
+- `approval_path_matrix_rows`: three rows (A-T1, B-T1, C-T1) — none with Class D
+
+**Correct output (escalated, §9.2 shape):**
 
 ```json
 {
@@ -495,6 +520,22 @@ Vendor class and deal size combination is not covered by any PAM-001 row. All up
 ```
 
 > Asserting an `approval_path` without matrix evidence would be silent failure. The agent sets `approval_path`, `required_approvals`, `estimated_timeline`, and `policy_citations` to `null` per §9.2 — it could not resolve the approval path determination. `fast_track_eligible` is passed through unchanged from STEP-02 (not `null`). The Supervisor reads the `null` fields to identify that approval path routing requires human judgment. Resolution owner: Procurement Director.
+
+**Anti-pattern — what NOT to emit:**
+
+The agent must NOT collapse this case into the §9.1 blocked shape. The following output is a contract violation:
+
+```json
+{
+  "status": "blocked",
+  "blocked_reason": ["MISSING_PAM_001"],
+  "blocked_fields": ["fast_track_eligible", "policy_citations", "required_approvals", "estimated_timeline"]
+}
+```
+
+> This is wrong because (1) `bundle_meta.admissible: true` — the bundle was admissible; (2) `bundle_meta.approval_path_matrix_rows_count: 3` — PAM-001 was retrieved successfully and three rows are present in the bundle; (3) `bundle_meta.primary_key_match_count: 0` — but no row matches the Class D profile. `MISSING_PAM_001` is reserved for the case where the matrix is **entirely** unavailable (zero retrieved rows AND registry-level exclusion). Here the matrix is fully available; the vendor profile simply falls in a coverage gap. Per §9.1.1, "rows present, none match" is escalated, not blocked. Per §9.1, the four `blocked_reason` values are exhaustive and none apply here.
+
+The same anti-pattern with arbitrary `errors`-style field listing (e.g., `{"status": "blocked", "errors": [...]}`) is also a contract violation — the spec defines the §9.1 blocked shape with `blocked_reason` and `blocked_fields` only. There is no `errors` field in this contract.
 
 ### Example D — IT Security output absent (blocked)
 

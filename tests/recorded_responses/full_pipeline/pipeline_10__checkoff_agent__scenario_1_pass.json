@@ -1,0 +1,89 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 10,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_2324a872ac",
+  "timestamp_utc": "20260430T042654Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "Procurement Manager",
+        "domain": "procurement",
+        "instructions": "The vendor assessment pipeline has completed successfully with an overall status of COMPLETE. Your approval is required to finalize this integration. This vendor has been classified as Class C with a Tier T1 integration handling UNREGULATED data. No DPA is required, NDA is executed, and the integration qualifies for fast-track approval. Your review and sign-off are needed to proceed with onboarding. No blockers or security escalations have been identified for your domain.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review and approve the vendor integration (Procurement approval pending, estimated 2 business days)"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T04:25:45Z",
+            "section": "C-T1",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Business Owner / Manager",
+        "domain": "business",
+        "instructions": "The vendor assessment pipeline has completed successfully with an overall status of COMPLETE. This integration has been cleared for fast-track approval. Your sign-off is required to move forward with onboarding. The vendor handles UNREGULATED data, has an executed NDA, and requires no DPA. No security or legal blockers have been identified.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review and approve the vendor integration (Business approval pending, estimated 3 business days)"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T04:25:45Z",
+            "section": "C-T1",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Procurement Director",
+        "domain": "procurement",
+        "instructions": "The vendor assessment pipeline has completed successfully with an overall status of COMPLETE. This integration qualifies for fast-track approval under Procurement Approval Matrix Class C, Tier T1 conditions. Manager-level sign-off has been routed and is pending. No blocking items have been identified. The estimated approval timeline is 3-5 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T04:25:45Z",
+            "section": "C-T1",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          },
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T04:25:45Z",
+            "section": "T3",
+            "source_name": "Slack / Meeting Thread Notes",
+            "version": "Export at init."
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 29.59237608697731,
+    "input_tokens": 7637,
+    "output_tokens": 834,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}
