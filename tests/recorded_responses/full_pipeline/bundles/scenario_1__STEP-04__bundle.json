@@ -847,7 +847,9 @@
     "bundle_meta": {
       "admissible": true,
       "missing_fields": [],
-      "prohibited_sources": []
+      "prohibited_sources": [],
+      "approval_path_matrix_rows_count": 5,
+      "primary_key_match_count": 0
     }
   },
   "source_provenance": [

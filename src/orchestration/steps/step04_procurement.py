@@ -168,6 +168,12 @@ class Step04ProcurementHandler(BaseStepHandler):
                     access_role=self.definition.access_role,
                     output_name="approval_matrix_rows",
                     search_terms=("approval", "authority", "vendor class", "integration tier"),
+                    # PAM-001 is a small finite matrix (~20 rows in production,
+                    # fewer in scenario subsets). Strict primary-key matching
+                    # requires exhaustive coverage so the matching row never
+                    # falls outside the top-K window — top-5 missed scenario_1's
+                    # C-T3 row in past runs and triggered a false ESCALATED.
+                    top_k=30,
                 ),
                 state=state,
             ),
@@ -179,6 +185,7 @@ class Step04ProcurementHandler(BaseStepHandler):
                     access_role=self.definition.access_role,
                     output_name="fast_track_rows",
                     search_terms=("fast track", "routing", "eligible", "unregulated"),
+                    top_k=30,
                 ),
                 state=state,
             ),

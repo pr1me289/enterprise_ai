@@ -1,0 +1,54 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 19,
+  "scenario": "scenario_2",
+  "step_id": "STEP-03",
+  "determination_key": "step_03_legal",
+  "agent_name": "legal_agent",
+  "pipeline_run_id": "run_6bd6c20ca3",
+  "timestamp_utc": "20260430T045416Z",
+  "parsed_output": {
+    "dpa_required": true,
+    "dpa_blocker": true,
+    "nda_status": "PENDING",
+    "nda_blocker": true,
+    "trigger_rule_cited": [
+      {
+        "source_id": "DPA-TM-001",
+        "version": "2.1",
+        "row_id": "A-01",
+        "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "policy_citations": [
+      {
+        "source_id": "DPA-TM-001",
+        "version": "2.1",
+        "row_id": "A-01",
+        "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12_1_4",
+        "section_id": "12.1.4",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "escalated"
+  },
+  "call_record": {
+    "agent_name": "legal_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 19.28360384600819,
+    "input_tokens": 19842,
+    "output_tokens": 328,
+    "missing_fields": [],
+    "status": "escalated"
+  },
+  "step_status": "ESCALATED"
+}

@@ -1,0 +1,73 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 19,
+  "scenario": "scenario_2",
+  "step_id": "STEP-02",
+  "determination_key": "step_02_security_classification",
+  "agent_name": "it_security_agent",
+  "pipeline_run_id": "run_6bd6c20ca3",
+  "timestamp_utc": "20260430T045416Z",
+  "parsed_output": {
+    "integration_type_normalized": "DIRECT_API",
+    "integration_tier": "TIER_1",
+    "data_classification": "REGULATED",
+    "eu_personal_data_present": true,
+    "fast_track_eligible": false,
+    "fast_track_rationale": "DISALLOWED_REGULATED_DATA",
+    "security_followup_required": true,
+    "nda_status_from_questionnaire": "PENDING",
+    "required_security_actions": [
+      {
+        "action_type": "FULL_SECURITY_REVIEW",
+        "reason": "TIER_1 direct ERP integration with REGULATED data classification requires mandatory penetration test, SOC 2 Type II certification, and quarterly access review per ISP-001 \u00a712.2",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "NDA_EXECUTION",
+        "reason": "NDA status is PENDING. ISP-001 \u00a712.1.4 requires fully executed NDA prior to disclosure of RESTRICTED information. Onboarding may not proceed to information-exchange phase until NDA execution is confirmed.",
+        "owner": "Procurement"
+      },
+      {
+        "action_type": "DATA_HANDLING_AGREEMENT",
+        "reason": "EU personal data present in vendor scope. Data-handling agreement must define field-level scope, retention, and processing restrictions for shift schedules and employee IDs.",
+        "owner": "IT Security / Legal"
+      }
+    ],
+    "policy_citations": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12_2",
+        "section_id": "12.2",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_5",
+        "section_id": "5",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12_1_4",
+        "section_id": "12.1.4",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "it_security_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 29.894471885985695,
+    "input_tokens": 20230,
+    "output_tokens": 606,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}
