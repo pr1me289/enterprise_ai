@@ -173,8 +173,8 @@ These are deterministic rules. The agent must apply them in order and may not ov
 Apply the classification logic in this sequence:
 
 1. normalize `integration_type_normalized` and `eu_personal_data_present` from questionnaire evidence
-2. assign `integration_tier`
-3. determine `data_classification`
+2. determine `data_classification` (see §8.3) — derived from `integration_type_normalized`, `eu_personal_data_present`, and `regulated_data_types`; does **not** depend on `integration_tier`
+3. assign `integration_tier` (see §8.2) — may depend on `data_classification` for the EXPORT_ONLY case (see §8.2 special rule)
 4. determine `security_followup_required` (see §8.4)
 5. determine `fast_track_eligible` and `fast_track_rationale` (see §8.6)
 

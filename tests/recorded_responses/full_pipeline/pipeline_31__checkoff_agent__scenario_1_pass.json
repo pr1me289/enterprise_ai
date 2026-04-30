@@ -1,0 +1,128 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 31,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_6a16fea73a",
+  "timestamp_utc": "20260430T053225Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "Procurement Director",
+        "domain": "procurement",
+        "instructions": "The vendor onboarding assessment is COMPLETE. Your approval is required to proceed with contract execution and integration deployment. This is a Class C (Non-regulated Software), Tier T2 integration under the STANDARD approval path. You must review and approve the procurement terms, contract language, and integration scope. The estimated timeline for your approval is 3\u20135 business days. No blockers are assigned to Procurement at this stage. Once you approve, the Business Owner and IT Security must complete their notifications/approvals before the integration can proceed to deployment.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review and approve the procurement terms and contract language for this vendor integration.",
+          "Confirm vendor contact and integration delivery timeline.",
+          "Coordinate with IT Security (notification) and Business Owner for concurrent approvals under the STANDARD path.",
+          "Provide approval status update to the integration program manager within 3\u20135 business days."
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T05:30:39Z",
+            "section": "C-T2",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "IT Security",
+        "domain": "security",
+        "instructions": "The vendor onboarding assessment is COMPLETE. IT Security must complete two required security actions and provide notification approval under the STANDARD approval path. This integration is classified as UNREGULATED data (Tier T2 EXPORT_ONLY). However, there is a discrepancy in the vendor questionnaire that requires your resolution: the vendor indicated no regulated data would be exported, but their regulated_data_types list includes Inventory position exports and Demand forecast outputs. You must confirm the vendor's actual data export scope and ensure encryption-in-transit is explicitly enabled for all SFTP transfers per ISP-001 \u00a712.2. Estimated timeline for your notification/approval is 1 business day, but security action completion may extend this.",
+        "blockers_owned": [],
+        "required_security_actions": [
+          {
+            "action_type": "DATA_CLASSIFICATION_REVIEW",
+            "owner": "IT Security",
+            "reason": "Questionnaire self-reported data_classification_self_reported = false, but regulated_data_types list includes Inventory position exports and Demand forecast outputs. Policy requires explicit classification of export fields for TIER_3 integrations per ISP-001 \u00a712.2. This discrepancy must be resolved: either the data is unregulated (and the type list should be clarified as metadata only), or the data is regulated and data_classification must be REGULATED. Confirm vendor's understanding of what data fields will be exported and whether they contain ERP-sensitive or restricted information."
+          },
+          {
+            "action_type": "ENCRYPTION_IN_TRANSIT_VERIFICATION",
+            "owner": "IT Security",
+            "reason": "ISP-001 \u00a712.2 Tier 3 row requires encryption-in-transit for all export-file transfers. Questionnaire confirms SFTP (which supports encryption), but explicit confirmation of encryption settings is required before contract execution."
+          }
+        ],
+        "next_steps": [
+          "Conduct DATA_CLASSIFICATION_REVIEW: Contact vendor to clarify actual data export scope. Confirm whether Inventory position exports and Demand forecast outputs will be included in SFTP transfers and their sensitivity classification.",
+          "Verify ENCRYPTION_IN_TRANSIT_VERIFICATION: Confirm vendor's SFTP configuration includes encryption-in-transit (TLS/SSH). Request explicit confirmation of encryption settings before contract signature.",
+          "Resolve the data_classification discrepancy: Update the finalized assessment to REGULATED if sensitive ERP data will be exported, or confirm UNREGULATED with clarification if the regulated_data_types list was informational only.",
+          "Provide security approval/notification status within 1 business day of completing these actions."
+        ],
+        "citations": [
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-30T05:30:31Z",
+            "section": "12.2",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          },
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-30T05:30:31Z",
+            "section": "5",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Business Owner (Manager+)",
+        "domain": "business",
+        "instructions": "The vendor onboarding assessment is COMPLETE. Your approval is required as the Business Owner (Manager level or above) for this integration. This is a non-regulated, Tier T2 EXPORT_ONLY integration operating under the STANDARD approval path. You must confirm business need, expected benefits, and readiness to deploy. The estimated timeline for your approval is 2\u20133 business days. No blockers are assigned to Business Operations at this stage. Your approval, combined with Procurement Director and IT Security notifications, will complete the STANDARD approval path and clear the integration for deployment.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review the integration business case and data export scope.",
+          "Confirm your department's readiness to deploy this integration and manage the SFTP-based export workflow.",
+          "Approve or escalate any concerns regarding the integration timeline or scope.",
+          "Provide your approval status within 2\u20133 business days."
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T05:30:39Z",
+            "section": "C-T2",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Legal (General Counsel)",
+        "domain": "legal",
+        "instructions": "The vendor onboarding assessment is COMPLETE. Legal review confirms that no Data Processing Agreement (DPA) or additional agreement amendments are required for this integration. The vendor's existing NDA is EXECUTED and valid. No legal blockers are blocking this onboarding. However, you are listed in the escalation contact map for potential future escalations related to NDA execution confirmation. At this stage, no action is required from Legal. Your escalation contact status is active only if the Procurement or Business teams escalate NDA-related concerns during their approval windows.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [],
+        "citations": [
+          {
+            "agent_id": "legal_agent",
+            "retrieval_timestamp": "2026-04-30T05:30:37Z",
+            "section": "12.1.4",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 46.004925038985675,
+    "input_tokens": 8240,
+    "output_tokens": 1778,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

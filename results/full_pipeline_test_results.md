@@ -400,3 +400,140 @@ Block format:
 - STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_25__it_security_agent__scenario_escalated_step4_demo_pass.json`
 - STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_25__legal_agent__scenario_escalated_step4_demo_pass.json`
 - STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_25__procurement_agent__scenario_escalated_step4_demo_pass.json`
+## Pipeline Run #26 — scenario_1 — 2026-04-30
+**Overall verdict:** FAIL
+**Supervisor status:** COMPLETE
+**Pipeline run id:** run_b05ae34d2d
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 3.01s | 20,590 | 290 |
+| STEP-03 | legal_agent | COMPLETE | PASS | 1.92s | 19,770 | 158 |
+| STEP-04 | procurement_agent | COMPLETE | FAIL | 3.37s | 34,126 | 352 |
+| STEP-05 | checklist_assembler | COMPLETE | PASS | 59.37s | 51,773 | 612 |
+| STEP-06 | checkoff_agent | COMPLETE | PASS | 38.66s | 7,701 | 960 |
+
+**Totals:** 5 agent call(s), 133,960 input tokens, 2,372 output tokens, 106.34s cumulative.
+
+**Per-step failures:**
+- [STEP-04] scenario_1: PRIMARY PAM-001 row_id='C-T2' does NOT match the vendor profile's primary keys (vendor_class='Class C', integration_tier='TIER_1' → expected row_id='C-T1'). Per §8.3 strict primary-key matching, substituting a non-matching row when a matching row is present in the candidate set is silent wrong-row selection — the Class-level mirror of scenario_7's silent path fabrication failure mode. §14 A-04: no approval_path may be asserted from a row that does not match on both primary keys.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_26__it_security_agent__scenario_1_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_26__legal_agent__scenario_1_pass.json`
+- STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_26__procurement_agent__scenario_1_fail.json`
+- STEP-05 → `tests/recorded_responses/full_pipeline/pipeline_26__checklist_assembler__scenario_1_pass.json`
+- STEP-06 → `tests/recorded_responses/full_pipeline/pipeline_26__checkoff_agent__scenario_1_pass.json`
+## Pipeline Run #27 — scenario_2 — 2026-04-30
+**Overall verdict:** PASS
+**Supervisor status:** ESCALATED
+**Pipeline run id:** run_1247dc1222
+**Halted at:** STEP-03
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 6.08s | 20,624 | 702 |
+| STEP-03 | legal_agent | ESCALATED | PASS | 28.95s | 19,842 | 328 |
+| STEP-04 | procurement_agent | PENDING | — | — | — | — |
+| STEP-05 | checklist_assembler | PENDING | — | — | — | — |
+| STEP-06 | checkoff_agent | PENDING | — | — | — | — |
+
+**Totals:** 2 agent call(s), 40,466 input tokens, 1,030 output tokens, 35.03s cumulative.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_27__it_security_agent__scenario_2_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_27__legal_agent__scenario_2_pass.json`
+## Pipeline Run #28 — scenario_blocked_demo — 2026-04-30
+**Overall verdict:** PASS
+**Supervisor status:** BLOCKED
+**Pipeline run id:** run_269b14ab88
+**Halted at:** STEP-04
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 33.91s | 26,437 | 718 |
+| STEP-03 | legal_agent | COMPLETE | PASS | 22.65s | 20,943 | 154 |
+| STEP-04 | procurement_agent | BLOCKED | PASS | 23.28s | 18,079 | 51 |
+| STEP-05 | checklist_assembler | PENDING | — | — | — | — |
+| STEP-06 | checkoff_agent | PENDING | — | — | — | — |
+
+**Totals:** 3 agent call(s), 65,459 input tokens, 923 output tokens, 79.84s cumulative.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_28__it_security_agent__scenario_blocked_demo_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_28__legal_agent__scenario_blocked_demo_pass.json`
+- STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_28__procurement_agent__scenario_blocked_demo_pass.json`
+## Pipeline Run #29 — scenario_escalated_step4_demo — 2026-04-30
+**Overall verdict:** PASS
+**Supervisor status:** ESCALATED
+**Pipeline run id:** run_5847f6845c
+**Halted at:** STEP-04
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 31.44s | 26,437 | 470 |
+| STEP-03 | legal_agent | COMPLETE | PASS | 24.46s | 20,873 | 154 |
+| STEP-04 | procurement_agent | ESCALATED | PASS | 23.91s | 20,360 | 67 |
+| STEP-05 | checklist_assembler | PENDING | — | — | — | — |
+| STEP-06 | checkoff_agent | PENDING | — | — | — | — |
+
+**Totals:** 3 agent call(s), 67,670 input tokens, 691 output tokens, 79.81s cumulative.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_29__it_security_agent__scenario_escalated_step4_demo_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_29__legal_agent__scenario_escalated_step4_demo_pass.json`
+- STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_29__procurement_agent__scenario_escalated_step4_demo_pass.json`
+## Pipeline Run #30 — scenario_1 — 2026-04-30
+**Overall verdict:** FAIL
+**Supervisor status:** COMPLETE
+**Pipeline run id:** run_de83b8f284
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 2.67s | 20,670 | 298 |
+| STEP-03 | legal_agent | COMPLETE | PASS | 2.10s | 19,778 | 158 |
+| STEP-04 | procurement_agent | COMPLETE | FAIL | 3.10s | 34,134 | 351 |
+| STEP-05 | checklist_assembler | COMPLETE | PASS | 60.56s | 51,729 | 615 |
+| STEP-06 | checkoff_agent | COMPLETE | PASS | 38.71s | 7,708 | 1,151 |
+
+**Totals:** 5 agent call(s), 134,019 input tokens, 2,573 output tokens, 107.14s cumulative.
+
+**Per-step failures:**
+- [STEP-04] scenario_1: PRIMARY PAM-001 row_id='C-T2' does NOT match the vendor profile's primary keys (vendor_class='Class C', integration_tier='TIER_1' → expected row_id='C-T1'). Per §8.3 strict primary-key matching, substituting a non-matching row when a matching row is present in the candidate set is silent wrong-row selection — the Class-level mirror of scenario_7's silent path fabrication failure mode. §14 A-04: no approval_path may be asserted from a row that does not match on both primary keys.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_30__it_security_agent__scenario_1_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_30__legal_agent__scenario_1_pass.json`
+- STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_30__procurement_agent__scenario_1_fail.json`
+- STEP-05 → `tests/recorded_responses/full_pipeline/pipeline_30__checklist_assembler__scenario_1_pass.json`
+- STEP-06 → `tests/recorded_responses/full_pipeline/pipeline_30__checkoff_agent__scenario_1_pass.json`
+## Pipeline Run #31 — scenario_1 — 2026-04-30
+**Overall verdict:** FAIL
+**Supervisor status:** COMPLETE
+**Pipeline run id:** run_6a16fea73a
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 6.07s | 20,670 | 552 |
+| STEP-03 | legal_agent | COMPLETE | PASS | 1.90s | 19,770 | 158 |
+| STEP-04 | procurement_agent | COMPLETE | FAIL | 3.61s | 34,126 | 356 |
+| STEP-05 | checklist_assembler | COMPLETE | PASS | 56.51s | 52,316 | 873 |
+| STEP-06 | checkoff_agent | COMPLETE | PASS | 46.00s | 8,240 | 1,778 |
+
+**Totals:** 5 agent call(s), 135,122 input tokens, 3,717 output tokens, 114.09s cumulative.
+
+**Per-step failures:**
+- [STEP-04] scenario_1: PRIMARY PAM-001 row_id='C-T2' does NOT match the vendor profile's primary keys (vendor_class='Class C', integration_tier='TIER_1' → expected row_id='C-T1'). Per §8.3 strict primary-key matching, substituting a non-matching row when a matching row is present in the candidate set is silent wrong-row selection — the Class-level mirror of scenario_7's silent path fabrication failure mode. §14 A-04: no approval_path may be asserted from a row that does not match on both primary keys.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_31__it_security_agent__scenario_1_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_31__legal_agent__scenario_1_pass.json`
+- STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_31__procurement_agent__scenario_1_fail.json`
+- STEP-05 → `tests/recorded_responses/full_pipeline/pipeline_31__checklist_assembler__scenario_1_pass.json`
+- STEP-06 → `tests/recorded_responses/full_pipeline/pipeline_31__checkoff_agent__scenario_1_pass.json`

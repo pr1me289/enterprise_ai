@@ -192,6 +192,11 @@ def complete_demo_scenario() -> ScenarioFixture:
         questionnaire_overrides={
             "contract_details": {
                 "vendor_class_assigned": "Class C — Non-regulated Software",
+                # Small T1-bracket deal — matches PAM C-T1 (FAST_TRACK ELIGIBLE)
+                # for the happy-path narrative. Canonical questionnaire value
+                # ($210K) lands in PAM T2 bracket and would route to C-T2
+                # (STANDARD), defeating the fast-track demo intent.
+                "annual_contract_value_usd": 45000,
             },
             "product_and_integration": {
                 "erp_integration": {

@@ -1293,9 +1293,9 @@
     ],
     "it_security_output": {
       "data_classification": "UNREGULATED",
-      "fast_track_eligible": true,
+      "fast_track_eligible": false,
       "integration_tier": "TIER_3",
-      "security_followup_required": false,
+      "security_followup_required": true,
       "policy_citations": [
         {
           "source_id": "ISP-001",
@@ -1333,7 +1333,7 @@
     },
     "questionnaire": {
       "vendor_class": "Class C \u2014 Non-regulated Software",
-      "deal_size": 210000,
+      "deal_size": 45000,
       "existing_nda_status": "EXECUTED",
       "existing_msa": false
     },

@@ -1,0 +1,61 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 26,
+  "scenario": "scenario_1",
+  "step_id": "STEP-04",
+  "determination_key": "step_04_procurement",
+  "agent_name": "procurement_agent",
+  "pipeline_run_id": "run_b05ae34d2d",
+  "timestamp_utc": "20260430T052108Z",
+  "parsed_output": {
+    "approval_path": "STANDARD",
+    "fast_track_eligible": true,
+    "required_approvals": [
+      {
+        "approver": "Procurement Manager",
+        "domain": "Procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3-5 business days"
+      },
+      {
+        "approver": "IT Security",
+        "domain": "IT Security",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2-3 business days"
+      },
+      {
+        "approver": "Director (Business Owner)",
+        "domain": "Business",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3-5 business days"
+      }
+    ],
+    "estimated_timeline": "5-8 business days",
+    "policy_citations": [
+      {
+        "source_id": "PAM-001",
+        "version": "2.0",
+        "chunk_id": "PAM-001__row_C-T2",
+        "row_id": "C-T2",
+        "approval_path_condition": "Class C \u2014 Non-regulated Software, Tier T2, STANDARD approval path",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "procurement_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 3.369600531994365,
+    "input_tokens": 34126,
+    "output_tokens": 352,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

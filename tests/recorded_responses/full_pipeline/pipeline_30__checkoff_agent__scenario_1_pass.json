@@ -1,0 +1,117 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 30,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_de83b8f284",
+  "timestamp_utc": "20260430T052834Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "Procurement Manager",
+        "domain": "procurement",
+        "instructions": "The vendor integration assessment has been completed and classified as UNREGULATED with no data protection or security blockers. Your approval is required to proceed with onboarding. This is a standard approval path (Class C, Tier T2) with an estimated timeline of 8-13 business days. Please review the checklist, confirm procurement readiness, and provide your approval within 3-5 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review vendor integration details and procurement requirements",
+          "Confirm vendor meets procurement standards per ISP-001 section 12.2",
+          "Provide approval status within 3-5 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T05:26:52Z",
+            "section": "C-T2",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "IT Security",
+        "domain": "security",
+        "instructions": "The vendor integration has been assessed for security and data protection requirements. The integration is classified as UNREGULATED (Tier 3, Export Only) with no outstanding security actions required. Your approval is needed to confirm security clearance. Please review the assessment against IT Security Policy section 12.2 and provide your approval within 2-3 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review security assessment and integration tier classification (TIER_3, EXPORT_ONLY)",
+          "Confirm compliance with IT Security Policy sections 12.2 and 12.1.4",
+          "Provide security approval within 2-3 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-30T05:26:47Z",
+            "section": "12.2",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          },
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-30T05:26:47Z",
+            "section": "12.1.4",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Director (Business Owner)",
+        "domain": "business",
+        "instructions": "The vendor integration assessment is complete and ready for business approval. The vendor qualifies as low-risk (UNREGULATED classification, no data protection requirements, fast-track eligible). All security and procurement reviews have been completed. Please provide your business approval and confirm readiness to proceed with onboarding within 3-5 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review complete vendor integration assessment",
+          "Confirm business requirements are met",
+          "Provide business owner approval within 3-5 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T05:26:52Z",
+            "section": "C-T2",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "General Counsel",
+        "domain": "legal",
+        "instructions": "The vendor integration has been assessed for legal and data protection requirements. No DPA or NDA blockers have been identified. The NDA status is EXECUTED. No legal actions are required to proceed with onboarding at this time.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Confirm NDA execution status and document retention",
+          "Note: No DPA required (UNREGULATED classification)"
+        ],
+        "citations": [
+          {
+            "agent_id": "legal_agent",
+            "retrieval_timestamp": "2026-04-30T05:26:50Z",
+            "section": "12.1.4",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 38.70730928299599,
+    "input_tokens": 7708,
+    "output_tokens": 1151,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

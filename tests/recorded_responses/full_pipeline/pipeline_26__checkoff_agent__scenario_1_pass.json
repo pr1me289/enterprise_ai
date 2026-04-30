@@ -1,0 +1,97 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 26,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_b05ae34d2d",
+  "timestamp_utc": "20260430T052108Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "Procurement Manager",
+        "domain": "procurement",
+        "instructions": "The vendor onboarding assessment is complete with overall status COMPLETE. You are required to approve this vendor integration as part of the standard approval path. This is a Class C (Non-regulated Software), Tier T2 integration requiring your procurement review and sign-off. No blockers are assigned to your domain. Please complete your approval within the estimated 3-5 business days to advance the onboarding process.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review and approve vendor onboarding per Procurement Approval Matrix (PAM-001, row C-T2)",
+          "Confirm procurement compliance for EXPORT_ONLY integration tier",
+          "Complete approval within estimated 3-5 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T05:19:27Z",
+            "section": "C-T2",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "IT Security",
+        "domain": "security",
+        "instructions": "The vendor onboarding assessment is complete with overall status COMPLETE. You are required to approve this vendor integration as part of the standard approval path. Data classification is UNREGULATED with no EU personal data present. No security actions are required. This integration qualifies for fast-track processing due to low-risk profile. Please complete your security review and approval within the estimated 2-3 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review and approve vendor security posture per IT Security Policy (ISP-001, sections 12.2 and 5)",
+          "Confirm data classification UNREGULATED is appropriate for your infrastructure",
+          "Complete approval within estimated 2-3 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-30T05:19:22Z",
+            "section": "12.2",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          },
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-30T05:19:22Z",
+            "section": "5",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Director (Business Owner)",
+        "domain": "business",
+        "instructions": "The vendor onboarding assessment is complete with overall status COMPLETE. You are required to approve this vendor integration as the business owner and decision authority. This is a standard approval path integration with no regulatory blockers, no DPA requirements, and executed NDA coverage. All technical and compliance preconditions have been cleared. Please complete your business approval within the estimated 3-5 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review vendor integration proposal and assessment summary",
+          "Confirm business case and integration value proposition",
+          "Provide business owner approval within estimated 3-5 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T05:19:27Z",
+            "section": "C-T2",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 38.66233235198888,
+    "input_tokens": 7701,
+    "output_tokens": 960,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

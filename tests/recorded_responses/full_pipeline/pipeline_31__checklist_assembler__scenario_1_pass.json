@@ -1,0 +1,97 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 31,
+  "scenario": "scenario_1",
+  "step_id": "STEP-05",
+  "determination_key": "step_05_checklist",
+  "agent_name": "checklist_assembler",
+  "pipeline_run_id": "run_6a16fea73a",
+  "timestamp_utc": "20260430T053225Z",
+  "parsed_output": {
+    "pipeline_run_id": "run_6a16fea73a",
+    "vendor_name": "OptiChain, Inc.",
+    "overall_status": "COMPLETE",
+    "data_classification": "UNREGULATED",
+    "dpa_required": false,
+    "fast_track_eligible": false,
+    "required_security_actions": [
+      {
+        "action_type": "DATA_CLASSIFICATION_REVIEW",
+        "owner": "IT Security",
+        "reason": "Questionnaire self-reported data_classification_self_reported = false, but regulated_data_types list includes Inventory position exports and Demand forecast outputs. Policy requires explicit classification of export fields for TIER_3 integrations per ISP-001 \u00a712.2. This discrepancy must be resolved: either the data is unregulated (and the type list should be clarified as metadata only), or the data is regulated and data_classification must be REGULATED. Confirm vendor's understanding of what data fields will be exported and whether they contain ERP-sensitive or restricted information."
+      },
+      {
+        "action_type": "ENCRYPTION_IN_TRANSIT_VERIFICATION",
+        "owner": "IT Security",
+        "reason": "ISP-001 \u00a712.2 Tier 3 row requires encryption-in-transit for all export-file transfers. Questionnaire confirms SFTP (which supports encryption), but explicit confirmation of encryption settings is required before contract execution."
+      }
+    ],
+    "approval_path": "STANDARD",
+    "required_approvals": [
+      {
+        "approver": "Procurement Manager",
+        "domain": "Procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3-5 business days"
+      },
+      {
+        "approver": "IT Security (notification)",
+        "domain": "IT Security",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "1 business day"
+      },
+      {
+        "approver": "Business Owner (Manager+)",
+        "domain": "Business Operations",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2-3 business days"
+      }
+    ],
+    "blockers": [],
+    "citations": [
+      {
+        "source_name": "IT Security Policy",
+        "version": "4.2",
+        "section": "12.2",
+        "retrieval_timestamp": "2026-04-30T05:30:31Z",
+        "agent_id": "it_security_agent"
+      },
+      {
+        "source_name": "IT Security Policy",
+        "version": "4.2",
+        "section": "5",
+        "retrieval_timestamp": "2026-04-30T05:30:31Z",
+        "agent_id": "it_security_agent"
+      },
+      {
+        "source_name": "IT Security Policy",
+        "version": "4.2",
+        "section": "12.1.4",
+        "retrieval_timestamp": "2026-04-30T05:30:37Z",
+        "agent_id": "legal_agent"
+      },
+      {
+        "source_name": "Procurement Approval Matrix",
+        "version": "2.0",
+        "section": "C-T2",
+        "retrieval_timestamp": "2026-04-30T05:30:39Z",
+        "agent_id": "procurement_agent"
+      }
+    ]
+  },
+  "call_record": {
+    "agent_name": "checklist_assembler",
+    "pipeline_run_id": "run_6a16fea73a",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 56.50718640699051,
+    "input_tokens": 52316,
+    "output_tokens": 873,
+    "missing_fields": [],
+    "status": "COMPLETE"
+  },
+  "step_status": "COMPLETE"
+}
