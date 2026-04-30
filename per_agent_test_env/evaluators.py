@@ -71,7 +71,7 @@ EXPECTED_STATUS: dict[tuple[str, str], str] = {
     # scenario_2: DPA required but not executed → dpa_blocker=true →
     # status=escalated per Legal Agent Spec §14 A-07 (hard rule: agent must
     # not emit complete when a DPA blocker is confirmed) and
-    # demo_scenario_02_escalated.md (STEP-03 is the first step in the chain
+    # scenarios/scenario_2/narrative.md (STEP-03 is the first step in the chain
     # to emit ESCALATED). NDA blocker alone does not escalate, but a DPA
     # blocker does.
     ("legal_agent", "scenario_2"): "escalated",

@@ -189,7 +189,7 @@ def test_build_storage_indices_writes_vector_bm25_and_structured_outputs(
     result = build_storage_indices(
         chunk_artifact_dir=chunk_artifact_dir,
         questionnaire_path=repo_root / "mock_documents/OptiChain_VSQ_001_v2_1.json",
-        stakeholder_map_path=repo_root / "scenario_1_mock_documents/Stakeholder_Map_PRQ_2024_0047.json",
+        stakeholder_map_path=repo_root / "scenarios/scenario_1/source_mock_documents/Stakeholder_Map_PRQ_2024_0047.json",
         chroma_persist_directory=tmp_path / "chroma",
         vector_registry_directory=tmp_path / "vector_registry",
         bm25_persist_directory=tmp_path / "bm25",

@@ -78,9 +78,7 @@ project-root/
 ├── uv.lock
 ├── README.md
 ├── CLAUDE.md
-├── .gitignore
-├── master_log.md
-└── past_prompts.md
+└── .gitignore
 
 
 Rules:
@@ -131,26 +129,6 @@ Never commit:
 
 ---
 
-## master_log.md
-
-Record all changes, plans, and execution results in `master_log.md` at the project root.
-
-**Entry format:**
-```
-### [#N] YYYY-MM-DD | {Claude Code | Codex}
-**Task:** What was requested
-**Plan:** Steps taken or intended
-**Changes:** Files created/modified/deleted, commands run
-**Result:** Outcome, errors hit, anything left incomplete
-**Next:** Remaining work or open questions (if any)
-```
-
-- Session number is ever-incrementing starting from `#1` — never reset it
-- Log *before* starting long tasks (plan) and *after* completing them (result)
-- If a task fails mid-way, log the failure state so the next session can resume cleanly
-
----
-
 ## README.md
 
 Keep this file accurate and current. Update it whenever you change:
@@ -183,12 +161,6 @@ Include 'Project Commands'
 
 # Build for production
 ```
-
----
-
-## past_prompts.md
-
-Do not touch past_prompts.md
 
 ---
 
