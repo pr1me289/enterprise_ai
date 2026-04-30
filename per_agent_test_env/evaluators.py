@@ -1626,22 +1626,26 @@ def _evaluate_procurement(output: dict[str, Any], scenario: str, report: Evaluat
                 "policy_citations empty on status='complete' — §14 A-01 requires "
                 "at least one PRIMARY PAM-001 row citation"
             )
-        # Required-keys check is scoped to PRIMARY citations only: those are the
-        # ones the spec hard-requires to carry full provenance (PAM row id +
-        # approval-path condition). SUPPLEMENTARY entries (e.g., Tier 3 Slack
-        # threads, secondary cross-references) are permitted with looser shape
-        # — only source_id + citation_class are mandatory there. The strict
-        # PRIMARY-PAM-001 backstop check below catches the load-bearing case.
-        primary_only = [
-            entry for entry in pc
-            if isinstance(entry, dict) and entry.get("citation_class") == "PRIMARY"
-        ]
-        for idx, entry in enumerate(primary_only):
+        # Required-keys check applies to PRIMARY citations and to entries that
+        # don't carry an explicit citation_class (the spec requires every
+        # citation to declare PRIMARY or SUPPLEMENTARY — an untagged entry is
+        # assumed PRIMARY for strictness purposes). SUPPLEMENTARY entries
+        # explicitly tagged as such (e.g., Tier 3 Slack threads, secondary
+        # cross-references) are permitted with looser shape — only source_id +
+        # citation_class are mandatory there. The strict PRIMARY-PAM-001
+        # backstop check below catches the load-bearing case where a clean
+        # COMPLETE determination must cite a real PAM row.
+        for idx, entry in enumerate(pc):
+            if not isinstance(entry, dict):
+                continue
+            cls = entry.get("citation_class")
+            if cls == "SUPPLEMENTARY":
+                continue
             for key in ("source_id", "version", "row_id", "approval_path_condition", "citation_class"):
                 if key not in entry or entry[key] in (None, ""):
                     report.failures.append(
-                        f"policy_citations[PRIMARY #{idx}] missing required key {key!r} "
-                        "(SUPPLEMENTARY entries are not held to this contract)"
+                        f"policy_citations[{idx}] missing required key {key!r} "
+                        "(citation_class != 'SUPPLEMENTARY' — strict shape required)"
                     )
         # Source_id allowlist applies to all entries (PRIMARY or SUPPLEMENTARY).
         _check_source_id_in(output, "policy_citations", ("PAM-001", "SLK-001"), report)
