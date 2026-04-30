@@ -205,6 +205,12 @@ def complete_demo_scenario() -> ScenarioFixture:
                 }
             },
             "data_handling": {
+                # Vendor self-reports as non-regulated, with NO regulated data types in
+                # scope. These two fields must be internally consistent — populating
+                # `regulated_data_types` while declaring NON_REGULATED is a contradiction
+                # the IT Security agent will (rightly) escalate on.
+                "data_classification_self_reported": "NON_REGULATED",
+                "regulated_data_types": [],
                 "personal_data_in_scope": False,
                 "data_categories_in_scope": ["Inventory position exports", "Demand forecast outputs"],
                 "data_subjects": {

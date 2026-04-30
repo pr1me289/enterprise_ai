@@ -10,29 +10,18 @@
       "AUDIT_LOG",
       "PIPELINE_STATE"
     ],
-    "pipeline_run_id": "run_6a16fea73a",
+    "pipeline_run_id": "run_a1e7197536",
     "vendor_name": "OptiChain, Inc.",
     "it_security_agent": {
       "integration_type_normalized": "EXPORT_ONLY",
-      "integration_tier": "TIER_3",
+      "integration_tier": "TIER_1",
       "data_classification": "UNREGULATED",
       "eu_personal_data_present": false,
-      "fast_track_eligible": false,
-      "fast_track_rationale": "DISALLOWED_INTEGRATION_RISK",
-      "security_followup_required": true,
+      "fast_track_eligible": true,
+      "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+      "security_followup_required": false,
       "nda_status_from_questionnaire": "EXECUTED",
-      "required_security_actions": [
-        {
-          "action_type": "DATA_CLASSIFICATION_REVIEW",
-          "reason": "Questionnaire self-reported data_classification_self_reported = false, but regulated_data_types list includes Inventory position exports and Demand forecast outputs. Policy requires explicit classification of export fields for TIER_3 integrations per ISP-001 \u00a712.2. This discrepancy must be resolved: either the data is unregulated (and the type list should be clarified as metadata only), or the data is regulated and data_classification must be REGULATED. Confirm vendor's understanding of what data fields will be exported and whether they contain ERP-sensitive or restricted information.",
-          "owner": "IT Security"
-        },
-        {
-          "action_type": "ENCRYPTION_IN_TRANSIT_VERIFICATION",
-          "reason": "ISP-001 \u00a712.2 Tier 3 row requires encryption-in-transit for all export-file transfers. Questionnaire confirms SFTP (which supports encryption), but explicit confirmation of encryption settings is required before contract execution.",
-          "owner": "IT Security"
-        }
-      ],
+      "required_security_actions": [],
       "policy_citations": [
         {
           "source_id": "ISP-001",
@@ -69,39 +58,32 @@
       "status": "complete"
     },
     "procurement_agent": {
-      "approval_path": "STANDARD",
-      "fast_track_eligible": false,
+      "approval_path": "FAST_TRACK",
+      "fast_track_eligible": true,
       "required_approvals": [
         {
           "approver": "Procurement Manager",
           "domain": "Procurement",
           "status": "PENDING",
           "blocker": false,
-          "estimated_completion": "3-5 business days"
+          "estimated_completion": "2-3 business days"
         },
         {
-          "approver": "IT Security (notification)",
-          "domain": "IT Security",
-          "status": "PENDING",
-          "blocker": false,
-          "estimated_completion": "1 business day"
-        },
-        {
-          "approver": "Business Owner (Manager+)",
+          "approver": "Business Owner / Manager",
           "domain": "Business Operations",
           "status": "PENDING",
           "blocker": false,
           "estimated_completion": "2-3 business days"
         }
       ],
-      "estimated_timeline": "5-8 business days",
+      "estimated_timeline": "3-5 business days",
       "policy_citations": [
         {
           "source_id": "PAM-001",
           "version": "2.0",
-          "chunk_id": "PAM-001__row_C-T2",
-          "row_id": "C-T2",
-          "approval_path_condition": "Class C \u2014 Non-regulated Software, Tier T2 integration, STANDARD approval path",
+          "chunk_id": "PAM-001__row_C-T1",
+          "row_id": "C-T1",
+          "approval_path_condition": "Class C vendor, TIER_1 integration, FAST_TRACK eligible path for non-regulated software with no DPA requirement",
           "citation_class": "PRIMARY"
         }
       ],
@@ -109,11 +91,11 @@
     },
     "audit_log_entries": [
       {
-        "entry_id": "audit_558eae8e0c",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_57309ceb3a",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RUN_EVENT",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -122,11 +104,11 @@
         }
       },
       {
-        "entry_id": "audit_7d369ae8d5",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_58af18bf26",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -137,11 +119,11 @@
         }
       },
       {
-        "entry_id": "audit_d19d0ada29",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_fb45e4e634",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -168,11 +150,11 @@
         }
       },
       {
-        "entry_id": "audit_11dd111c01",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_c64e2c6a81",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -227,11 +209,11 @@
         }
       },
       {
-        "entry_id": "audit_bfdee3f19f",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_f11b9381a1",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -254,11 +236,11 @@
         }
       },
       {
-        "entry_id": "audit_e6892f1145",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_a5ce7b5008",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "DETERMINATION",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -272,11 +254,11 @@
         }
       },
       {
-        "entry_id": "audit_e04ce5b205",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_50152a1252",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -287,11 +269,11 @@
         }
       },
       {
-        "entry_id": "audit_fcb898b903",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_0ed1a2f2c6",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -302,11 +284,11 @@
         }
       },
       {
-        "entry_id": "audit_391022f746",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_f1ac14629a",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -333,11 +315,11 @@
         }
       },
       {
-        "entry_id": "audit_84e74d5364",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_6dd4f41cda",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -360,11 +342,11 @@
         }
       },
       {
-        "entry_id": "audit_17249cc959",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_74c796e9c2",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -387,11 +369,11 @@
         }
       },
       {
-        "entry_id": "audit_4f5cc844c0",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_ec21e77519",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": "ISP-001",
         "chunks_retrieved": [
           {
@@ -556,11 +538,11 @@
         }
       },
       {
-        "entry_id": "audit_6409fd52b2",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_00f10c4fea",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": "ISP-001",
         "chunks_retrieved": [
           {
@@ -725,11 +707,11 @@
         }
       },
       {
-        "entry_id": "audit_334162d4bf",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_a9bf76750d",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": "ISP-001",
         "chunks_retrieved": [
           {
@@ -894,11 +876,11 @@
         }
       },
       {
-        "entry_id": "audit_cf442a4e55",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_a7c25e6dc4",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -917,11 +899,11 @@
         }
       },
       {
-        "entry_id": "audit_aa8536fc8b",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_6a3814bfd2",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:31Z",
+        "timestamp": "2026-04-30T06:46:29Z",
         "source_queried": "ISP-001",
         "chunks_retrieved": [
           {
@@ -1086,36 +1068,25 @@
         }
       },
       {
-        "entry_id": "audit_5f93131ed9",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_9c38f02436",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "it_security_agent",
         "event_type": "DETERMINATION",
-        "timestamp": "2026-04-30T05:30:37Z",
+        "timestamp": "2026-04-30T06:46:32Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
           "step_id": "STEP-02",
           "output": {
             "integration_type_normalized": "EXPORT_ONLY",
-            "integration_tier": "TIER_3",
+            "integration_tier": "TIER_1",
             "data_classification": "UNREGULATED",
             "eu_personal_data_present": false,
-            "fast_track_eligible": false,
-            "fast_track_rationale": "DISALLOWED_INTEGRATION_RISK",
-            "security_followup_required": true,
+            "fast_track_eligible": true,
+            "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+            "security_followup_required": false,
             "nda_status_from_questionnaire": "EXECUTED",
-            "required_security_actions": [
-              {
-                "action_type": "DATA_CLASSIFICATION_REVIEW",
-                "reason": "Questionnaire self-reported data_classification_self_reported = false, but regulated_data_types list includes Inventory position exports and Demand forecast outputs. Policy requires explicit classification of export fields for TIER_3 integrations per ISP-001 \u00a712.2. This discrepancy must be resolved: either the data is unregulated (and the type list should be clarified as metadata only), or the data is regulated and data_classification must be REGULATED. Confirm vendor's understanding of what data fields will be exported and whether they contain ERP-sensitive or restricted information.",
-                "owner": "IT Security"
-              },
-              {
-                "action_type": "ENCRYPTION_IN_TRANSIT_VERIFICATION",
-                "reason": "ISP-001 \u00a712.2 Tier 3 row requires encryption-in-transit for all export-file transfers. Questionnaire confirms SFTP (which supports encryption), but explicit confirmation of encryption settings is required before contract execution.",
-                "owner": "IT Security"
-              }
-            ],
+            "required_security_actions": [],
             "policy_citations": [
               {
                 "source_id": "ISP-001",
@@ -1137,11 +1108,11 @@
         }
       },
       {
-        "entry_id": "audit_761f94a520",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_7db2be9a6e",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-30T05:30:37Z",
+        "timestamp": "2026-04-30T06:46:32Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -1152,11 +1123,11 @@
         }
       },
       {
-        "entry_id": "audit_f832f53cb1",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_4a295599f3",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-30T05:30:37Z",
+        "timestamp": "2026-04-30T06:46:32Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -1167,11 +1138,11 @@
         }
       },
       {
-        "entry_id": "audit_b83614facb",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_9c944e74f2",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:37Z",
+        "timestamp": "2026-04-30T06:46:32Z",
         "source_queried": "STEP-02",
         "chunks_retrieved": [
           {
@@ -1198,11 +1169,11 @@
         }
       },
       {
-        "entry_id": "audit_af9a469b58",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_379a3a1dd4",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:37Z",
+        "timestamp": "2026-04-30T06:46:32Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -1225,11 +1196,11 @@
         }
       },
       {
-        "entry_id": "audit_4c63a5b502",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_5a13d45d33",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:37Z",
+        "timestamp": "2026-04-30T06:46:32Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -1248,11 +1219,11 @@
         }
       },
       {
-        "entry_id": "audit_eaf01e8007",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_cbb7af986f",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:37Z",
+        "timestamp": "2026-04-30T06:46:32Z",
         "source_queried": "DPA-TM-001",
         "chunks_retrieved": [
           {
@@ -1408,11 +1379,11 @@
         }
       },
       {
-        "entry_id": "audit_209a8d0f6b",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_b6bd97cfdb",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:37Z",
+        "timestamp": "2026-04-30T06:46:32Z",
         "source_queried": "ISP-001",
         "chunks_retrieved": [
           {
@@ -1577,11 +1548,11 @@
         }
       },
       {
-        "entry_id": "audit_7e0a25a166",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_df318b1046",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "legal_agent",
         "event_type": "DETERMINATION",
-        "timestamp": "2026-04-30T05:30:39Z",
+        "timestamp": "2026-04-30T06:46:34Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -1606,11 +1577,11 @@
         }
       },
       {
-        "entry_id": "audit_5c9cc37b6d",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_d8c581b834",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-30T05:30:39Z",
+        "timestamp": "2026-04-30T06:46:34Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -1621,11 +1592,11 @@
         }
       },
       {
-        "entry_id": "audit_066aea2779",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_40886c520c",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-30T05:30:39Z",
+        "timestamp": "2026-04-30T06:46:34Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -1636,11 +1607,11 @@
         }
       },
       {
-        "entry_id": "audit_a96a7cb013",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_9d2f0e9f3d",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:39Z",
+        "timestamp": "2026-04-30T06:46:34Z",
         "source_queried": "STEP-02",
         "chunks_retrieved": [
           {
@@ -1679,11 +1650,11 @@
         }
       },
       {
-        "entry_id": "audit_e286682829",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_2952b7a5bf",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:39Z",
+        "timestamp": "2026-04-30T06:46:34Z",
         "source_queried": "STEP-03",
         "chunks_retrieved": [
           {
@@ -1726,11 +1697,11 @@
         }
       },
       {
-        "entry_id": "audit_08a5d67c9f",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_d07ac6b0ca",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:39Z",
+        "timestamp": "2026-04-30T06:46:34Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -1761,11 +1732,11 @@
         }
       },
       {
-        "entry_id": "audit_9fa8a529ec",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_f1a706a469",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:39Z",
+        "timestamp": "2026-04-30T06:46:34Z",
         "source_queried": "PAM-001",
         "chunks_retrieved": [
           {
@@ -2325,11 +2296,11 @@
         }
       },
       {
-        "entry_id": "audit_c58f340177",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_3268ff313e",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:39Z",
+        "timestamp": "2026-04-30T06:46:34Z",
         "source_queried": "PAM-001",
         "chunks_retrieved": [
           {
@@ -2889,11 +2860,11 @@
         }
       },
       {
-        "entry_id": "audit_9f1a8307d7",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_ff4cb05785",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:39Z",
+        "timestamp": "2026-04-30T06:46:34Z",
         "source_queried": "SLK-001",
         "chunks_retrieved": [
           {
@@ -3021,49 +2992,42 @@
         }
       },
       {
-        "entry_id": "audit_04db2ce560",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_24004adf36",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "procurement_agent",
         "event_type": "DETERMINATION",
-        "timestamp": "2026-04-30T05:30:42Z",
+        "timestamp": "2026-04-30T06:46:37Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
           "step_id": "STEP-04",
           "output": {
-            "approval_path": "STANDARD",
-            "fast_track_eligible": false,
+            "approval_path": "FAST_TRACK",
+            "fast_track_eligible": true,
             "required_approvals": [
               {
                 "approver": "Procurement Manager",
                 "domain": "Procurement",
                 "status": "PENDING",
                 "blocker": false,
-                "estimated_completion": "3-5 business days"
+                "estimated_completion": "2-3 business days"
               },
               {
-                "approver": "IT Security (notification)",
-                "domain": "IT Security",
-                "status": "PENDING",
-                "blocker": false,
-                "estimated_completion": "1 business day"
-              },
-              {
-                "approver": "Business Owner (Manager+)",
+                "approver": "Business Owner / Manager",
                 "domain": "Business Operations",
                 "status": "PENDING",
                 "blocker": false,
                 "estimated_completion": "2-3 business days"
               }
             ],
-            "estimated_timeline": "5-8 business days",
+            "estimated_timeline": "3-5 business days",
             "policy_citations": [
               {
                 "source_id": "PAM-001",
                 "version": "2.0",
-                "chunk_id": "PAM-001__row_C-T2",
-                "row_id": "C-T2",
-                "approval_path_condition": "Class C \u2014 Non-regulated Software, Tier T2 integration, STANDARD approval path",
+                "chunk_id": "PAM-001__row_C-T1",
+                "row_id": "C-T1",
+                "approval_path_condition": "Class C vendor, TIER_1 integration, FAST_TRACK eligible path for non-regulated software with no DPA requirement",
                 "citation_class": "PRIMARY"
               }
             ],
@@ -3072,11 +3036,11 @@
         }
       },
       {
-        "entry_id": "audit_04b4644e71",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_a47251f8da",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-30T05:30:42Z",
+        "timestamp": "2026-04-30T06:46:37Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -3087,11 +3051,11 @@
         }
       },
       {
-        "entry_id": "audit_a47e1a7c37",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_643f5a94d4",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-30T05:30:42Z",
+        "timestamp": "2026-04-30T06:46:37Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -3102,11 +3066,11 @@
         }
       },
       {
-        "entry_id": "audit_49fc2ee339",
-        "pipeline_run_id": "run_6a16fea73a",
+        "entry_id": "audit_6325d5a453",
+        "pipeline_run_id": "run_a1e7197536",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-30T05:30:42Z",
+        "timestamp": "2026-04-30T06:46:37Z",
         "source_queried": "PIPELINE_STATE",
         "chunks_retrieved": [
           {

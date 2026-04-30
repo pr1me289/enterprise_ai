@@ -1,0 +1,68 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 37,
+  "scenario": "scenario_2",
+  "step_id": "STEP-02",
+  "determination_key": "step_02_security_classification",
+  "agent_name": "it_security_agent",
+  "pipeline_run_id": "run_13a7f9ffa1",
+  "timestamp_utc": "20260430T064854Z",
+  "parsed_output": {
+    "integration_type_normalized": "DIRECT_API",
+    "integration_tier": "TIER_1",
+    "data_classification": "REGULATED",
+    "eu_personal_data_present": true,
+    "fast_track_eligible": false,
+    "fast_track_rationale": "DISALLOWED_REGULATED_DATA",
+    "security_followup_required": true,
+    "nda_status_from_questionnaire": "PENDING",
+    "required_security_actions": [
+      {
+        "action_type": "FULL_SECURITY_REVIEW",
+        "reason": "TIER_1 (Direct API) integration with REGULATED data (EU personal data confirmed). ISP-001 \u00a712.2 requires CISO + CIO written approval, mandatory penetration test, SOC 2 Type II certification, and quarterly access review for Tier 1 integrations.",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "NDA_EXECUTION",
+        "reason": "NDA status is PENDING. ISP-001 \u00a712.1.4 requires full NDA execution prior to disclosure of RESTRICTED or CONFIDENTIAL information. EU personal data qualifies as RESTRICTED per ISP-001 \u00a75. Onboarding may not proceed to information-exchange phase until NDA execution is confirmed.",
+        "owner": "Procurement"
+      }
+    ],
+    "policy_citations": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12_2",
+        "section_id": "12.2",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_5",
+        "section_id": "5",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12_1_4",
+        "section_id": "12.1.4",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "it_security_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 5.7835226460010745,
+    "input_tokens": 20708,
+    "output_tokens": 578,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

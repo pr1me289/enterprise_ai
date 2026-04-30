@@ -19,67 +19,49 @@
           "domain": "Procurement",
           "status": "PENDING",
           "blocker": false,
-          "estimated_completion": "3-5 business days"
+          "estimated_completion": "2-3 business days"
         },
         {
-          "approver": "IT Security (notification)",
-          "domain": "IT Security",
-          "status": "PENDING",
-          "blocker": false,
-          "estimated_completion": "1 business day"
-        },
-        {
-          "approver": "Business Owner (Manager+)",
+          "approver": "Business Owner / Manager",
           "domain": "Business Operations",
           "status": "PENDING",
           "blocker": false,
           "estimated_completion": "2-3 business days"
         }
       ],
-      "required_security_actions": [
-        {
-          "action_type": "DATA_CLASSIFICATION_REVIEW",
-          "owner": "IT Security",
-          "reason": "Questionnaire self-reported data_classification_self_reported = false, but regulated_data_types list includes Inventory position exports and Demand forecast outputs. Policy requires explicit classification of export fields for TIER_3 integrations per ISP-001 \u00a712.2. This discrepancy must be resolved: either the data is unregulated (and the type list should be clarified as metadata only), or the data is regulated and data_classification must be REGULATED. Confirm vendor's understanding of what data fields will be exported and whether they contain ERP-sensitive or restricted information."
-        },
-        {
-          "action_type": "ENCRYPTION_IN_TRANSIT_VERIFICATION",
-          "owner": "IT Security",
-          "reason": "ISP-001 \u00a712.2 Tier 3 row requires encryption-in-transit for all export-file transfers. Questionnaire confirms SFTP (which supports encryption), but explicit confirmation of encryption settings is required before contract execution."
-        }
-      ],
+      "required_security_actions": [],
       "citations": [
         {
           "source_name": "IT Security Policy",
           "version": "4.2",
           "section": "12.2",
-          "retrieval_timestamp": "2026-04-30T05:30:31Z",
+          "retrieval_timestamp": "2026-04-30T06:46:29Z",
           "agent_id": "it_security_agent"
         },
         {
           "source_name": "IT Security Policy",
           "version": "4.2",
           "section": "5",
-          "retrieval_timestamp": "2026-04-30T05:30:31Z",
+          "retrieval_timestamp": "2026-04-30T06:46:29Z",
           "agent_id": "it_security_agent"
         },
         {
           "source_name": "IT Security Policy",
           "version": "4.2",
           "section": "12.1.4",
-          "retrieval_timestamp": "2026-04-30T05:30:37Z",
+          "retrieval_timestamp": "2026-04-30T06:46:32Z",
           "agent_id": "legal_agent"
         },
         {
           "source_name": "Procurement Approval Matrix",
           "version": "2.0",
-          "section": "C-T2",
-          "retrieval_timestamp": "2026-04-30T05:30:39Z",
+          "section": "C-T1",
+          "retrieval_timestamp": "2026-04-30T06:46:34Z",
           "agent_id": "procurement_agent"
         }
       ],
       "data_classification": "UNREGULATED",
-      "approval_path": "STANDARD"
+      "approval_path": "FAST_TRACK"
     },
     "stakeholder_map": {
       "stakeholder_map": {
@@ -118,25 +100,14 @@
     "domain_outputs": {
       "step_02": {
         "integration_type_normalized": "EXPORT_ONLY",
-        "integration_tier": "TIER_3",
+        "integration_tier": "TIER_1",
         "data_classification": "UNREGULATED",
         "eu_personal_data_present": false,
-        "fast_track_eligible": false,
-        "fast_track_rationale": "DISALLOWED_INTEGRATION_RISK",
-        "security_followup_required": true,
+        "fast_track_eligible": true,
+        "fast_track_rationale": "ELIGIBLE_LOW_RISK",
+        "security_followup_required": false,
         "nda_status_from_questionnaire": "EXECUTED",
-        "required_security_actions": [
-          {
-            "action_type": "DATA_CLASSIFICATION_REVIEW",
-            "reason": "Questionnaire self-reported data_classification_self_reported = false, but regulated_data_types list includes Inventory position exports and Demand forecast outputs. Policy requires explicit classification of export fields for TIER_3 integrations per ISP-001 \u00a712.2. This discrepancy must be resolved: either the data is unregulated (and the type list should be clarified as metadata only), or the data is regulated and data_classification must be REGULATED. Confirm vendor's understanding of what data fields will be exported and whether they contain ERP-sensitive or restricted information.",
-            "owner": "IT Security"
-          },
-          {
-            "action_type": "ENCRYPTION_IN_TRANSIT_VERIFICATION",
-            "reason": "ISP-001 \u00a712.2 Tier 3 row requires encryption-in-transit for all export-file transfers. Questionnaire confirms SFTP (which supports encryption), but explicit confirmation of encryption settings is required before contract execution.",
-            "owner": "IT Security"
-          }
-        ],
+        "required_security_actions": [],
         "policy_citations": [
           {
             "source_id": "ISP-001",
@@ -173,39 +144,32 @@
         "status": "complete"
       },
       "step_04": {
-        "approval_path": "STANDARD",
-        "fast_track_eligible": false,
+        "approval_path": "FAST_TRACK",
+        "fast_track_eligible": true,
         "required_approvals": [
           {
             "approver": "Procurement Manager",
             "domain": "Procurement",
             "status": "PENDING",
             "blocker": false,
-            "estimated_completion": "3-5 business days"
+            "estimated_completion": "2-3 business days"
           },
           {
-            "approver": "IT Security (notification)",
-            "domain": "IT Security",
-            "status": "PENDING",
-            "blocker": false,
-            "estimated_completion": "1 business day"
-          },
-          {
-            "approver": "Business Owner (Manager+)",
+            "approver": "Business Owner / Manager",
             "domain": "Business Operations",
             "status": "PENDING",
             "blocker": false,
             "estimated_completion": "2-3 business days"
           }
         ],
-        "estimated_timeline": "5-8 business days",
+        "estimated_timeline": "3-5 business days",
         "policy_citations": [
           {
             "source_id": "PAM-001",
             "version": "2.0",
-            "chunk_id": "PAM-001__row_C-T2",
-            "row_id": "C-T2",
-            "approval_path_condition": "Class C \u2014 Non-regulated Software, Tier T2 integration, STANDARD approval path",
+            "chunk_id": "PAM-001__row_C-T1",
+            "row_id": "C-T1",
+            "approval_path_condition": "Class C vendor, TIER_1 integration, FAST_TRACK eligible path for non-regulated software with no DPA requirement",
             "citation_class": "PRIMARY"
           }
         ],

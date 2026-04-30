@@ -628,11 +628,8 @@
       "integration_details.erp_type": "EXPORT_ONLY",
       "integration_details.erp_system": "SAP S/4HANA",
       "integration_details.integration_description": "Scheduled export-only transfer over SFTP. No service account and no persistent ERP session.",
-      "data_classification_self_reported": false,
-      "regulated_data_types": [
-        "Inventory position exports",
-        "Demand forecast outputs"
-      ],
+      "data_classification_self_reported": "NON_REGULATED",
+      "regulated_data_types": [],
       "eu_personal_data_flag": false,
       "data_subjects_eu": false,
       "existing_nda_status": "EXECUTED"

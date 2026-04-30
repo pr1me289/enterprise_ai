@@ -91,6 +91,10 @@
     ]
   },
   "data_handling": {
+    "data_classification_self_reported": "REGULATED",
+    "regulated_data_types": [
+      "EU employee personal data (shift schedules, employee identifiers, EU-based facility staff)"
+    ],
     "data_categories_in_scope": [
       "Production order and manufacturing schedule data (SAP S/4HANA exports)",
       "MRP outputs and inventory position records (SAP S/4HANA exports)",

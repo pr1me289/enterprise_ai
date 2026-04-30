@@ -282,6 +282,14 @@ def scenario_escalated_step4_demo_questionnaire_overrides() -> dict[str, Any]:
             }
         },
         "data_handling": {
+            # Regulated profile but no EU personal data — override the canonical
+            # EU-flavored regulated_data_types so the agent doesn't see a stale
+            # EU mention alongside eu_personal_data_flag=false.
+            "data_classification_self_reported": "REGULATED",
+            "regulated_data_types": [
+                "ERP transactional data (production orders, MRP outputs)",
+                "Inventory position records",
+            ],
             "personal_data_in_scope": False,
             "data_categories_in_scope": [
                 "ERP transactional data (production orders, MRP outputs)",
@@ -327,6 +335,14 @@ def scenario_blocked_demo_questionnaire_overrides() -> dict[str, Any]:
             }
         },
         "data_handling": {
+            # Regulated profile but no EU personal data — override the canonical
+            # EU-flavored regulated_data_types so the agent doesn't see a stale
+            # EU mention alongside eu_personal_data_flag=false.
+            "data_classification_self_reported": "REGULATED",
+            "regulated_data_types": [
+                "ERP transactional data (production orders, MRP outputs)",
+                "Inventory position records",
+            ],
             "personal_data_in_scope": False,
             "data_categories_in_scope": [
                 "ERP transactional data (production orders, MRP outputs)",

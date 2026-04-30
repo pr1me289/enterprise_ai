@@ -40,8 +40,8 @@ class Step01IntakeHandler(BaseStepHandler):
                 field_map={
                     "vendor_name": ("vendor_profile.vendor_legal_name",),
                     "integration_details.erp_type": ("product_and_integration.erp_integration.erp_type",),
-                    "data_classification_self_reported": ("data_handling.personal_data_in_scope",),
-                    "regulated_data_types": ("data_handling.data_categories_in_scope",),
+                    "data_classification_self_reported": ("data_handling.data_classification_self_reported",),
+                    "regulated_data_types": ("data_handling.regulated_data_types",),
                     "eu_personal_data_flag": ("data_handling.data_subjects.eu_personal_data_flag",),
                     "data_subjects_eu": ("data_handling.data_subjects.data_subjects_eu",),
                     "existing_nda_status": ("legal_and_contractual_status.existing_nda_status",),

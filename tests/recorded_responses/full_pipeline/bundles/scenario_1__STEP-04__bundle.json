@@ -1293,9 +1293,9 @@
     ],
     "it_security_output": {
       "data_classification": "UNREGULATED",
-      "fast_track_eligible": false,
-      "integration_tier": "TIER_3",
-      "security_followup_required": true,
+      "fast_track_eligible": true,
+      "integration_tier": "TIER_1",
+      "security_followup_required": false,
       "policy_citations": [
         {
           "source_id": "ISP-001",

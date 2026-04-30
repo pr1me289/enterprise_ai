@@ -628,11 +628,10 @@
       "integration_details.erp_type": "DIRECT_API",
       "integration_details.erp_system": "SAP S/4HANA",
       "integration_details.integration_description": "Direct API integration to SAP S/4HANA. Vendor establishes a persistent authenticated session via OAuth client credentials and pulls production order, MRP, and inventory data over the SAP OData API on a scheduled interval. No middleware layer. No EU personal data in scope; US manufacturing operational data only.",
-      "data_classification_self_reported": false,
+      "data_classification_self_reported": "REGULATED",
       "regulated_data_types": [
         "ERP transactional data (production orders, MRP outputs)",
-        "Inventory position records",
-        "Production scheduling data"
+        "Inventory position records"
       ],
       "eu_personal_data_flag": false,
       "data_subjects_eu": false,

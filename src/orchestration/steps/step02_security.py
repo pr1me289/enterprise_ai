@@ -40,8 +40,15 @@ class Step02SecurityHandler(BaseStepHandler):
                     access_role=self.definition.access_role,
                     output_name="classification_inputs",
                     field_map={
-                        "data_classification_self_reported": ("data_handling.personal_data_in_scope",),
-                        "regulated_data_types": ("data_handling.data_categories_in_scope",),
+                        # Both fields are read from semantically-matched canonical paths.
+                        # Earlier mapping pointed at `personal_data_in_scope` (boolean —
+                        # is personal data in scope) and `data_categories_in_scope` (broad
+                        # list of all categories), which silently conflated different
+                        # concepts and made the agent see contradictory inputs (e.g.
+                        # `data_classification_self_reported = false` AND a populated
+                        # `regulated_data_types` list of routine, non-regulated categories).
+                        "data_classification_self_reported": ("data_handling.data_classification_self_reported",),
+                        "regulated_data_types": ("data_handling.regulated_data_types",),
                     },
                 ),
                 state=state,
