@@ -6,6 +6,10 @@ This project demonstrates how to build an AI workflow that doesn't treat all ent
 
 The reference scenario is an AI-assisted vendor onboarding pipeline at a fictional manufacturer ("Lichen Manufacturing"), evaluating a fictional vendor ("OptiChain"). Six sequential agent steps decide whether the vendor passes intake, what data classification applies, whether a DPA is required, what approval path the procurement team should follow, and what guidance to surface to stakeholders.
 
+Link to the narrative web-app presentation: [https://www.piercenellessen.com](https://www.piercenellessen.com)
+
+Github repo for the web-app: [https://github.com/pr1me289/web-app-enterprise-ai](https://github.com/pr1me289/web-app-enterprise-ai)
+
 ---
 
 ## Table of contents
