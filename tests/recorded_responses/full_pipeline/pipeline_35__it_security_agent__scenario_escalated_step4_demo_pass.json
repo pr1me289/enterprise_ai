@@ -1,0 +1,59 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 35,
+  "scenario": "scenario_escalated_step4_demo",
+  "step_id": "STEP-02",
+  "determination_key": "step_02_security_classification",
+  "agent_name": "it_security_agent",
+  "pipeline_run_id": "run_5cac0af317",
+  "timestamp_utc": "20260430T063434Z",
+  "parsed_output": {
+    "integration_type_normalized": "DIRECT_API",
+    "integration_tier": "TIER_1",
+    "data_classification": "UNREGULATED",
+    "eu_personal_data_present": false,
+    "fast_track_eligible": false,
+    "fast_track_rationale": "DISALLOWED_INTEGRATION_RISK",
+    "security_followup_required": true,
+    "nda_status_from_questionnaire": "EXECUTED",
+    "required_security_actions": [
+      {
+        "action_type": "FULL_SECURITY_REVIEW",
+        "reason": "TIER_1 Direct API integration requires CISO + CIO written approval, mandatory penetration test, SOC 2 Type II certification, and quarterly access review per ISP-001 \u00a712.2",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "PENETRATION_TEST",
+        "reason": "Mandatory for TIER_1 Direct API connections to SAP S/4HANA per ISP-001 \u00a712.2 Additional Requirements",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "SOC2_VALIDATION",
+        "reason": "SOC 2 Type II certification required for TIER_1 Direct API access per ISP-001 \u00a712.2",
+        "owner": "Procurement / Vendor Management"
+      }
+    ],
+    "policy_citations": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12",
+        "section_id": "12.2",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "it_security_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 30.590323623997392,
+    "input_tokens": 26517,
+    "output_tokens": 450,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

@@ -311,7 +311,7 @@
       "ISP-001"
     ],
     "security_output": {
-      "data_classification": "REGULATED",
+      "data_classification": "UNREGULATED",
       "status": "complete",
       "policy_citations": [
         {
@@ -319,13 +319,6 @@
           "version": "4.2",
           "chunk_id": "ISP-001__section_12",
           "section_id": "12.2",
-          "citation_class": "PRIMARY"
-        },
-        {
-          "source_id": "ISP-001",
-          "version": "4.2",
-          "chunk_id": "ISP-001__section_5",
-          "section_id": "5",
           "citation_class": "PRIMARY"
         }
       ]

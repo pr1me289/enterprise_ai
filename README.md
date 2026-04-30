@@ -1,6 +1,6 @@
 # Spec-Driven Enterprise Context Engineering
 
-> A Python reference pipeline for **governed enterprise AI** — turning heterogeneous source material into auditable, permission-aware, citation-complete evidence bundles for downstream LLM agents.
+> A Python-built pipeline for **governed enterprise AI** — turning heterogeneous source material into auditable, permission-aware, citation-complete evidence bundles for downstream LLM agents.
 
 This project demonstrates how to build an AI workflow that doesn't treat all enterprise data the same. Instead of a single undifferentiated vector search, it routes each source through the correct retrieval lane (indexed-hybrid, direct-structured, or non-retrieval), preserves authority hierarchies, enforces per-agent permissions, and produces an audit log of every retrieval and determination.
 
