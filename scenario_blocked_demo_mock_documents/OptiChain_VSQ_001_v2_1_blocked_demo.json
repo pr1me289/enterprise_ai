@@ -1,0 +1,104 @@
+{
+  "submission_id": "VSQ-PRQ-2024-0047-v2.1",
+  "submission_version": 1,
+  "submission_timestamp": "2024-03-04T17:42:00Z",
+  "procurement_reference": "PRQ-2024-0047",
+  "questionnaire_version": "VSQ-001 v2.1",
+  "submission_method": "Lichen Vendor Portal",
+
+  "vendor_profile": {
+    "vendor_name": "OptiChain, Inc.",
+    "vendor_legal_name": "OptiChain, Inc.",
+    "vendor_primary_contact": "Jordan Leví",
+    "vendor_contact_title": "Director of Enterprise Sales",
+    "vendor_contact_email": "j.levi@optichain.io",
+    "vendor_contact_phone": "+1 (415) 882-4401",
+    "vendor_registered_address": "340 Pine Street, Suite 800, San Francisco, CA 94104, USA",
+    "vendor_operating_jurisdiction": "United States (Delaware incorporation)",
+    "vendor_founded": 2018,
+    "vendor_enterprise_customers": 47,
+    "subsidiaries_involved": false,
+    "pending_litigation": false,
+    "lichen_internal_sponsor": "Petra Horak, VP Operations"
+  },
+
+  "contract": {
+    "contract_value_annual": 210000,
+    "contract_value_total": 675000,
+    "contract_term_months": 36,
+    "implementation_fee": 45000,
+    "renewal_options": "annual",
+    "solution_proposed": "OptiChain Demand Intelligence Platform — Enterprise Demand Forecasting module with direct ERP integration"
+  },
+
+  "integration_details": {
+    "erp_type": "DIRECT_API",
+    "erp_system": "SAP S/4HANA",
+    "integration_description": "Direct API integration to SAP S/4HANA. Vendor establishes a persistent authenticated session via OAuth client credentials and pulls production order, MRP, and inventory data over the SAP OData API on a scheduled interval. No middleware layer. No EU personal data in scope; US manufacturing operational data only.",
+    "other_systems_required": false,
+    "other_systems_list": []
+  },
+
+  "data_classification_self_reported": "REGULATED",
+  "regulated_data_types": [
+    "ERP transactional data (production orders, MRP outputs)",
+    "Inventory position records",
+    "Production scheduling data"
+  ],
+  "eu_personal_data_flag": "NO",
+  "data_subjects_eu": "NONE",
+  "personal_data_in_scope": false,
+  "personal_data_categories": [],
+  "data_transfer_outside_eea": false,
+  "data_retention_months": 3,
+  "data_used_for_model_training": false,
+
+  "deployment": {
+    "deployment_model": "SaaS",
+    "hosting_provider": "AWS",
+    "primary_region": "us-east-1",
+    "eu_data_residency_required": false,
+    "multi_tenant": true,
+    "tenant_isolation": "logical"
+  },
+
+  "sub_processors": [
+    { "name": "Amazon Web Services, Inc.", "purpose": "Cloud infrastructure and hosting", "regions": ["us-east-1"], "handles_lichen_data": true },
+    { "name": "Snowflake Inc.", "purpose": "Data warehousing and analytics layer", "handles_lichen_data": true },
+    { "name": "Datadog, Inc.", "purpose": "Platform monitoring and observability", "handles_lichen_data": true },
+    { "name": "Stripe, Inc.", "purpose": "Billing and payment processing", "handles_lichen_data": false }
+  ],
+
+  "security_attestations": {
+    "soc2_type2": true,
+    "soc2_period": "2023-04-01 to 2024-03-31",
+    "soc2_auditor": "Deloitte & Touche LLP",
+    "soc2_opinion": "unqualified",
+    "iso27001": false,
+    "iso27001_target": "Q4 2024",
+    "pci_dss": false,
+    "mfa_enforced": true,
+    "encryption_at_rest": "AES-256",
+    "encryption_in_transit": "TLS 1.2 minimum",
+    "pentest_last_completed": "2023-11",
+    "pentest_vendor": "NCC Group",
+    "breach_notification_hours": 24,
+    "security_incidents_24mo": false
+  },
+
+  "existing_nda_status": "EXECUTED",
+  "nda_execution_date": "2024-01-15",
+  "existing_dpa_status": "NOT_REQUIRED",
+  "existing_msa": "YES",
+  "prior_engagement_reference": "PRQ-2023-0031",
+  "prior_engagement_status": "CLOSED_SUCCESSFULLY",
+  "prior_engagement_closed": "2023-Q3",
+
+  "vendor_class": "Class A — Enterprise Platform",
+  "vendor_attestation": {
+    "attested_by": "Jordan Leví",
+    "attested_title": "Director of Enterprise Sales",
+    "attestation_date": "2024-03-04",
+    "attestation_accurate": true
+  }
+}

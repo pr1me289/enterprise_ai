@@ -1,0 +1,4 @@
+Class,Tier,Approval Path,IT Security Review,Legal / DPA Review,Procurement Review,Business Owner Sign-off,Fast-Track Eligible?,Required Approvals / Notes
+A,T1,STANDARD,Required,Required,Required,Director+,NOT ELIGIBLE,CISO awareness notification required. DPA executed before implementation begins.
+B,T1,STANDARD,Required,Required,Required,Manager+,CONDITIONAL,DPA required if personal data in scope. Confirm data subject categories and legal basis before execution.
+C,T1,FAST_TRACK,Notification only,Not required,Required,Manager+,ELIGIBLE,"No DPA required. Standard NDA / confidentiality provisions apply. IT Security notification for any system integration, even if non-regulated."

@@ -1,0 +1,21 @@
+Class,Tier,Approval Path,IT Security Review,Legal / DPA Review,Procurement Review,Business Owner Sign-off,Fast-Track Eligible?,Required Approvals / Notes
+A,T1,STANDARD,Required,Required,Required,Director+,NOT ELIGIBLE,CISO awareness notification required. DPA executed before implementation begins.
+A,T2,STANDARD,Required,Required,Required,VP+,NOT ELIGIBLE,CISO awareness required. DPA executed before implementation. ERP integration tier must be formally assigned per ISP-001 §12.2 before integration activity begins.
+A,T3,STANDARD — ENHANCED,Required + CISO Sign-off,Required + GC Sign-off,Required + CPO Sign-off,VP + SVP,NOT ELIGIBLE,CISO and General Counsel must co-sign approval memo. DPA required. ERP tier assignment mandatory. Architecture review by IT Security before integration.
+A,T4,EXECUTIVE APPROVAL,Required + CISO Sign-off,Required + GC Sign-off,Required + CPO Sign-off,EVP + CFO,NOT ELIGIBLE,Full executive approval package required. Board notification if vendor will have persistent production system access. DPA required. Legal contract review mandatory.
+B,T1,STANDARD,Required,Required,Required,Manager+,CONDITIONAL,DPA required if personal data in scope. Confirm data subject categories and legal basis before execution.
+B,T2,STANDARD,Required,Required,Required,Director+,NOT ELIGIBLE,DPA required. SOC 2 Type II or ISO 27001 attestation required for vendors handling RESTRICTED data per ISP-001 §12.1.3. NDA must be confirmed executed before information exchange.
+B,T3,STANDARD — ENHANCED,Required + CISO Awareness,Required + GC Awareness,Required + CPO Sign-off,VP+,NOT ELIGIBLE,DPA required. Enhanced security review. VP business owner sign-off on data classification memo.
+B,T4,EXECUTIVE APPROVAL,Required + CISO Sign-off,Required + GC Sign-off,Required + CPO Sign-off,EVP + CFO,NOT ELIGIBLE,Executive approval package. DPA required. Legal contract review mandatory.
+C,T1,FAST_TRACK,Notification only,Not required,Required,Manager+,ELIGIBLE,"No DPA required. Standard NDA / confidentiality provisions apply. IT Security notification for any system integration, even if non-regulated."
+C,T2,STANDARD,Required,Not required,Required,Director+,CONDITIONAL,No DPA required unless personal data is inadvertently in scope — confirm at intake. Standard NDA applies.
+C,T3,STANDARD,Required,Not required,Required + CPO Sign-off,VP+,NOT ELIGIBLE,IT Security review required despite non-regulated classification. VP sign-off required at T3 regardless of data scope.
+C,T4,EXECUTIVE APPROVAL,Required + CISO Awareness,Required,Required + CPO Sign-off,EVP,NOT ELIGIBLE,Executive approval required. Legal must review at T4 regardless of data classification.
+D,T1,STANDARD,Required,Conditional,Required,Manager+,NOT ELIGIBLE,IT Security review required for all technology professional services where personnel will have system access. DPA required if personal data accessed.
+D,T2,STANDARD,Required,Required,Required,Director+,NOT ELIGIBLE,DPA required if regulated data accessed. Background check requirements for personnel with RESTRICTED data access apply per ISP-001 §6.3.
+D,T3,STANDARD — ENHANCED,Required + CISO Sign-off,Required,Required + CPO Sign-off,VP+,NOT ELIGIBLE,CISO sign-off on personnel access scope. DPA required. Enhanced ISP-001 §12 compliance verification.
+D,T4,EXECUTIVE APPROVAL,Required + CISO Sign-off,Required + GC Sign-off,Required + CPO Sign-off,EVP + CFO,NOT ELIGIBLE,Full executive package. All personnel with production access individually vetted by IT Security.
+E,T1,FAST_TRACK,Not required,Not required,Required,Manager+,ELIGIBLE,Standard NDA / confidentiality provisions apply. No system access; no data handling review required.
+E,T2,FAST_TRACK,Not required,Not required,Required,Director+,ELIGIBLE,Standard NDA applies. Procurement confirms no system access and no regulated data in scope before streamlined path is confirmed.
+E,T3,STANDARD,Notification only,Not required,Required + CPO Sign-off,VP+,CONDITIONAL,VP sign-off required at T3 threshold regardless of engagement type.
+E,T4,EXECUTIVE APPROVAL,Required,Required,Required + CPO Sign-off,EVP,NOT ELIGIBLE,Executive approval required at T4 regardless of engagement type.

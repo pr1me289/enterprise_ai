@@ -1,0 +1,122 @@
+[
+  {
+    "chunk_id": "SLK-001__thread_T1",
+    "text": "channel: #vendor-eval-optichain\nP. Horak [2024-02-27T09:14:00Z]: Hey team \u2014 just a heads up that we've received OptiChain's formal questionnaire submission through the vendor portal. Procurement has it and IT Security and Legal are being looped in this week. Given that this is a renewal-adjacent engagement with an existing vendor relationship from last year, I'm hoping the review is relatively quick. @M. Osei can you confirm receipt and next steps?\nM. Osei [2024-02-27T09:31:00Z]: Confirmed \u2014 questionnaire received, logged as PRQ-2024-0047, review initiated. First read looks clean \u2014 they're proposing the export-only module, no direct ERP integration, no personal data. I'll send the formal kickoff note to IT Security and Legal today.\nT. Kowalski [2024-02-27T10:08:00Z]: Quick question \u2014 do we know yet how they're actually connecting to SAP? I had a call with their sales team last week and got the impression it's just nightly exports, no persistent connection into the system at all.\nD. Achterberg [2024-02-27T10:33:00Z]: That's consistent with what the questionnaire says in Q2.2 \u2014 they explicitly describe export-only file-based transfers over HTTPS with no persistent session and no service account credentials on their side. That's a clean Tier 3 under ISP-001 \u00a712.2. I'll confirm formally once I've reviewed the full submission but the integration pattern is clear from their answer.\nT. Kowalski [2024-02-27T10:41:00Z]: Good \u2014 that should make the security side pretty clean then. No architecture diagram request needed this time?\nD. Achterberg [2024-02-27T10:49:00Z]: No. Their Q2.2 answer is unambiguous \u2014 export-only, Lichen initiates, no vendor-side credentials, HTTPS transmission. The ISP-001 \u00a712.2 Tier 3 criteria are satisfied from the questionnaire alone. I'll document the formal tier assignment in the onboarding record.\nM. Osei [2024-02-27T11:02:00Z]: Great. I'll log ERP integration tier as Tier 3 confirmed pending D. Achterberg's formal sign-off. No PROVISIONAL status needed on the integration question.\nP. Horak [2024-02-27T11:15:00Z]: Sounds like a much cleaner run than we sometimes get with new platforms. Let's keep it moving \u2014 I want this wrapped up inside two weeks.",
+    "metadata": {
+      "chunk_id": "SLK-001__thread_T1",
+      "source_id": "SLK-001",
+      "source_name": "Slack / Meeting Thread Notes",
+      "source_type": "SLACK_THREAD",
+      "authority_tier": 3,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "Export at init.",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "allowed_agents_str": "|procurement|",
+      "is_primary_citable": false,
+      "manifest_status": "CONFIRMED",
+      "section_id": null,
+      "row_id": null,
+      "record_id": null,
+      "thread_id": "T1",
+      "domain_scope": null,
+      "text": "channel: #vendor-eval-optichain\nP. Horak [2024-02-27T09:14:00Z]: Hey team \u2014 just a heads up that we've received OptiChain's formal questionnaire submission through the vendor portal. Procurement has it and IT Security and Legal are being looped in this week. Given that this is a renewal-adjacent engagement with an existing vendor relationship from last year, I'm hoping the review is relatively quick. @M. Osei can you confirm receipt and next steps?\nM. Osei [2024-02-27T09:31:00Z]: Confirmed \u2014 questionnaire received, logged as PRQ-2024-0047, review initiated. First read looks clean \u2014 they're proposing the export-only module, no direct ERP integration, no personal data. I'll send the formal kickoff note to IT Security and Legal today.\nT. Kowalski [2024-02-27T10:08:00Z]: Quick question \u2014 do we know yet how they're actually connecting to SAP? I had a call with their sales team last week and got the impression it's just nightly exports, no persistent connection into the system at all.\nD. Achterberg [2024-02-27T10:33:00Z]: That's consistent with what the questionnaire says in Q2.2 \u2014 they explicitly describe export-only file-based transfers over HTTPS with no persistent session and no service account credentials on their side. That's a clean Tier 3 under ISP-001 \u00a712.2. I'll confirm formally once I've reviewed the full submission but the integration pattern is clear from their answer.\nT. Kowalski [2024-02-27T10:41:00Z]: Good \u2014 that should make the security side pretty clean then. No architecture diagram request needed this time?\nD. Achterberg [2024-02-27T10:49:00Z]: No. Their Q2.2 answer is unambiguous \u2014 export-only, Lichen initiates, no vendor-side credentials, HTTPS transmission. The ISP-001 \u00a712.2 Tier 3 criteria are satisfied from the questionnaire alone. I'll document the formal tier assignment in the onboarding record.\nM. Osei [2024-02-27T11:02:00Z]: Great. I'll log ERP integration tier as Tier 3 confirmed pending D. Achterberg's formal sign-off. No PROVISIONAL status needed on the integration question.\nP. Horak [2024-02-27T11:15:00Z]: Sounds like a much cleaner run than we sometimes get with new platforms. Let's keep it moving \u2014 I want this wrapped up inside two weeks.",
+      "citation_label": "SLK-001 thread T1",
+      "chunk_type": "THREAD",
+      "chunk_order": 1
+    }
+  },
+  {
+    "chunk_id": "SLK-001__thread_T2",
+    "text": "channel: #procurement-ops\nM. Osei [2024-03-04T08:47:00Z]: OptiChain questionnaire just came in through the portal \u2014 PRQ-2024-0047. Starting my review now. One thing to confirm: NDA status. Their Q5.1 says fully executed January 15, 2024. Can Legal confirm that's in our contract records?\nR. Lim [2024-03-04T09:05:00Z]: Confirmed. Executed mutual NDA with OptiChain, Inc. on file \u2014 signed January 15, 2024. No issues there. ISP-001 \u00a712.1.4 is satisfied. Information-exchange phase is clear.\nM. Osei [2024-03-04T09:12:00Z]: Perfect. Also checking Q5.2 \u2014 they reference a prior MSA from PRQ-2023-0031. Can you confirm that engagement closed cleanly?\nR. Lim [2024-03-04T09:24:00Z]: Yes, PRQ-2023-0031 closed Q3 2023 with no open items, no compliance flags, no outstanding obligations. The MSA is on file. This satisfies the prior relationship requirement for fast-track consideration under the procurement matrix.\nM. Osei [2024-03-04T09:31:00Z]: Great. Logging NDA status as EXECUTED and prior relationship as CONFIRMED in the onboarding record. No blockers on the legal/contractual side.\nP. Horak [2024-03-04T10:05:00Z]: Thanks both \u2014 clean on the legal side then. @M. Osei let me know when you have the classification memo ready. I want to make sure the fast-track path is formally documented before we loop in the business owner for sign-off.",
+    "metadata": {
+      "chunk_id": "SLK-001__thread_T2",
+      "source_id": "SLK-001",
+      "source_name": "Slack / Meeting Thread Notes",
+      "source_type": "SLACK_THREAD",
+      "authority_tier": 3,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "Export at init.",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "allowed_agents_str": "|procurement|",
+      "is_primary_citable": false,
+      "manifest_status": "CONFIRMED",
+      "section_id": null,
+      "row_id": null,
+      "record_id": null,
+      "thread_id": "T2",
+      "domain_scope": null,
+      "text": "channel: #procurement-ops\nM. Osei [2024-03-04T08:47:00Z]: OptiChain questionnaire just came in through the portal \u2014 PRQ-2024-0047. Starting my review now. One thing to confirm: NDA status. Their Q5.1 says fully executed January 15, 2024. Can Legal confirm that's in our contract records?\nR. Lim [2024-03-04T09:05:00Z]: Confirmed. Executed mutual NDA with OptiChain, Inc. on file \u2014 signed January 15, 2024. No issues there. ISP-001 \u00a712.1.4 is satisfied. Information-exchange phase is clear.\nM. Osei [2024-03-04T09:12:00Z]: Perfect. Also checking Q5.2 \u2014 they reference a prior MSA from PRQ-2023-0031. Can you confirm that engagement closed cleanly?\nR. Lim [2024-03-04T09:24:00Z]: Yes, PRQ-2023-0031 closed Q3 2023 with no open items, no compliance flags, no outstanding obligations. The MSA is on file. This satisfies the prior relationship requirement for fast-track consideration under the procurement matrix.\nM. Osei [2024-03-04T09:31:00Z]: Great. Logging NDA status as EXECUTED and prior relationship as CONFIRMED in the onboarding record. No blockers on the legal/contractual side.\nP. Horak [2024-03-04T10:05:00Z]: Thanks both \u2014 clean on the legal side then. @M. Osei let me know when you have the classification memo ready. I want to make sure the fast-track path is formally documented before we loop in the business owner for sign-off.",
+      "citation_label": "SLK-001 thread T2",
+      "chunk_type": "THREAD",
+      "chunk_order": 2
+    }
+  },
+  {
+    "chunk_id": "SLK-001__thread_T3",
+    "text": "channel: #optichain-review-notes\nM. Osei [2024-03-05T15:15:00Z]: Posting the notes from today's OptiChain review kickoff (30 min call, attendees: P. Horak, D. Achterberg, R. Lim, M. Osei): Status: Questionnaire received, review complete. No blocking items identified. Summary: ERP integration \u2014 confirmed Tier 3 / export-only per ISP-001 \u00a712.2. No architecture documentation required. Data classification \u2014 UNREGULATED. No regulated data, no personal data, no EU employee data in scope. DPA \u2014 not required. No DPA trigger rows apply. NDA \u2014 fully executed January 15, 2024. Prior relationship \u2014 PRQ-2023-0031 closed cleanly Q3 2023. Vendor class \u2014 Class C (non-regulated software). Contract value \u2014 $45K TCV / T1. Approval path \u2014 FAST_TRACK eligible. Next steps: D. Achterberg to issue formal Tier 3 sign-off to Procurement by EOD. M. Osei to issue Procurement Classification Memo. Manager-level sign-off to close the run.\nD. Achterberg [2024-03-05T15:27:00Z]: Formal Tier 3 confirmation sent to @M. Osei \u2014 documented in the onboarding record. No security follow-up items.\nR. Lim [2024-03-05T15:33:00Z]: Legal confirmation issued \u2014 no DPA required, NDA confirmed, no legal blockers. Fast-track path is clear from our side.\nM. Osei [2024-03-05T15:40:00Z]: Classification memo drafted and being routed for Manager sign-off. Logging overall onboarding status as COMPLETE pending final Manager approval. Fastest run we've had in a while.\nP. Horak [2024-03-05T15:55:00Z]: Great work everyone. I'll get the Manager sign-off from Operations by end of week. Once that's confirmed we can notify OptiChain and kick off onboarding. Good example of the process working the way it's supposed to.",
+    "metadata": {
+      "chunk_id": "SLK-001__thread_T3",
+      "source_id": "SLK-001",
+      "source_name": "Slack / Meeting Thread Notes",
+      "source_type": "SLACK_THREAD",
+      "authority_tier": 3,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "Export at init.",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "allowed_agents_str": "|procurement|",
+      "is_primary_citable": false,
+      "manifest_status": "CONFIRMED",
+      "section_id": null,
+      "row_id": null,
+      "record_id": null,
+      "thread_id": "T3",
+      "domain_scope": null,
+      "text": "channel: #optichain-review-notes\nM. Osei [2024-03-05T15:15:00Z]: Posting the notes from today's OptiChain review kickoff (30 min call, attendees: P. Horak, D. Achterberg, R. Lim, M. Osei): Status: Questionnaire received, review complete. No blocking items identified. Summary: ERP integration \u2014 confirmed Tier 3 / export-only per ISP-001 \u00a712.2. No architecture documentation required. Data classification \u2014 UNREGULATED. No regulated data, no personal data, no EU employee data in scope. DPA \u2014 not required. No DPA trigger rows apply. NDA \u2014 fully executed January 15, 2024. Prior relationship \u2014 PRQ-2023-0031 closed cleanly Q3 2023. Vendor class \u2014 Class C (non-regulated software). Contract value \u2014 $45K TCV / T1. Approval path \u2014 FAST_TRACK eligible. Next steps: D. Achterberg to issue formal Tier 3 sign-off to Procurement by EOD. M. Osei to issue Procurement Classification Memo. Manager-level sign-off to close the run.\nD. Achterberg [2024-03-05T15:27:00Z]: Formal Tier 3 confirmation sent to @M. Osei \u2014 documented in the onboarding record. No security follow-up items.\nR. Lim [2024-03-05T15:33:00Z]: Legal confirmation issued \u2014 no DPA required, NDA confirmed, no legal blockers. Fast-track path is clear from our side.\nM. Osei [2024-03-05T15:40:00Z]: Classification memo drafted and being routed for Manager sign-off. Logging overall onboarding status as COMPLETE pending final Manager approval. Fastest run we've had in a while.\nP. Horak [2024-03-05T15:55:00Z]: Great work everyone. I'll get the Manager sign-off from Operations by end of week. Once that's confirmed we can notify OptiChain and kick off onboarding. Good example of the process working the way it's supposed to.",
+      "citation_label": "SLK-001 thread T3",
+      "chunk_type": "THREAD",
+      "chunk_order": 3
+    }
+  },
+  {
+    "chunk_id": "SLK-001__thread_T4",
+    "text": "channel: #facilities-ops\nC. Oduya [2024-03-05T10:05:00Z]: Heads up \u2014 we're kicking off the onboarding process for Greenbrook Catering Services for the Dortmund facility cafeteria contract (PRQ-2024-0051). They're replacing Compass Group effective May 1. Contract value is about \u20ac48,000 annually. No data or system access required, just a facilities services agreement.\nN. Papadopoulos [2024-03-05T10:18:00Z]: Does this need to go through the full vendor approval process or is there a lighter-weight path for facilities vendors?\nC. Oduya [2024-03-05T10:31:00Z]: Class E, Tier 1 \u2014 so it's the FAST_TRACK path. No IT Security review required, no DPA, just standard NDA and Procurement sign-off at Manager level. Should be done in a few days.\nN. Papadopoulos [2024-03-05T10:39:00Z]: Perfect, and I assume no ERP integration or data access for a catering vendor?\nC. Oduya [2024-03-05T10:44:00Z]: Correct \u2014 zero system access. They're providing catering services only. The only thing we're sharing with them is the headcount by facility for meal planning, which is aggregate non-personal data. No DPA needed.\nC. Oduya [2024-03-05T11:02:00Z]: NDA is already drafted, sending to Greenbrook today. Should have this wrapped up by end of week. I'll post the final approval confirmation here once it's done.",
+    "metadata": {
+      "chunk_id": "SLK-001__thread_T4",
+      "source_id": "SLK-001",
+      "source_name": "Slack / Meeting Thread Notes",
+      "source_type": "SLACK_THREAD",
+      "authority_tier": 3,
+      "retrieval_lane": "INDEXED_HYBRID",
+      "version": "Export at init.",
+      "document_date": "2026-04-04",
+      "freshness_status": "CURRENT",
+      "allowed_agents": [
+        "procurement"
+      ],
+      "allowed_agents_str": "|procurement|",
+      "is_primary_citable": false,
+      "manifest_status": "CONFIRMED",
+      "section_id": null,
+      "row_id": null,
+      "record_id": null,
+      "thread_id": "T4",
+      "domain_scope": null,
+      "text": "channel: #facilities-ops\nC. Oduya [2024-03-05T10:05:00Z]: Heads up \u2014 we're kicking off the onboarding process for Greenbrook Catering Services for the Dortmund facility cafeteria contract (PRQ-2024-0051). They're replacing Compass Group effective May 1. Contract value is about \u20ac48,000 annually. No data or system access required, just a facilities services agreement.\nN. Papadopoulos [2024-03-05T10:18:00Z]: Does this need to go through the full vendor approval process or is there a lighter-weight path for facilities vendors?\nC. Oduya [2024-03-05T10:31:00Z]: Class E, Tier 1 \u2014 so it's the FAST_TRACK path. No IT Security review required, no DPA, just standard NDA and Procurement sign-off at Manager level. Should be done in a few days.\nN. Papadopoulos [2024-03-05T10:39:00Z]: Perfect, and I assume no ERP integration or data access for a catering vendor?\nC. Oduya [2024-03-05T10:44:00Z]: Correct \u2014 zero system access. They're providing catering services only. The only thing we're sharing with them is the headcount by facility for meal planning, which is aggregate non-personal data. No DPA needed.\nC. Oduya [2024-03-05T11:02:00Z]: NDA is already drafted, sending to Greenbrook today. Should have this wrapped up by end of week. I'll post the final approval confirmation here once it's done.",
+      "citation_label": "SLK-001 thread T4",
+      "chunk_type": "THREAD",
+      "chunk_order": 4
+    }
+  }
+]

@@ -8,6 +8,8 @@ from pathlib import Path
 SCENARIO_DIRS: dict[str, str] = {
     "scenario_1": "scenario_1_mock_documents",
     "scenario_2": "scenario_2_mock_documents",
+    "scenario_blocked_demo": "scenario_blocked_demo_mock_documents",
+    "scenario_escalated_step4_demo": "scenario_escalated_step4_demo_mock_documents",
 }
 
 
@@ -26,6 +28,22 @@ SCENARIO_SOURCE_CANDIDATES: dict[str, dict[str, tuple[str, ...]]] = {
         "procurement_matrix": ("Procurement_Approval_Matrix_v2_0.xlsx", "Procurement_Approval_Matrix_v2_0.csv"),
         "questionnaire": ("OptiChain_VSQ_001_v2_1.json",),
         "slack": ("Slack_Thread_Export_001.json", "Slack_Thread_Export_001.md"),
+        "stakeholder_map": ("Stakeholder_Map_PRQ_2024_0047.json",),
+    },
+    "scenario_blocked_demo": {
+        "policy": ("IT_Security_Policy_V4.2.md",),
+        "dpa_matrix": ("DPA_Legal_Trigger_Matrix_v1_3.csv", "DPA_Legal_Trigger_Matrix_v1_3.xlsx"),
+        "procurement_matrix": ("Procurement_Approval_Matrix_v2_0.csv",),
+        "questionnaire": ("OptiChain_VSQ_001_v2_1_blocked_demo.json",),
+        "slack": ("Slack_Thread_Export_scenario01.json", "Slack_Thread_Export_scenario01.md"),
+        "stakeholder_map": ("Stakeholder_Map_PRQ_2024_0047.json",),
+    },
+    "scenario_escalated_step4_demo": {
+        "policy": ("IT_Security_Policy_V4.2.md",),
+        "dpa_matrix": ("DPA_Legal_Trigger_Matrix_v1_3.csv", "DPA_Legal_Trigger_Matrix_v1_3.xlsx"),
+        "procurement_matrix": ("Procurement_Approval_Matrix_v2_0.csv",),
+        "questionnaire": ("OptiChain_VSQ_001_v2_1_escalated_step4_demo.json",),
+        "slack": ("Slack_Thread_Export_scenario01.json", "Slack_Thread_Export_scenario01.md"),
         "stakeholder_map": ("Stakeholder_Map_PRQ_2024_0047.json",),
     },
 }

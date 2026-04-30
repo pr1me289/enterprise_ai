@@ -1,0 +1,78 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 7,
+  "scenario": "scenario_blocked_demo",
+  "step_id": "STEP-02",
+  "determination_key": "step_02_security_classification",
+  "agent_name": "it_security_agent",
+  "pipeline_run_id": "run_500e817423",
+  "timestamp_utc": "20260428T021148Z",
+  "parsed_output": {
+    "integration_type_normalized": "DIRECT_API",
+    "integration_tier": "TIER_1",
+    "data_classification": "REGULATED",
+    "eu_personal_data_present": false,
+    "fast_track_eligible": false,
+    "fast_track_rationale": "DISALLOWED_INTEGRATION_RISK",
+    "security_followup_required": true,
+    "nda_status_from_questionnaire": "EXECUTED",
+    "required_security_actions": [
+      {
+        "action_type": "FULL_SECURITY_REVIEW",
+        "reason": "TIER_1 direct ERP integration with REGULATED data classification requires mandatory CISO + CIO written approval, penetration testing, and SOC 2 Type II certification per ISP-001 \u00a712.2",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "SOC_2_VALIDATION",
+        "reason": "Vendor handling RESTRICTED/REGULATED data via direct ERP connection must provide valid SOC 2 Type II report or ISO 27001 certification within preceding 12 months per ISP-001 \u00a712.1.3",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "PENETRATION_TEST",
+        "reason": "TIER_1 direct API integration requires mandatory penetration test prior to contract execution per ISP-001 \u00a712.2 Additional Requirements",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "QUARTERLY_ACCESS_REVIEW",
+        "reason": "TIER_1 integration requires quarterly access review schedule per ISP-001 \u00a712.2 Additional Requirements",
+        "owner": "IT Security"
+      }
+    ],
+    "policy_citations": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12",
+        "section_id": "12.2",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_5",
+        "section_id": "5",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12",
+        "section_id": "12.1.3",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "it_security_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 5.506305474002147,
+    "input_tokens": 26043,
+    "output_tokens": 664,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

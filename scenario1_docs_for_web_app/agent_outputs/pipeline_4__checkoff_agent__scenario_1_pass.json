@@ -1,0 +1,72 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 4,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_b0ae836897",
+  "timestamp_utc": "20260427T154232Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "Procurement Manager",
+        "domain": "procurement",
+        "instructions": "The vendor onboarding assessment is complete and eligible for fast-track approval. Your role is to review and approve the procurement recommendation. The integration is classified as Tier 3 (Export Only) with UNREGULATED data, no DPA requirements, and an executed NDA. No security blockers or follow-up actions are required from your department. Your approval is the first step in the fast-track path and is estimated to take 2 business days. Please review the attached checklist summary and issue your approval to proceed to Business Owner sign-off.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review vendor classification (Class C) and integration tier (Tier 3 - Export Only) against procurement standards.",
+          "Confirm alignment with fast-track approval path per Procurement Approval Matrix section C-T1.",
+          "Issue approval to advance to Business Owner for operational sign-off.",
+          "Estimated completion: 2 business days from this guidance issuance."
+        ],
+        "citations": [
+          {
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0",
+            "section": "C-T1",
+            "retrieval_timestamp": "2026-04-27T15:41:23Z",
+            "agent_id": "procurement_agent"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Business Owner",
+        "domain": "operations",
+        "instructions": "The vendor onboarding assessment is complete and ready for your operational approval. All compliance checks have cleared: data is UNREGULATED, no DPA is required, the NDA is executed, and no security follow-up is needed. The integration is classified as Tier 3 (Export Only). Your approval is the final step in the fast-track path. Once Procurement Manager has approved, please review the checklist and issue your operational sign-off to close the onboarding process.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Await Procurement Manager approval (estimated 2 business days).",
+          "Review vendor integration scope and data classification (UNREGULATED, Tier 3 - Export Only).",
+          "Confirm operational feasibility and resource allocation for the integration.",
+          "Issue operational approval to complete the fast-track onboarding.",
+          "Estimated completion: 3 business days from Procurement Manager approval."
+        ],
+        "citations": [
+          {
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0",
+            "section": "C-T1",
+            "retrieval_timestamp": "2026-04-27T15:41:23Z",
+            "agent_id": "procurement_agent"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 26.665247319004266,
+    "input_tokens": 7448,
+    "output_tokens": 724,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

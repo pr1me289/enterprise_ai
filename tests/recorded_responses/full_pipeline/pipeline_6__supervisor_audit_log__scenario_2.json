@@ -1,0 +1,1571 @@
+{
+  "record_type": "supervisor_audit_log",
+  "pipeline_run_number": 6,
+  "scenario": "scenario_2",
+  "pipeline_run_id": "run_a97dfc0bee",
+  "timestamp_utc": "20260427T201012Z",
+  "entry_count": 28,
+  "entries": [
+    {
+      "entry_id": "audit_349623ed23",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RUN_EVENT",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "message": "Pipeline initialized",
+        "manifest_version": "CC-001-v1.4"
+      }
+    },
+    {
+      "entry_id": "audit_a9798e5009",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "STATUS_CHANGE",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-01",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS",
+        "reason": null
+      }
+    },
+    {
+      "entry_id": "audit_30890eb206",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": "VQ-OC-001",
+      "chunks_retrieved": [
+        {
+          "field_path": "document_id",
+          "value_present": true
+        },
+        {
+          "field_path": "submission_date",
+          "value_present": true
+        },
+        {
+          "field_path": "vendor_name",
+          "value_present": true
+        }
+      ],
+      "details": {
+        "request_id": "R01-SQ-01",
+        "lane": "direct_structured",
+        "admitted_count": 3,
+        "excluded_count": 0,
+        "output_name": "questionnaire_exists",
+        "missing_fields": [],
+        "search_terms": []
+      }
+    },
+    {
+      "entry_id": "audit_126538ab86",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": "VQ-OC-001",
+      "chunks_retrieved": [
+        {
+          "field_path": "vendor_name",
+          "value_present": true
+        },
+        {
+          "field_path": "integration_details.erp_type",
+          "value_present": true
+        },
+        {
+          "field_path": "data_classification_self_reported",
+          "value_present": true
+        },
+        {
+          "field_path": "regulated_data_types",
+          "value_present": true
+        },
+        {
+          "field_path": "eu_personal_data_flag",
+          "value_present": true
+        },
+        {
+          "field_path": "data_subjects_eu",
+          "value_present": true
+        },
+        {
+          "field_path": "existing_nda_status",
+          "value_present": true
+        },
+        {
+          "field_path": "existing_msa",
+          "value_present": true
+        },
+        {
+          "field_path": "vendor_class",
+          "value_present": true
+        },
+        {
+          "field_path": "contract_value_annual",
+          "value_present": true
+        }
+      ],
+      "details": {
+        "request_id": "R01-SQ-02",
+        "lane": "direct_structured",
+        "admitted_count": 10,
+        "excluded_count": 0,
+        "output_name": "questionnaire_complete",
+        "missing_fields": [],
+        "search_terms": []
+      }
+    },
+    {
+      "entry_id": "audit_fd7c539e54",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": "VQ-OC-001",
+      "chunks_retrieved": [
+        {
+          "field_path": "document_id",
+          "value_present": true
+        },
+        {
+          "field_path": "submission_version",
+          "value_present": true
+        }
+      ],
+      "details": {
+        "request_id": "R01-SQ-03",
+        "lane": "direct_structured",
+        "admitted_count": 2,
+        "excluded_count": 0,
+        "output_name": "version_conflict_detected",
+        "missing_fields": [],
+        "search_terms": []
+      }
+    },
+    {
+      "entry_id": "audit_44e4723dfb",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "DETERMINATION",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-01",
+        "output": {
+          "questionnaire_valid": true,
+          "vendor_name": "OptiChain, Inc.",
+          "status": "COMPLETE",
+          "notes": []
+        }
+      }
+    },
+    {
+      "entry_id": "audit_7bd2fb24f5",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "STATUS_CHANGE",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-01",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETE",
+        "reason": null
+      }
+    },
+    {
+      "entry_id": "audit_235cccebda",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "STATUS_CHANGE",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-02",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS",
+        "reason": null
+      }
+    },
+    {
+      "entry_id": "audit_9e6c7854d1",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": "VQ-OC-001",
+      "chunks_retrieved": [
+        {
+          "field_path": "integration_details.erp_type",
+          "value_present": true
+        },
+        {
+          "field_path": "integration_details.erp_system",
+          "value_present": true
+        },
+        {
+          "field_path": "integration_details.integration_description",
+          "value_present": true
+        }
+      ],
+      "details": {
+        "request_id": "R02-SQ-01",
+        "lane": "direct_structured",
+        "admitted_count": 3,
+        "excluded_count": 0,
+        "output_name": "integration_inputs",
+        "missing_fields": [],
+        "search_terms": []
+      }
+    },
+    {
+      "entry_id": "audit_35ce522090",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": "VQ-OC-001",
+      "chunks_retrieved": [
+        {
+          "field_path": "data_classification_self_reported",
+          "value_present": true
+        },
+        {
+          "field_path": "regulated_data_types",
+          "value_present": true
+        }
+      ],
+      "details": {
+        "request_id": "R02-SQ-02",
+        "lane": "direct_structured",
+        "admitted_count": 2,
+        "excluded_count": 0,
+        "output_name": "classification_inputs",
+        "missing_fields": [],
+        "search_terms": []
+      }
+    },
+    {
+      "entry_id": "audit_20dc2af226",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": "VQ-OC-001",
+      "chunks_retrieved": [
+        {
+          "field_path": "eu_personal_data_flag",
+          "value_present": true
+        },
+        {
+          "field_path": "data_subjects_eu",
+          "value_present": true
+        }
+      ],
+      "details": {
+        "request_id": "R02-SQ-03",
+        "lane": "direct_structured",
+        "admitted_count": 2,
+        "excluded_count": 0,
+        "output_name": "eu_inputs",
+        "missing_fields": [],
+        "search_terms": []
+      }
+    },
+    {
+      "entry_id": "audit_b9c9e6d2cb",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": "ISP-001",
+      "chunks_retrieved": [
+        {
+          "chunk_id": "ISP-001__section_12_2",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 51,
+          "citation_label": "ISP-001 \u00a712.2",
+          "text": "12.2 ERP System Integration Requirements\nVendors that will integrate with or exchange data with Lichen's enterprise resource planning system (SAP S/4HANA, \"the ERP\") are subject to the following tier classification. The applicable tier determines the approval path and technical security requirements.\n\n| Integration Tier | Definition | Approval Required | Additional Requirements |\n|-----------------|-----------|------------------|------------------------|\n| **Tier 1 \u2014 Direct** | Vendor system establishes a persistent authenticated session or API connection directly to Lichen ERP (SAP S/4HANA). | CISO + CIO written approval prior to contract execution | Mandatory penetration test; SOC 2 Type II required; quarterly access review |\n| **Tier 2 \u2014 Mediated** | Vendor system exchanges data with Lichen ERP via an approved middleware layer or integration platform (e.g., MuleSoft). Vendor does not hold ERP credentials. | CISO approval; Procurement sign-off | SOC 2 Type II or equivalent required; data-handling agreement must define field-level scope |\n| **Tier 3 \u2014 Indirect / File-Based** | Vendor receives or transmits structured data exports (CSV, XML, EDI) that are subsequently imported into ERP by Lichen personnel. No system-to-system authentication involved. | Standard vendor approval process | Data classification of export fields required; encryption-in-transit required |\n| **Unclassified / Pending Review** | Integration pattern does not clearly fit Tier 1, 2, or 3 as described. Vendor has described data flow in terms that are ambiguous with respect to ERP credential handling or middleware involvement. | BLOCKED \u2014 integration cannot proceed until CISO formally assigns a tier | Vendor must provide architecture diagram and data-flow documentation within 10 business days of request. Onboarding status: PROVISIONAL pending tier determination. |",
+          "section_id": "12.2",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 7.0,
+          "rerank_score": 7.0
+        },
+        {
+          "chunk_id": "ISP-001__section_12_2_1",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 52,
+          "citation_label": "ISP-001 \u00a712.2.1",
+          "text": "12.2.1 Tier classification must be formally documented in the vendor onboarding record by the IT Security Team prior to contract execution. Procurement must not represent an integration tier to the vendor without IT Security confirmation.",
+          "section_id": "12.2.1",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 6.0,
+          "rerank_score": 3.0
+        },
+        {
+          "chunk_id": "ISP-001__section_12_2_2",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 53,
+          "citation_label": "ISP-001 \u00a712.2.2",
+          "text": "12.2.2 A vendor whose integration description does not clearly satisfy the criteria of Tier 1, 2, or 3 must be treated as \"Unclassified / Pending Review\". Onboarding status must be set to PROVISIONAL and the vendor notified that the integration cannot proceed until tier assignment is complete.",
+          "section_id": "12.2.2",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 5.0,
+          "rerank_score": 1.6667
+        },
+        {
+          "chunk_id": "ISP-001__section_12_2_3",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 54,
+          "citation_label": "ISP-001 \u00a712.2.3",
+          "text": "12.2.3 Tier assignment may not be changed after contract execution without CISO approval and a corresponding contract amendment.",
+          "section_id": "12.2.3",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 4.0,
+          "rerank_score": 1.0
+        },
+        {
+          "chunk_id": "ISP-001__section_4",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 11,
+          "citation_label": "ISP-001 \u00a74",
+          "text": "4 Roles and Responsibilities\n| Role | Responsible Party | Key Obligations |\n|------|-------------------|----------------|\n| Chief Information Security Officer (CISO) | K. Whitfield | Policy ownership, annual review, exception approval, board reporting |\n| IT Security Team | IT Department | Control implementation, vulnerability management, access review, incident response |\n| Department Heads / Business Owners | All Departments | Asset classification within their domain, ensuring staff compliance, escalating incidents |\n| Procurement / Vendor Management | Procurement Dept. | Enforce \u00a712 requirements during vendor selection; collect and validate security attestations |\n| Legal & Compliance | General Counsel Office | DPA trigger assessment, regulatory mapping, contract clause enforcement |\n| All Employees & Contractors | Individual | Acceptable use compliance, incident reporting, completion of mandatory security training |",
+          "section_id": "4",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 2.0,
+          "rerank_score": 0.4
+        }
+      ],
+      "details": {
+        "request_id": "R02-SQ-04",
+        "lane": "indexed_hybrid",
+        "admitted_count": 5,
+        "excluded_count": 0,
+        "output_name": "erp_tier_policy_chunks",
+        "missing_fields": [],
+        "search_terms": [
+          "ERP integration tier",
+          "12.2",
+          "integration classification",
+          "tier"
+        ]
+      }
+    },
+    {
+      "entry_id": "audit_eee11a350e",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": "ISP-001",
+      "chunks_retrieved": [
+        {
+          "chunk_id": "ISP-001__section_12_2",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 51,
+          "citation_label": "ISP-001 \u00a712.2",
+          "text": "12.2 ERP System Integration Requirements\nVendors that will integrate with or exchange data with Lichen's enterprise resource planning system (SAP S/4HANA, \"the ERP\") are subject to the following tier classification. The applicable tier determines the approval path and technical security requirements.\n\n| Integration Tier | Definition | Approval Required | Additional Requirements |\n|-----------------|-----------|------------------|------------------------|\n| **Tier 1 \u2014 Direct** | Vendor system establishes a persistent authenticated session or API connection directly to Lichen ERP (SAP S/4HANA). | CISO + CIO written approval prior to contract execution | Mandatory penetration test; SOC 2 Type II required; quarterly access review |\n| **Tier 2 \u2014 Mediated** | Vendor system exchanges data with Lichen ERP via an approved middleware layer or integration platform (e.g., MuleSoft). Vendor does not hold ERP credentials. | CISO approval; Procurement sign-off | SOC 2 Type II or equivalent required; data-handling agreement must define field-level scope |\n| **Tier 3 \u2014 Indirect / File-Based** | Vendor receives or transmits structured data exports (CSV, XML, EDI) that are subsequently imported into ERP by Lichen personnel. No system-to-system authentication involved. | Standard vendor approval process | Data classification of export fields required; encryption-in-transit required |\n| **Unclassified / Pending Review** | Integration pattern does not clearly fit Tier 1, 2, or 3 as described. Vendor has described data flow in terms that are ambiguous with respect to ERP credential handling or middleware involvement. | BLOCKED \u2014 integration cannot proceed until CISO formally assigns a tier | Vendor must provide architecture diagram and data-flow documentation within 10 business days of request. Onboarding status: PROVISIONAL pending tier determination. |",
+          "section_id": "12.2",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 5.0,
+          "rerank_score": 5.0
+        },
+        {
+          "chunk_id": "ISP-001__section_4",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 11,
+          "citation_label": "ISP-001 \u00a74",
+          "text": "4 Roles and Responsibilities\n| Role | Responsible Party | Key Obligations |\n|------|-------------------|----------------|\n| Chief Information Security Officer (CISO) | K. Whitfield | Policy ownership, annual review, exception approval, board reporting |\n| IT Security Team | IT Department | Control implementation, vulnerability management, access review, incident response |\n| Department Heads / Business Owners | All Departments | Asset classification within their domain, ensuring staff compliance, escalating incidents |\n| Procurement / Vendor Management | Procurement Dept. | Enforce \u00a712 requirements during vendor selection; collect and validate security attestations |\n| Legal & Compliance | General Counsel Office | DPA trigger assessment, regulatory mapping, contract clause enforcement |\n| All Employees & Contractors | Individual | Acceptable use compliance, incident reporting, completion of mandatory security training |",
+          "section_id": "4",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 4.5,
+          "rerank_score": 2.25
+        },
+        {
+          "chunk_id": "ISP-001__section_6_3_1",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 22,
+          "citation_label": "ISP-001 \u00a76.3.1",
+          "text": "6.3.1 Third-party access must be provisioned through the standard access request process with explicit CISO awareness for RESTRICTED data scope.",
+          "section_id": "6.3.1",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 4.5,
+          "rerank_score": 1.5
+        },
+        {
+          "chunk_id": "ISP-001__section_12",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 46,
+          "citation_label": "ISP-001 \u00a712",
+          "text": "12 Third-Party and Supplier Security\nThis section governs the security requirements applicable to all third parties that access, process, store, or transmit Lichen information assets, or that connect to Lichen systems in any capacity. Compliance with this section is a contractual requirement and must be verified prior to contract execution and annually thereafter.",
+          "section_id": "12",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 4.5,
+          "rerank_score": 1.125
+        },
+        {
+          "chunk_id": "ISP-001__section_5",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 12,
+          "citation_label": "ISP-001 \u00a75",
+          "text": "5 Information Asset Classification\nAll Lichen information assets must be classified according to the following framework. Classification determines applicable handling, storage, transmission, and disposal requirements.\n\n| Classification | Definition | Examples |\n|----------------|-----------|---------|\n| **RESTRICTED** | Highest sensitivity. Unauthorized disclosure would cause severe financial, legal, or reputational harm. | ERP credentials, DPA-regulated personal data, M&A information, CISO-designated systems |\n| **CONFIDENTIAL** | Significant sensitivity. Disclosure would cause material harm to Lichen Manufacturing or third parties. | Vendor contracts, financial forecasts, internal audit reports, employee PII |\n| **INTERNAL USE** | Low sensitivity. Authorized employees only. Disclosure causes limited harm. | Internal procedures, project plans, non-sensitive emails, policy documents |\n| **PUBLIC** | No restriction. Approved for external distribution. | Marketing materials, public job postings, published press releases |",
+          "section_id": "5",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 4.0,
+          "rerank_score": 0.8
+        }
+      ],
+      "details": {
+        "request_id": "R02-SQ-05",
+        "lane": "indexed_hybrid",
+        "admitted_count": 5,
+        "excluded_count": 0,
+        "output_name": "classification_policy_chunks",
+        "missing_fields": [],
+        "search_terms": [
+          "regulated data",
+          "data classification",
+          "third-party access",
+          "12"
+        ]
+      }
+    },
+    {
+      "entry_id": "audit_49e83660b5",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": "ISP-001",
+      "chunks_retrieved": [
+        {
+          "chunk_id": "ISP-001__section_5",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 12,
+          "citation_label": "ISP-001 \u00a75",
+          "text": "5 Information Asset Classification\nAll Lichen information assets must be classified according to the following framework. Classification determines applicable handling, storage, transmission, and disposal requirements.\n\n| Classification | Definition | Examples |\n|----------------|-----------|---------|\n| **RESTRICTED** | Highest sensitivity. Unauthorized disclosure would cause severe financial, legal, or reputational harm. | ERP credentials, DPA-regulated personal data, M&A information, CISO-designated systems |\n| **CONFIDENTIAL** | Significant sensitivity. Disclosure would cause material harm to Lichen Manufacturing or third parties. | Vendor contracts, financial forecasts, internal audit reports, employee PII |\n| **INTERNAL USE** | Low sensitivity. Authorized employees only. Disclosure causes limited harm. | Internal procedures, project plans, non-sensitive emails, policy documents |\n| **PUBLIC** | No restriction. Approved for external distribution. | Marketing materials, public job postings, published press releases |",
+          "section_id": "5",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 3.0,
+          "rerank_score": 3.0
+        },
+        {
+          "chunk_id": "ISP-001__section_6_3_1",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 22,
+          "citation_label": "ISP-001 \u00a76.3.1",
+          "text": "6.3.1 Third-party access must be provisioned through the standard access request process with explicit CISO awareness for RESTRICTED data scope.",
+          "section_id": "6.3.1",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 3.0,
+          "rerank_score": 1.5
+        },
+        {
+          "chunk_id": "ISP-001__section_17_3",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 77,
+          "citation_label": "ISP-001 \u00a717.3",
+          "text": "17.3 Third-party violations may result in suspension of data access, contract termination, and recovery of damages where applicable.",
+          "section_id": "17.3",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 3.0,
+          "rerank_score": 1.0
+        },
+        {
+          "chunk_id": "ISP-001__section_2",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 2,
+          "citation_label": "ISP-001 \u00a72",
+          "text": "2 Scope\nThis Policy applies to:\n\n- All Lichen employees, officers, and directors\n- All contractors, consultants, temporary workers, and agents operating on behalf of Lichen Manufacturing\n- All third-party vendors and suppliers who access, process, store, or transmit Lichen information assets\n- All information assets owned, leased, or managed by Lichen Manufacturing, regardless of location or form\n- All Lichen systems, networks, and infrastructure, including cloud-hosted environments and third-party SaaS platforms\n\nGeographic scope is global. All Lichen facilities, including manufacturing plants, distribution centers, and corporate offices, fall within scope. Subsidiaries operating under the Lichen Manufacturing parent entity are subject to this Policy unless a separate, equivalent policy has been approved by the CISO.",
+          "section_id": "2",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 2.0,
+          "rerank_score": 0.5
+        },
+        {
+          "chunk_id": "ISP-001__section_3_6",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 9,
+          "citation_label": "ISP-001 \u00a73.6",
+          "text": "3.6 Subject all third-party entities to security requirements appropriate to the sensitivity of the information they will access or process.",
+          "section_id": "3.6",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 2.0,
+          "rerank_score": 0.4
+        }
+      ],
+      "details": {
+        "request_id": "R02-SQ-06",
+        "lane": "indexed_hybrid",
+        "admitted_count": 5,
+        "excluded_count": 0,
+        "output_name": "fast_track_policy_chunks",
+        "missing_fields": [],
+        "search_terms": [
+          "fast track",
+          "manual review",
+          "regulated data",
+          "third-party risk"
+        ]
+      }
+    },
+    {
+      "entry_id": "audit_b2256d337c",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": "VQ-OC-001",
+      "chunks_retrieved": [
+        {
+          "field_path": "existing_nda_status",
+          "value_present": true
+        }
+      ],
+      "details": {
+        "request_id": "R02-SQ-07A",
+        "lane": "direct_structured",
+        "admitted_count": 1,
+        "excluded_count": 0,
+        "output_name": "nda_inputs",
+        "missing_fields": [],
+        "search_terms": []
+      }
+    },
+    {
+      "entry_id": "audit_ac8a68d88a",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:04Z",
+      "source_queried": "ISP-001",
+      "chunks_retrieved": [
+        {
+          "chunk_id": "ISP-001__section_12_1_4",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 50,
+          "citation_label": "ISP-001 \u00a712.1.4",
+          "text": "12.1.4 Where a non-disclosure agreement (NDA) is required by Lichen's data classification or by the nature of the information to be shared, the NDA must be fully executed prior to the disclosure of any CONFIDENTIAL or RESTRICTED information. Procurement must confirm NDA status in the onboarding record. **Onboarding may not proceed to the information-exchange phase until NDA execution is confirmed.**",
+          "section_id": "12.1.4",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 9.5,
+          "rerank_score": 9.5
+        },
+        {
+          "chunk_id": "ISP-001__section_4",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 11,
+          "citation_label": "ISP-001 \u00a74",
+          "text": "4 Roles and Responsibilities\n| Role | Responsible Party | Key Obligations |\n|------|-------------------|----------------|\n| Chief Information Security Officer (CISO) | K. Whitfield | Policy ownership, annual review, exception approval, board reporting |\n| IT Security Team | IT Department | Control implementation, vulnerability management, access review, incident response |\n| Department Heads / Business Owners | All Departments | Asset classification within their domain, ensuring staff compliance, escalating incidents |\n| Procurement / Vendor Management | Procurement Dept. | Enforce \u00a712 requirements during vendor selection; collect and validate security attestations |\n| Legal & Compliance | General Counsel Office | DPA trigger assessment, regulatory mapping, contract clause enforcement |\n| All Employees & Contractors | Individual | Acceptable use compliance, incident reporting, completion of mandatory security training |",
+          "section_id": "4",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 3.5,
+          "rerank_score": 1.75
+        },
+        {
+          "chunk_id": "ISP-001__section_12_2",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 51,
+          "citation_label": "ISP-001 \u00a712.2",
+          "text": "12.2 ERP System Integration Requirements\nVendors that will integrate with or exchange data with Lichen's enterprise resource planning system (SAP S/4HANA, \"the ERP\") are subject to the following tier classification. The applicable tier determines the approval path and technical security requirements.\n\n| Integration Tier | Definition | Approval Required | Additional Requirements |\n|-----------------|-----------|------------------|------------------------|\n| **Tier 1 \u2014 Direct** | Vendor system establishes a persistent authenticated session or API connection directly to Lichen ERP (SAP S/4HANA). | CISO + CIO written approval prior to contract execution | Mandatory penetration test; SOC 2 Type II required; quarterly access review |\n| **Tier 2 \u2014 Mediated** | Vendor system exchanges data with Lichen ERP via an approved middleware layer or integration platform (e.g., MuleSoft). Vendor does not hold ERP credentials. | CISO approval; Procurement sign-off | SOC 2 Type II or equivalent required; data-handling agreement must define field-level scope |\n| **Tier 3 \u2014 Indirect / File-Based** | Vendor receives or transmits structured data exports (CSV, XML, EDI) that are subsequently imported into ERP by Lichen personnel. No system-to-system authentication involved. | Standard vendor approval process | Data classification of export fields required; encryption-in-transit required |\n| **Unclassified / Pending Review** | Integration pattern does not clearly fit Tier 1, 2, or 3 as described. Vendor has described data flow in terms that are ambiguous with respect to ERP credential handling or middleware involvement. | BLOCKED \u2014 integration cannot proceed until CISO formally assigns a tier | Vendor must provide architecture diagram and data-flow documentation within 10 business days of request. Onboarding status: PROVISIONAL pending tier determination. |",
+          "section_id": "12.2",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 3.5,
+          "rerank_score": 1.1667
+        },
+        {
+          "chunk_id": "ISP-001__section_5",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 12,
+          "citation_label": "ISP-001 \u00a75",
+          "text": "5 Information Asset Classification\nAll Lichen information assets must be classified according to the following framework. Classification determines applicable handling, storage, transmission, and disposal requirements.\n\n| Classification | Definition | Examples |\n|----------------|-----------|---------|\n| **RESTRICTED** | Highest sensitivity. Unauthorized disclosure would cause severe financial, legal, or reputational harm. | ERP credentials, DPA-regulated personal data, M&A information, CISO-designated systems |\n| **CONFIDENTIAL** | Significant sensitivity. Disclosure would cause material harm to Lichen Manufacturing or third parties. | Vendor contracts, financial forecasts, internal audit reports, employee PII |\n| **INTERNAL USE** | Low sensitivity. Authorized employees only. Disclosure causes limited harm. | Internal procedures, project plans, non-sensitive emails, policy documents |\n| **PUBLIC** | No restriction. Approved for external distribution. | Marketing materials, public job postings, published press releases |",
+          "section_id": "5",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 3.0,
+          "rerank_score": 0.75
+        },
+        {
+          "chunk_id": "ISP-001__section_12_1_1",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 47,
+          "citation_label": "ISP-001 \u00a712.1.1",
+          "text": "12.1.1 All prospective vendors with access to CONFIDENTIAL or RESTRICTED information must complete the Lichen Vendor Security Questionnaire (VSQ) prior to contract execution. Procurement is responsible for ensuring questionnaire submission and routing completed questionnaires to IT Security for review.",
+          "section_id": "12.1.1",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 3.0,
+          "rerank_score": 0.6
+        }
+      ],
+      "details": {
+        "request_id": "R02-SQ-07",
+        "lane": "indexed_hybrid",
+        "admitted_count": 5,
+        "excluded_count": 0,
+        "output_name": "nda_policy_chunks",
+        "missing_fields": [],
+        "search_terms": [
+          "NDA",
+          "12.1.4",
+          "information exchange",
+          "non-disclosure"
+        ]
+      }
+    },
+    {
+      "entry_id": "audit_fed8d82dbe",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "it_security_agent",
+      "event_type": "DETERMINATION",
+      "timestamp": "2026-04-27T20:10:09Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-02",
+        "output": {
+          "integration_type_normalized": "DIRECT_API",
+          "integration_tier": "TIER_1",
+          "data_classification": "REGULATED",
+          "eu_personal_data_present": true,
+          "fast_track_eligible": false,
+          "fast_track_rationale": "DISALLOWED_REGULATED_DATA",
+          "security_followup_required": true,
+          "nda_status_from_questionnaire": "PENDING",
+          "required_security_actions": [
+            {
+              "action_type": "FULL_SECURITY_REVIEW",
+              "reason": "TIER_1 direct ERP integration with REGULATED data classification (EU personal data present). Mandatory security review required per ISP-001 \u00a712.2.",
+              "owner": "IT Security"
+            },
+            {
+              "action_type": "NDA_EXECUTION",
+              "reason": "NDA status is PENDING. Per ISP-001 \u00a712.1.4, NDA must be fully executed prior to disclosure of RESTRICTED or CONFIDENTIAL information. Onboarding cannot proceed to information-exchange phase until NDA execution is confirmed.",
+              "owner": "Procurement"
+            }
+          ],
+          "policy_citations": [
+            {
+              "source_id": "ISP-001",
+              "version": "4.2",
+              "chunk_id": "ISP-001__section_12_2",
+              "section_id": "12.2",
+              "citation_class": "PRIMARY"
+            },
+            {
+              "source_id": "ISP-001",
+              "version": "4.2",
+              "chunk_id": "ISP-001__section_5",
+              "section_id": "5",
+              "citation_class": "PRIMARY"
+            },
+            {
+              "source_id": "ISP-001",
+              "version": "4.2",
+              "chunk_id": "ISP-001__section_12_1_4",
+              "section_id": "12.1.4",
+              "citation_class": "PRIMARY"
+            }
+          ],
+          "status": "complete"
+        }
+      }
+    },
+    {
+      "entry_id": "audit_945308c9c0",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "STATUS_CHANGE",
+      "timestamp": "2026-04-27T20:10:09Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-02",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETE",
+        "reason": null
+      }
+    },
+    {
+      "entry_id": "audit_23e516e07f",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "STATUS_CHANGE",
+      "timestamp": "2026-04-27T20:10:09Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-03",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS",
+        "reason": null
+      }
+    },
+    {
+      "entry_id": "audit_a592f85ccd",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:09Z",
+      "source_queried": "STEP-02",
+      "chunks_retrieved": [
+        {
+          "field_path": "upstream_data_classification",
+          "value_present": true
+        },
+        {
+          "field_path": "status",
+          "value_present": true
+        },
+        {
+          "field_path": "policy_citations",
+          "value_present": true
+        }
+      ],
+      "details": {
+        "request_id": "R03-SQ-01",
+        "lane": "runtime_read",
+        "admitted_count": 3,
+        "excluded_count": 0,
+        "output_name": "upstream_security",
+        "missing_fields": [],
+        "search_terms": []
+      }
+    },
+    {
+      "entry_id": "audit_93be75cdd4",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:09Z",
+      "source_queried": "VQ-OC-001",
+      "chunks_retrieved": [
+        {
+          "field_path": "eu_personal_data_flag",
+          "value_present": true
+        },
+        {
+          "field_path": "data_subjects_eu",
+          "value_present": true
+        }
+      ],
+      "details": {
+        "request_id": "R03-SQ-02",
+        "lane": "direct_structured",
+        "admitted_count": 2,
+        "excluded_count": 0,
+        "output_name": "eu_inputs",
+        "missing_fields": [],
+        "search_terms": []
+      }
+    },
+    {
+      "entry_id": "audit_acf3477e82",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:09Z",
+      "source_queried": "VQ-OC-001",
+      "chunks_retrieved": [
+        {
+          "field_path": "existing_nda_status",
+          "value_present": true
+        }
+      ],
+      "details": {
+        "request_id": "R03-SQ-03",
+        "lane": "direct_structured",
+        "admitted_count": 1,
+        "excluded_count": 0,
+        "output_name": "nda_inputs",
+        "missing_fields": [],
+        "search_terms": []
+      }
+    },
+    {
+      "entry_id": "audit_a3f1f63b04",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:09Z",
+      "source_queried": "DPA-TM-001",
+      "chunks_retrieved": [
+        {
+          "chunk_id": "DPA-TM-001__row_A-01",
+          "source_id": "DPA-TM-001",
+          "source_name": "DPA Legal Trigger Matrix",
+          "source_type": "LEGAL_TRIGGER_MATRIX",
+          "version": "2.1",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "legal"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "ROW",
+          "chunk_order": 1,
+          "citation_label": "DPA-TM-001 row A-01",
+          "text": "ID: A-01\nTrigger Condition: Vendor will process personal data of EU/EEA data subjects on behalf of Lichen\nData Types Involved: Any personal data of EU/EEA individuals (name, email, ID, behavioral, device identifiers)\nRegulations Triggered: GDPR Art. 28; GDPR Art. 4(8)\nDPA Required?: REQUIRED\nRequired DPA / Contract Clauses: GDPR Art. 28 DPA; mandatory clauses: subject matter & duration; nature & purpose of processing; data type & data subject categories; obligations & rights of controller\nAdditional Obligations: Lichen Legal must execute Art. 28 DPA before any processing begins.\nLichen Action / Owner: Owner: General Counsel / Privacy Team",
+          "section_id": null,
+          "row_id": "A-01",
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 8.5,
+          "rerank_score": 8.5
+        },
+        {
+          "chunk_id": "DPA-TM-001__row_A-03",
+          "source_id": "DPA-TM-001",
+          "source_name": "DPA Legal Trigger Matrix",
+          "source_type": "LEGAL_TRIGGER_MATRIX",
+          "version": "2.1",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "legal"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "ROW",
+          "chunk_order": 3,
+          "citation_label": "DPA-TM-001 row A-03",
+          "text": "ID: A-03\nTrigger Condition: Vendor will process special-category personal data of EU/EEA data subjects (e.g., health, biometric, union membership)\nData Types Involved: Health/medical data; biometric identifiers; racial or ethnic origin; religious beliefs; criminal conviction data; trade union membership\nRegulations Triggered: GDPR Art. 9; GDPR Art. 28; potentially HIPAA if US health data overlaps\nDPA Required?: REQUIRED\nRequired DPA / Contract Clauses: GDPR Art. 28 DPA with explicit Art. 9 processing provisions; document legal basis under Art. 9(2); DPIA under Art. 35 mandatory; enhanced security obligations\nAdditional Obligations: DPIA must be completed and documented before engagement. CISO approval required.\nLichen Action / Owner: Owner: Privacy Team + CISO",
+          "section_id": null,
+          "row_id": "A-03",
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 7.0,
+          "rerank_score": 3.5
+        },
+        {
+          "chunk_id": "DPA-TM-001__row_A-04",
+          "source_id": "DPA-TM-001",
+          "source_name": "DPA Legal Trigger Matrix",
+          "source_type": "LEGAL_TRIGGER_MATRIX",
+          "version": "2.1",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "legal"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "ROW",
+          "chunk_order": 4,
+          "citation_label": "DPA-TM-001 row A-04",
+          "text": "ID: A-04\nTrigger Condition: Vendor will process personal data of minors (under 16 in EU; under 13 or 16 depending on US state law)\nData Types Involved: Personal data where data subject age is known or reasonably inferred to be below applicable threshold\nRegulations Triggered: GDPR Art. 8; COPPA (US); UK GDPR Age Appropriate Design Code\nDPA Required?: REQUIRED\nRequired DPA / Contract Clauses: GDPR Art. 28 DPA; COPPA written agreement if applicable; vendor must implement age-verification or age-appropriate processing controls; parental consent mechanism documentation required\nAdditional Obligations: Engage Privacy Team and Legal before any processing of minor data. Separate DPIA required.\nLichen Action / Owner: Owner: General Counsel",
+          "section_id": null,
+          "row_id": "A-04",
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 7.0,
+          "rerank_score": 2.3333
+        },
+        {
+          "chunk_id": "DPA-TM-001__row_A-05",
+          "source_id": "DPA-TM-001",
+          "source_name": "DPA Legal Trigger Matrix",
+          "source_type": "LEGAL_TRIGGER_MATRIX",
+          "version": "2.1",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "legal"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "ROW",
+          "chunk_order": 5,
+          "citation_label": "DPA-TM-001 row A-05",
+          "text": "ID: A-05\nTrigger Condition: Vendor will process personal data of UK data subjects post-Brexit\nData Types Involved: Any personal data of UK individuals\nRegulations Triggered: UK GDPR (retained EU law); Data Protection Act 2018\nDPA Required?: REQUIRED\nRequired DPA / Contract Clauses: UK GDPR Art. 28 DPA (separate from EU GDPR DPA or combined with appropriate UK-specific addendum); UK ICO standard clauses if applicable\nAdditional Obligations: Confirm whether EU Art. 28 DPA is sufficient or a UK addendum is required.\nLichen Action / Owner: Owner: Legal / Privacy",
+          "section_id": null,
+          "row_id": "A-05",
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 7.0,
+          "rerank_score": 1.75
+        },
+        {
+          "chunk_id": "DPA-TM-001__row_B-01",
+          "source_id": "DPA-TM-001",
+          "source_name": "DPA Legal Trigger Matrix",
+          "source_type": "LEGAL_TRIGGER_MATRIX",
+          "version": "2.1",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "legal"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "ROW",
+          "chunk_order": 6,
+          "citation_label": "DPA-TM-001 row B-01",
+          "text": "ID: B-01\nTrigger Condition: Vendor will transfer or access EU/EEA personal data from a country without EU adequacy decision (e.g., US, India, non-adequate third country)\nData Types Involved: Any EU/EEA personal data transferred to or accessed from a non-adequate country\nRegulations Triggered: GDPR Ch. V (Arts. 44\u201349); EDPB transfer guidance\nDPA Required?: REQUIRED\nRequired DPA / Contract Clauses: Standard Contractual Clauses (SCCs) \u2014 2021 EU SCCs (Commission Decision 2021/914); Transfer Impact Assessment (TIA) documenting legal landscape of destination country; Supplementary Technical Measures where TIA identifies residual risk\nAdditional Obligations: Legal must determine applicable SCC module (C2P or C2C). TIA must be completed and retained.\nLichen Action / Owner: Owner: Privacy Team / External Counsel",
+          "section_id": null,
+          "row_id": "B-01",
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 7.0,
+          "rerank_score": 1.4
+        }
+      ],
+      "details": {
+        "request_id": "R03-SQ-04",
+        "lane": "indexed_hybrid",
+        "admitted_count": 5,
+        "excluded_count": 0,
+        "output_name": "dpa_trigger_rows",
+        "missing_fields": [],
+        "search_terms": [
+          "DPA",
+          "trigger",
+          "EU",
+          "personal data",
+          "controller"
+        ]
+      }
+    },
+    {
+      "entry_id": "audit_a5b578d741",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RETRIEVAL",
+      "timestamp": "2026-04-27T20:10:09Z",
+      "source_queried": "ISP-001",
+      "chunks_retrieved": [
+        {
+          "chunk_id": "ISP-001__section_12_1_4",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 50,
+          "citation_label": "ISP-001 \u00a712.1.4",
+          "text": "12.1.4 Where a non-disclosure agreement (NDA) is required by Lichen's data classification or by the nature of the information to be shared, the NDA must be fully executed prior to the disclosure of any CONFIDENTIAL or RESTRICTED information. Procurement must confirm NDA status in the onboarding record. **Onboarding may not proceed to the information-exchange phase until NDA execution is confirmed.**",
+          "section_id": "12.1.4",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 9.5,
+          "rerank_score": 9.5
+        },
+        {
+          "chunk_id": "ISP-001__section_4",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 11,
+          "citation_label": "ISP-001 \u00a74",
+          "text": "4 Roles and Responsibilities\n| Role | Responsible Party | Key Obligations |\n|------|-------------------|----------------|\n| Chief Information Security Officer (CISO) | K. Whitfield | Policy ownership, annual review, exception approval, board reporting |\n| IT Security Team | IT Department | Control implementation, vulnerability management, access review, incident response |\n| Department Heads / Business Owners | All Departments | Asset classification within their domain, ensuring staff compliance, escalating incidents |\n| Procurement / Vendor Management | Procurement Dept. | Enforce \u00a712 requirements during vendor selection; collect and validate security attestations |\n| Legal & Compliance | General Counsel Office | DPA trigger assessment, regulatory mapping, contract clause enforcement |\n| All Employees & Contractors | Individual | Acceptable use compliance, incident reporting, completion of mandatory security training |",
+          "section_id": "4",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 3.5,
+          "rerank_score": 1.75
+        },
+        {
+          "chunk_id": "ISP-001__section_12_2",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 51,
+          "citation_label": "ISP-001 \u00a712.2",
+          "text": "12.2 ERP System Integration Requirements\nVendors that will integrate with or exchange data with Lichen's enterprise resource planning system (SAP S/4HANA, \"the ERP\") are subject to the following tier classification. The applicable tier determines the approval path and technical security requirements.\n\n| Integration Tier | Definition | Approval Required | Additional Requirements |\n|-----------------|-----------|------------------|------------------------|\n| **Tier 1 \u2014 Direct** | Vendor system establishes a persistent authenticated session or API connection directly to Lichen ERP (SAP S/4HANA). | CISO + CIO written approval prior to contract execution | Mandatory penetration test; SOC 2 Type II required; quarterly access review |\n| **Tier 2 \u2014 Mediated** | Vendor system exchanges data with Lichen ERP via an approved middleware layer or integration platform (e.g., MuleSoft). Vendor does not hold ERP credentials. | CISO approval; Procurement sign-off | SOC 2 Type II or equivalent required; data-handling agreement must define field-level scope |\n| **Tier 3 \u2014 Indirect / File-Based** | Vendor receives or transmits structured data exports (CSV, XML, EDI) that are subsequently imported into ERP by Lichen personnel. No system-to-system authentication involved. | Standard vendor approval process | Data classification of export fields required; encryption-in-transit required |\n| **Unclassified / Pending Review** | Integration pattern does not clearly fit Tier 1, 2, or 3 as described. Vendor has described data flow in terms that are ambiguous with respect to ERP credential handling or middleware involvement. | BLOCKED \u2014 integration cannot proceed until CISO formally assigns a tier | Vendor must provide architecture diagram and data-flow documentation within 10 business days of request. Onboarding status: PROVISIONAL pending tier determination. |",
+          "section_id": "12.2",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 3.5,
+          "rerank_score": 1.1667
+        },
+        {
+          "chunk_id": "ISP-001__section_5",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 12,
+          "citation_label": "ISP-001 \u00a75",
+          "text": "5 Information Asset Classification\nAll Lichen information assets must be classified according to the following framework. Classification determines applicable handling, storage, transmission, and disposal requirements.\n\n| Classification | Definition | Examples |\n|----------------|-----------|---------|\n| **RESTRICTED** | Highest sensitivity. Unauthorized disclosure would cause severe financial, legal, or reputational harm. | ERP credentials, DPA-regulated personal data, M&A information, CISO-designated systems |\n| **CONFIDENTIAL** | Significant sensitivity. Disclosure would cause material harm to Lichen Manufacturing or third parties. | Vendor contracts, financial forecasts, internal audit reports, employee PII |\n| **INTERNAL USE** | Low sensitivity. Authorized employees only. Disclosure causes limited harm. | Internal procedures, project plans, non-sensitive emails, policy documents |\n| **PUBLIC** | No restriction. Approved for external distribution. | Marketing materials, public job postings, published press releases |",
+          "section_id": "5",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 3.0,
+          "rerank_score": 0.75
+        },
+        {
+          "chunk_id": "ISP-001__section_12_1_1",
+          "source_id": "ISP-001",
+          "source_name": "IT Security Policy",
+          "source_type": "POLICY_DOCUMENT",
+          "version": "4.2",
+          "document_date": "2026-04-04",
+          "freshness_status": "CURRENT",
+          "authority_tier": 1,
+          "retrieval_lane": "INDEXED_HYBRID",
+          "allowed_agents": [
+            "it_security",
+            "legal",
+            "procurement"
+          ],
+          "is_primary_citable": true,
+          "manifest_status": "CONFIRMED",
+          "chunk_type": "SECTION",
+          "chunk_order": 47,
+          "citation_label": "ISP-001 \u00a712.1.1",
+          "text": "12.1.1 All prospective vendors with access to CONFIDENTIAL or RESTRICTED information must complete the Lichen Vendor Security Questionnaire (VSQ) prior to contract execution. Procurement is responsible for ensuring questionnaire submission and routing completed questionnaires to IT Security for review.",
+          "section_id": "12.1.1",
+          "row_id": null,
+          "record_id": null,
+          "thread_id": null,
+          "domain_scope": null,
+          "retrieval_score": 3.0,
+          "rerank_score": 0.6
+        }
+      ],
+      "details": {
+        "request_id": "R03-SQ-06",
+        "lane": "indexed_hybrid",
+        "admitted_count": 5,
+        "excluded_count": 0,
+        "output_name": "nda_clause_chunks",
+        "missing_fields": [],
+        "search_terms": [
+          "NDA",
+          "12.1.4",
+          "information exchange",
+          "non-disclosure"
+        ]
+      }
+    },
+    {
+      "entry_id": "audit_c9946660a0",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "legal_agent",
+      "event_type": "DETERMINATION",
+      "timestamp": "2026-04-27T20:10:12Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-03",
+        "output": {
+          "dpa_required": true,
+          "dpa_blocker": true,
+          "nda_status": "PENDING",
+          "nda_blocker": true,
+          "trigger_rule_cited": [
+            {
+              "source_id": "DPA-TM-001",
+              "version": "2.1",
+              "row_id": "A-01",
+              "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen",
+              "citation_class": "PRIMARY"
+            }
+          ],
+          "policy_citations": [
+            {
+              "source_id": "DPA-TM-001",
+              "version": "2.1",
+              "row_id": "A-01",
+              "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen",
+              "citation_class": "PRIMARY"
+            },
+            {
+              "source_id": "ISP-001",
+              "version": "4.2",
+              "chunk_id": "ISP-001__section_12_1_4",
+              "section_id": "12.1.4",
+              "citation_class": "PRIMARY"
+            }
+          ],
+          "status": "escalated"
+        }
+      }
+    },
+    {
+      "entry_id": "audit_fe72df9613",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "STATUS_CHANGE",
+      "timestamp": "2026-04-27T20:10:12Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-03",
+        "from_status": "IN_PROGRESS",
+        "to_status": "ESCALATED",
+        "reason": null
+      }
+    },
+    {
+      "entry_id": "audit_c08905b9fd",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "legal_agent",
+      "event_type": "ESCALATION",
+      "timestamp": "2026-04-27T20:10:12Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "step_id": "STEP-03",
+        "evidence_condition": "Legal blocker or missing citation evidence requires human action.",
+        "resolution_owner": "Legal (General Counsel)"
+      }
+    },
+    {
+      "entry_id": "audit_5bd92b5b59",
+      "pipeline_run_id": "run_a97dfc0bee",
+      "agent_id": "supervisor",
+      "event_type": "RUN_EVENT",
+      "timestamp": "2026-04-27T20:10:12Z",
+      "source_queried": null,
+      "chunks_retrieved": [],
+      "details": {
+        "message": "Pipeline halted in escalated state",
+        "overall_status": "ESCALATED"
+      }
+    }
+  ]
+}

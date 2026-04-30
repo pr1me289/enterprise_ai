@@ -191,23 +191,27 @@ SCENARIO_2_EXPECTATIONS: dict[str, ExpectationSet] = {
         step="STEP-02",
         expectations=(
             FieldExpectation("data_classification", "REGULATED", equals="REGULATED"),
-            FieldExpectation("integration_type_normalized", "AMBIGUOUS", equals="AMBIGUOUS"),
+            FieldExpectation(
+                "integration_type_normalized",
+                "DIRECT_API",
+                equals="DIRECT_API",
+            ),
             FieldExpectation(
                 "integration_tier",
-                "UNCLASSIFIED_PENDING_REVIEW",
-                equals="UNCLASSIFIED_PENDING_REVIEW",
+                "TIER_1 or TIER_2",
+                one_of=("TIER_1", "TIER_2"),
             ),
             FieldExpectation("eu_personal_data_present", "YES", equals="YES"),
             FieldExpectation("fast_track_eligible", "false", equals=False),
             FieldExpectation(
                 "fast_track_rationale",
-                "DISALLOWED_AMBIGUOUS_SCOPE or DISALLOWED_REGULATED_DATA",
-                one_of=("DISALLOWED_AMBIGUOUS_SCOPE", "DISALLOWED_REGULATED_DATA"),
+                "DISALLOWED_REGULATED_DATA or DISALLOWED_INTEGRATION_RISK",
+                one_of=("DISALLOWED_REGULATED_DATA", "DISALLOWED_INTEGRATION_RISK"),
             ),
             FieldExpectation("security_followup_required", "true", equals=True),
             FieldExpectation("required_security_actions", "non-empty", non_empty=True),
             FieldExpectation("nda_status_from_questionnaire", "PENDING", equals="PENDING"),
-            FieldExpectation("status", "escalated", equals="escalated"),
+            FieldExpectation("status", "complete", equals="complete"),
             FieldExpectation("policy_citations", "non-empty", non_empty=True),
         ),
     ),
@@ -275,9 +279,128 @@ SCENARIO_2_EXPECTATIONS: dict[str, ExpectationSet] = {
 # ---------------------------------------------------------------------------
 
 
+SCENARIO_BLOCKED_DEMO_EXPECTATIONS: dict[str, ExpectationSet] = {
+    "it_security_agent": ExpectationSet(
+        scenario="scenario_blocked_demo",
+        agent="it_security_agent",
+        step="STEP-02",
+        expectations=(
+            FieldExpectation("data_classification", "REGULATED", equals="REGULATED"),
+            FieldExpectation(
+                "integration_type_normalized",
+                "DIRECT_API",
+                equals="DIRECT_API",
+            ),
+            FieldExpectation(
+                "integration_tier",
+                "TIER_1 or TIER_2",
+                one_of=("TIER_1", "TIER_2"),
+            ),
+            FieldExpectation("eu_personal_data_present", "NO", equals="NO"),
+            FieldExpectation("fast_track_eligible", "false", equals=False),
+            FieldExpectation(
+                "fast_track_rationale",
+                "DISALLOWED_REGULATED_DATA or DISALLOWED_INTEGRATION_RISK",
+                one_of=("DISALLOWED_REGULATED_DATA", "DISALLOWED_INTEGRATION_RISK"),
+            ),
+            FieldExpectation(
+                "nda_status_from_questionnaire",
+                "EXECUTED",
+                equals="EXECUTED",
+            ),
+            FieldExpectation("status", "complete", equals="complete"),
+            FieldExpectation("policy_citations", "non-empty", non_empty=True),
+        ),
+    ),
+    "legal_agent": ExpectationSet(
+        scenario="scenario_blocked_demo",
+        agent="legal_agent",
+        step="STEP-03",
+        expectations=(
+            FieldExpectation("dpa_required", "false", equals=False),
+            FieldExpectation("dpa_blocker", "false", equals=False),
+            FieldExpectation("nda_status", "EXECUTED", equals="EXECUTED"),
+            FieldExpectation("nda_blocker", "false", equals=False),
+            FieldExpectation("status", "complete", equals="complete"),
+        ),
+    ),
+    "procurement_agent": ExpectationSet(
+        scenario="scenario_blocked_demo",
+        agent="procurement_agent",
+        step="STEP-04",
+        expectations=(
+            FieldExpectation("status", "blocked", equals="blocked"),
+            FieldExpectation(
+                "blocked_reason",
+                "includes MISSING_PAM_001",
+                predicate=_contains_any_substring(("MISSING_PAM_001",)),
+            ),
+        ),
+    ),
+}
+
+
+SCENARIO_ESCALATED_STEP4_DEMO_EXPECTATIONS: dict[str, ExpectationSet] = {
+    "it_security_agent": ExpectationSet(
+        scenario="scenario_escalated_step4_demo",
+        agent="it_security_agent",
+        step="STEP-02",
+        expectations=(
+            FieldExpectation("data_classification", "REGULATED", equals="REGULATED"),
+            FieldExpectation(
+                "integration_type_normalized",
+                "DIRECT_API",
+                equals="DIRECT_API",
+            ),
+            FieldExpectation(
+                "integration_tier",
+                "TIER_1 or TIER_2",
+                one_of=("TIER_1", "TIER_2"),
+            ),
+            FieldExpectation("eu_personal_data_present", "NO", equals="NO"),
+            FieldExpectation("fast_track_eligible", "false", equals=False),
+            FieldExpectation(
+                "fast_track_rationale",
+                "DISALLOWED_REGULATED_DATA or DISALLOWED_INTEGRATION_RISK",
+                one_of=("DISALLOWED_REGULATED_DATA", "DISALLOWED_INTEGRATION_RISK"),
+            ),
+            FieldExpectation(
+                "nda_status_from_questionnaire",
+                "EXECUTED",
+                equals="EXECUTED",
+            ),
+            FieldExpectation("status", "complete", equals="complete"),
+            FieldExpectation("policy_citations", "non-empty", non_empty=True),
+        ),
+    ),
+    "legal_agent": ExpectationSet(
+        scenario="scenario_escalated_step4_demo",
+        agent="legal_agent",
+        step="STEP-03",
+        expectations=(
+            FieldExpectation("dpa_required", "false", equals=False),
+            FieldExpectation("dpa_blocker", "false", equals=False),
+            FieldExpectation("nda_status", "EXECUTED", equals="EXECUTED"),
+            FieldExpectation("nda_blocker", "false", equals=False),
+            FieldExpectation("status", "complete", equals="complete"),
+        ),
+    ),
+    "procurement_agent": ExpectationSet(
+        scenario="scenario_escalated_step4_demo",
+        agent="procurement_agent",
+        step="STEP-04",
+        expectations=(
+            FieldExpectation("status", "escalated", equals="escalated"),
+        ),
+    ),
+}
+
+
 EXPECTATIONS_BY_SCENARIO: dict[str, dict[str, ExpectationSet]] = {
     "scenario_1": SCENARIO_1_EXPECTATIONS,
     "scenario_2": SCENARIO_2_EXPECTATIONS,
+    "scenario_blocked_demo": SCENARIO_BLOCKED_DEMO_EXPECTATIONS,
+    "scenario_escalated_step4_demo": SCENARIO_ESCALATED_STEP4_DEMO_EXPECTATIONS,
 }
 
 

@@ -106,3 +106,127 @@ Block format:
 
 **Recorded responses:**
 - STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_3__it_security_agent__scenario_2_pass.json`
+## Pipeline Run #4 — scenario_1 — 2026-04-27
+**Overall verdict:** PASS
+**Supervisor status:** COMPLETE
+**Pipeline run id:** run_b0ae836897
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 3.23s | 20,196 | 224 |
+| STEP-03 | legal_agent | COMPLETE | PASS | 1.85s | 19,704 | 158 |
+| STEP-04 | procurement_agent | COMPLETE | PASS | 3.20s | 20,639 | 302 |
+| STEP-05 | checklist_assembler | COMPLETE | PASS | 38.77s | 39,412 | 477 |
+| STEP-06 | checkoff_agent | COMPLETE | PASS | 26.67s | 7,448 | 724 |
+
+**Totals:** 5 agent call(s), 107,399 input tokens, 1,885 output tokens, 73.72s cumulative.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_4__it_security_agent__scenario_1_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_4__legal_agent__scenario_1_pass.json`
+- STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_4__procurement_agent__scenario_1_pass.json`
+- STEP-05 → `tests/recorded_responses/full_pipeline/pipeline_4__checklist_assembler__scenario_1_pass.json`
+- STEP-06 → `tests/recorded_responses/full_pipeline/pipeline_4__checkoff_agent__scenario_1_pass.json`
+## Pipeline Run #5 — scenario_2 — 2026-04-27
+**Overall verdict:** PASS
+**Supervisor status:** ESCALATED
+**Pipeline run id:** run_46b0736b8b
+**Halted at:** STEP-02
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | ESCALATED | PASS | 10.11s | 20,199 | 757 |
+| STEP-03 | legal_agent | PENDING | — | — | — | — |
+| STEP-04 | procurement_agent | PENDING | — | — | — | — |
+| STEP-05 | checklist_assembler | PENDING | — | — | — | — |
+| STEP-06 | checkoff_agent | PENDING | — | — | — | — |
+
+**Totals:** 1 agent call(s), 20,199 input tokens, 757 output tokens, 10.11s cumulative.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_5__it_security_agent__scenario_2_pass.json`
+## Pipeline Run #6 — scenario_2 — 2026-04-27
+**Overall verdict:** PASS
+**Supervisor status:** ESCALATED
+**Pipeline run id:** run_a97dfc0bee
+**Halted at:** STEP-03
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 5.01s | 20,230 | 531 |
+| STEP-03 | legal_agent | ESCALATED | PASS | 2.66s | 19,842 | 328 |
+| STEP-04 | procurement_agent | PENDING | — | — | — | — |
+| STEP-05 | checklist_assembler | PENDING | — | — | — | — |
+| STEP-06 | checkoff_agent | PENDING | — | — | — | — |
+
+**Totals:** 2 agent call(s), 40,072 input tokens, 859 output tokens, 7.67s cumulative.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_6__it_security_agent__scenario_2_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_6__legal_agent__scenario_2_pass.json`
+## Pipeline Run #7 — scenario_blocked_demo — 2026-04-27
+**Overall verdict:** PASS
+**Supervisor status:** BLOCKED
+**Pipeline run id:** run_500e817423
+**Halted at:** STEP-04
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 5.51s | 26,043 | 664 |
+| STEP-03 | legal_agent | COMPLETE | PASS | 2.21s | 20,943 | 154 |
+| STEP-04 | procurement_agent | BLOCKED | PASS | 1.48s | 16,699 | 51 |
+| STEP-05 | checklist_assembler | PENDING | — | — | — | — |
+| STEP-06 | checkoff_agent | PENDING | — | — | — | — |
+
+**Totals:** 3 agent call(s), 63,685 input tokens, 869 output tokens, 9.19s cumulative.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_7__it_security_agent__scenario_blocked_demo_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_7__legal_agent__scenario_blocked_demo_pass.json`
+- STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_7__procurement_agent__scenario_blocked_demo_pass.json`
+## Pipeline Run #8 — scenario_escalated_step4_demo — 2026-04-27
+**Overall verdict:** PASS
+**Supervisor status:** BLOCKED
+**Pipeline run id:** run_8213dd83cf
+**Halted at:** STEP-04
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 7.25s | 26,043 | 739 |
+| STEP-03 | legal_agent | COMPLETE | PASS | 1.58s | 20,943 | 154 |
+| STEP-04 | procurement_agent | BLOCKED | PASS | 1.52s | 20,768 | 52 |
+| STEP-05 | checklist_assembler | PENDING | — | — | — | — |
+| STEP-06 | checkoff_agent | PENDING | — | — | — | — |
+
+**Totals:** 3 agent call(s), 67,754 input tokens, 945 output tokens, 10.35s cumulative.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_8__it_security_agent__scenario_escalated_step4_demo_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_8__legal_agent__scenario_escalated_step4_demo_pass.json`
+- STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_8__procurement_agent__scenario_escalated_step4_demo_pass.json`
+## Pipeline Run #9 — scenario_escalated_step4_demo — 2026-04-27
+**Overall verdict:** PASS
+**Supervisor status:** ESCALATED
+**Pipeline run id:** run_baa1f4802d
+**Halted at:** STEP-04
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 4.83s | 26,043 | 586 |
+| STEP-03 | legal_agent | COMPLETE | PASS | 1.47s | 20,873 | 154 |
+| STEP-04 | procurement_agent | ESCALATED | PASS | 1.21s | 18,980 | 68 |
+| STEP-05 | checklist_assembler | PENDING | — | — | — | — |
+| STEP-06 | checkoff_agent | PENDING | — | — | — | — |
+
+**Totals:** 3 agent call(s), 65,896 input tokens, 808 output tokens, 7.52s cumulative.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_9__it_security_agent__scenario_escalated_step4_demo_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_9__legal_agent__scenario_escalated_step4_demo_pass.json`
+- STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_9__procurement_agent__scenario_escalated_step4_demo_pass.json`

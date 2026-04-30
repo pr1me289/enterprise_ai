@@ -254,6 +254,98 @@ def _scenario_1_captured() -> dict[str, dict[str, Any]]:
 # ---------------------------------------------------------------------------
 
 
+def scenario_escalated_step4_demo_questionnaire_overrides() -> dict[str, Any]:
+    """Questionnaire deltas for the STEP-04 ESCALATED demo scenario.
+
+    Identical regulated-non-fast-track profile to scenario_blocked_demo, but
+    with vendor_class flipped to "Class F — Specialty Consulting Practice"
+    (a vendor type the production PAM-001 v2.0 matrix does not cover).
+    Bundle is admissible; PAM-001 retrieval succeeds; no retrieved row
+    matches the Class F profile → Procurement Agent emits status=escalated.
+    """
+    return {
+        "contract_details": {
+            "vendor_class_assigned": "Class D — Technology Professional Services",
+            "annual_contract_value_usd": 150000,
+        },
+        "product_and_integration": {
+            "erp_integration": {
+                "erp_type": "DIRECT_API",
+                "integration_description": (
+                    "Direct API integration to SAP S/4HANA. Vendor establishes "
+                    "a persistent authenticated session via OAuth client "
+                    "credentials and pulls production order, MRP, and inventory "
+                    "data over the SAP OData API on a scheduled interval. No "
+                    "middleware layer. No EU personal data in scope; US "
+                    "manufacturing operational data only."
+                ),
+            }
+        },
+        "data_handling": {
+            "personal_data_in_scope": False,
+            "data_categories_in_scope": [
+                "ERP transactional data (production orders, MRP outputs)",
+                "Inventory position records",
+                "Production scheduling data",
+            ],
+            "data_subjects": {
+                "eu_personal_data_flag": False,
+                "data_subjects_eu": False,
+            },
+        },
+        "legal_and_contractual_status": {
+            "existing_nda_status": "EXECUTED",
+            "existing_dpa_status": "NOT_REQUIRED",
+            "dpa_required": False,
+        },
+    }
+
+
+def scenario_blocked_demo_questionnaire_overrides() -> dict[str, Any]:
+    """Questionnaire deltas for the STEP-04 BLOCKED demo scenario.
+
+    Profile: regulated enterprise vendor, direct API integration to SAP
+    S/4HANA, no EU personal data, NDA executed, DPA not required. STEP-02
+    yields REGULATED + non-fast-track; STEP-03 yields no DPA blocker; STEP-04
+    blocks because PAM-001 is missing from the scenario's index registry.
+    """
+    return {
+        "contract_details": {
+            "vendor_class_assigned": "Class A — Enterprise Platform",
+        },
+        "product_and_integration": {
+            "erp_integration": {
+                "erp_type": "DIRECT_API",
+                "integration_description": (
+                    "Direct API integration to SAP S/4HANA. Vendor establishes "
+                    "a persistent authenticated session via OAuth client "
+                    "credentials and pulls production order, MRP, and inventory "
+                    "data over the SAP OData API on a scheduled interval. No "
+                    "middleware layer. No EU personal data in scope; US "
+                    "manufacturing operational data only."
+                ),
+            }
+        },
+        "data_handling": {
+            "personal_data_in_scope": False,
+            "data_categories_in_scope": [
+                "ERP transactional data (production orders, MRP outputs)",
+                "Inventory position records",
+                "Production scheduling data",
+            ],
+            "data_subjects": {
+                "eu_personal_data_flag": False,
+                "data_subjects_eu": False,
+            },
+        },
+        "legal_and_contractual_status": {
+            "existing_nda_status": "EXECUTED",
+            "existing_dpa_status": "NOT_REQUIRED",
+            "dpa_required": False,
+        },
+    }
+
+
 def scenario_2_questionnaire_overrides() -> dict[str, Any]:
     """Questionnaire deltas that convert the root questionnaire into scenario_2.
 
@@ -264,10 +356,12 @@ def scenario_2_questionnaire_overrides() -> dict[str, Any]:
     return {
         "product_and_integration": {
             "erp_integration": {
-                "erp_type": "AMBIGUOUS",
+                "erp_type": "DIRECT_API",
                 "integration_description": (
-                    "Vendor may deploy an extraction agent with service-account credentials to "
-                    "pull ERP data on a recurring schedule."
+                    "Direct API integration to SAP S/4HANA. Vendor establishes a "
+                    "persistent authenticated session via OAuth client credentials "
+                    "and pulls production order, MRP, and inventory data over the "
+                    "SAP OData API on a scheduled interval. No middleware layer."
                 ),
             }
         },

@@ -158,6 +158,45 @@ def record_pipeline_run(
     return written
 
 
+def record_supervisor_audit_log(
+    *,
+    scenario: str,
+    supervisor: Any,
+    record_dir: Path,
+    pipeline_run_number: int,
+) -> Path:
+    """Dump the Supervisor's append-only audit log to disk.
+
+    The Supervisor holds ``audit_logger.entries`` in memory only — the
+    full trail is never persisted unless STEP-05 happens to run (its
+    bundle reads the audit log as input). Scenarios that halt before
+    STEP-05 therefore lose the trail when the test process exits. This
+    helper closes that gap by writing every ``AuditEntry`` to a
+    standalone file named ``pipeline_{N}__supervisor_audit_log__{scenario}.json``
+    after every full-pipeline run, regardless of which step terminated.
+    """
+    record_dir.mkdir(parents=True, exist_ok=True)
+    audit_logger = getattr(supervisor, "audit_logger", None)
+    entries = list(getattr(audit_logger, "entries", []) or [])
+    payload = {
+        "record_type": "supervisor_audit_log",
+        "pipeline_run_number": pipeline_run_number,
+        "scenario": scenario,
+        "pipeline_run_id": getattr(supervisor.state, "pipeline_run_id", "") or "",
+        "timestamp_utc": _utc_timestamp(),
+        "entry_count": len(entries),
+        "entries": [entry.to_dict() for entry in entries],
+    }
+    path = record_dir / (
+        f"pipeline_{pipeline_run_number}__supervisor_audit_log__{scenario}.json"
+    )
+    path.write_text(
+        json.dumps(payload, indent=2, sort_keys=False, default=str),
+        encoding="utf-8",
+    )
+    return path
+
+
 def rename_with_verdicts(
     paths: dict[StepId, Path],
     verdicts: dict[StepId, bool],

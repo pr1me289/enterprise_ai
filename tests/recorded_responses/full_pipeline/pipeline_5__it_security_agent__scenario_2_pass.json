@@ -1,0 +1,80 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 5,
+  "scenario": "scenario_2",
+  "step_id": "STEP-02",
+  "determination_key": "step_02_security_classification",
+  "agent_name": "it_security_agent",
+  "pipeline_run_id": "run_46b0736b8b",
+  "timestamp_utc": "20260427T172502Z",
+  "parsed_output": {
+    "integration_type_normalized": "AMBIGUOUS",
+    "integration_tier": "UNCLASSIFIED_PENDING_REVIEW",
+    "data_classification": "REGULATED",
+    "eu_personal_data_present": true,
+    "fast_track_eligible": false,
+    "fast_track_rationale": "DISALLOWED_AMBIGUOUS_SCOPE",
+    "security_followup_required": true,
+    "nda_status_from_questionnaire": "PENDING",
+    "required_security_actions": [
+      {
+        "action_type": "ARCHITECTURE_CLARIFICATION",
+        "reason": "Integration pattern is ambiguous \u2014 vendor description states 'may deploy an extraction agent with service-account credentials' which does not clearly map to Tier 1 (direct API), Tier 2 (approved middleware), or Tier 3 (file-based export). Service-account credential deployment suggests direct system access but lacks explicit confirmation of persistent authenticated session vs. scheduled extraction. Tier assignment requires clarification per ISP-001 \u00a712.2.2.",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "EU_PERSONAL_DATA_HANDLING_REVIEW",
+        "reason": "EU personal data is present (Employee IDs for EU-based facilities, shift schedules). Vendor will access RESTRICTED data classification per ISP-001 \u00a75. Security review required before data access can be provisioned.",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "NDA_EXECUTION_REQUIRED",
+        "reason": "NDA status is PENDING. Per ISP-001 \u00a712.1.4, onboarding may not proceed to information-exchange phase until NDA execution is confirmed. Required before any RESTRICTED data disclosure.",
+        "owner": "Procurement"
+      }
+    ],
+    "policy_citations": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12_2",
+        "section_id": "12.2",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12_2_2",
+        "section_id": "12.2.2",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_5",
+        "section_id": "5",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12_1_4",
+        "section_id": "12.1.4",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "escalated"
+  },
+  "call_record": {
+    "agent_name": "it_security_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 10.110787751997123,
+    "input_tokens": 20199,
+    "output_tokens": 757,
+    "missing_fields": [],
+    "status": "escalated"
+  },
+  "step_status": "ESCALATED"
+}

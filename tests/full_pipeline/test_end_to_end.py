@@ -69,6 +69,26 @@ _SCENARIO_CASES: tuple[ScenarioCase, ...] = (
         expected_terminal_statuses={},  # enforced per-case below
         marker="scenario2",
     ),
+    ScenarioCase(
+        name="scenario_blocked_demo",
+        overrides_factory="scenario_blocked_demo_questionnaire_overrides",
+        overrides_source="bundle_builder",
+        expected_overall_status="BLOCKED",
+        # STEP-01..03 must be COMPLETE; STEP-04 BLOCKED on missing PAM-001;
+        # STEP-05 / STEP-06 must remain PENDING (supervisor halt invariant).
+        expected_terminal_statuses={},  # enforced per-case below
+        marker="scenario_blocked_demo",
+    ),
+    ScenarioCase(
+        name="scenario_escalated_step4_demo",
+        overrides_factory="scenario_escalated_step4_demo_questionnaire_overrides",
+        overrides_source="bundle_builder",
+        expected_overall_status="ESCALATED",
+        # STEP-01..03 must be COMPLETE; STEP-04 ESCALATED on Class F vendor
+        # profile not matching any PAM-001 row; STEP-05 / STEP-06 PENDING.
+        expected_terminal_statuses={},  # enforced per-case below
+        marker="scenario_escalated_step4_demo",
+    ),
 )
 
 
@@ -78,9 +98,10 @@ def _load_overrides(case: ScenarioCase) -> dict[str, Any]:
 
         return complete_demo_scenario().questionnaire_overrides
     if case.overrides_source == "bundle_builder":
-        from tests.support.bundle_builder import scenario_2_questionnaire_overrides
+        from tests.support import bundle_builder
 
-        return scenario_2_questionnaire_overrides()
+        factory = getattr(bundle_builder, case.overrides_factory)
+        return factory()
     raise RuntimeError(f"unknown overrides_source: {case.overrides_source}")
 
 
@@ -104,6 +125,7 @@ def test_pipeline_end_to_end(case: ScenarioCase, anthropic_client, live_monitor)
     from tests.support.pipeline_recorder import (
         next_pipeline_run_number,
         record_pipeline_run,
+        record_supervisor_audit_log,
     )
     from tests.support.pipeline_results_writer import append_results_block
 
@@ -183,6 +205,12 @@ def test_pipeline_end_to_end(case: ScenarioCase, anthropic_client, live_monitor)
         verdicts=verdicts,
         pipeline_run_number=pipeline_run_number,
     )
+    record_supervisor_audit_log(
+        scenario=case.name,
+        supervisor=supervisor,
+        record_dir=record_dir,
+        pipeline_run_number=pipeline_run_number,
+    )
     append_results_block(
         results_path=REPO_ROOT / "results" / "full_pipeline_test_results.md",
         pipeline_run_number=pipeline_run_number,
@@ -243,4 +271,42 @@ def test_pipeline_end_to_end(case: ScenarioCase, anthropic_client, live_monitor)
                 f"{case.name}: downstream step {sid.value} "
                 f"has status={s.value!r} — expected PENDING after halt at "
                 f"{step_ids[escalated_idx].value}"
+            )
+    elif case.name == "scenario_blocked_demo":
+        # Orchestration contract for BLOCKED: STEP-04 must terminate as
+        # BLOCKED on missing PAM-001; STEP-05 / STEP-06 must remain PENDING.
+        step_ids = [StepId.STEP_01, StepId.STEP_02, StepId.STEP_03,
+                    StepId.STEP_04, StepId.STEP_05, StepId.STEP_06]
+        for sid in (StepId.STEP_01, StepId.STEP_02, StepId.STEP_03):
+            actual = supervisor.state.step_statuses[sid].value
+            assert actual == "COMPLETE", (
+                f"{case.name}: {sid.value} status={actual!r} != COMPLETE"
+            )
+        step04_status = supervisor.state.step_statuses[StepId.STEP_04].value
+        assert step04_status == "BLOCKED", (
+            f"{case.name}: STEP-04 status={step04_status!r} != BLOCKED"
+        )
+        for sid in (StepId.STEP_05, StepId.STEP_06):
+            s = supervisor.state.step_statuses[sid]
+            assert s == StepStatus.PENDING, (
+                f"{case.name}: downstream {sid.value} status={s.value!r} "
+                "— expected PENDING after STEP-04 BLOCKED"
+            )
+    elif case.name == "scenario_escalated_step4_demo":
+        # Orchestration contract for STEP-04 ESCALATED on no matching PAM
+        # row: STEP-01..03 COMPLETE, STEP-04 ESCALATED, STEP-05/06 PENDING.
+        for sid in (StepId.STEP_01, StepId.STEP_02, StepId.STEP_03):
+            actual = supervisor.state.step_statuses[sid].value
+            assert actual == "COMPLETE", (
+                f"{case.name}: {sid.value} status={actual!r} != COMPLETE"
+            )
+        step04_status = supervisor.state.step_statuses[StepId.STEP_04].value
+        assert step04_status == "ESCALATED", (
+            f"{case.name}: STEP-04 status={step04_status!r} != ESCALATED"
+        )
+        for sid in (StepId.STEP_05, StepId.STEP_06):
+            s = supervisor.state.step_statuses[sid]
+            assert s == StepStatus.PENDING, (
+                f"{case.name}: downstream {sid.value} status={s.value!r} "
+                "— expected PENDING after STEP-04 ESCALATED"
             )
