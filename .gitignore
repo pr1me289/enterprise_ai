@@ -29,6 +29,7 @@ data/structured/
 # Environment files
 .env
 .env.*
+!.env.example
 
 # Logs and OS files
 *.log
