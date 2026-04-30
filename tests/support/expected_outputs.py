@@ -116,7 +116,10 @@ SCENARIO_1_EXPECTATIONS: dict[str, ExpectationSet] = {
         expectations=(
             FieldExpectation("data_classification", "UNREGULATED", equals="UNREGULATED"),
             FieldExpectation("integration_type_normalized", "EXPORT_ONLY", equals="EXPORT_ONLY"),
-            FieldExpectation("integration_tier", "TIER_3", equals="TIER_3"),
+            # Per IT Security Spec §8.2 (post-fixture-coherence fix): EXPORT_ONLY
+            # + UNREGULATED → TIER_1 (low-coupling AND low-risk → light review).
+            # This makes the chain cohere with PAM C-T1 (FAST_TRACK ELIGIBLE).
+            FieldExpectation("integration_tier", "TIER_1", equals="TIER_1"),
             FieldExpectation("eu_personal_data_present", "NO", equals="NO"),
             FieldExpectation("fast_track_eligible", "true", equals=True),
             FieldExpectation("fast_track_rationale", "ELIGIBLE_LOW_RISK", equals="ELIGIBLE_LOW_RISK"),

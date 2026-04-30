@@ -10,7 +10,7 @@
       "AUDIT_LOG",
       "PIPELINE_STATE"
     ],
-    "pipeline_run_id": "run_b0ae836897",
+    "pipeline_run_id": "run_d389b807a4",
     "vendor_name": "OptiChain, Inc.",
     "it_security_agent": {
       "integration_type_normalized": "EXPORT_ONLY",
@@ -28,6 +28,13 @@
           "version": "4.2",
           "chunk_id": "ISP-001__section_12_2",
           "section_id": "12.2",
+          "citation_class": "PRIMARY"
+        },
+        {
+          "source_id": "ISP-001",
+          "version": "4.2",
+          "chunk_id": "ISP-001__section_5",
+          "section_id": "5",
           "citation_class": "PRIMARY"
         }
       ],
@@ -51,7 +58,7 @@
       "status": "complete"
     },
     "procurement_agent": {
-      "approval_path": "FAST_TRACK",
+      "approval_path": "STANDARD",
       "fast_track_eligible": true,
       "required_approvals": [
         {
@@ -59,24 +66,31 @@
           "domain": "Procurement",
           "status": "PENDING",
           "blocker": false,
-          "estimated_completion": "2 business days"
+          "estimated_completion": "3-5 business days"
         },
         {
-          "approver": "Business Owner",
-          "domain": "Operations",
+          "approver": "IT Security",
+          "domain": "IT Security",
           "status": "PENDING",
           "blocker": false,
-          "estimated_completion": "3 business days"
+          "estimated_completion": "2-3 business days"
+        },
+        {
+          "approver": "Director (Business Owner)",
+          "domain": "Business",
+          "status": "PENDING",
+          "blocker": false,
+          "estimated_completion": "3-5 business days"
         }
       ],
-      "estimated_timeline": "3-5 business days",
+      "estimated_timeline": "8-13 business days",
       "policy_citations": [
         {
           "source_id": "PAM-001",
           "version": "2.0",
-          "chunk_id": "PAM-001__row_C-T1",
-          "row_id": "C-T1",
-          "approval_path_condition": "Class C vendor, Tier 1 integration, UNREGULATED data classification, fast-track eligible, no DPA required",
+          "chunk_id": "PAM-001__row_C-T2",
+          "row_id": "C-T2",
+          "approval_path_condition": "Class C vendor, Tier 2 integration, non-regulated software, standard approval path",
           "citation_class": "PRIMARY"
         }
       ],
@@ -84,11 +98,11 @@
     },
     "audit_log_entries": [
       {
-        "entry_id": "audit_3350fd70a7",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_6086b0fc2b",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RUN_EVENT",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -97,11 +111,11 @@
         }
       },
       {
-        "entry_id": "audit_72a2b514d6",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_a888bde64e",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -112,11 +126,11 @@
         }
       },
       {
-        "entry_id": "audit_89f42d0500",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_f8b2663cfe",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -143,11 +157,11 @@
         }
       },
       {
-        "entry_id": "audit_1237c57914",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_13bc9e3e49",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -202,11 +216,11 @@
         }
       },
       {
-        "entry_id": "audit_a7d48d473b",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_dd62a9ea16",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -229,11 +243,11 @@
         }
       },
       {
-        "entry_id": "audit_145641dc07",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_9a0a854093",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "DETERMINATION",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -247,11 +261,11 @@
         }
       },
       {
-        "entry_id": "audit_b745e073db",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_6486beceaf",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -262,11 +276,11 @@
         }
       },
       {
-        "entry_id": "audit_06f1bc2990",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_1149a0ce69",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -277,11 +291,11 @@
         }
       },
       {
-        "entry_id": "audit_bbebd08485",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_f925dea039",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -308,11 +322,11 @@
         }
       },
       {
-        "entry_id": "audit_8cc2f2a347",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_ead3cad926",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -335,11 +349,11 @@
         }
       },
       {
-        "entry_id": "audit_58580d81e8",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_a48f5b7373",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -362,11 +376,11 @@
         }
       },
       {
-        "entry_id": "audit_0c13315900",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_726f43a0da",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": "ISP-001",
         "chunks_retrieved": [
           {
@@ -531,11 +545,11 @@
         }
       },
       {
-        "entry_id": "audit_65eee3867d",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_055efbc185",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": "ISP-001",
         "chunks_retrieved": [
           {
@@ -700,11 +714,11 @@
         }
       },
       {
-        "entry_id": "audit_069f59a2d7",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_ef3e07c2e9",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": "ISP-001",
         "chunks_retrieved": [
           {
@@ -869,11 +883,11 @@
         }
       },
       {
-        "entry_id": "audit_18afe43be1",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_f437d39f95",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -892,11 +906,11 @@
         }
       },
       {
-        "entry_id": "audit_1a95dc9130",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_d29327e625",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:18Z",
+        "timestamp": "2026-04-30T04:58:24Z",
         "source_queried": "ISP-001",
         "chunks_retrieved": [
           {
@@ -1061,11 +1075,11 @@
         }
       },
       {
-        "entry_id": "audit_af1eb36b44",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_e542b85ba2",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "it_security_agent",
         "event_type": "DETERMINATION",
-        "timestamp": "2026-04-27T15:41:21Z",
+        "timestamp": "2026-04-30T04:58:27Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -1087,6 +1101,13 @@
                 "chunk_id": "ISP-001__section_12_2",
                 "section_id": "12.2",
                 "citation_class": "PRIMARY"
+              },
+              {
+                "source_id": "ISP-001",
+                "version": "4.2",
+                "chunk_id": "ISP-001__section_5",
+                "section_id": "5",
+                "citation_class": "PRIMARY"
               }
             ],
             "status": "complete"
@@ -1094,11 +1115,11 @@
         }
       },
       {
-        "entry_id": "audit_16e0b068fc",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_74a5efc39a",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-27T15:41:21Z",
+        "timestamp": "2026-04-30T04:58:27Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -1109,11 +1130,11 @@
         }
       },
       {
-        "entry_id": "audit_6ab126dadf",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_aa59d5ae69",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-27T15:41:21Z",
+        "timestamp": "2026-04-30T04:58:27Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -1124,11 +1145,11 @@
         }
       },
       {
-        "entry_id": "audit_8af056a4e6",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_9ede6a3909",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:21Z",
+        "timestamp": "2026-04-30T04:58:27Z",
         "source_queried": "STEP-02",
         "chunks_retrieved": [
           {
@@ -1155,11 +1176,11 @@
         }
       },
       {
-        "entry_id": "audit_b02c1778f6",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_1694399033",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:21Z",
+        "timestamp": "2026-04-30T04:58:27Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -1182,11 +1203,11 @@
         }
       },
       {
-        "entry_id": "audit_5fa9b7366b",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_45c2fddd2f",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:21Z",
+        "timestamp": "2026-04-30T04:58:27Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -1205,11 +1226,11 @@
         }
       },
       {
-        "entry_id": "audit_5a77479b0f",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_937bddbac6",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:21Z",
+        "timestamp": "2026-04-30T04:58:27Z",
         "source_queried": "DPA-TM-001",
         "chunks_retrieved": [
           {
@@ -1365,11 +1386,11 @@
         }
       },
       {
-        "entry_id": "audit_29da28af18",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_053bf2d26c",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:21Z",
+        "timestamp": "2026-04-30T04:58:27Z",
         "source_queried": "ISP-001",
         "chunks_retrieved": [
           {
@@ -1534,11 +1555,11 @@
         }
       },
       {
-        "entry_id": "audit_5f80230a48",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_947a36da0c",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "legal_agent",
         "event_type": "DETERMINATION",
-        "timestamp": "2026-04-27T15:41:23Z",
+        "timestamp": "2026-04-30T04:58:28Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -1563,11 +1584,11 @@
         }
       },
       {
-        "entry_id": "audit_f99c3a0ef4",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_6d8b2117ca",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-27T15:41:23Z",
+        "timestamp": "2026-04-30T04:58:28Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -1578,11 +1599,11 @@
         }
       },
       {
-        "entry_id": "audit_aa12c48785",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_5e56d9f346",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-27T15:41:23Z",
+        "timestamp": "2026-04-30T04:58:28Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -1593,11 +1614,11 @@
         }
       },
       {
-        "entry_id": "audit_c050b96176",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_bd739eafad",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:23Z",
+        "timestamp": "2026-04-30T04:58:28Z",
         "source_queried": "STEP-02",
         "chunks_retrieved": [
           {
@@ -1636,11 +1657,11 @@
         }
       },
       {
-        "entry_id": "audit_4935e41f06",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_8fbaff4b33",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:23Z",
+        "timestamp": "2026-04-30T04:58:28Z",
         "source_queried": "STEP-03",
         "chunks_retrieved": [
           {
@@ -1683,11 +1704,11 @@
         }
       },
       {
-        "entry_id": "audit_1454fc61ff",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_e6d758a33a",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:23Z",
+        "timestamp": "2026-04-30T04:58:28Z",
         "source_queried": "VQ-OC-001",
         "chunks_retrieved": [
           {
@@ -1718,11 +1739,11 @@
         }
       },
       {
-        "entry_id": "audit_0530aad2ac",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_bcec3d88e9",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:23Z",
+        "timestamp": "2026-04-30T04:58:28Z",
         "source_queried": "PAM-001",
         "chunks_retrieved": [
           {
@@ -1859,12 +1880,417 @@
             "domain_scope": null,
             "retrieval_score": 3.5,
             "rerank_score": 0.7
+          },
+          {
+            "chunk_id": "PAM-001__row_B-T1",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 5,
+            "citation_label": "PAM-001 row B-T1",
+            "text": "Class: B\nTier: T1\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: CONDITIONAL\nRequired Approvals / Notes: DPA required if personal data in scope. Confirm data subject categories and legal basis before execution.",
+            "section_id": null,
+            "row_id": "B-T1",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.5833
+          },
+          {
+            "chunk_id": "PAM-001__row_B-T2",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 6,
+            "citation_label": "PAM-001 row B-T2",
+            "text": "Class: B\nTier: T2\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: DPA required. SOC 2 Type II or ISO 27001 attestation required for vendors handling RESTRICTED data per ISP-001 \u00a712.1.3. NDA must be confirmed executed before information exchange.",
+            "section_id": null,
+            "row_id": "B-T2",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.5
+          },
+          {
+            "chunk_id": "PAM-001__row_B-T3",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 7,
+            "citation_label": "PAM-001 row B-T3",
+            "text": "Class: B\nTier: T3\nApproval Path: STANDARD \u2014 ENHANCED\nIT Security Review: Required + CISO Awareness\nLegal / DPA Review: Required + GC Awareness\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: VP+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: DPA required. Enhanced security review. VP business owner sign-off on data classification memo.",
+            "section_id": null,
+            "row_id": "B-T3",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.4375
+          },
+          {
+            "chunk_id": "PAM-001__row_B-T4",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 8,
+            "citation_label": "PAM-001 row B-T4",
+            "text": "Class: B\nTier: T4\nApproval Path: EXECUTIVE APPROVAL\nIT Security Review: Required + CISO Sign-off\nLegal / DPA Review: Required + GC Sign-off\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: EVP + CFO\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Executive approval package. DPA required. Legal contract review mandatory.",
+            "section_id": null,
+            "row_id": "B-T4",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.3889
+          },
+          {
+            "chunk_id": "PAM-001__row_C-T2",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 10,
+            "citation_label": "PAM-001 row C-T2",
+            "text": "Class: C\nTier: T2\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Not required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: CONDITIONAL\nRequired Approvals / Notes: No DPA required unless personal data is inadvertently in scope \u2014 confirm at intake. Standard NDA applies.",
+            "section_id": null,
+            "row_id": "C-T2",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.35
+          },
+          {
+            "chunk_id": "PAM-001__row_C-T3",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 11,
+            "citation_label": "PAM-001 row C-T3",
+            "text": "Class: C\nTier: T3\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Not required\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: VP+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: IT Security review required despite non-regulated classification. VP sign-off required at T3 regardless of data scope.",
+            "section_id": null,
+            "row_id": "C-T3",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.3182
+          },
+          {
+            "chunk_id": "PAM-001__row_C-T4",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 12,
+            "citation_label": "PAM-001 row C-T4",
+            "text": "Class: C\nTier: T4\nApproval Path: EXECUTIVE APPROVAL\nIT Security Review: Required + CISO Awareness\nLegal / DPA Review: Required\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: EVP\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Executive approval required. Legal must review at T4 regardless of data classification.",
+            "section_id": null,
+            "row_id": "C-T4",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.2917
+          },
+          {
+            "chunk_id": "PAM-001__row_D-T1",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 13,
+            "citation_label": "PAM-001 row D-T1",
+            "text": "Class: D\nTier: T1\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Conditional\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: IT Security review required for all technology professional services where personnel will have system access. DPA required if personal data accessed.",
+            "section_id": null,
+            "row_id": "D-T1",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.2692
+          },
+          {
+            "chunk_id": "PAM-001__row_D-T2",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 14,
+            "citation_label": "PAM-001 row D-T2",
+            "text": "Class: D\nTier: T2\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: DPA required if regulated data accessed. Background check requirements for personnel with RESTRICTED data access apply per ISP-001 \u00a76.3.",
+            "section_id": null,
+            "row_id": "D-T2",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.25
+          },
+          {
+            "chunk_id": "PAM-001__row_D-T3",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 15,
+            "citation_label": "PAM-001 row D-T3",
+            "text": "Class: D\nTier: T3\nApproval Path: STANDARD \u2014 ENHANCED\nIT Security Review: Required + CISO Sign-off\nLegal / DPA Review: Required\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: VP+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: CISO sign-off on personnel access scope. DPA required. Enhanced ISP-001 \u00a712 compliance verification.",
+            "section_id": null,
+            "row_id": "D-T3",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.2333
+          },
+          {
+            "chunk_id": "PAM-001__row_D-T4",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 16,
+            "citation_label": "PAM-001 row D-T4",
+            "text": "Class: D\nTier: T4\nApproval Path: EXECUTIVE APPROVAL\nIT Security Review: Required + CISO Sign-off\nLegal / DPA Review: Required + GC Sign-off\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: EVP + CFO\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Full executive package. All personnel with production access individually vetted by IT Security.",
+            "section_id": null,
+            "row_id": "D-T4",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.2188
+          },
+          {
+            "chunk_id": "PAM-001__row_E-T1",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 17,
+            "citation_label": "PAM-001 row E-T1",
+            "text": "Class: E\nTier: T1\nApproval Path: FAST_TRACK\nIT Security Review: Not required\nLegal / DPA Review: Not required\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: ELIGIBLE\nRequired Approvals / Notes: Standard NDA / confidentiality provisions apply. No system access; no data handling review required.",
+            "section_id": null,
+            "row_id": "E-T1",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.2059
+          },
+          {
+            "chunk_id": "PAM-001__row_E-T2",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 18,
+            "citation_label": "PAM-001 row E-T2",
+            "text": "Class: E\nTier: T2\nApproval Path: FAST_TRACK\nIT Security Review: Not required\nLegal / DPA Review: Not required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: ELIGIBLE\nRequired Approvals / Notes: Standard NDA applies. Procurement confirms no system access and no regulated data in scope before streamlined path is confirmed.",
+            "section_id": null,
+            "row_id": "E-T2",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.1944
+          },
+          {
+            "chunk_id": "PAM-001__row_E-T3",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 19,
+            "citation_label": "PAM-001 row E-T3",
+            "text": "Class: E\nTier: T3\nApproval Path: STANDARD\nIT Security Review: Notification only\nLegal / DPA Review: Not required\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: VP+\nFast-Track Eligible?: CONDITIONAL\nRequired Approvals / Notes: VP sign-off required at T3 threshold regardless of engagement type.",
+            "section_id": null,
+            "row_id": "E-T3",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.1842
+          },
+          {
+            "chunk_id": "PAM-001__row_E-T4",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 20,
+            "citation_label": "PAM-001 row E-T4",
+            "text": "Class: E\nTier: T4\nApproval Path: EXECUTIVE APPROVAL\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: EVP\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Executive approval required at T4 regardless of engagement type.",
+            "section_id": null,
+            "row_id": "E-T4",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.175
           }
         ],
         "details": {
           "request_id": "R04-SQ-04",
           "lane": "indexed_hybrid",
-          "admitted_count": 5,
+          "admitted_count": 20,
           "excluded_count": 0,
           "output_name": "approval_matrix_rows",
           "missing_fields": [],
@@ -1877,11 +2303,11 @@
         }
       },
       {
-        "entry_id": "audit_1a51de5f18",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_ef5c87714b",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:23Z",
+        "timestamp": "2026-04-30T04:58:28Z",
         "source_queried": "PAM-001",
         "chunks_retrieved": [
           {
@@ -2018,12 +2444,417 @@
             "domain_scope": null,
             "retrieval_score": 3.5,
             "rerank_score": 0.7
+          },
+          {
+            "chunk_id": "PAM-001__row_B-T2",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 6,
+            "citation_label": "PAM-001 row B-T2",
+            "text": "Class: B\nTier: T2\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: DPA required. SOC 2 Type II or ISO 27001 attestation required for vendors handling RESTRICTED data per ISP-001 \u00a712.1.3. NDA must be confirmed executed before information exchange.",
+            "section_id": null,
+            "row_id": "B-T2",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.5833
+          },
+          {
+            "chunk_id": "PAM-001__row_B-T3",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 7,
+            "citation_label": "PAM-001 row B-T3",
+            "text": "Class: B\nTier: T3\nApproval Path: STANDARD \u2014 ENHANCED\nIT Security Review: Required + CISO Awareness\nLegal / DPA Review: Required + GC Awareness\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: VP+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: DPA required. Enhanced security review. VP business owner sign-off on data classification memo.",
+            "section_id": null,
+            "row_id": "B-T3",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.5
+          },
+          {
+            "chunk_id": "PAM-001__row_B-T4",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 8,
+            "citation_label": "PAM-001 row B-T4",
+            "text": "Class: B\nTier: T4\nApproval Path: EXECUTIVE APPROVAL\nIT Security Review: Required + CISO Sign-off\nLegal / DPA Review: Required + GC Sign-off\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: EVP + CFO\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Executive approval package. DPA required. Legal contract review mandatory.",
+            "section_id": null,
+            "row_id": "B-T4",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.4375
+          },
+          {
+            "chunk_id": "PAM-001__row_C-T1",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 9,
+            "citation_label": "PAM-001 row C-T1",
+            "text": "Class: C\nTier: T1\nApproval Path: FAST_TRACK\nIT Security Review: Notification only\nLegal / DPA Review: Not required\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: ELIGIBLE\nRequired Approvals / Notes: No DPA required. Standard NDA / confidentiality provisions apply. IT Security notification for any system integration, even if non-regulated.",
+            "section_id": null,
+            "row_id": "C-T1",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.3889
+          },
+          {
+            "chunk_id": "PAM-001__row_C-T2",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 10,
+            "citation_label": "PAM-001 row C-T2",
+            "text": "Class: C\nTier: T2\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Not required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: CONDITIONAL\nRequired Approvals / Notes: No DPA required unless personal data is inadvertently in scope \u2014 confirm at intake. Standard NDA applies.",
+            "section_id": null,
+            "row_id": "C-T2",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.35
+          },
+          {
+            "chunk_id": "PAM-001__row_C-T3",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 11,
+            "citation_label": "PAM-001 row C-T3",
+            "text": "Class: C\nTier: T3\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Not required\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: VP+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: IT Security review required despite non-regulated classification. VP sign-off required at T3 regardless of data scope.",
+            "section_id": null,
+            "row_id": "C-T3",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.3182
+          },
+          {
+            "chunk_id": "PAM-001__row_C-T4",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 12,
+            "citation_label": "PAM-001 row C-T4",
+            "text": "Class: C\nTier: T4\nApproval Path: EXECUTIVE APPROVAL\nIT Security Review: Required + CISO Awareness\nLegal / DPA Review: Required\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: EVP\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Executive approval required. Legal must review at T4 regardless of data classification.",
+            "section_id": null,
+            "row_id": "C-T4",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.2917
+          },
+          {
+            "chunk_id": "PAM-001__row_D-T1",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 13,
+            "citation_label": "PAM-001 row D-T1",
+            "text": "Class: D\nTier: T1\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Conditional\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: IT Security review required for all technology professional services where personnel will have system access. DPA required if personal data accessed.",
+            "section_id": null,
+            "row_id": "D-T1",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.2692
+          },
+          {
+            "chunk_id": "PAM-001__row_D-T2",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 14,
+            "citation_label": "PAM-001 row D-T2",
+            "text": "Class: D\nTier: T2\nApproval Path: STANDARD\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: DPA required if regulated data accessed. Background check requirements for personnel with RESTRICTED data access apply per ISP-001 \u00a76.3.",
+            "section_id": null,
+            "row_id": "D-T2",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.25
+          },
+          {
+            "chunk_id": "PAM-001__row_D-T3",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 15,
+            "citation_label": "PAM-001 row D-T3",
+            "text": "Class: D\nTier: T3\nApproval Path: STANDARD \u2014 ENHANCED\nIT Security Review: Required + CISO Sign-off\nLegal / DPA Review: Required\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: VP+\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: CISO sign-off on personnel access scope. DPA required. Enhanced ISP-001 \u00a712 compliance verification.",
+            "section_id": null,
+            "row_id": "D-T3",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.2333
+          },
+          {
+            "chunk_id": "PAM-001__row_D-T4",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 16,
+            "citation_label": "PAM-001 row D-T4",
+            "text": "Class: D\nTier: T4\nApproval Path: EXECUTIVE APPROVAL\nIT Security Review: Required + CISO Sign-off\nLegal / DPA Review: Required + GC Sign-off\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: EVP + CFO\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Full executive package. All personnel with production access individually vetted by IT Security.",
+            "section_id": null,
+            "row_id": "D-T4",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.2188
+          },
+          {
+            "chunk_id": "PAM-001__row_E-T1",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 17,
+            "citation_label": "PAM-001 row E-T1",
+            "text": "Class: E\nTier: T1\nApproval Path: FAST_TRACK\nIT Security Review: Not required\nLegal / DPA Review: Not required\nProcurement Review: Required\nBusiness Owner Sign-off: Manager+\nFast-Track Eligible?: ELIGIBLE\nRequired Approvals / Notes: Standard NDA / confidentiality provisions apply. No system access; no data handling review required.",
+            "section_id": null,
+            "row_id": "E-T1",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.2059
+          },
+          {
+            "chunk_id": "PAM-001__row_E-T2",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 18,
+            "citation_label": "PAM-001 row E-T2",
+            "text": "Class: E\nTier: T2\nApproval Path: FAST_TRACK\nIT Security Review: Not required\nLegal / DPA Review: Not required\nProcurement Review: Required\nBusiness Owner Sign-off: Director+\nFast-Track Eligible?: ELIGIBLE\nRequired Approvals / Notes: Standard NDA applies. Procurement confirms no system access and no regulated data in scope before streamlined path is confirmed.",
+            "section_id": null,
+            "row_id": "E-T2",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.1944
+          },
+          {
+            "chunk_id": "PAM-001__row_E-T3",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 19,
+            "citation_label": "PAM-001 row E-T3",
+            "text": "Class: E\nTier: T3\nApproval Path: STANDARD\nIT Security Review: Notification only\nLegal / DPA Review: Not required\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: VP+\nFast-Track Eligible?: CONDITIONAL\nRequired Approvals / Notes: VP sign-off required at T3 threshold regardless of engagement type.",
+            "section_id": null,
+            "row_id": "E-T3",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.1842
+          },
+          {
+            "chunk_id": "PAM-001__row_E-T4",
+            "source_id": "PAM-001",
+            "source_name": "Procurement Approval Matrix",
+            "source_type": "PROCUREMENT_APPROVAL_MATRIX",
+            "version": "2.0",
+            "document_date": "2026-04-04",
+            "freshness_status": "CURRENT",
+            "authority_tier": 1,
+            "retrieval_lane": "INDEXED_HYBRID",
+            "allowed_agents": [
+              "procurement"
+            ],
+            "is_primary_citable": true,
+            "manifest_status": "CONFIRMED",
+            "chunk_type": "ROW",
+            "chunk_order": 20,
+            "citation_label": "PAM-001 row E-T4",
+            "text": "Class: E\nTier: T4\nApproval Path: EXECUTIVE APPROVAL\nIT Security Review: Required\nLegal / DPA Review: Required\nProcurement Review: Required + CPO Sign-off\nBusiness Owner Sign-off: EVP\nFast-Track Eligible?: NOT ELIGIBLE\nRequired Approvals / Notes: Executive approval required at T4 regardless of engagement type.",
+            "section_id": null,
+            "row_id": "E-T4",
+            "record_id": null,
+            "thread_id": null,
+            "domain_scope": null,
+            "retrieval_score": 3.5,
+            "rerank_score": 0.175
           }
         ],
         "details": {
           "request_id": "R04-SQ-05",
           "lane": "indexed_hybrid",
-          "admitted_count": 5,
+          "admitted_count": 20,
           "excluded_count": 0,
           "output_name": "fast_track_rows",
           "missing_fields": [],
@@ -2036,11 +2867,11 @@
         }
       },
       {
-        "entry_id": "audit_f611089e44",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_e480ff91c5",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:23Z",
+        "timestamp": "2026-04-30T04:58:28Z",
         "source_queried": "SLK-001",
         "chunks_retrieved": [
           {
@@ -2168,17 +2999,17 @@
         }
       },
       {
-        "entry_id": "audit_cff402f6cb",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_26e520cae8",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "procurement_agent",
         "event_type": "DETERMINATION",
-        "timestamp": "2026-04-27T15:41:26Z",
+        "timestamp": "2026-04-30T04:58:32Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
           "step_id": "STEP-04",
           "output": {
-            "approval_path": "FAST_TRACK",
+            "approval_path": "STANDARD",
             "fast_track_eligible": true,
             "required_approvals": [
               {
@@ -2186,24 +3017,31 @@
                 "domain": "Procurement",
                 "status": "PENDING",
                 "blocker": false,
-                "estimated_completion": "2 business days"
+                "estimated_completion": "3-5 business days"
               },
               {
-                "approver": "Business Owner",
-                "domain": "Operations",
+                "approver": "IT Security",
+                "domain": "IT Security",
                 "status": "PENDING",
                 "blocker": false,
-                "estimated_completion": "3 business days"
+                "estimated_completion": "2-3 business days"
+              },
+              {
+                "approver": "Director (Business Owner)",
+                "domain": "Business",
+                "status": "PENDING",
+                "blocker": false,
+                "estimated_completion": "3-5 business days"
               }
             ],
-            "estimated_timeline": "3-5 business days",
+            "estimated_timeline": "8-13 business days",
             "policy_citations": [
               {
                 "source_id": "PAM-001",
                 "version": "2.0",
-                "chunk_id": "PAM-001__row_C-T1",
-                "row_id": "C-T1",
-                "approval_path_condition": "Class C vendor, Tier 1 integration, UNREGULATED data classification, fast-track eligible, no DPA required",
+                "chunk_id": "PAM-001__row_C-T2",
+                "row_id": "C-T2",
+                "approval_path_condition": "Class C vendor, Tier 2 integration, non-regulated software, standard approval path",
                 "citation_class": "PRIMARY"
               }
             ],
@@ -2212,11 +3050,11 @@
         }
       },
       {
-        "entry_id": "audit_02948117d8",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_519c3089c0",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-27T15:41:26Z",
+        "timestamp": "2026-04-30T04:58:32Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -2227,11 +3065,11 @@
         }
       },
       {
-        "entry_id": "audit_dce68c67c9",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_dd0aa413df",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "STATUS_CHANGE",
-        "timestamp": "2026-04-27T15:41:26Z",
+        "timestamp": "2026-04-30T04:58:32Z",
         "source_queried": null,
         "chunks_retrieved": [],
         "details": {
@@ -2242,11 +3080,11 @@
         }
       },
       {
-        "entry_id": "audit_2ca566a899",
-        "pipeline_run_id": "run_b0ae836897",
+        "entry_id": "audit_51b019538b",
+        "pipeline_run_id": "run_d389b807a4",
         "agent_id": "supervisor",
         "event_type": "RETRIEVAL",
-        "timestamp": "2026-04-27T15:41:26Z",
+        "timestamp": "2026-04-30T04:58:32Z",
         "source_queried": "PIPELINE_STATE",
         "chunks_retrieved": [
           {

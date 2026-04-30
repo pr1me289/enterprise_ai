@@ -182,12 +182,17 @@ Normalization of `eu_personal_data_present` must occur in the same initial quest
 
 ### 8.2 Integration Tier Assignment
 
+`integration_tier` is the **review-burden tier** the vendor's integration profile warrants. It is the key the Procurement Agent uses to look up the matching PAM-001 row at STEP-04 (matched against PAM's `Tier` column). Lower tier = lighter review burden; higher tier = heavier review burden. Tier assignment combines integration coupling (Direct API / Middleware / Export-only) with data sensitivity (Regulated / Unregulated): a tighter-coupled integration of regulated data warrants more review than a loose-coupled integration of unregulated data.
+
 | Condition | Assigned Tier |
 |---|---|
-| Direct API connection to ERP without approved middleware | `TIER_1` |
-| Connection through approved mediated middleware layer | `TIER_2` |
-| Export-only / file-based, no direct system access | `TIER_3` |
+| Direct API connection to ERP without approved middleware (any data classification) | `TIER_1` |
+| Connection through approved mediated middleware layer (any data classification) | `TIER_2` |
+| Export-only / file-based, no direct system access, **regulated data in scope** | `TIER_3` |
+| Export-only / file-based, no direct system access, **no regulated data in scope** (low-coupling AND low-risk vendor) | `TIER_1` |
 | Integration pattern not classifiable from available evidence | `UNCLASSIFIED_PENDING_REVIEW` |
+
+> **Note on TIER_1 for EXPORT_ONLY + UNREGULATED:** A vendor with no regulated data exposure and no direct ERP coupling presents the lowest combined risk profile — neither the data-sensitivity dimension nor the coupling-tightness dimension elevates the review burden. Such vendors warrant the lightest-tier review (TIER_1, Class C × T1 fast-track in PAM-001) even though their integration mechanism is technically EXPORT_ONLY. This is the only path by which an EXPORT_ONLY integration lands at TIER_1 — any regulated data in scope reverts to TIER_3.
 
 Tier assignment must cite the relevant ISP-001 §12.2 row.
 
@@ -212,6 +217,7 @@ Tier assignment must cite the relevant ISP-001 §12.2 row.
 | `eu_personal_data_present = true` and `integration_tier` is not `TIER_3` | `true` — data handling review required |
 | `integration_type_normalized = AMBIGUOUS` | `true` — integration pattern must be clarified before review can proceed |
 | `data_classification = UNREGULATED` and `integration_tier = TIER_3` and no ambiguity | `false` |
+| `data_classification = UNREGULATED` and `integration_tier = TIER_1` (the EXPORT_ONLY + UNREGULATED path per §8.2) and no ambiguity | `false` — light-tier review is satisfied by the §8.2 classification itself |
 
 When `security_followup_required = true`, the agent must populate `required_security_actions` with at least one structured entry describing the required action, reason, and responsible owner. An empty `required_security_actions` array is only valid when `security_followup_required = false`.
 

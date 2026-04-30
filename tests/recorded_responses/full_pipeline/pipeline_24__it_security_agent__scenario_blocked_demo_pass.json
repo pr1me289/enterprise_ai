@@ -1,0 +1,78 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 24,
+  "scenario": "scenario_blocked_demo",
+  "step_id": "STEP-02",
+  "determination_key": "step_02_security_classification",
+  "agent_name": "it_security_agent",
+  "pipeline_run_id": "run_605da83c92",
+  "timestamp_utc": "20260430T050202Z",
+  "parsed_output": {
+    "integration_type_normalized": "DIRECT_API",
+    "integration_tier": "TIER_1",
+    "data_classification": "REGULATED",
+    "eu_personal_data_present": false,
+    "fast_track_eligible": false,
+    "fast_track_rationale": "DISALLOWED_REGULATED_DATA",
+    "security_followup_required": true,
+    "nda_status_from_questionnaire": "EXECUTED",
+    "required_security_actions": [
+      {
+        "action_type": "FULL_SECURITY_REVIEW",
+        "reason": "TIER_1 direct ERP integration with regulated transactional data requires mandatory CISO + CIO written approval, penetration testing, and SOC 2 Type II certification per ISP-001 \u00a712.2",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "PENETRATION_TEST",
+        "reason": "Tier 1 direct API connection to SAP S/4HANA requires mandatory penetration test prior to contract execution per ISP-001 \u00a712.2 Tier 1 Additional Requirements",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "SOC2_CERTIFICATION_VALIDATION",
+        "reason": "Vendor handling ERP transactional data (classified as RESTRICTED under ISP-001 \u00a75) must provide valid SOC 2 Type II report dated within preceding 12 months per ISP-001 \u00a712.1.3",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "CISO_CIO_APPROVAL",
+        "reason": "Tier 1 ERP integration requires CISO + CIO written approval prior to contract execution per ISP-001 \u00a712.2",
+        "owner": "CISO and CIO"
+      }
+    ],
+    "policy_citations": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12",
+        "section_id": "12.2",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_5",
+        "section_id": "5",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12",
+        "section_id": "12.1.3",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "it_security_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 34.023885470000096,
+    "input_tokens": 26043,
+    "output_tokens": 696,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

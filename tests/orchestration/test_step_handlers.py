@@ -179,7 +179,9 @@ class TestStep02Security:
         assert output["status"] == "complete"
         assert output["fast_track_eligible"] is True
         assert output["data_classification"] == "UNREGULATED"
-        assert output["integration_tier"] == "TIER_3"
+        # Per IT Security Spec §8.2: EXPORT_ONLY + UNREGULATED → TIER_1
+        # (low-coupling AND low-risk → light review tier, matches PAM C-T1).
+        assert output["integration_tier"] == "TIER_1"
 
     def test_escalation_path_ambiguous_integration(
         self, mock_documents_dir: Path, repo_root: Path

@@ -19,14 +19,21 @@
           "domain": "Procurement",
           "status": "PENDING",
           "blocker": false,
-          "estimated_completion": "2 business days"
+          "estimated_completion": "3-5 business days"
         },
         {
-          "approver": "Business Owner",
-          "domain": "Operations",
+          "approver": "IT Security",
+          "domain": "IT Security",
           "status": "PENDING",
           "blocker": false,
-          "estimated_completion": "3 business days"
+          "estimated_completion": "2-3 business days"
+        },
+        {
+          "approver": "Director (Business Owner)",
+          "domain": "Business",
+          "status": "PENDING",
+          "blocker": false,
+          "estimated_completion": "3-5 business days"
         }
       ],
       "required_security_actions": [],
@@ -35,26 +42,33 @@
           "source_name": "IT Security Policy",
           "version": "4.2",
           "section": "12.2",
-          "retrieval_timestamp": "2026-04-27T15:41:18Z",
+          "retrieval_timestamp": "2026-04-30T04:58:24Z",
+          "agent_id": "it_security_agent"
+        },
+        {
+          "source_name": "IT Security Policy",
+          "version": "4.2",
+          "section": "5",
+          "retrieval_timestamp": "2026-04-30T04:58:24Z",
           "agent_id": "it_security_agent"
         },
         {
           "source_name": "IT Security Policy",
           "version": "4.2",
           "section": "12.1.4",
-          "retrieval_timestamp": "2026-04-27T15:41:21Z",
+          "retrieval_timestamp": "2026-04-30T04:58:27Z",
           "agent_id": "legal_agent"
         },
         {
           "source_name": "Procurement Approval Matrix",
           "version": "2.0",
-          "section": "C-T1",
-          "retrieval_timestamp": "2026-04-27T15:41:23Z",
+          "section": "C-T2",
+          "retrieval_timestamp": "2026-04-30T04:58:28Z",
           "agent_id": "procurement_agent"
         }
       ],
       "data_classification": "UNREGULATED",
-      "approval_path": "FAST_TRACK"
+      "approval_path": "STANDARD"
     },
     "stakeholder_map": {
       "stakeholder_map": {
@@ -108,6 +122,13 @@
             "chunk_id": "ISP-001__section_12_2",
             "section_id": "12.2",
             "citation_class": "PRIMARY"
+          },
+          {
+            "source_id": "ISP-001",
+            "version": "4.2",
+            "chunk_id": "ISP-001__section_5",
+            "section_id": "5",
+            "citation_class": "PRIMARY"
           }
         ],
         "status": "complete"
@@ -130,7 +151,7 @@
         "status": "complete"
       },
       "step_04": {
-        "approval_path": "FAST_TRACK",
+        "approval_path": "STANDARD",
         "fast_track_eligible": true,
         "required_approvals": [
           {
@@ -138,24 +159,31 @@
             "domain": "Procurement",
             "status": "PENDING",
             "blocker": false,
-            "estimated_completion": "2 business days"
+            "estimated_completion": "3-5 business days"
           },
           {
-            "approver": "Business Owner",
-            "domain": "Operations",
+            "approver": "IT Security",
+            "domain": "IT Security",
             "status": "PENDING",
             "blocker": false,
-            "estimated_completion": "3 business days"
+            "estimated_completion": "2-3 business days"
+          },
+          {
+            "approver": "Director (Business Owner)",
+            "domain": "Business",
+            "status": "PENDING",
+            "blocker": false,
+            "estimated_completion": "3-5 business days"
           }
         ],
-        "estimated_timeline": "3-5 business days",
+        "estimated_timeline": "8-13 business days",
         "policy_citations": [
           {
             "source_id": "PAM-001",
             "version": "2.0",
-            "chunk_id": "PAM-001__row_C-T1",
-            "row_id": "C-T1",
-            "approval_path_condition": "Class C vendor, Tier 1 integration, UNREGULATED data classification, fast-track eligible, no DPA required",
+            "chunk_id": "PAM-001__row_C-T2",
+            "row_id": "C-T2",
+            "approval_path_condition": "Class C vendor, Tier 2 integration, non-regulated software, standard approval path",
             "citation_class": "PRIMARY"
           }
         ],

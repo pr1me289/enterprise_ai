@@ -1,0 +1,94 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 22,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_d389b807a4",
+  "timestamp_utc": "20260430T050008Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "Procurement Manager",
+        "domain": "procurement",
+        "instructions": "The vendor onboarding assessment is complete and has reached COMPLETE status. As Procurement Manager, you are required to approve this vendor integration. The vendor has been classified as Class C with Tier 2 integration (EXPORT_ONLY) and non-regulated data handling. No blockers or security escalations apply to this approval. Your review and approval are required to proceed with onboarding. Expected completion timeline: 3-5 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review and approve vendor onboarding per STANDARD approval path (Class C, Tier 2 integration)",
+          "Complete procurement approval within estimated 3-5 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T04:58:28Z",
+            "section": "C-T2",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "IT Security",
+        "domain": "security",
+        "instructions": "The vendor onboarding assessment is complete and has reached COMPLETE status. As IT Security contact (K. Whitfield), you are required to approve this vendor integration. The vendor has been classified as UNREGULATED with no EU personal data present. Integration tier is TIER_3 (EXPORT_ONLY). No security actions or blockers are outstanding. Your approval confirms the security posture assessment and clears the vendor for onboarding. Expected completion timeline: 2-3 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review and approve IT security clearance for vendor integration (EXPORT_ONLY, UNREGULATED data)",
+          "Complete security approval within estimated 2-3 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-30T04:58:24Z",
+            "section": "12.2",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          },
+          {
+            "agent_id": "it_security_agent",
+            "retrieval_timestamp": "2026-04-30T04:58:24Z",
+            "section": "5",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Director (Business Owner)",
+        "domain": "business",
+        "instructions": "The vendor onboarding assessment is complete and has reached COMPLETE status. As Director and business owner, you are required to provide final approval for this vendor integration. The assessment has cleared all technical, legal, and procurement gates: data is unregulated, no DPA is required, NDA is executed, and the vendor follows STANDARD approval path. No blockers remain. Your approval authorizes the vendor to proceed to onboarding. Expected completion timeline: 3-5 business days.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review and provide final business owner approval for vendor onboarding",
+          "Complete director approval within estimated 3-5 business days"
+        ],
+        "citations": [
+          {
+            "agent_id": "legal_agent",
+            "retrieval_timestamp": "2026-04-30T04:58:27Z",
+            "section": "12.1.4",
+            "source_name": "IT Security Policy",
+            "version": "4.2"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 37.10916443399037,
+    "input_tokens": 7699,
+    "output_tokens": 964,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

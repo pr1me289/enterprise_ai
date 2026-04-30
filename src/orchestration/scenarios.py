@@ -61,7 +61,12 @@ def complete_demo_scenario() -> ScenarioFixture:
     agent_outputs = {
         "it_security_agent": {
             "integration_type_normalized": "EXPORT_ONLY",
-            "integration_tier": "TIER_3",
+            # Per IT Security Spec §8.2 (post-fixture-coherence fix): EXPORT_ONLY +
+            # UNREGULATED → TIER_1, so the chain coheres with PAM C-T1 (Class C ×
+            # Tier 1 = FAST_TRACK ELIGIBLE). The previous TIER_3 mapping conflicted
+            # with PAM C-T3 (NOT ELIGIBLE for fast-track) and made the "happy path"
+            # fast-track scenario unreachable for the live agent.
+            "integration_tier": "TIER_1",
             "data_classification": "UNREGULATED",
             "eu_personal_data_present": "NO",
             "fast_track_eligible": True,
