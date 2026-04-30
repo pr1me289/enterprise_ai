@@ -1,0 +1,54 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 40,
+  "scenario": "scenario_1",
+  "step_id": "STEP-04",
+  "determination_key": "step_04_procurement",
+  "agent_name": "procurement_agent",
+  "pipeline_run_id": "run_e63ed7a19e",
+  "timestamp_utc": "20260430T071600Z",
+  "parsed_output": {
+    "approval_path": "FAST_TRACK",
+    "fast_track_eligible": true,
+    "required_approvals": [
+      {
+        "approver": "Procurement Manager",
+        "domain": "Procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2-3 business days"
+      },
+      {
+        "approver": "Business Owner",
+        "domain": "Business Operations",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3-5 business days"
+      }
+    ],
+    "estimated_timeline": "5-7 business days",
+    "policy_citations": [
+      {
+        "source_id": "PAM-001",
+        "version": "2.0",
+        "chunk_id": "PAM-001__row_C-T1",
+        "row_id": "C-T1",
+        "approval_path_condition": "Class C, Tier T1, UNREGULATED data classification, no DPA required, fast-track eligible",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "procurement_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 3.3063601719914004,
+    "input_tokens": 34126,
+    "output_tokens": 304,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

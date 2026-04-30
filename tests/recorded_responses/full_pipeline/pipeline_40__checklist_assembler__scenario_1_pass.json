@@ -1,0 +1,79 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 40,
+  "scenario": "scenario_1",
+  "step_id": "STEP-05",
+  "determination_key": "step_05_checklist",
+  "agent_name": "checklist_assembler",
+  "pipeline_run_id": "run_e63ed7a19e",
+  "timestamp_utc": "20260430T071600Z",
+  "parsed_output": {
+    "pipeline_run_id": "run_e63ed7a19e",
+    "vendor_name": "OptiChain, Inc.",
+    "overall_status": "COMPLETE",
+    "data_classification": "UNREGULATED",
+    "dpa_required": false,
+    "fast_track_eligible": true,
+    "required_security_actions": [],
+    "approval_path": "FAST_TRACK",
+    "required_approvals": [
+      {
+        "approver": "Procurement Manager",
+        "domain": "Procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2-3 business days"
+      },
+      {
+        "approver": "Business Owner",
+        "domain": "Business Operations",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3-5 business days"
+      }
+    ],
+    "blockers": [],
+    "citations": [
+      {
+        "source_name": "IT Security Policy",
+        "version": "4.2",
+        "section": "12.2",
+        "retrieval_timestamp": "2026-04-30T07:14:17Z",
+        "agent_id": "it_security_agent"
+      },
+      {
+        "source_name": "IT Security Policy",
+        "version": "4.2",
+        "section": "5",
+        "retrieval_timestamp": "2026-04-30T07:14:17Z",
+        "agent_id": "it_security_agent"
+      },
+      {
+        "source_name": "IT Security Policy",
+        "version": "4.2",
+        "section": "12.1.4",
+        "retrieval_timestamp": "2026-04-30T07:14:20Z",
+        "agent_id": "legal_agent"
+      },
+      {
+        "source_name": "Procurement Approval Matrix",
+        "version": "2.0",
+        "section": "C-T1",
+        "retrieval_timestamp": "2026-04-30T07:14:22Z",
+        "agent_id": "procurement_agent"
+      }
+    ]
+  },
+  "call_record": {
+    "agent_name": "checklist_assembler",
+    "pipeline_run_id": "run_e63ed7a19e",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 62.30739631099277,
+    "input_tokens": 51670,
+    "output_tokens": 557,
+    "missing_fields": [],
+    "status": "COMPLETE"
+  },
+  "step_status": "COMPLETE"
+}

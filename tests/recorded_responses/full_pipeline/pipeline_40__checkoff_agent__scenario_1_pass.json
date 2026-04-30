@@ -1,0 +1,70 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 40,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_e63ed7a19e",
+  "timestamp_utc": "20260430T071600Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "Procurement Manager",
+        "domain": "procurement",
+        "instructions": "The vendor integration assessment is complete and has been cleared for fast-track approval. Your role is to provide procurement authorization for this integration. The vendor qualifies under the fast-track pathway (Class C, Tier 1, UNREGULATED data classification, no DPA required). Review the completed assessment and confirm procurement readiness. Your approval is a non-blocking item and is estimated to complete within 2-3 business days. Once you provide approval, the Business Owner approval will complete the pipeline.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review the fast-track approval assessment for the vendor integration",
+          "Confirm procurement authorization and compliance with vendor management policy",
+          "Submit approval within 2-3 business days to advance to Business Owner sign-off"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T07:14:22Z",
+            "section": "C-T1",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Business Owner",
+        "domain": "procurement",
+        "instructions": "The vendor integration assessment is complete and approved for fast-track processing. Your role is to provide business authorization confirming operational readiness for this integration. The integration is classified as UNREGULATED with TIER_1 integration tier and EXPORT_ONLY type. No data protection agreements or additional security actions are required. Your approval is a non-blocking item and is estimated to complete within 3-5 business days. This is the final approval step in the pipeline.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review the completed vendor integration assessment",
+          "Confirm business operational readiness for the integration",
+          "Verify that all integration requirements align with business operations",
+          "Submit business authorization within 3-5 business days to close the approval pipeline"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-04-30T07:14:22Z",
+            "section": "C-T1",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 32.66981908501475,
+    "input_tokens": 7594,
+    "output_tokens": 635,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}
