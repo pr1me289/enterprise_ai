@@ -19,7 +19,7 @@ from typing import Any
 import pytest
 
 
-pytestmark = [pytest.mark.api, pytest.mark.layer_handoff, pytest.mark.scenario1]
+pytestmark = [pytest.mark.api, pytest.mark.layer_handoff, pytest.mark.scenario_1]
 
 
 def test_fast_track_passthrough_scenario_1(

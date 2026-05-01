@@ -14,7 +14,7 @@ import pytest
 from tests.support.bundle_builder import drop_key, set_value
 
 
-pytestmark = [pytest.mark.api, pytest.mark.layer_acceptance, pytest.mark.scenario1]
+pytestmark = [pytest.mark.api, pytest.mark.layer_acceptance, pytest.mark.scenario_1]
 
 
 AGENT = "checklist_assembler"

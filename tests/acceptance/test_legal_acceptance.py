@@ -13,7 +13,7 @@ from typing import Any
 import pytest
 
 
-pytestmark = [pytest.mark.api, pytest.mark.layer_acceptance, pytest.mark.scenario2]
+pytestmark = [pytest.mark.api, pytest.mark.layer_acceptance, pytest.mark.scenario_2]
 
 
 AGENT = "legal_agent"

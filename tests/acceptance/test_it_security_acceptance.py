@@ -21,7 +21,7 @@ pytestmark = [pytest.mark.api, pytest.mark.layer_acceptance]
 AGENT = "it_security_agent"
 
 
-@pytest.mark.scenario2
+@pytest.mark.scenario_2
 def test_a03_regulated_data_forbids_fast_track(
     run_llm_agent,
     scenario_2_bundles: dict[str, Any],
@@ -43,7 +43,7 @@ def test_a03_regulated_data_forbids_fast_track(
     )
 
 
-@pytest.mark.scenario1
+@pytest.mark.scenario_1
 def test_a03_variant_ambiguous_erp_forbids_fast_track(
     run_llm_agent,
     scenario_1_bundles: dict[str, Any],
@@ -75,7 +75,7 @@ def test_a03_variant_ambiguous_erp_forbids_fast_track(
     )
 
 
-@pytest.mark.scenario1
+@pytest.mark.scenario_1
 def test_a04_no_primary_tier3_citation_scenario_1(
     run_llm_agent,
     scenario_1_bundles: dict[str, Any],
@@ -95,7 +95,7 @@ def test_a04_no_primary_tier3_citation_scenario_1(
         raise
 
 
-@pytest.mark.scenario2
+@pytest.mark.scenario_2
 def test_a04_no_primary_tier3_citation_scenario_2(
     run_llm_agent,
     scenario_2_bundles: dict[str, Any],

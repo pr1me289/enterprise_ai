@@ -23,7 +23,7 @@ pytestmark = [pytest.mark.api, pytest.mark.layer_handoff]
 UPSTREAM_AGENTS = ("it_security_agent", "legal_agent", "procurement_agent")
 
 
-@pytest.mark.scenario1
+@pytest.mark.scenario_1
 @pytest.mark.parametrize("upstream", UPSTREAM_AGENTS)
 def test_single_upstream_blocked_forces_overall_blocked(
     run_llm_agent,
@@ -55,7 +55,7 @@ def test_single_upstream_blocked_forces_overall_blocked(
     )
 
 
-@pytest.mark.scenario1
+@pytest.mark.scenario_1
 @pytest.mark.parametrize("upstream", UPSTREAM_AGENTS)
 def test_single_upstream_escalated_forces_overall_escalated(
     run_llm_agent,

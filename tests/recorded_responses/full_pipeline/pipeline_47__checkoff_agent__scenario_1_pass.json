@@ -1,0 +1,71 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 47,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_0014e81619",
+  "timestamp_utc": "20260501T160621Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "Procurement Manager",
+        "domain": "procurement",
+        "instructions": "The pipeline assessment is complete. Your approval is required to finalize this vendor onboarding. This is a FAST_TRACK approval path for non-regulated software (UNREGULATED data classification, Tier T1 integration). No blockers have been identified. Your estimated completion window is 2 business days. Please review and approve this vendor integration to proceed to Business Owner sign-off.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review vendor details and integration scope (EXPORT_ONLY, Tier T1)",
+          "Confirm NDA execution status: EXECUTED",
+          "Approve vendor onboarding within 2 business days",
+          "Pass approval to Business Owner (Manager+) for final sign-off"
+        ],
+        "citations": [
+          {
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0",
+            "section": "C-T1",
+            "retrieval_timestamp": "2026-05-01T16:04:25Z",
+            "agent_id": "procurement_agent"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Business Owner (Manager+)",
+        "domain": "business",
+        "instructions": "The pipeline assessment is complete. Your approval is required to finalize this vendor onboarding. This is a FAST_TRACK approval path for non-regulated software (UNREGULATED data classification, Tier T1 integration). No blockers have been identified. Your estimated completion window is 3 business days. Please review and approve this vendor integration to close out the onboarding process.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review vendor integration details and business case",
+          "Confirm alignment with business requirements",
+          "Approve vendor onboarding within 3 business days",
+          "This is the final approval; upon your sign-off, onboarding is complete"
+        ],
+        "citations": [
+          {
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0",
+            "section": "C-T1",
+            "retrieval_timestamp": "2026-05-01T16:04:25Z",
+            "agent_id": "procurement_agent"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 36.84753359100068,
+    "input_tokens": 7457,
+    "output_tokens": 620,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

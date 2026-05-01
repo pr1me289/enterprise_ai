@@ -158,7 +158,7 @@ uv run pytest -m "not api"
 
 # Live full-pipeline tests (real Anthropic API; gated by -m api + ANTHROPIC_API_KEY)
 uv run pytest tests/full_pipeline/test_end_to_end.py -m api -v                          # all 4 scenarios
-uv run pytest tests/full_pipeline/test_end_to_end.py -m "api and scenario1" -v          # one scenario
+uv run pytest tests/full_pipeline/test_end_to_end.py -m "api and scenario_1" -v          # one scenario
 uv run pytest tests/full_pipeline/test_end_to_end.py -m "api and scenario_blocked_demo" -v
 
 # Per-agent isolated live-API runs
@@ -183,7 +183,7 @@ uv run ruff format .
 | Marker | What it gates |
 | --- | --- |
 | `api` | Tests that hit the real Anthropic API. Auto-skipped unless `-m api` is on the CLI **and** `ANTHROPIC_API_KEY` is set. |
-| `scenario1`, `scenario2`, `scenario_blocked_demo`, `scenario_escalated_step4_demo` | Per-scenario filters for the live full-pipeline suite. |
+| `scenario_1`, `scenario_2`, `scenario_blocked_demo`, `scenario_escalated_step4_demo` | Per-scenario filters for the live full-pipeline suite. |
 | `full_pipeline`, `layer_unit`, `layer_handoff`, `layer_acceptance` | Layer filters for the broader test taxonomy. |
 
 ## Live-API safety rails (enforced by `tests/conftest.py`)

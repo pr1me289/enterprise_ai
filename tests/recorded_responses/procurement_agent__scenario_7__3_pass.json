@@ -1,0 +1,21 @@
+{
+  "agent_name": "procurement_agent",
+  "scenario": "scenario_7",
+  "pipeline_run_id": "scenario_7_synthesized",
+  "run_number": 3,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260501T155552Z",
+  "system_prompt_path": "agent_spec_docs/Procurement_Agent_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_04_scenario_7.json",
+  "raw_text": "```json\n{\n  \"approval_path\": null,\n  \"fast_track_eligible\": true,\n  \"required_approvals\": null,\n  \"estimated_timeline\": null,\n  \"policy_citations\": null,\n  \"status\": \"escalated\"\n}\n```",
+  "parsed_output": {
+    "approval_path": null,
+    "fast_track_eligible": true,
+    "required_approvals": null,
+    "estimated_timeline": null,
+    "policy_citations": null,
+    "status": "escalated"
+  },
+  "error": null
+}

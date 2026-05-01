@@ -186,10 +186,10 @@ From the repo root:
 
 ```bash
 # Scenario 1 (happy path) — ~5 real API calls
-uv run pytest tests/full_pipeline/test_end_to_end.py -m "api and scenario1" -v
+uv run pytest tests/full_pipeline/test_end_to_end.py -m "api and scenario_1" -v
 
 # Scenario 2 (escalation) — halts mid-pipeline, fewer calls
-uv run pytest tests/full_pipeline/test_end_to_end.py -m "api and scenario2" -v
+uv run pytest tests/full_pipeline/test_end_to_end.py -m "api and scenario_2" -v
 
 # Both scenarios
 uv run pytest tests/full_pipeline/test_end_to_end.py -m api -v

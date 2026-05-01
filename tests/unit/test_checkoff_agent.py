@@ -32,7 +32,7 @@ AGENT = "checkoff_agent"
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.scenario1
+@pytest.mark.scenario_1
 def test_scenario_1_happy_path(
     invoke_and_assert,
     scenario_1_bundles: dict[str, Any],
@@ -46,7 +46,7 @@ def test_scenario_1_happy_path(
     )
 
 
-@pytest.mark.scenario2
+@pytest.mark.scenario_2
 def test_scenario_2_escalated_path_routes_to_stakeholders(
     invoke_and_assert,
     scenario_2_bundles: dict[str, Any],
@@ -65,7 +65,7 @@ def test_scenario_2_escalated_path_routes_to_stakeholders(
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.scenario1
+@pytest.mark.scenario_1
 def test_missing_finalized_checklist_blocks(
     invoke_raw,
     scenario_1_bundles: dict[str, Any],

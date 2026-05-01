@@ -300,12 +300,10 @@ class LiveMonitor:
         output_tokens: int | None,
         status: str | None,
     ) -> None:
-        self._totals.api_calls += 1
-        if input_tokens:
-            self._totals.input_tokens += input_tokens
-        if output_tokens:
-            self._totals.output_tokens += output_tokens
-        self._totals.elapsed_seconds += elapsed
+        # Counters (api_calls, input_tokens, output_tokens, elapsed_seconds)
+        # are bumped at the SDK boundary in ``InstrumentedMessages.create``,
+        # not here, so the full-pipeline path counts correctly even though it
+        # does not call this method.
         colored_status = _c(status or "ok", _status_color(status or "OK"))
         self._emit(
             "AGENT_CALL_OK",
@@ -319,7 +317,8 @@ class LiveMonitor:
         )
 
     def agent_call_err(self, *, agent: str, elapsed: float, error: str) -> None:
-        self._totals.api_errors += 1
+        # ``api_errors`` is bumped by ``InstrumentedMessages.create`` for the
+        # same reason as ``agent_call_ok`` above.
         self._emit(
             "AGENT_CALL_ERR",
             {
@@ -432,6 +431,8 @@ class InstrumentedMessages:
             response = self._inner.create(**kwargs)
         except Exception as exc:  # noqa: BLE001
             elapsed = time.monotonic() - t0
+            self._monitor._totals.api_errors += 1
+            self._monitor._totals.elapsed_seconds += elapsed
             self._monitor.agent_call_err(
                 agent=kwargs.get("model", "unknown"),
                 elapsed=elapsed,
@@ -442,9 +443,20 @@ class InstrumentedMessages:
         usage = getattr(response, "usage", None)
         in_tokens = getattr(usage, "input_tokens", None)
         out_tokens = getattr(usage, "output_tokens", None)
-        # Stash last-call telemetry on the monitor so the caller can pull it
-        # into an AGENT_CALL_OK line. Counters are bumped by `agent_call_ok`
-        # to avoid double-counting when the conftest fixture emits the event.
+        # Counters live at the SDK boundary so they fire whether or not a
+        # higher-level wrapper (e.g. the ``run_llm_agent`` fixture) brackets
+        # the call with ``agent_call_start`` / ``agent_call_ok``. Without this
+        # the full-pipeline path — Supervisor → AnthropicLLMAdapter → here —
+        # leaves SESSION_END counters at zero.
+        totals = self._monitor._totals
+        totals.api_calls += 1
+        totals.elapsed_seconds += elapsed
+        if in_tokens:
+            totals.input_tokens += in_tokens
+        if out_tokens:
+            totals.output_tokens += out_tokens
+        # Stash last-call telemetry so a higher-level wrapper can render it
+        # in its own AGENT_CALL_OK event.
         self._monitor._last_call = {  # type: ignore[attr-defined]
             "elapsed": elapsed,
             "input_tokens": in_tokens,

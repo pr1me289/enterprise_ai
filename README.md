@@ -112,7 +112,7 @@ PYTHONPATH=src uv run python test_harness/run_test_scenario.py --scenario scenar
 uv run pytest -m "not api"
 
 # 5. Run a live end-to-end scenario against the Anthropic API
-uv run pytest tests/full_pipeline/test_end_to_end.py -m "api and scenario1" -v
+uv run pytest tests/full_pipeline/test_end_to_end.py -m "api and scenario_1" -v
 ```
 
 **Cost note:** live tests default to `claude-haiku-4-5`. A single full-pipeline run is roughly 5 API calls (~$0.05). A 50-call session cap (`ANTHROPIC_MAX_CALLS`) protects against runaway loops. Sonnet/Opus runs are blocked unless you explicitly opt in with `ALLOW_NON_HAIKU=1`.

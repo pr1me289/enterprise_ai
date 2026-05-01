@@ -23,8 +23,8 @@ package = false
 testpaths = ["tests"]
 markers = [
     "api: tests that hit the real Anthropic API (skipped unless -m api is passed)",
-    "scenario1: clean governed-completion scenario expectations",
-    "scenario2: escalated/regulated scenario expectations",
+    "scenario_1: clean governed-completion scenario expectations",
+    "scenario_2: escalated/regulated scenario expectations",
     "scenario_blocked_demo: STEP-04 BLOCKED on missing procurement matrix",
     "scenario_escalated_step4_demo: STEP-04 ESCALATED on no matching PAM-001 row",
     "layer_unit: per-agent unit tests (Layer 1)",

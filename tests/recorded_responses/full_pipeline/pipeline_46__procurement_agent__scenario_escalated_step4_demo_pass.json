@@ -1,0 +1,34 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 46,
+  "scenario": "scenario_escalated_step4_demo",
+  "step_id": "STEP-04",
+  "determination_key": "step_04_procurement",
+  "agent_name": "procurement_agent",
+  "pipeline_run_id": "run_2f3ff15bd4",
+  "timestamp_utc": "20260501T160327Z",
+  "parsed_output": {
+    "status": "escalated",
+    "approval_path": null,
+    "fast_track_eligible": false,
+    "required_approvals": null,
+    "estimated_timeline": null,
+    "policy_citations": null
+  },
+  "call_record": {
+    "agent_name": "procurement_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 1.9670908469997812,
+    "input_tokens": 20360,
+    "output_tokens": 67,
+    "missing_fields": [
+      "required_approvals",
+      "estimated_timeline",
+      "policy_citations"
+    ],
+    "status": "escalated"
+  },
+  "step_status": "ESCALATED"
+}

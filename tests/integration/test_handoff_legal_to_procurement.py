@@ -16,7 +16,7 @@ from typing import Any
 import pytest
 
 
-pytestmark = [pytest.mark.api, pytest.mark.layer_handoff, pytest.mark.scenario2]
+pytestmark = [pytest.mark.api, pytest.mark.layer_handoff, pytest.mark.scenario_2]
 
 
 def test_legal_escalation_forces_procurement_escalation(

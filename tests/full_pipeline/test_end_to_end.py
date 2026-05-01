@@ -52,7 +52,7 @@ _SCENARIO_CASES: tuple[ScenarioCase, ...] = (
             "STEP-05": "COMPLETE",
             "STEP-06": "COMPLETE",
         },
-        marker="scenario1",
+        marker="scenario_1",
     ),
     ScenarioCase(
         name="scenario_2",
@@ -67,7 +67,7 @@ _SCENARIO_CASES: tuple[ScenarioCase, ...] = (
         # supervisor's obligation is the same either way: halt + return
         # ESCALATED to I/O.
         expected_terminal_statuses={},  # enforced per-case below
-        marker="scenario2",
+        marker="scenario_2",
     ),
     ScenarioCase(
         name="scenario_blocked_demo",
@@ -196,6 +196,29 @@ def test_pipeline_end_to_end(case: ScenarioCase, anthropic_client, live_monitor)
     # --- Per-step evaluator assertions (lifted from per_agent_test_env) ---
     reports = evaluate_pipeline_run(scenario=case.name, supervisor=supervisor)
     verdicts = verdicts_from_reports(reports)
+
+    # Feed each per-step report into the live monitor as field_verdict events.
+    # The full-pipeline path uses report-style evaluation rather than per-field
+    # event emission (unlike unit/integration/acceptance), so without this loop
+    # SESSION_END's fields_pass / fields_fail counters always read 0.
+    for step_id, report in reports.items():
+        if report.passed:
+            live_monitor.field_verdict(
+                path=step_id.value,
+                description="step contract",
+                passed=True,
+                observed=None,
+                reason="all per-step expectations satisfied",
+            )
+        else:
+            for failure in report.failures:
+                live_monitor.field_verdict(
+                    path=step_id.value,
+                    description="step contract",
+                    passed=False,
+                    observed=None,
+                    reason=failure,
+                )
     record_dir = REPO_ROOT / "tests" / "recorded_responses" / "full_pipeline"
     pipeline_run_number = next_pipeline_run_number(record_dir)
     record_paths = record_pipeline_run(

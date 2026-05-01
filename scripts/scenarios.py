@@ -49,7 +49,7 @@ FULL_PIPELINE: tuple[FullPipelineScenario, ...] = (
         name="scenario_1",
         expected_status="COMPLETE",
         halt_step="(runs all 6 steps)",
-        pytest_marker="scenario1",
+        pytest_marker="scenario_1",
         purpose=(
             "Clean governed completion. Class C non-regulated vendor, "
             "fast-track approval. Proves sequential orchestration, scoped "
@@ -60,7 +60,7 @@ FULL_PIPELINE: tuple[FullPipelineScenario, ...] = (
         name="scenario_2",
         expected_status="ESCALATED",
         halt_step="STEP-03 (Legal)",
-        pytest_marker="scenario2",
+        pytest_marker="scenario_2",
         purpose=(
             "First-escalated-status halt. EU employee data + DPA required "
             "but not executed + NDA unconfirmed. Pipeline preserves the "

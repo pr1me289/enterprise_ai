@@ -268,9 +268,9 @@ def _layer_from_markers(markers) -> str:
 
 def _scenario_from_markers(markers) -> str | None:
     names = {m.name for m in markers}
-    if "scenario1" in names:
+    if "scenario_1" in names:
         return "scenario_1"
-    if "scenario2" in names:
+    if "scenario_2" in names:
         return "scenario_2"
     return None
 

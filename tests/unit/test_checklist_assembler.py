@@ -33,7 +33,7 @@ AGENT = "checklist_assembler"
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.scenario1
+@pytest.mark.scenario_1
 def test_scenario_1_happy_path(
     invoke_and_assert,
     scenario_1_bundles: dict[str, Any],
@@ -47,7 +47,7 @@ def test_scenario_1_happy_path(
     )
 
 
-@pytest.mark.scenario2
+@pytest.mark.scenario_2
 def test_scenario_2_escalated_path(
     invoke_and_assert,
     scenario_2_bundles: dict[str, Any],
@@ -66,7 +66,7 @@ def test_scenario_2_escalated_path(
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.scenario1
+@pytest.mark.scenario_1
 def test_upstream_blocked_propagates(
     invoke_raw,
     scenario_1_bundles: dict[str, Any],
@@ -85,7 +85,7 @@ def test_upstream_blocked_propagates(
     )
 
 
-@pytest.mark.scenario1
+@pytest.mark.scenario_1
 def test_single_escalation_propagates(
     invoke_raw,
     scenario_1_bundles: dict[str, Any],

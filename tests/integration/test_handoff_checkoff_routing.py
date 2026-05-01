@@ -21,7 +21,7 @@ from tests.support.bundle_builder import drop_key
 pytestmark = [pytest.mark.api, pytest.mark.layer_handoff]
 
 
-@pytest.mark.scenario2
+@pytest.mark.scenario_2
 def test_checkoff_runs_on_escalated(
     run_llm_agent,
     scenario_2_bundles: dict[str, Any],
@@ -43,7 +43,7 @@ def test_checkoff_runs_on_escalated(
     )
 
 
-@pytest.mark.scenario1
+@pytest.mark.scenario_1
 def test_checkoff_blocks_when_checklist_missing(
     run_llm_agent,
     scenario_1_bundles: dict[str, Any],

@@ -1,0 +1,72 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 47,
+  "scenario": "scenario_1",
+  "step_id": "STEP-05",
+  "determination_key": "step_05_checklist",
+  "agent_name": "checklist_assembler",
+  "pipeline_run_id": "run_0014e81619",
+  "timestamp_utc": "20260501T160621Z",
+  "parsed_output": {
+    "pipeline_run_id": "run_0014e81619",
+    "vendor_name": "OptiChain, Inc.",
+    "overall_status": "COMPLETE",
+    "data_classification": "UNREGULATED",
+    "dpa_required": false,
+    "fast_track_eligible": true,
+    "required_security_actions": [],
+    "approval_path": "FAST_TRACK",
+    "required_approvals": [
+      {
+        "approver": "Procurement Manager",
+        "domain": "Procurement",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "2 business days"
+      },
+      {
+        "approver": "Business Owner (Manager+)",
+        "domain": "Business",
+        "status": "PENDING",
+        "blocker": false,
+        "estimated_completion": "3 business days"
+      }
+    ],
+    "blockers": [],
+    "citations": [
+      {
+        "source_name": "IT Security Policy",
+        "version": "4.2",
+        "section": "12.2",
+        "retrieval_timestamp": "2026-05-01T16:04:17Z",
+        "agent_id": "it_security_agent"
+      },
+      {
+        "source_name": "IT Security Policy",
+        "version": "4.2",
+        "section": "12.1.4",
+        "retrieval_timestamp": "2026-05-01T16:04:23Z",
+        "agent_id": "legal_agent"
+      },
+      {
+        "source_name": "Procurement Approval Matrix",
+        "version": "2.0",
+        "section": "C-T1",
+        "retrieval_timestamp": "2026-05-01T16:04:25Z",
+        "agent_id": "procurement_agent"
+      }
+    ]
+  },
+  "call_record": {
+    "agent_name": "checklist_assembler",
+    "pipeline_run_id": "run_0014e81619",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 50.821877952999785,
+    "input_tokens": 51479,
+    "output_tokens": 480,
+    "missing_fields": [],
+    "status": "COMPLETE"
+  },
+  "step_status": "COMPLETE"
+}
