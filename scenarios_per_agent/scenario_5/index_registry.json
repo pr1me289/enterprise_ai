@@ -20,8 +20,8 @@
       "backends": ["chroma", "bm25"],
       "backend_locations": {
         "chroma_collection": "idx_dpa_matrix__scenario5",
-        "chroma_persist_dir": "scenario_data/scenario_5/chroma/",
-        "bm25_bundle": "scenario_data/scenario_5/bm25/idx_dpa_matrix__scenario5.pkl"
+        "chroma_persist_dir": "scenarios_per_agent/scenario_5/chroma/",
+        "bm25_bundle": "scenarios_per_agent/scenario_5/bm25/idx_dpa_matrix__scenario5.pkl"
       }
     },
     {

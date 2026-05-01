@@ -1,0 +1,39 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 44,
+  "scenario": "scenario_blocked_demo",
+  "step_id": "STEP-03",
+  "determination_key": "step_03_legal",
+  "agent_name": "legal_agent",
+  "pipeline_run_id": "run_6167cce958",
+  "timestamp_utc": "20260501T152947Z",
+  "parsed_output": {
+    "dpa_required": false,
+    "dpa_blocker": false,
+    "nda_status": "EXECUTED",
+    "nda_blocker": false,
+    "trigger_rule_cited": [],
+    "policy_citations": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12",
+        "section_id": "12.1.4",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "legal_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 32.26933987800112,
+    "input_tokens": 20873,
+    "output_tokens": 154,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

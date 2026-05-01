@@ -2,14 +2,14 @@
 
 Scenario 7 — Procurement Agent, No-Matching-Row Escalation.
 
-1. Write scenario_data/scenario_7/sources/PAM-001_scenario7.json as a
+1. Write scenarios_per_agent/scenario_7/sources/PAM-001_scenario7.json as a
    deliberate subset of production PAM-001: rows A-T1, B-T1, C-T1 only.
    This leaves Classes D and E uncovered entirely so the scenario-7
    questionnaire profile (Class D — Technology Professional Services)
    has no matching row.
 2. Re-chunk + re-embed into the scenario-scoped Chroma collection
    `idx_procurement_matrix__scenario7` and BM25 bundle
-   `scenario_data/scenario_7/bm25/idx_procurement_matrix__scenario7.pkl`.
+   `scenarios_per_agent/scenario_7/bm25/idx_procurement_matrix__scenario7.pkl`.
 3. Regenerate tests/fixtures/bundles/step_04_scenario_7.json so
    approval_path_matrix_rows contains all three rows as the Supervisor-
    assembled candidate set.
@@ -17,7 +17,7 @@ Scenario 7 — Procurement Agent, No-Matching-Row Escalation.
    questionnaire-representative query and that none of them cleanly
    matches Class D × Tier 3.
 
-This script writes ONLY to scenario_data/scenario_7/ and tests/fixtures/.
+This script writes ONLY to scenarios_per_agent/scenario_7/ and tests/fixtures/.
 It does not touch production indices.
 """
 
@@ -42,7 +42,7 @@ from indexing.metadata_schema import (  # noqa: E402
 )
 
 PROD_PAM_PATH = REPO_ROOT / "data" / "processed" / "scenario_1" / "chunks" / "PAM-001.json"
-SCENARIO_ROOT = REPO_ROOT / "scenario_data" / "scenario_7"
+SCENARIO_ROOT = REPO_ROOT / "scenarios_per_agent" / "scenario_7"
 SOURCE_PATH = SCENARIO_ROOT / "sources" / "PAM-001_scenario7.json"
 CHROMA_DIR = SCENARIO_ROOT / "chroma"
 BM25_DIR = SCENARIO_ROOT / "bm25"

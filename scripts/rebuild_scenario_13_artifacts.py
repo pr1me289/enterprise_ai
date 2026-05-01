@@ -2,14 +2,14 @@
 
 Scenario 13 — Procurement Agent, Clean Upstream Pass → COMPLETE.
 
-1. Write scenario_data/scenario_13/chunks/PAM-001_scenario13_chunks.json with
+1. Write scenarios_per_agent/scenario_13/chunks/PAM-001_scenario13_chunks.json with
    two rows: Q-01-FASTTRACK (TIER_2 x TIER_3 x UNREGULATED, the clean primary-
    key match for the scenario_13 questionnaire profile) and Q-02-STANDARD
    (TIER_2 x TIER_2_SAAS x REGULATED, a structurally-valid distractor that
    shares vendor_class but mismatches on integration_tier).
 2. Re-chunk + re-embed into scenario-scoped Chroma collection
    `idx_procurement_matrix__scenario13` and a scenario-scoped BM25 bundle.
-3. Write scenario_data/scenario_13/index_registry.json describing the
+3. Write scenarios_per_agent/scenario_13/index_registry.json describing the
    scenario-scoped collection.
 4. Write tests/fixtures/bundles/step_04_scenario_13.json - clean IT Security
    output (status=complete, EXPORT_ONLY/TIER_3/UNREGULATED/fast_track_eligible
@@ -20,7 +20,7 @@ Scenario 13 — Procurement Agent, Clean Upstream Pass → COMPLETE.
 5. Retrieval-only check confirming Q-01-FASTTRACK surfaces as the primary-
    key match and Q-02-STANDARD is retrievable but non-matching.
 
-This script writes ONLY to scenario_data/scenario_13/ and tests/fixtures/.
+This script writes ONLY to scenarios_per_agent/scenario_13/ and tests/fixtures/.
 It does not touch production indices.
 """
 
@@ -43,7 +43,7 @@ from indexing.metadata_schema import (  # noqa: E402
     metadata_from_chunk,
 )
 
-SCENARIO_ROOT = REPO_ROOT / "scenario_data" / "scenario_13"
+SCENARIO_ROOT = REPO_ROOT / "scenarios_per_agent" / "scenario_13"
 CHUNKS_PATH = SCENARIO_ROOT / "chunks" / "PAM-001_scenario13_chunks.json"
 CHROMA_DIR = SCENARIO_ROOT / "chroma"
 BM25_DIR = SCENARIO_ROOT / "bm25"
@@ -51,7 +51,7 @@ REGISTRY_DIR = SCENARIO_ROOT / "vector_registry"
 INDEX_REGISTRY_PATH = SCENARIO_ROOT / "index_registry.json"
 FIXTURE_PATH = REPO_ROOT / "tests" / "fixtures" / "bundles" / "step_04_scenario_13.json"
 COLLECTION_NAME = "idx_procurement_matrix__scenario13"
-BM25_BUNDLE_RELATIVE = f"scenario_data/scenario_13/bm25/{COLLECTION_NAME}.pkl"
+BM25_BUNDLE_RELATIVE = f"scenarios_per_agent/scenario_13/bm25/{COLLECTION_NAME}.pkl"
 
 SOURCE_ID = "PAM-001"
 SOURCE_NAME = "Procurement Approval Matrix"

@@ -1,0 +1,61 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 44,
+  "scenario": "scenario_blocked_demo",
+  "step_id": "STEP-02",
+  "determination_key": "step_02_security_classification",
+  "agent_name": "it_security_agent",
+  "pipeline_run_id": "run_6167cce958",
+  "timestamp_utc": "20260501T152947Z",
+  "parsed_output": {
+    "integration_type_normalized": "DIRECT_API",
+    "integration_tier": "TIER_1",
+    "data_classification": "REGULATED",
+    "eu_personal_data_present": false,
+    "fast_track_eligible": false,
+    "fast_track_rationale": "DISALLOWED_REGULATED_DATA",
+    "security_followup_required": true,
+    "nda_status_from_questionnaire": "EXECUTED",
+    "required_security_actions": [
+      {
+        "action_type": "FULL_SECURITY_REVIEW",
+        "reason": "TIER_1 Direct API integration with REGULATED data classification requires mandatory penetration test, SOC 2 Type II certification, and quarterly access review per ISP-001 \u00a712.2",
+        "owner": "IT Security"
+      },
+      {
+        "action_type": "CISO_CIO_APPROVAL",
+        "reason": "TIER_1 Direct API integration to ERP requires CISO + CIO written approval prior to contract execution per ISP-001 \u00a712.2",
+        "owner": "CISO / CIO"
+      }
+    ],
+    "policy_citations": [
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12",
+        "section_id": "12.2",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_5",
+        "section_id": "5",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "it_security_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 3.8616711300001043,
+    "input_tokens": 26512,
+    "output_tokens": 449,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

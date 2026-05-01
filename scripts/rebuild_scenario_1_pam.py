@@ -32,7 +32,7 @@ from indexing.metadata_schema import (  # noqa: E402
     metadata_from_chunk,
 )
 
-CSV_PATH = REPO_ROOT / "scenarios" / "scenario_1" / "source_mock_documents" / "Procurement_Approval_Matrix_v2_0.csv"
+CSV_PATH = REPO_ROOT / "scenarios_full_pipeline" / "scenario_1" / "source_mock_documents" / "Procurement_Approval_Matrix_v2_0.csv"
 CHUNKS_PATH = REPO_ROOT / "data" / "processed" / "scenario_1" / "chunks" / "PAM-001.json"
 CHROMA_DIR = REPO_ROOT / "data" / "indexes" / "scenario_1" / "chroma"
 VECTOR_REGISTRY_DIR = REPO_ROOT / "data" / "indexes" / "scenario_1" / "vector_registry"

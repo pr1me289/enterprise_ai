@@ -9,13 +9,13 @@ scenario-scoped index. R02-SQ-06 retrieves an empty result set. STEP-02
 must escalate (per ORCH-PLAN-001 R02-SQ-06 + classification rule 6) while
 still emitting the firm determinations supported by §12.2 and §4.
 
-1. Write scenario_data/scenario_15/chunks/ISP-001_scenario15_chunks.json
+1. Write scenarios_per_agent/scenario_15/chunks/ISP-001_scenario15_chunks.json
    with TWO SECTION chunks: §12.2 ERP integration tier table and §4 data
    classification framework. The chunks are deliberately written to avoid
    any 'fast-track' / 'fast track' terminology so R02-SQ-06 scores zero.
 2. Embed and write to scenario-scoped Chroma collection
    ``idx_security_policy__scenario15`` and a scenario-scoped BM25 bundle.
-3. Write scenario_data/scenario_15/index_registry.json describing the
+3. Write scenarios_per_agent/scenario_15/index_registry.json describing the
    scenario-scoped collection.
 4. Write tests/fixtures/bundles/step_02_scenario_15.json — honest
    questionnaire (LIMITED_OPERATIONAL_DATA self-report, EU employee data),
@@ -28,7 +28,7 @@ still emitting the firm determinations supported by §12.2 and §4.
    (BM25 score == 0 for the fast-track query against both chunks),
    §12.3 chunk_id is demonstrably absent from the collection.
 
-This script writes ONLY to scenario_data/scenario_15/ and tests/fixtures/.
+This script writes ONLY to scenarios_per_agent/scenario_15/ and tests/fixtures/.
 It does not touch production indices.
 """
 
@@ -51,7 +51,7 @@ from indexing.metadata_schema import (  # noqa: E402
     metadata_from_chunk,
 )
 
-SCENARIO_ROOT = REPO_ROOT / "scenario_data" / "scenario_15"
+SCENARIO_ROOT = REPO_ROOT / "scenarios_per_agent" / "scenario_15"
 CHUNKS_PATH = SCENARIO_ROOT / "chunks" / "ISP-001_scenario15_chunks.json"
 CHROMA_DIR = SCENARIO_ROOT / "chroma"
 BM25_DIR = SCENARIO_ROOT / "bm25"
@@ -59,7 +59,7 @@ REGISTRY_DIR = SCENARIO_ROOT / "vector_registry"
 INDEX_REGISTRY_PATH = SCENARIO_ROOT / "index_registry.json"
 FIXTURE_PATH = REPO_ROOT / "tests" / "fixtures" / "bundles" / "step_02_scenario_15.json"
 COLLECTION_NAME = "idx_security_policy__scenario15"
-BM25_BUNDLE_RELATIVE = f"scenario_data/scenario_15/bm25/{COLLECTION_NAME}.pkl"
+BM25_BUNDLE_RELATIVE = f"scenarios_per_agent/scenario_15/bm25/{COLLECTION_NAME}.pkl"
 
 SOURCE_ID = "ISP-001"
 SOURCE_NAME = "IT Security Policy"

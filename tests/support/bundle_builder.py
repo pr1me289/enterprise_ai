@@ -66,7 +66,7 @@ AGENT_BY_STEP: dict[str, str] = {
 def _root_questionnaire() -> Path:
     """The canonical questionnaire that matches STEP-01's field_map schema.
 
-    The scenarios/scenario_1/source_mock_documents/OptiChain_VSQ_001_v2_1_scenario01.json copy
+    The scenarios_full_pipeline/scenario_1/source_mock_documents/OptiChain_VSQ_001_v2_1_scenario01.json copy
     uses a different top-level shape (submission_id, submission_timestamp) that
     does not satisfy STEP-01's required ``document_id`` / ``version`` fields,
     so we always start from the root file and layer scenario deltas through
@@ -204,7 +204,7 @@ def _scenario_2_checklist_output() -> dict[str, Any]:
 def _load_stakeholder_map(scenario: str) -> dict[str, Any]:
     import json
 
-    base = REPO_ROOT / "scenarios" / scenario / "source_mock_documents" / "Stakeholder_Map_PRQ_2024_0047.json"
+    base = REPO_ROOT / "scenarios_full_pipeline" / scenario / "source_mock_documents" / "Stakeholder_Map_PRQ_2024_0047.json"
     if not base.exists():
         base = REPO_ROOT / "mock_documents" / "Stakeholder_Map_PRQ_2024_0047.json"
     return json.loads(base.read_text(encoding="utf-8"))

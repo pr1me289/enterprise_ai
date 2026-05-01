@@ -60,7 +60,7 @@ scripts/                          # Reproducible scenario-data builders
 ├── rebuild_scenario_{7,8,9,10,13,14,15}_artifacts.py
 └── rebuild_scenario_1_pam.py     # Rebuild scenario_1's PAM-001 chunks/index
 
-scenarios/                        # Demo scenarios (4) — both source mocks + captured artefacts
+scenarios_full_pipeline/          # Demo scenarios (4) — both source mocks + captured artefacts
 ├── scenario_1/                   # Happy-path COMPLETE
 ├── scenario_2/                   # Legal-blockers ESCALATED (STEP-03)
 ├── scenario_blocked_demo/        # STEP-04 BLOCKED (missing PAM-001 from registry)
@@ -71,8 +71,10 @@ scenarios/                        # Demo scenarios (4) — both source mocks + c
       narrative.md                # (scenario_1 + scenario_2 only) demo narrative
       README.md                   # (scenario_blocked_demo + escalated_step4_demo) build notes
 
-scenario_data/                    # Per-agent isolation test fixtures (scenarios 3–15)
-                                  # Used by per_agent_test_env, NOT by the live demo pipeline
+scenarios_per_agent/              # Scenario-scoped retrieval data for the per-agent isolation suite
+                                  # (scenarios 3–15). Bundle fixtures live under
+                                  # tests/fixtures/bundles/. Used by per_agent_test_env, NOT by the
+                                  # live demo pipeline.
 
 mock_documents/                   # Canonical mock corpus (master copy, fed by overrides at runtime)
 mock_documents_csv_versions/      # CSV variants of the matrices
@@ -123,6 +125,17 @@ echo "ANTHROPIC_API_KEY=sk-ant-..." > .env   # required for live API tests
 ```
 
 ## Commands (from repo root)
+
+### List every prepared testing scenario
+
+```bash
+uv run python scripts/scenarios.py                        # full catalog
+uv run python scripts/scenarios.py --env full_pipeline    # only the 4 demo scenarios
+uv run python scripts/scenarios.py --env per_agent        # only the per-agent isolation scenarios
+uv run python scripts/scenarios.py --agent legal_agent    # one agent's per-agent scenarios
+```
+
+Prints, for each scenario, the agent it exercises, the expected terminal status, and what it proves. The catalog is hand-curated against `per_agent_test_env/evaluators.py` (per-agent expected statuses) and `tests/full_pipeline/test_end_to_end.py` (full-pipeline cases) — update `scripts/scenarios.py` when you add a scenario.
 
 ### Build scenario data (chunks + indexes)
 
@@ -195,7 +208,7 @@ Four scenarios drive both the live full-pipeline tests and the web-app demo page
 | `scenario_blocked_demo` | STEP-04 | BLOCKED | PAM-001 absent from registry (no matrix at all) |
 | `scenario_escalated_step4_demo` | STEP-04 | ESCALATED | Curated 3-row matrix; vendor profile (Class D) has no row |
 
-Per-scenario captured artefacts live under `scenarios/<name>/web_app/`:
+Per-scenario captured artefacts live under `scenarios_full_pipeline/<name>/web_app/`:
 - `agent_outputs/` — raw `parsed_output` per agent invocation (`pipeline_N__<agent>__<scenario>_pass.json`)
 - `agent_input_bundles/` — the bundle each agent received as context
 - `supervisor_audit_log.json` — append-only audit trail captured in-memory during the run
@@ -205,7 +218,7 @@ Per-scenario captured artefacts live under `scenarios/<name>/web_app/`:
 
 ## Adding or modifying a scenario
 
-1. Source documents — drop into `scenarios/<new_name>/source_mock_documents/` (use an existing scenario as the template; rename the questionnaire file).
+1. Source documents — drop into `scenarios_full_pipeline/<new_name>/source_mock_documents/` (use an existing scenario as the template; rename the questionnaire file).
 2. Register in `src/preprocessing/scenario_sources.py` — add to `SCENARIO_DIRS` + `SCENARIO_SOURCE_CANDIDATES`.
 3. Build the data:
    ```bash
@@ -219,9 +232,9 @@ Per-scenario captured artefacts live under `scenarios/<name>/web_app/`:
    - `tests/support/bundle_builder.py` — add a `<new_name>_questionnaire_overrides()` factory
    - `tests/support/expected_outputs.py` — add per-step expectations
 5. Run live: `uv run pytest tests/full_pipeline/test_end_to_end.py -m "api and <marker>" -v`
-6. Mirror artefacts to `scenarios/<new_name>/web_app/` for the demo.
+6. Mirror artefacts to `scenarios_full_pipeline/<new_name>/web_app/` for the demo.
 
-For per-agent isolation tests (scenarios 3–15 pattern), see existing `scripts/rebuild_scenario_*_artifacts.py` and `scenario_data/` as templates.
+For per-agent isolation tests (scenarios 3–15 pattern), see existing `scripts/rebuild_scenario_*_artifacts.py` and `scenarios_per_agent/` as templates.
 
 ## Workflow reminders
 
@@ -230,4 +243,4 @@ For per-agent isolation tests (scenarios 3–15 pattern), see existing `scripts/
 - After a live full-pipeline run, the `bundles/` files under `tests/recorded_responses/full_pipeline/bundles/` are **overwritten**. Recorded agent outputs are appended (`pipeline_N__...`).
 - The `data/` subdirs are mostly gitignored (Chroma + BM25 + structured stores). Source chunks under `data/processed/<scenario>/chunks/` are **not** gitignored — they're the canonical chunk artefacts.
 - The Anthropic adapter `AnthropicLLMAdapter` (`src/agents/llm_caller.py`) **never raises** to the state machine on parse/API errors — failures become a minimal blocked payload. To debug, set `raise_on_error=True` when constructing the adapter in a one-off script.
-- Re-running a scenario does NOT replace the captured artefacts in `scenarios/<name>/web_app/` — those have to be mirrored manually if you want them refreshed for the demo.
+- Re-running a scenario does NOT replace the captured artefacts in `scenarios_full_pipeline/<name>/web_app/` — those have to be mirrored manually if you want them refreshed for the demo.

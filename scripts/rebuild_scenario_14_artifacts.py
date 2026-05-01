@@ -3,14 +3,14 @@
 Scenario 14 — IT Security Agent, Policy-Over-Questionnaire Conflict
 → REGULATED + COMPLETE.
 
-1. Write scenario_data/scenario_14/chunks/ISP-001_scenario14_chunks.json
+1. Write scenarios_per_agent/scenario_14/chunks/ISP-001_scenario14_chunks.json
    with three SECTION chunks: §12.2 ERP integration tier table (DIRECT_API
    → TIER_1), §4 data classification framework (TIER_1 → REGULATED override
    of vendor self-report), §12.3 fast-track disqualifications (REGULATED
    blocks fast-track; TIER_1 architectural review required).
 2. Embed and write to scenario-scoped Chroma collection
    ``idx_security_policy__scenario14`` and a scenario-scoped BM25 bundle.
-3. Write scenario_data/scenario_14/index_registry.json describing the
+3. Write scenarios_per_agent/scenario_14/index_registry.json describing the
    scenario-scoped collection.
 4. Write tests/fixtures/bundles/step_02_scenario_14.json — adversarial
    questionnaire (data_classification_self_reported="NON_REGULATED",
@@ -20,7 +20,7 @@ Scenario 14 — IT Security Agent, Policy-Over-Questionnaire Conflict
    on top, all three chunks are retrievable, no production ISP-001 chunks
    leak in.
 
-This script writes ONLY to scenario_data/scenario_14/ and tests/fixtures/.
+This script writes ONLY to scenarios_per_agent/scenario_14/ and tests/fixtures/.
 It does not touch production indices.
 """
 
@@ -43,7 +43,7 @@ from indexing.metadata_schema import (  # noqa: E402
     metadata_from_chunk,
 )
 
-SCENARIO_ROOT = REPO_ROOT / "scenario_data" / "scenario_14"
+SCENARIO_ROOT = REPO_ROOT / "scenarios_per_agent" / "scenario_14"
 CHUNKS_PATH = SCENARIO_ROOT / "chunks" / "ISP-001_scenario14_chunks.json"
 CHROMA_DIR = SCENARIO_ROOT / "chroma"
 BM25_DIR = SCENARIO_ROOT / "bm25"
@@ -51,7 +51,7 @@ REGISTRY_DIR = SCENARIO_ROOT / "vector_registry"
 INDEX_REGISTRY_PATH = SCENARIO_ROOT / "index_registry.json"
 FIXTURE_PATH = REPO_ROOT / "tests" / "fixtures" / "bundles" / "step_02_scenario_14.json"
 COLLECTION_NAME = "idx_security_policy__scenario14"
-BM25_BUNDLE_RELATIVE = f"scenario_data/scenario_14/bm25/{COLLECTION_NAME}.pkl"
+BM25_BUNDLE_RELATIVE = f"scenarios_per_agent/scenario_14/bm25/{COLLECTION_NAME}.pkl"
 
 SOURCE_ID = "ISP-001"
 SOURCE_NAME = "IT Security Policy"

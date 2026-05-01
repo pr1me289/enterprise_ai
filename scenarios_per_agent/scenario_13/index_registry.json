@@ -25,7 +25,7 @@
       ],
       "backend_locations": {
         "chroma_collection": "idx_procurement_matrix__scenario13",
-        "bm25_bundle": "scenario_data/scenario_13/bm25/idx_procurement_matrix__scenario13.pkl"
+        "bm25_bundle": "scenarios_per_agent/scenario_13/bm25/idx_procurement_matrix__scenario13.pkl"
       }
     }
   }

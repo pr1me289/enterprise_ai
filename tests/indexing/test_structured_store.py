@@ -36,7 +36,7 @@ def test_structured_store_get_field_reads_nested_questionnaire_value(repo_root, 
 
 def test_build_structured_store_writes_stakeholder_map_payload(repo_root, tmp_path) -> None:
     output_path = build_structured_store(
-        repo_root / "scenarios/scenario_1/source_mock_documents/Stakeholder_Map_PRQ_2024_0047.json",
+        repo_root / "scenarios_full_pipeline/scenario_1/source_mock_documents/Stakeholder_Map_PRQ_2024_0047.json",
         store=StructuredStore(output_dir=tmp_path),
     )
 
@@ -54,8 +54,8 @@ def test_build_structured_store_writes_stakeholder_map_payload(repo_root, tmp_pa
 def test_build_structured_stores_returns_both_direct_structured_source_paths(repo_root, tmp_path) -> None:
     paths = build_structured_stores(
         [
-            repo_root / "scenarios/scenario_1/source_mock_documents/OptiChain_VSQ_001_v2_1_scenario01.json",
-            repo_root / "scenarios/scenario_1/source_mock_documents/Stakeholder_Map_PRQ_2024_0047.json",
+            repo_root / "scenarios_full_pipeline/scenario_1/source_mock_documents/OptiChain_VSQ_001_v2_1_scenario01.json",
+            repo_root / "scenarios_full_pipeline/scenario_1/source_mock_documents/Stakeholder_Map_PRQ_2024_0047.json",
         ],
         store=StructuredStore(output_dir=tmp_path),
     )

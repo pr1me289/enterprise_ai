@@ -726,7 +726,7 @@ def test_evaluator_flags_legal_isp_001_missing_section_id() -> None:
 
 
 def test_evaluator_scenario_2_legal_soft_expects_escalated() -> None:
-    # Per spec §14 A-07 and scenarios/scenario_2/narrative.md, Legal's
+    # Per spec §14 A-07 and scenarios_full_pipeline/scenario_2/narrative.md, Legal's
     # scenario_2 must emit ESCALATED. If the model returns 'complete'
     # the scenario-status soft check must fire a warning naming
     # 'escalated' as the expected value.

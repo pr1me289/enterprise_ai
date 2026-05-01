@@ -1,18 +1,18 @@
 """Rebuild scenario-5 DPA artifacts end-to-end.
 
-1. Rebuild scenario_data/scenario_5/sources/DPA-TM-001_scenario5.json by copying
+1. Rebuild scenarios_per_agent/scenario_5/sources/DPA-TM-001_scenario5.json by copying
    the production v2.1 row set and appending row A-07 (same fact pattern as
    A-01, opposite outcome grounded in Art. 6(1)(f) legitimate interest /
    controller-to-controller allocation, no factual carve-outs).
 2. Re-chunk + re-embed the scenario-5 source into the scenario-scoped Chroma
    collection `idx_dpa_matrix__scenario5` and BM25 bundle
-   `scenario_data/scenario_5/bm25/idx_dpa_matrix__scenario5.pkl`.
+   `scenarios_per_agent/scenario_5/bm25/idx_dpa_matrix__scenario5.pkl`.
 3. Regenerate tests/fixtures/bundles/step_03_scenario_5.json so
    dpa_trigger_rows contains A-01 + A-07.
 4. Run a retrieval-only check against the scenario-scoped indices to confirm
    both A-01 and A-07 surface.
 
-This script writes ONLY to scenario_data/scenario_5/, tests/fixtures/, and the
+This script writes ONLY to scenarios_per_agent/scenario_5/, tests/fixtures/, and the
 scenario-scoped chroma/bm25 directories. It does not touch production indices.
 """
 
@@ -37,7 +37,7 @@ from indexing.metadata_schema import (  # noqa: E402
 )
 
 PROD_DPA_PATH = REPO_ROOT / "data" / "processed" / "scenario_2" / "chunks" / "DPA-TM-001.json"
-SCENARIO_ROOT = REPO_ROOT / "scenario_data" / "scenario_5"
+SCENARIO_ROOT = REPO_ROOT / "scenarios_per_agent" / "scenario_5"
 SOURCE_PATH = SCENARIO_ROOT / "sources" / "DPA-TM-001_scenario5.json"
 CHROMA_DIR = SCENARIO_ROOT / "chroma"
 BM25_DIR = SCENARIO_ROOT / "bm25"

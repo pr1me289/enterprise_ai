@@ -39,8 +39,8 @@ def test_build_index_registry_payload_is_source_level_and_uses_store_mapping(rep
     grouped = group_chunks_by_index_name(chunks)
     structured_store_paths = build_structured_stores(
         [
-            repo_root / "scenarios/scenario_1/source_mock_documents/OptiChain_VSQ_001_v2_1_scenario01.json",
-            repo_root / "scenarios/scenario_1/source_mock_documents/Stakeholder_Map_PRQ_2024_0047.json",
+            repo_root / "scenarios_full_pipeline/scenario_1/source_mock_documents/OptiChain_VSQ_001_v2_1_scenario01.json",
+            repo_root / "scenarios_full_pipeline/scenario_1/source_mock_documents/Stakeholder_Map_PRQ_2024_0047.json",
         ],
         store=StructuredStore(output_dir=tmp_path / "structured"),
     )

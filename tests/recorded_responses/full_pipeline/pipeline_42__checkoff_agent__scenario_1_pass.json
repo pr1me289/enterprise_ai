@@ -1,0 +1,71 @@
+{
+  "record_type": "pipeline_step",
+  "pipeline_run_number": 42,
+  "scenario": "scenario_1",
+  "step_id": "STEP-06",
+  "determination_key": "step_06_guidance",
+  "agent_name": "checkoff_agent",
+  "pipeline_run_id": "run_0fdbee66d4",
+  "timestamp_utc": "20260501T152617Z",
+  "parsed_output": {
+    "guidance_documents": [
+      {
+        "stakeholder_role": "Procurement Manager",
+        "domain": "procurement",
+        "instructions": "The vendor integration assessment is COMPLETE and fast-track eligible. You are the primary approver for procurement authority. Review and approve this vendor onboarding within 2\u20133 business days. The vendor is classified as non-regulated software (UNREGULATED data classification), Tier T1 integration, and presents no DPA or NDA blockers. No security follow-up actions are required. Your approval clears the procurement gate for final business operations sign-off.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review the vendor against Procurement Approval Matrix row C-T1 (non-regulated software, Tier T1)",
+          "Verify completion of any internal procurement due diligence",
+          "Approve or escalate with rationale within 2\u20133 business days",
+          "Notify Business Owner (Manager+) once procurement approval is granted"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-05-01T15:24:36Z",
+            "section": "C-T1",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      },
+      {
+        "stakeholder_role": "Business Owner (Manager+)",
+        "domain": "procurement",
+        "instructions": "The vendor integration assessment is COMPLETE and fast-track eligible. You are the secondary approver for business operations authority. The vendor meets all security, legal, and procurement requirements for fast-track approval. Review the vendor's business case and operational fit, then approve within 2\u20133 business days. No blockers remain. Your approval completes the onboarding authorization.",
+        "blockers_owned": [],
+        "required_security_actions": [],
+        "next_steps": [
+          "Review vendor business case and operational fit",
+          "Confirm Procurement Manager approval has been granted",
+          "Approve or escalate with rationale within 2\u20133 business days",
+          "Upon approval, onboarding authorization is complete"
+        ],
+        "citations": [
+          {
+            "agent_id": "procurement_agent",
+            "retrieval_timestamp": "2026-05-01T15:24:36Z",
+            "section": "C-T1",
+            "source_name": "Procurement Approval Matrix",
+            "version": "2.0"
+          }
+        ]
+      }
+    ],
+    "status": "complete"
+  },
+  "call_record": {
+    "agent_name": "checkoff_agent",
+    "pipeline_run_id": "",
+    "model": "claude-haiku-4-5",
+    "outcome": "ok",
+    "elapsed_seconds": 39.85329507099959,
+    "input_tokens": 7604,
+    "output_tokens": 642,
+    "missing_fields": [],
+    "status": "complete"
+  },
+  "step_status": "COMPLETE"
+}

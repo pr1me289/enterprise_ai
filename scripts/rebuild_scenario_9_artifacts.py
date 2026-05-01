@@ -16,19 +16,19 @@ The scenario tests whether the Procurement Agent:
   * emits status='complete' — clean upstreams + clean match, no blocker to propagate
 
 Build steps:
- 1. Write scenario_data/scenario_9/chunks/PAM-001_scenario9_chunks.json (3 rows).
- 2. Write scenario_data/scenario_9/chunks/SLK-001_scenario9_chunks.json (3 threads).
+ 1. Write scenarios_per_agent/scenario_9/chunks/PAM-001_scenario9_chunks.json (3 rows).
+ 2. Write scenarios_per_agent/scenario_9/chunks/SLK-001_scenario9_chunks.json (3 threads).
  3. Re-embed + write Chroma collections:
       idx_procurement_matrix__scenario9, idx_slack_notes__scenario9
     plus BM25 bundles for both.
- 4. Write scenario_data/scenario_9/index_registry.json.
+ 4. Write scenarios_per_agent/scenario_9/index_registry.json.
  5. Write tests/fixtures/bundles/step_04_scenario_9.json — clean IT Security
     output (COMPLETE, REGULATED, T2, fast_track_eligible=false), clean Legal
     output (COMPLETE, DPA executed, NDA executed), D-T1/D-T2/D-T3 as matrix
     candidates, T-901/T-902/T-903 as Tier 3 Slack threads.
  6. Retrieval-only checks against both scenario-scoped indices.
 
-Writes ONLY under scenario_data/scenario_9/ and tests/fixtures/. Does not
+Writes ONLY under scenarios_per_agent/scenario_9/ and tests/fixtures/. Does not
 touch production indices.
 """
 
@@ -51,7 +51,7 @@ from indexing.metadata_schema import (  # noqa: E402
     metadata_from_chunk,
 )
 
-SCENARIO_ROOT = REPO_ROOT / "scenario_data" / "scenario_9"
+SCENARIO_ROOT = REPO_ROOT / "scenarios_per_agent" / "scenario_9"
 PAM_CHUNKS_PATH = SCENARIO_ROOT / "chunks" / "PAM-001_scenario9_chunks.json"
 SLK_CHUNKS_PATH = SCENARIO_ROOT / "chunks" / "SLK-001_scenario9_chunks.json"
 CHROMA_DIR = SCENARIO_ROOT / "chroma"
@@ -62,8 +62,8 @@ FIXTURE_PATH = REPO_ROOT / "tests" / "fixtures" / "bundles" / "step_04_scenario_
 
 PAM_COLLECTION = "idx_procurement_matrix__scenario9"
 SLK_COLLECTION = "idx_slack_notes__scenario9"
-PAM_BM25_RELATIVE = f"scenario_data/scenario_9/bm25/{PAM_COLLECTION}.pkl"
-SLK_BM25_RELATIVE = f"scenario_data/scenario_9/bm25/{SLK_COLLECTION}.pkl"
+PAM_BM25_RELATIVE = f"scenarios_per_agent/scenario_9/bm25/{PAM_COLLECTION}.pkl"
+SLK_BM25_RELATIVE = f"scenarios_per_agent/scenario_9/bm25/{SLK_COLLECTION}.pkl"
 
 DOCUMENT_DATE = "2026-04-19"
 

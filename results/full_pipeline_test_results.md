@@ -746,3 +746,67 @@ Block format:
 - STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_41__procurement_agent__scenario_1_pass.json`
 - STEP-05 → `tests/recorded_responses/full_pipeline/pipeline_41__checklist_assembler__scenario_1_pass.json`
 - STEP-06 → `tests/recorded_responses/full_pipeline/pipeline_41__checkoff_agent__scenario_1_pass.json`
+## Pipeline Run #42 — scenario_1 — 2026-05-01
+**Overall verdict:** PASS
+**Supervisor status:** COMPLETE
+**Pipeline run id:** run_0fdbee66d4
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 5.93s | 20,656 | 290 |
+| STEP-03 | legal_agent | COMPLETE | PASS | 2.48s | 19,770 | 158 |
+| STEP-04 | procurement_agent | COMPLETE | PASS | 4.83s | 34,126 | 307 |
+| STEP-05 | checklist_assembler | COMPLETE | PASS | 55.94s | 51,691 | 560 |
+| STEP-06 | checkoff_agent | COMPLETE | PASS | 39.85s | 7,604 | 642 |
+
+**Totals:** 5 agent call(s), 133,847 input tokens, 1,957 output tokens, 109.04s cumulative.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_42__it_security_agent__scenario_1_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_42__legal_agent__scenario_1_pass.json`
+- STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_42__procurement_agent__scenario_1_pass.json`
+- STEP-05 → `tests/recorded_responses/full_pipeline/pipeline_42__checklist_assembler__scenario_1_pass.json`
+- STEP-06 → `tests/recorded_responses/full_pipeline/pipeline_42__checkoff_agent__scenario_1_pass.json`
+## Pipeline Run #43 — scenario_blocked_demo — 2026-05-01
+**Overall verdict:** PASS
+**Supervisor status:** BLOCKED
+**Pipeline run id:** run_a3343ff9a7
+**Halted at:** STEP-04
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 8.80s | 26,512 | 617 |
+| STEP-03 | legal_agent | COMPLETE | PASS | 1.74s | 20,943 | 154 |
+| STEP-04 | procurement_agent | BLOCKED | PASS | 1.36s | 18,079 | 51 |
+| STEP-05 | checklist_assembler | PENDING | — | — | — | — |
+| STEP-06 | checkoff_agent | PENDING | — | — | — | — |
+
+**Totals:** 3 agent call(s), 65,534 input tokens, 822 output tokens, 11.90s cumulative.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_43__it_security_agent__scenario_blocked_demo_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_43__legal_agent__scenario_blocked_demo_pass.json`
+- STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_43__procurement_agent__scenario_blocked_demo_pass.json`
+## Pipeline Run #44 — scenario_blocked_demo — 2026-05-01
+**Overall verdict:** PASS
+**Supervisor status:** BLOCKED
+**Pipeline run id:** run_6167cce958
+**Halted at:** STEP-04
+
+| Step | Agent | Status | Verdict | Elapsed | In tokens | Out tokens |
+|------|-------|--------|---------|---------|-----------|------------|
+| STEP-01 | intake (deterministic) | COMPLETE | n/a | — | — | — |
+| STEP-02 | it_security_agent | COMPLETE | PASS | 3.86s | 26,512 | 449 |
+| STEP-03 | legal_agent | COMPLETE | PASS | 32.27s | 20,873 | 154 |
+| STEP-04 | procurement_agent | BLOCKED | PASS | 22.21s | 18,009 | 51 |
+| STEP-05 | checklist_assembler | PENDING | — | — | — | — |
+| STEP-06 | checkoff_agent | PENDING | — | — | — | — |
+
+**Totals:** 3 agent call(s), 65,394 input tokens, 654 output tokens, 58.34s cumulative.
+
+**Recorded responses:**
+- STEP-02 → `tests/recorded_responses/full_pipeline/pipeline_44__it_security_agent__scenario_blocked_demo_pass.json`
+- STEP-03 → `tests/recorded_responses/full_pipeline/pipeline_44__legal_agent__scenario_blocked_demo_pass.json`
+- STEP-04 → `tests/recorded_responses/full_pipeline/pipeline_44__procurement_agent__scenario_blocked_demo_pass.json`

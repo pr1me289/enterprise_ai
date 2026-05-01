@@ -82,7 +82,15 @@ Four end-to-end scenarios exercise every terminal status and the major escalatio
 | `scenario_blocked_demo` | STEP-04 | **BLOCKED** | Procurement Approval Matrix is missing from the index. No evidence base to begin work |
 | `scenario_escalated_step4_demo` | STEP-04 | **ESCALATED** | Curated 3-row matrix; vendor profile (Class D) doesn't match any row. Evidence present but unresolvable |
 
-Captured run artefacts (raw agent outputs, input bundles, supervisor audit logs, source corpora) live under `scenarios/<name>/web_app/` and feed a separate web-app demo of the pipeline.
+Captured run artefacts (raw agent outputs, input bundles, supervisor audit logs, source corpora) live under `scenarios_full_pipeline/<name>/web_app/` and feed a separate web-app demo of the pipeline.
+
+To list every prepared testing scenario (full-pipeline + per-agent) with the agent it exercises and what it proves:
+
+```bash
+uv run python scripts/scenarios.py                        # everything
+uv run python scripts/scenarios.py --env full_pipeline    # 4 demo scenarios
+uv run python scripts/scenarios.py --agent legal_agent    # one agent's per-agent scenarios
+```
 
 ---
 
@@ -129,8 +137,8 @@ test_harness/         # Deterministic mock pipeline (no LLM, no API key required
 per_agent_test_env/   # Per-agent isolated live-API testing harness
 scripts/              # Reproducible scenario-data builders
 
-scenarios/            # Demo scenarios (source mocks + captured run artefacts)
-scenario_data/        # Per-agent isolation test fixtures (scenarios 3–15)
+scenarios_full_pipeline/  # Demo scenarios (source mocks + captured run artefacts) — 4 scenarios for the end-to-end suite
+scenarios_per_agent/      # Scenario-scoped retrieval data for the per-agent isolation suite (scenarios 3–15)
 mock_documents/       # Canonical mock corpus
 core_documents/       # Authoritative governance + design docs
 agent_spec_docs/      # Per-agent behavioural specs (loaded as system prompts)
@@ -154,7 +162,7 @@ Detailed file-by-file map: [USER_MANUAL.md](USER_MANUAL.md).
 - **`pytest`** — test framework with custom markers for live-API gating
 - **`ruff`** — linting + formatting
 
-No web framework, no UI in this repo. The companion web-app project consumes the captured artefacts under `scenarios/`.
+No web framework, no UI in this repo. The companion web-app project consumes the captured artefacts under `scenarios_full_pipeline/`.
 
 ---
 

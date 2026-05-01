@@ -1,6 +1,6 @@
 {
   "registry_version": "1.0",
-  "scenario": "scenario_8",
+  "scenario": "scenario_10",
   "generated_at": "2026-04-19T00:00:00Z",
   "sources": {
     "PAM-001": {
@@ -9,7 +9,7 @@
       "source_type": "PROCUREMENT_APPROVAL_MATRIX",
       "authority_tier": 1,
       "retrieval_lane": "INDEXED_HYBRID",
-      "version": "3.0-scenario8",
+      "version": "3.0-scenario10",
       "document_date": "2026-04-19",
       "freshness_status": "CURRENT",
       "manifest_status": "CONFIRMED",
@@ -18,14 +18,14 @@
       ],
       "is_primary_citable": true,
       "storage_kind": "vector_bm25",
-      "logical_store_name": "idx_procurement_matrix__scenario8",
+      "logical_store_name": "idx_procurement_matrix__scenario10",
       "backends": [
         "chroma",
         "bm25"
       ],
       "backend_locations": {
-        "chroma_collection": "idx_procurement_matrix__scenario8",
-        "bm25_bundle": "scenario_data/scenario_8/bm25/idx_procurement_matrix__scenario8.pkl"
+        "chroma_collection": "idx_procurement_matrix__scenario10",
+        "bm25_bundle": "scenarios_per_agent/scenario_10/bm25/idx_procurement_matrix__scenario10.pkl"
       }
     }
   }

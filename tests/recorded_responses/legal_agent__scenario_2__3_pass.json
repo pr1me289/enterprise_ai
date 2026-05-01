@@ -1,0 +1,59 @@
+{
+  "agent_name": "legal_agent",
+  "scenario": "scenario_2",
+  "pipeline_run_id": "scenario_2_synthesized",
+  "run_number": 3,
+  "model": "claude-haiku-4-5",
+  "max_tokens": 4096,
+  "timestamp_utc": "20260501T152326Z",
+  "system_prompt_path": "agent_spec_docs/Legal_Agent_Spec.md",
+  "bundle_fixture_path": "tests/fixtures/bundles/step_03_scenario_2.json",
+  "raw_text": "```json\n{\n  \"dpa_required\": true,\n  \"dpa_blocker\": true,\n  \"nda_status\": \"PENDING\",\n  \"nda_blocker\": true,\n  \"trigger_rule_cited\": [\n    {\n      \"source_id\": \"DPA-TM-001\",\n      \"version\": \"1.3\",\n      \"row_id\": \"A-01\",\n      \"trigger_condition\": \"Vendor will process personal data of EU/EEA data subjects on behalf of Lichen\",\n      \"citation_class\": \"PRIMARY\"\n    },\n    {\n      \"source_id\": \"DPA-TM-001\",\n      \"version\": \"1.3\",\n      \"row_id\": \"E-01\",\n      \"trigger_condition\": \"Vendor will have logical access to Lichen production systems or data repositories containing personal data\",\n      \"citation_class\": \"PRIMARY\"\n    }\n  ],\n  \"policy_citations\": [\n    {\n      \"source_id\": \"DPA-TM-001\",\n      \"version\": \"1.3\",\n      \"row_id\": \"A-01\",\n      \"trigger_condition\": \"Vendor will process personal data of EU/EEA data subjects on behalf of Lichen\",\n      \"citation_class\": \"PRIMARY\"\n    },\n    {\n      \"source_id\": \"DPA-TM-001\",\n      \"version\": \"1.3\",\n      \"row_id\": \"E-01\",\n      \"trigger_condition\": \"Vendor will have logical access to Lichen production systems or data repositories containing personal data\",\n      \"citation_class\": \"PRIMARY\"\n    },\n    {\n      \"source_id\": \"ISP-001\",\n      \"version\": \"4.2\",\n      \"chunk_id\": \"ISP-001__section_12\",\n      \"section_id\": \"12.1.4\",\n      \"citation_class\": \"PRIMARY\"\n    }\n  ],\n  \"status\": \"escalated\"\n}\n```",
+  "parsed_output": {
+    "dpa_required": true,
+    "dpa_blocker": true,
+    "nda_status": "PENDING",
+    "nda_blocker": true,
+    "trigger_rule_cited": [
+      {
+        "source_id": "DPA-TM-001",
+        "version": "1.3",
+        "row_id": "A-01",
+        "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "DPA-TM-001",
+        "version": "1.3",
+        "row_id": "E-01",
+        "trigger_condition": "Vendor will have logical access to Lichen production systems or data repositories containing personal data",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "policy_citations": [
+      {
+        "source_id": "DPA-TM-001",
+        "version": "1.3",
+        "row_id": "A-01",
+        "trigger_condition": "Vendor will process personal data of EU/EEA data subjects on behalf of Lichen",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "DPA-TM-001",
+        "version": "1.3",
+        "row_id": "E-01",
+        "trigger_condition": "Vendor will have logical access to Lichen production systems or data repositories containing personal data",
+        "citation_class": "PRIMARY"
+      },
+      {
+        "source_id": "ISP-001",
+        "version": "4.2",
+        "chunk_id": "ISP-001__section_12",
+        "section_id": "12.1.4",
+        "citation_class": "PRIMARY"
+      }
+    ],
+    "status": "escalated"
+  },
+  "error": null
+}

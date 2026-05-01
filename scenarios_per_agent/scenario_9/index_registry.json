@@ -25,7 +25,7 @@
       ],
       "backend_locations": {
         "chroma_collection": "idx_procurement_matrix__scenario9",
-        "bm25_bundle": "scenario_data/scenario_9/bm25/idx_procurement_matrix__scenario9.pkl"
+        "bm25_bundle": "scenarios_per_agent/scenario_9/bm25/idx_procurement_matrix__scenario9.pkl"
       }
     },
     "SLK-001": {
@@ -50,7 +50,7 @@
       ],
       "backend_locations": {
         "chroma_collection": "idx_slack_notes__scenario9",
-        "bm25_bundle": "scenario_data/scenario_9/bm25/idx_slack_notes__scenario9.pkl"
+        "bm25_bundle": "scenarios_per_agent/scenario_9/bm25/idx_slack_notes__scenario9.pkl"
       }
     }
   }

@@ -6,10 +6,10 @@ from pathlib import Path
 
 
 SCENARIO_DIRS: dict[str, str] = {
-    "scenario_1": "scenarios/scenario_1/source_mock_documents",
-    "scenario_2": "scenarios/scenario_2/source_mock_documents",
-    "scenario_blocked_demo": "scenarios/scenario_blocked_demo/source_mock_documents",
-    "scenario_escalated_step4_demo": "scenarios/scenario_escalated_step4_demo/source_mock_documents",
+    "scenario_1": "scenarios_full_pipeline/scenario_1/source_mock_documents",
+    "scenario_2": "scenarios_full_pipeline/scenario_2/source_mock_documents",
+    "scenario_blocked_demo": "scenarios_full_pipeline/scenario_blocked_demo/source_mock_documents",
+    "scenario_escalated_step4_demo": "scenarios_full_pipeline/scenario_escalated_step4_demo/source_mock_documents",
 }
 
 

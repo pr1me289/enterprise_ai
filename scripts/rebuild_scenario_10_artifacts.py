@@ -18,17 +18,17 @@ so the ONLY reason the bundle is inadmissible is the missing IT Security
 output — making the `blocked_reason` enum value unambiguous (single-cause).
 
 Build steps:
- 1. Write scenario_data/scenario_10/chunks/PAM-001_scenario10_chunks.json
+ 1. Write scenarios_per_agent/scenario_10/chunks/PAM-001_scenario10_chunks.json
     (C-T1 primary-key match, C-T2 optional distractor).
  2. Re-embed + write Chroma collection idx_procurement_matrix__scenario10
     plus the BM25 bundle.
- 3. Write scenario_data/scenario_10/index_registry.json.
+ 3. Write scenarios_per_agent/scenario_10/index_registry.json.
  4. Write tests/fixtures/bundles/step_04_scenario_10.json — it_security_output
     key OMITTED entirely; legal_output clean COMPLETE; questionnaire
     populated; PAM-001 rows present in bundle.
  5. Retrieval-only check against the scenario-scoped index.
 
-Writes ONLY under scenario_data/scenario_10/ and tests/fixtures/. Does not
+Writes ONLY under scenarios_per_agent/scenario_10/ and tests/fixtures/. Does not
 touch production indices.
 """
 
@@ -51,7 +51,7 @@ from indexing.metadata_schema import (  # noqa: E402
     metadata_from_chunk,
 )
 
-SCENARIO_ROOT = REPO_ROOT / "scenario_data" / "scenario_10"
+SCENARIO_ROOT = REPO_ROOT / "scenarios_per_agent" / "scenario_10"
 PAM_CHUNKS_PATH = SCENARIO_ROOT / "chunks" / "PAM-001_scenario10_chunks.json"
 CHROMA_DIR = SCENARIO_ROOT / "chroma"
 BM25_DIR = SCENARIO_ROOT / "bm25"
@@ -60,7 +60,7 @@ INDEX_REGISTRY_PATH = SCENARIO_ROOT / "index_registry.json"
 FIXTURE_PATH = REPO_ROOT / "tests" / "fixtures" / "bundles" / "step_04_scenario_10.json"
 
 PAM_COLLECTION = "idx_procurement_matrix__scenario10"
-PAM_BM25_RELATIVE = f"scenario_data/scenario_10/bm25/{PAM_COLLECTION}.pkl"
+PAM_BM25_RELATIVE = f"scenarios_per_agent/scenario_10/bm25/{PAM_COLLECTION}.pkl"
 
 DOCUMENT_DATE = "2026-04-19"
 

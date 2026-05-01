@@ -37,12 +37,12 @@ def mock_documents_dir() -> Path:
 
 @pytest.fixture
 def scenario_1_mock_documents_dir(repo_root: Path) -> Path:
-    return repo_root / "scenarios" / "scenario_1" / "source_mock_documents"
+    return repo_root / "scenarios_full_pipeline" / "scenario_1" / "source_mock_documents"
 
 
 @pytest.fixture
 def scenario_2_mock_documents_dir(repo_root: Path) -> Path:
-    return repo_root / "scenarios" / "scenario_2" / "source_mock_documents"
+    return repo_root / "scenarios_full_pipeline" / "scenario_2" / "source_mock_documents"
 
 
 # ---------------------------------------------------------------------------
